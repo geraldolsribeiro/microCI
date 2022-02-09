@@ -1,0 +1,35 @@
+
+CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
+CXXFLAGS+= -I../include/
+CXXFLAGS+= -std=c++17
+LDFLAGS+= -lstdc++fs
+LDFLAGS+= -lyaml-cpp
+LDFLAGS+= -lfmt
+
+all: deps microCI test
+
+test:
+	./microCI -h
+	./microCI
+	./microCI -i y.yml      || echo "OK"
+	./microCI --input=x.yml || echo "OK"
+
+microCI: microCI.cpp
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+deps: ../include/argh.hpp ../include/inja.hpp ../include/nlohmann/json.hpp
+
+../include/argh.hpp:
+	curl https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o $@
+
+../include/inja.hpp:
+	curl https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp -o $@
+
+../include/nlohmann/json.hpp:
+	curl https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o $@
+
+clean:
+	rm -f microCI
+	rm -f ../include/argh.hpp
+	rm -f ../include/inja.hpp
+	rm -f ../include/nlohmann/json.hpp

@@ -1,0 +1,17 @@
+# Teste de configuração
+envs:
+  ENV1: "xxx"
+  ENV2: "yyy"
+docker: "ubuntu:18.04"
+steps:
+  - name: "Instalar dependências"
+    description: "Descrição do passo"
+    docker: "node:16"  # Comentário na frente da chave
+    bash: |
+      npm install
+  - name: "Construir"
+    docker: "node:16"
+    bash: |
+      npm run lint --fix
+      npm run build
+
