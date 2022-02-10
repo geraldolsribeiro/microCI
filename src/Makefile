@@ -1,10 +1,16 @@
 
+CXXFLAGS+= -DFMT_HEADER_ONLY
 CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
+
 CXXFLAGS+= -I../include/
+
+CXXFLAGS+= -s
+CXXFLAGS+= -O3
+CXXFLAGS+= -static
+CXXFLAGS+= -fPIC
 CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
-LDFLAGS+= -lfmt
 
 all: deps microCI test
 
@@ -16,6 +22,7 @@ test:
 
 microCI: microCI.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	strip --strip-unneeded $@
 
 deps: ../include/argh.hpp ../include/inja.hpp ../include/nlohmann/json.hpp
 
