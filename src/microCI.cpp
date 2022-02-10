@@ -1,6 +1,7 @@
 // TODO: saída para relatório
 // https://github.com/p-ranav/tabulate
 // https://docs.docker.com/engine/reference/commandline/run/
+// https://plantuml.com/yaml
 
 #include <filesystem>
 #include <fstream>
@@ -63,6 +64,73 @@ string sanitizeName(const string &s) {
   return ret;
 }
 
+void parsePluginStep() {}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void parseBashStep(const map<string, string> &envs, const string &dockerImage,
+                   const string &stepName, const string &stepDescription,
+                   const string s) {
+  auto ss = stringstream{s};
+  auto cmds = vector<string>{};
+  auto line = string{};
+  nlohmann::json data;
+
+  while (getline(ss, line, '\n')) {
+    cmds.push_back(line);
+  }
+
+  data["STEP_NAME"] = stepName;
+  data["STEP_DESCRIPTION"] = stepDescription;
+  data["FUNCTION_NAME"] = sanitizeName(stepName);
+
+  cout << inja::render(R"(
+# ----------------------------------------------------------------------
+# {{ STEP_DESCRIPTION }}
+# ----------------------------------------------------------------------
+function step_{{ FUNCTION_NAME }}() {
+  printf "${cyan}%60s${clearColor}: " "{{ STEP_NAME }}"
+  {
+    echo ""
+    echo ""
+    echo ""
+    echo "Passo: {{ STEP_NAME }}"
+    docker run \
+      --interactive \
+      --attach stdout \
+      --attach stderr \
+      --rm \
+      --workdir /ws \
+)",
+                       data);
+
+  for (auto [key, val] : envs) {
+    cout << "      --env " << key << R"(=")" << val << R"(" \
+)";
+  }
+  cout << R"(      --volume "${PWD}":/ws \
+    )" << dockerImage
+       << R"( \
+      /bin/bash -c "cd /ws)";
+  for (auto cmd : cmds) {
+    cout << R"( \
+         && )"
+         << cmd << " 2>&1";
+  }
+  cout << R"("
+    status=$?
+    echo "Status: ${status}"
+  } 2>&1 >> .microCI.log
+  if [ "${status}" = "0" ]; then
+    echo -e "${green}OK${clearColor}"
+  else
+    echo -e "${red}FALHOU${clearColor}"
+  fi
+}
+)";
+}
+
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
@@ -97,7 +165,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
 
   string dockerImageGlobal;
   map<string, string> envs;
-  nlohmann::json data;
 
   cout << R"(#!/bin/bash
 red='\033[0;31m'
@@ -183,7 +250,6 @@ function assert_function() {
   if (CI["steps"].IsSequence()) {
     for (auto step : CI["steps"]) {
       string dockerImage = dockerImageGlobal;
-      auto cmds = vector<string>{};
       string stepName = step["name"].as<string>();
       string stepDescription;
 
@@ -196,61 +262,13 @@ function assert_function() {
       }
 
       if (step["bash"]) {
-        auto ss = stringstream{step["bash"].as<string>()};
-        string line;
-        while (getline(ss, line, '\n')) {
-          cmds.push_back(line);
-        }
+        parseBashStep(envs, dockerImage, stepName, stepDescription,
+                      step["bash"].as<string>());
       }
 
-      data["STEP_NAME"] = stepName;
-      data["STEP_DESCRIPTION"] = stepDescription;
-      data["FUNCTION_NAME"] = sanitizeName(stepName);
-
-      cout << inja::render(R"(
-# ----------------------------------------------------------------------
-# {{ STEP_DESCRIPTION }}
-# ----------------------------------------------------------------------
-function step_{{ FUNCTION_NAME }}() {
-  printf "${cyan}%60s${clearColor}: " "{{ STEP_NAME }}"
-  {
-    echo ""
-    echo ""
-    echo ""
-    echo "Passo: {{ STEP_NAME }}"
-    docker run \
-      --interactive \
-      --attach stdout \
-      --attach stderr \
-      --rm \
-      --workdir /ws \
-)",
-                           data);
-
-      for (auto [key, val] : envs) {
-        cout << "      --env " << key << R"(=")" << val << R"(" \
-)";
+      if (step["plugin"]) {
+        parsePluginStep();
       }
-      cout << R"(      --volume "${PWD}":/ws \
-    )" << dockerImage
-           << R"( \
-      /bin/bash -c "cd /ws)";
-      for (auto cmd : cmds) {
-        cout << R"( \
-         && )"
-             << cmd << " 2>&1";
-      }
-      cout << R"("
-    status=$?
-    echo "Status: ${status}"
-  } 2>&1 >> .microCI.log
-  if [ "${status}" = "0" ]; then
-    echo -e "${green}OK${clearColor}"
-  else
-    echo -e "${red}FALHOU${clearColor}"
-  fi
-}
-)";
     }
     cout << R"(
 
