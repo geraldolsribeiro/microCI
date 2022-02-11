@@ -9,6 +9,7 @@ using namespace std;
 #include <nlohmann/json.hpp>
 
 namespace microci {
+using nlohmann::json;
 
 // ----------------------------------------------------------------------
 //
@@ -30,7 +31,10 @@ string banner() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-MicroCI::MicroCI() { initBash(); }
+MicroCI::MicroCI() {
+  mPluginParserMap.emplace("git_deploy", &MicroCI::parseGitDeployPluginStep);
+  initBash();
+}
 
 // ----------------------------------------------------------------------
 //
@@ -40,19 +44,23 @@ MicroCI::~MicroCI() {}
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::Bash() const { return mBash.str(); }
+string MicroCI::Script() const { return mScript.str(); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-bool MicroCI::LoadYaml(const string& filename) {
+bool MicroCI::ReadConfig(const string& filename) {
   YAML::Node CI;
 
   try {
     CI = YAML::LoadFile(filename);
-  } catch (YAML::BadFile bf) {
+  } catch (YAML::BadFile e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
-    spdlog::error(bf.what());
+    spdlog::error(e.what());
+    return false;
+  } catch (YAML::ParserException e) {
+    spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
+    spdlog::error(e.what());
     return false;
   }
 
@@ -66,7 +74,7 @@ bool MicroCI::LoadYaml(const string& filename) {
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
     mDockerImageGlobal = CI["docker"].as<string>();
-    mBash << "# Imagem docker global: " << mDockerImageGlobal << endl;
+    mScript << "# Imagem docker global: " << mDockerImageGlobal << endl;
   }
 
   if (CI["steps"].IsSequence()) {
@@ -79,19 +87,21 @@ bool MicroCI::LoadYaml(const string& filename) {
         parsePluginStep(step);
       }
     }
-    mBash << R"(
+    mScript << R"(
 
 function main() {
   date >> .microCI.log
+
 )";
     for (auto step : CI["steps"]) {
       string stepName = step["name"].as<string>();
-      mBash << "   step_" << sanitizeName(stepName) << endl;
+      mScript << "  step_" << sanitizeName(stepName) << endl;
     }
-    mBash << R"(
+    mScript << R"(
   date >> .microCI.log
 }
 
+# Executa todos os passos
 main
 
 )";
@@ -105,8 +115,23 @@ main
 string MicroCI::sanitizeName(const string& name) const {
   // FIXME: tolower
   auto ret = name;
-  const auto allowedChars =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+
+  // Troca os caracteres acentuados por versão sem acento
+  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}};
+  for (auto [from, to] : tr) {
+    size_t pos = 0;
+    while ((pos = ret.find(from, pos)) != string::npos) {
+      ret.replace(pos, from.length(), to);
+      pos += to.length();
+    }
+  }
+
+  // Converte tudo para minúsculas
+  transform(ret.begin(), ret.end(), ret.begin(),
+            [](unsigned char c) { return tolower(c); });
+
+  // Caracteres não permitidos são trocados por _
+  const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
   size_t found = ret.find_first_not_of(allowedChars);
   while (found != string::npos) {
     ret[found] = '_';
@@ -115,7 +140,82 @@ string MicroCI::sanitizeName(const string& name) const {
   return ret;
 }
 
-void MicroCI::parsePluginStep(YAML::Node& step) {}
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
+  auto stepName = string{};
+  auto stepDescription = string{};
+
+  if (step["description"]) {
+    const auto stepName = step["name"].as<string>();
+  }
+  if (step["description"]) {
+    stepDescription = step["description"].as<string>();
+  }
+
+  const auto name = step["plugin"]["name"].as<string>();
+  const auto repo = step["plugin"]["repo"].as<string>();
+  const auto gitDir = step["plugin"]["git_dir"].as<string>();
+  const auto workTree = step["plugin"]["work_tree"].as<string>();
+
+  json data;
+  data["GIT_URL"] = repo;
+  data["GIT_DIR"] = gitDir;
+  data["GIT_WORK"] = workTree;
+  data["STEP_NAME"] = stepName;
+  data["FUNCTION_NAME"] = sanitizeName(stepName);
+  data["STEP_DESCRIPTION"] = stepDescription;
+
+  mScript << inja::render(R"(
+# ----------------------------------------------------------------------
+# {{ STEP_DESCRIPTION }}
+# ----------------------------------------------------------------------
+function step_{{ FUNCTION_NAME }}() {
+  printf "${cyan}%60s${clearColor}: " "{{ STEP_NAME }}"
+  {
+    # Caso ainda não exista realiza o clone inicial
+    if [ ! -d "{{GIT_DIR}}" ]; then
+      git clone "{{GIT_URL}}" \
+        --separate-git-dir="{{GIT_DIR}}" \
+        "{{GIT_WORK}}"
+    fi
+
+    # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
+    git --git-dir="{{GIT_DIR}}" \
+      --work-tree="{{GIT_WORK}}" \
+      clean -xfd
+    git --git-dir="{{GIT_DIR}}" \
+      --work-tree="{{GIT_WORK}}" \
+      checkout -f
+    git --git-dir="{{GIT_DIR}}" \
+      --work-tree="{{GIT_WORK}}" \
+      pull
+
+    # Remove o arquivo .git que aponta para o git-dir
+    rm -f "${GIT_WORK}/.git"
+
+    date >> .microCI.log
+  }
+)",
+                          data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parsePluginStep(YAML::Node& step) {
+  auto pluginName = step["plugin"]["name"].as<string>();
+  auto stepName = step["name"].as<string>();
+  if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
+    spdlog::error("Plugin '{}' não encontrado no passo '{}'", pluginName,
+                  stepName);
+    return;
+  }
+
+  parseFunctionPtr parser = mPluginParserMap[pluginName];
+  (this->*parser)(step);
+}
 
 // ----------------------------------------------------------------------
 //
@@ -132,7 +232,7 @@ void MicroCI::parseBashStep(YAML::Node& step) {
     cmds.push_back(line);
   }
 
-  string stepName = step["name"].as<string>();
+  auto stepName = step["name"].as<string>();
 
   if (step["docker"]) {
     dockerImage = step["docker"].as<string>();
@@ -146,7 +246,7 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   data["STEP_DESCRIPTION"] = stepDescription;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
 
-  mBash << inja::render(R"(
+  mScript << inja::render(R"(
 # ----------------------------------------------------------------------
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
@@ -164,22 +264,22 @@ function step_{{ FUNCTION_NAME }}() {
       --rm \
       --workdir /ws \
 )",
-                        data);
+                          data);
 
   for (auto [key, val] : mEnvs) {
-    mBash << "      --env " << key << R"(=")" << val << R"(" \
+    mScript << "      --env " << key << R"(=")" << val << R"(" \
 )";
   }
-  mBash << R"(      --volume "${PWD}":/ws \
+  mScript << R"(      --volume "${PWD}":/ws \
     )" << dockerImage
-        << R"( \
+          << R"( \
       /bin/bash -c "cd /ws)";
   for (auto cmd : cmds) {
-    mBash << R"( \
+    mScript << R"( \
          && )"
-          << cmd << " 2>&1";
+            << cmd << " 2>&1";
   }
-  mBash << R"("
+  mScript << R"("
     status=$?
     echo "Status: ${status}"
   } 2>&1 >> .microCI.log
@@ -188,6 +288,7 @@ function step_{{ FUNCTION_NAME }}() {
   else
     echo -e "${red}FALHOU${clearColor}"
   fi
+  date >> .microCI.log
 }
 )";
 }
@@ -197,30 +298,30 @@ function step_{{ FUNCTION_NAME }}() {
 // ----------------------------------------------------------------------
 void MicroCI::initBash() {
   nlohmann::json data;
-  data["VERSION"] = fmt::format( "{}.{}.{}    ", MAJOR, MINOR, PATCH ).substr( 0, 10 );
+  data["VERSION"] =
+      fmt::format("{}.{}.{}    ", MAJOR, MINOR, PATCH).substr(0, 10);
+  data["BLUE"] = "\033[0;34m";
+  data["YELLOW"] = "\033[0;33m";
+  data["MAGENTA"] = "\033[0;35m";
+  data["RED"] = "\033[0;31m";
+  data["GREEN"] = "\033[0;32m";
+  data["CYAN"] = "\033[0;36m";
+  data["CLEAR"] = "\033[0m";
 
-  mBash << inja::render( R"(#!/bin/bash
-red='\033[0;31m'
-green='\033[0;32m'
-yellow='\033[0;33m'
-blue='\033[0;34m'
-magenta='\033[0;35m'
-cyan='\033[0;36m'
-clearColor='\033[0m'
-
+  mScript << inja::render(R"(#!/bin/bash
 {
-  echo -e "${blue}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${clearColor}"
-  echo -e "${blue}┃                                                                    ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░░░░░░░░░░░░░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░░░░░█▀▀░▀█▀░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░█░█░█░░░░█░░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░▀░░░░░░░░░░░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                          ░░░░░░░░░░░░░░░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                            microCI {{ VERSION }}                       ┃${clearColor}"
-  echo -e "${blue}┃                           Geraldo Ribeiro                          ┃${clearColor}"
-  echo -e "${blue}┃                                                                    ┃${clearColor}"
-  echo -e "${blue}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${clearColor}"
+  echo -e "{{BLUE}}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{{CLEAR}}"
+  echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░░░░░█▀▀░▀█▀░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░█░█░█░░░░█░░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░▀░░░░░░░░░░░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                            microCI {{ VERSION }}                       ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                           Geraldo Ribeiro                          ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"
 } | tee .microCI.log
 
 PWD=$(pwd)
@@ -265,7 +366,9 @@ function assert_function() {
   assert "\"$(type -t ${func})\" == \"function\""
 }
 
-)", data ) << endl;
+)",
+                          data)
+          << endl;
 }
 
 }  // namespace microci

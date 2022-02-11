@@ -15,10 +15,11 @@ LDFLAGS+= -lyaml-cpp
 all: deps microCI test
 
 test:
-	./microCI -h
-	./microCI
 	./microCI -i y.yml      || echo "OK"
 	./microCI --input=x.yml || echo "OK"
+	./microCI -h
+	./microCI
+	./microCI -i git_deploy.yml
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

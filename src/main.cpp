@@ -51,13 +51,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return 1;
   }
 
-  if (!uCI.LoadYaml(yamlFilename)) {
+  if (!uCI.ReadConfig(yamlFilename)) {
     cout << microci::banner() << endl;
     spdlog::error( "Falha na leitura do arquivo {}", yamlFilename );
     return 1;
   }
 
-  cout << uCI.Bash();
+  cout << uCI.Script();
   return 0;
 }
 

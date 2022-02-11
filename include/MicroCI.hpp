@@ -19,18 +19,22 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
-  bool LoadYaml(const string& yaml);
-  string Bash() const;
+  bool ReadConfig(const string& yaml);
+  string Script() const;
 
  private:
   void initBash();
   void parseBashStep(YAML::Node& step);
   void parsePluginStep(YAML::Node& step);
+  void parseGitDeployPluginStep(YAML::Node& step);
   string sanitizeName(const string& name) const;
 
   map<string, string> mEnvs;
   string mDockerImageGlobal;
-  stringstream mBash;
+  stringstream mScript;
+
+  typedef void (MicroCI::*parseFunctionPtr)(YAML::Node& step);
+  map<string, parseFunctionPtr> mPluginParserMap;
 };
 
 }  // namespace microci
