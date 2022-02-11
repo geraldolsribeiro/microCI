@@ -1,0 +1,15 @@
+
+                           ░░░░░░░░░░░░░░░░░
+                           ░░░░░░░█▀▀░▀█▀░░░
+                           ░░░█░█░█░░░░█░░░░
+                           ░░░█▀▀░▀▀▀░▀▀▀░░░
+                           ░░░▀░░░░░░░░░░░░░
+                           ░░░░░░░░░░░░░░░░░
+                             microCI 0.2.0
+                            Geraldo Ribeiro
+
+Opções:
+  -h --help                Ajuda
+  -i,--input arquivo.yml   Carrega arquivo de configuração (default .microCI.yml)
+
+

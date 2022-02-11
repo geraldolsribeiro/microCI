@@ -14,8 +14,8 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 0;
-const int PATCH = 2;
+const int MINOR = 2;
+const int PATCH = 0;
 
 string banner();
 
@@ -31,6 +31,7 @@ class MicroCI {
   void parseBashStep(YAML::Node& step);
   void parsePluginStep(YAML::Node& step);
   void parseGitDeployPluginStep(YAML::Node& step);
+  void parseMkdocsMaterialPluginStep(YAML::Node& step);
   json defaultDataTemplate() const;
   string sanitizeName(const string& name) const;
 

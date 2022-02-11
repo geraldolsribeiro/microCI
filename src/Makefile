@@ -17,9 +17,10 @@ all: deps microCI test
 test:
 	./microCI -i y.yml      || echo "OK"
 	./microCI --input=x.yml || echo "OK"
-	./microCI -h
-	./microCI
-	./microCI -i git_deploy.yml
+	./microCI -h > help.txt
+	./microCI > default.sh
+	./microCI -i git_deploy.yml > git_deploy.sh
+	./microCI -i mkdocs_material.yml > mkdocs_material.sh
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

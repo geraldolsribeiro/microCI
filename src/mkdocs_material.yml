@@ -1,0 +1,15 @@
+---
+steps:
+  - name: "Construir documentação em formato HTML"
+    description: "Documentação do projetos"
+    plugin:
+      name: "mkdocs_material"
+      action: "build"
+  - name: "Servidor local na porta 8000"
+    description: "Executa servidor local para preview da documentação"
+    # passo executado localmente
+    only: mk2
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
+

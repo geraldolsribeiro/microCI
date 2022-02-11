@@ -31,6 +31,8 @@ string banner() {
 // ----------------------------------------------------------------------
 MicroCI::MicroCI() {
   mPluginParserMap.emplace("git_deploy", &MicroCI::parseGitDeployPluginStep);
+  mPluginParserMap.emplace("mkdocs_material",
+                           &MicroCI::parseMkdocsMaterialPluginStep);
   initBash();
 }
 
@@ -141,6 +143,71 @@ string MicroCI::sanitizeName(const string& name) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
+  auto stepName = string{};
+  auto stepDescription = string{};
+  auto action = string{"build"};
+
+  if (step["name"]) {
+    stepName = step["name"].as<string>();
+  }
+  if (step["description"]) {
+    stepDescription = step["description"].as<string>();
+  }
+  if( step["plugin"]["action"] ) {
+    action = step["plugin"]["action"].as<string>();
+  }
+
+  auto data = defaultDataTemplate();
+  data["ACTION"] = action;
+  data["STEP_NAME"] = stepName;
+  data["FUNCTION_NAME"] = sanitizeName(stepName);
+  data["STEP_DESCRIPTION"] = stepDescription;
+
+  // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
+  // exec 5> >(logger -t $0)
+  // BASH_XTRACEFD="5"
+  // PS4='$LINENO: '
+  // set -x
+  //
+  // # Place your code here
+
+  mScript << inja::render(R"(
+# ----------------------------------------------------------------------
+# {{ STEP_DESCRIPTION }}
+# ----------------------------------------------------------------------
+function step_{{ FUNCTION_NAME }}() {
+  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
+  {
+    (
+      set -e
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /docs \
+        --volume "${PWD}":/docs \
+        squidfunk/mkdocs-material \
+        {{ACTION}} 2>&1
+    )
+    status=$?
+    echo "Status: ${status}"
+  } >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "{{GREEN}}OK{{CLEAR}}"
+  else
+    echo -e "{{RED}}FALHOU{{CLEAR}}"
+  fi
+}
+)",
+                          data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
   auto stepName = string{};
   auto stepDescription = string{};
@@ -199,7 +266,7 @@ function step_{{ FUNCTION_NAME }}() {
     )
     status=$?
     echo "Status: ${status}"
-  } 2>&1 >> .microCI.log
+  } >> .microCI.log
 
   if [ "${status}" = "0" ]; then
     echo -e "{{GREEN}}OK{{CLEAR}}"
@@ -216,13 +283,14 @@ function step_{{ FUNCTION_NAME }}() {
 // ----------------------------------------------------------------------
 void MicroCI::parsePluginStep(YAML::Node& step) {
   auto pluginName = step["plugin"]["name"].as<string>();
-  auto stepName = step["name"].as<string>();
   if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
+    auto stepName = step["name"].as<string>();
     spdlog::error("Plugin '{}' não encontrado no passo '{}'", pluginName,
                   stepName);
     return;
   }
 
+  // Executa o plugin
   parseFunctionPtr parser = mPluginParserMap[pluginName];
   (this->*parser)(step);
 }
@@ -283,7 +351,7 @@ function step_{{ FUNCTION_NAME }}() {
 )";
   }
   mScript << R"(        --volume "${PWD}":/ws \
-    )" << dockerImage
+        )" << dockerImage
           << R"( \
         /bin/bash -c "cd /ws)";
   for (auto cmd : cmds) {
@@ -295,7 +363,7 @@ function step_{{ FUNCTION_NAME }}() {
     )
     status=$?
     echo "Status: ${status}"
-  } 2>&1 >> .microCI.log
+  } >> .microCI.log
 
   if [ "${status}" = "0" ]; then
     echo -e "{{GREEN}}OK{{CLEAR}}"
@@ -332,6 +400,10 @@ void MicroCI::initBash() {
 
   mScript << inja::render(R"(#!/bin/bash
 {
+  exec 5> .microCI.dbg
+  BASH_XTRACEFD="5"
+  PS4='$LINENO: '
+
   echo -e "{{BLUE}}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
@@ -344,6 +416,8 @@ void MicroCI::initBash() {
   echo -e "{{BLUE}}┃                           Geraldo Ribeiro                          ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
   echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"
+  echo ""
+  echo ""
 } | tee .microCI.log
 
 PWD=$(pwd)
