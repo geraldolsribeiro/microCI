@@ -183,6 +183,9 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   }
   if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
+    if( action == "serve" ) {
+      action += " --dev-addr=0.0.0.0:8000";
+    }
   }
   if (step["plugin"]["port"]) {
     port = step["plugin"]["port"].as<string>();

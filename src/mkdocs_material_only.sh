@@ -81,7 +81,7 @@ function step_servidor_local_na_porta_8000() {
         --volume "${PWD}":/docs \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
-        serve 2>&1
+        serve --dev-addr=0.0.0.0:8000 2>&1
     )
     status=$?
     echo "Status: ${status}"
