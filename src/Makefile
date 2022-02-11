@@ -21,6 +21,8 @@ test:
 	./microCI > default.sh
 	./microCI -i git_deploy.yml > git_deploy.sh
 	./microCI -i mkdocs_material.yml > mkdocs_material.sh
+	./microCI -i mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

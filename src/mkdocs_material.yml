@@ -8,7 +8,7 @@ steps:
   - name: "Servidor local na porta 8000"
     description: "Executa servidor local para preview da documentação"
     # passo executado localmente
-    only: mk2
+    only: "local-step"
     plugin:
       name: "mkdocs_material"
       action: "serve"

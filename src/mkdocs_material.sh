@@ -12,13 +12,12 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.2.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.3.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
   echo ""
   echo ""
-  date
 } | tee .microCI.log
 
 PWD=$(pwd)
@@ -80,8 +79,9 @@ function step_construir_documentacao_em_formato_html() {
         --rm \
         --workdir /docs \
         --volume "${PWD}":/docs \
+        --publish 8000:8000 \
         squidfunk/mkdocs-material \
-        serve 2>&1
+        build 2>&1
     )
     status=$?
     echo "Status: ${status}"

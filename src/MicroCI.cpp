@@ -1,3 +1,6 @@
+// docker run --rm -it -v ~/.ssh:/root/.ssh -v ${PWD}:/docs
+// squidfunk/mkdocs-material gh-deploy
+
 #include <iostream>
 
 using namespace std;
@@ -44,6 +47,11 @@ MicroCI::~MicroCI() {}
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetOnlyStep(const string& onlyStep) { mOnlyStep = onlyStep; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 string MicroCI::Script() const { return mScript.str(); }
 
 // ----------------------------------------------------------------------
@@ -77,27 +85,44 @@ bool MicroCI::ReadConfig(const string& filename) {
     mScript << "# Imagem docker global: " << mDockerImageGlobal << endl;
   }
 
-  if (CI["steps"].IsSequence()) {
+  if (!mOnlyStep.empty()) {
     for (auto step : CI["steps"]) {
-      if (step["bash"]) {
-        parseBashStep(step);
-      }
-
-      if (step["plugin"]) {
-        parsePluginStep(step);
+      if (step["only"] and step["only"].as<string>() == mOnlyStep) {
+        if (step["bash"]) {
+          parseBashStep(step);
+        } else if (step["plugin"]) {
+          parsePluginStep(step);
+        }
+        mScript << "# Executa somente este passo" << endl;
+        mScript << "step_" << sanitizeName(step["name"].as<string>()) << endl;
+        mScript << "exit 0;" << endl;
       }
     }
-    mScript << R"(
+  } else {
+    if (CI["steps"].IsSequence()) {
+      for (auto step : CI["steps"]) {
+        if (step["only"]) {
+          continue;
+        } else if (step["bash"]) {
+          parseBashStep(step);
+        } else if (step["plugin"]) {
+          parsePluginStep(step);
+        }
+      }
+      mScript << R"(
 
 function main() {
   date >> .microCI.log
 
 )";
-    for (auto step : CI["steps"]) {
-      string stepName = step["name"].as<string>();
-      mScript << "  step_" << sanitizeName(stepName) << endl;
-    }
-    mScript << R"(
+      for (auto step : CI["steps"]) {
+        if (step["only"]) {
+          continue;
+        }
+        string stepName = step["name"].as<string>();
+        mScript << "  step_" << sanitizeName(stepName) << endl;
+      }
+      mScript << R"(
   date >> .microCI.log
 }
 
@@ -105,6 +130,7 @@ function main() {
 main
 
 )";
+    }
   }
   return true;
 }
@@ -147,6 +173,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   auto stepName = string{};
   auto stepDescription = string{};
   auto action = string{"build"};
+  auto port = string{"8000"};
 
   if (step["name"]) {
     stepName = step["name"].as<string>();
@@ -154,12 +181,16 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   if (step["description"]) {
     stepDescription = step["description"].as<string>();
   }
-  if( step["plugin"]["action"] ) {
+  if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
+  }
+  if (step["plugin"]["port"]) {
+    port = step["plugin"]["port"].as<string>();
   }
 
   auto data = defaultDataTemplate();
   data["ACTION"] = action;
+  data["PORT"] = port;
   data["STEP_NAME"] = stepName;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["STEP_DESCRIPTION"] = stepDescription;
@@ -188,6 +219,7 @@ function step_{{ FUNCTION_NAME }}() {
         --rm \
         --workdir /docs \
         --volume "${PWD}":/docs \
+        --publish {{PORT}}:8000 \
         squidfunk/mkdocs-material \
         {{ACTION}} 2>&1
     )

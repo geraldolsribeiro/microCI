@@ -28,7 +28,7 @@ steps:
     stage: build
     image: gcc
     commands:
-      - make test   
+      - make test
       */
 
 #include <filesystem>
@@ -63,7 +63,9 @@ Opções:
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   //{{{
   argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
-  string yamlFilename = ".microCI.yml";
+  auto yamlFilename = string{".microCI.yml"};
+  auto onlyStep = string{};
+
   MicroCI uCI{};
 
   if (cmdl[{"-h", "--help"}]) {
@@ -79,9 +81,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     return 1;
   }
 
+  if ((cmdl({"-O", "--only"}) >> onlyStep)) {
+    uCI.SetOnlyStep(onlyStep);
+  }
+
   if (!uCI.ReadConfig(yamlFilename)) {
     cout << microci::banner() << endl;
-    spdlog::error( "Falha na leitura do arquivo {}", yamlFilename );
+    spdlog::error("Falha na leitura do arquivo {}", yamlFilename);
     return 1;
   }
 

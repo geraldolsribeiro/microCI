@@ -65,35 +65,23 @@ function assert_function() {
 
 
 # ----------------------------------------------------------------------
-# Ferramenta de gerenciamento de riscos
+# Executa servidor local para preview da documentação
 # ----------------------------------------------------------------------
-function step_deploy_de_pagina_de_aplicacao_vue() {
-  printf "[0;36m%60s[0m: " "Deploy de página de aplicação Vue"
+function step_servidor_local_na_porta_8000() {
+  printf "[0;36m%60s[0m: " "Servidor local na porta 8000"
   {
     (
       set -e
-      # Caso ainda não exista realiza o clone inicial
-      if [ ! -d "/opt/microCI/repos/risk_frontend_deploy" ]; then
-        git clone "git@gitlabcorp.stefanini.com.br:str/risk_frontend_deploy.git" \
-          --separate-git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-          "/var/www/str-intranet/html/risk" 2>&1
-      fi
-
-      # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
-      git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
-        clean -xfd 2>&1 \
-      && git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
-        checkout -f 2>&1 \
-      && git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
-        pull 2>&1
-
-      # Remove o arquivo .git que aponta para o git-dir
-      rm -f "/var/www/str-intranet/html/risk/.git" 2>&1
-
-      date
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /docs \
+        --volume "${PWD}":/docs \
+        --publish 8000:8000 \
+        squidfunk/mkdocs-material \
+        serve 2>&1
     )
     status=$?
     echo "Status: ${status}"
@@ -105,16 +93,6 @@ function step_deploy_de_pagina_de_aplicacao_vue() {
     echo -e "[0;31mFALHOU[0m"
   fi
 }
-
-
-function main() {
-  date >> .microCI.log
-
-  step_deploy_de_pagina_de_aplicacao_vue
-
-  date >> .microCI.log
-}
-
-# Executa todos os passos
-main
-
+# Executa somente este passo
+step_servidor_local_na_porta_8000
+exit 0;

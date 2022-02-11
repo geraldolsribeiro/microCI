@@ -14,7 +14,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 2;
+const int MINOR = 3;
 const int PATCH = 0;
 
 string banner();
@@ -25,6 +25,7 @@ class MicroCI {
   virtual ~MicroCI();
   bool ReadConfig(const string& yaml);
   string Script() const;
+  void SetOnlyStep(const string& onlyStep);
 
  private:
   void initBash();
@@ -35,6 +36,7 @@ class MicroCI {
   json defaultDataTemplate() const;
   string sanitizeName(const string& name) const;
 
+  string mOnlyStep;
   map<string, string> mEnvs;
   string mDockerImageGlobal;
   stringstream mScript;
