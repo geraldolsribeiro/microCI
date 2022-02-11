@@ -5,7 +5,7 @@ steps:
     plugin:
       name: "mkdocs_material"
       action: "build"
-  - name: "Servidor local na porta 9001"
+  - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
     # passo executado localmente
     only: "local-step"
