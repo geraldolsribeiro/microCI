@@ -1,0 +1,10 @@
+---
+steps:
+  - name: "Deploy de página de aplicação Vue"
+    description: "Ferramenta de gerenciamento de riscos"
+    plugin:
+      name: "git_deploy"
+      repo: "git@gitlabcorp.stefanini.com.br:str/risk_frontend_deploy.git"
+      git_dir: "/opt/microCI/repos/risk_frontend_deploy"
+      work_tree: "/var/www/str-intranet/html/risk"
+

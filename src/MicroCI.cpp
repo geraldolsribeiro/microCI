@@ -6,10 +6,8 @@ using namespace std;
 
 #include <MicroCI.hpp>
 #include <inja.hpp>
-#include <nlohmann/json.hpp>
 
 namespace microci {
-using nlohmann::json;
 
 // ----------------------------------------------------------------------
 //
@@ -147,8 +145,8 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
   auto stepName = string{};
   auto stepDescription = string{};
 
-  if (step["description"]) {
-    const auto stepName = step["name"].as<string>();
+  if (step["name"]) {
+    stepName = step["name"].as<string>();
   }
   if (step["description"]) {
     stepDescription = step["description"].as<string>();
@@ -159,7 +157,7 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
   const auto gitDir = step["plugin"]["git_dir"].as<string>();
   const auto workTree = step["plugin"]["work_tree"].as<string>();
 
-  json data;
+  auto data = defaultDataTemplate();
   data["GIT_URL"] = repo;
   data["GIT_DIR"] = gitDir;
   data["GIT_WORK"] = workTree;
@@ -172,31 +170,43 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
-  printf "${cyan}%60s${clearColor}: " "{{ STEP_NAME }}"
+  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
   {
-    # Caso ainda não exista realiza o clone inicial
-    if [ ! -d "{{GIT_DIR}}" ]; then
-      git clone "{{GIT_URL}}" \
-        --separate-git-dir="{{GIT_DIR}}" \
-        "{{GIT_WORK}}"
-    fi
+    (
+      set -e
+      # Caso ainda não exista realiza o clone inicial
+      if [ ! -d "{{GIT_DIR}}" ]; then
+        git clone "{{GIT_URL}}" \
+          --separate-git-dir="{{GIT_DIR}}" \
+          "{{GIT_WORK}}" 2>&1
+      fi
 
-    # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
-    git --git-dir="{{GIT_DIR}}" \
-      --work-tree="{{GIT_WORK}}" \
-      clean -xfd
-    git --git-dir="{{GIT_DIR}}" \
-      --work-tree="{{GIT_WORK}}" \
-      checkout -f
-    git --git-dir="{{GIT_DIR}}" \
-      --work-tree="{{GIT_WORK}}" \
-      pull
+      # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
+      git --git-dir="{{GIT_DIR}}" \
+        --work-tree="{{GIT_WORK}}" \
+        clean -xfd 2>&1 \
+      && git --git-dir="{{GIT_DIR}}" \
+        --work-tree="{{GIT_WORK}}" \
+        checkout -f 2>&1 \
+      && git --git-dir="{{GIT_DIR}}" \
+        --work-tree="{{GIT_WORK}}" \
+        pull 2>&1
 
-    # Remove o arquivo .git que aponta para o git-dir
-    rm -f "${GIT_WORK}/.git"
+      # Remove o arquivo .git que aponta para o git-dir
+      rm -f "{{GIT_WORK}}/.git" 2>&1
 
-    date >> .microCI.log
-  }
+      date
+    )
+    status=$?
+    echo "Status: ${status}"
+  } 2>&1 >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "{{GREEN}}OK{{CLEAR}}"
+  else
+    echo -e "{{RED}}FALHOU{{CLEAR}}"
+  fi
+}
 )",
                           data);
 }
@@ -225,7 +235,7 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   auto cmds = vector<string>{};
   auto line = string{};
   auto stepDescription = string{};
-  nlohmann::json data;
+  auto data = defaultDataTemplate();
   string dockerImage = mDockerImageGlobal;
 
   while (getline(ss, line, '\n')) {
@@ -251,53 +261,57 @@ void MicroCI::parseBashStep(YAML::Node& step) {
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
-  printf "${cyan}%60s${clearColor}: " "{{ STEP_NAME }}"
+  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
   {
-    echo ""
-    echo ""
-    echo ""
-    echo "Passo: {{ STEP_NAME }}"
-    docker run \
-      --interactive \
-      --attach stdout \
-      --attach stderr \
-      --rm \
-      --workdir /ws \
+    (
+      set -e
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: {{ STEP_NAME }}"
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /ws \
 )",
                           data);
 
   for (auto [key, val] : mEnvs) {
-    mScript << "      --env " << key << R"(=")" << val << R"(" \
+    mScript << "        --env " << key << R"(=")" << val << R"(" \
 )";
   }
-  mScript << R"(      --volume "${PWD}":/ws \
+  mScript << R"(        --volume "${PWD}":/ws \
     )" << dockerImage
           << R"( \
-      /bin/bash -c "cd /ws)";
+        /bin/bash -c "cd /ws)";
   for (auto cmd : cmds) {
     mScript << R"( \
-         && )"
+           && )"
             << cmd << " 2>&1";
   }
-  mScript << R"("
+  mScript << inja::render(R"("
+    )
     status=$?
     echo "Status: ${status}"
   } 2>&1 >> .microCI.log
+
   if [ "${status}" = "0" ]; then
-    echo -e "${green}OK${clearColor}"
+    echo -e "{{GREEN}}OK{{CLEAR}}"
   else
-    echo -e "${red}FALHOU${clearColor}"
+    echo -e "{{RED}}FALHOU{{CLEAR}}"
   fi
-  date >> .microCI.log
 }
-)";
+)",
+                          data);
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::initBash() {
-  nlohmann::json data;
+json MicroCI::defaultDataTemplate() const {
+  json data;
   data["VERSION"] =
       fmt::format("{}.{}.{}    ", MAJOR, MINOR, PATCH).substr(0, 10);
   data["BLUE"] = "\033[0;34m";
@@ -307,6 +321,14 @@ void MicroCI::initBash() {
   data["GREEN"] = "\033[0;32m";
   data["CYAN"] = "\033[0;36m";
   data["CLEAR"] = "\033[0m";
+  return data;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::initBash() {
+  auto data = defaultDataTemplate();
 
   mScript << inja::render(R"(#!/bin/bash
 {
