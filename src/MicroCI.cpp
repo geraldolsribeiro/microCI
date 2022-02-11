@@ -1,59 +1,110 @@
-// TODO: saída para relatório
-// https://github.com/p-ranav/tabulate
-// https://docs.docker.com/engine/reference/commandline/run/
-// https://plantuml.com/yaml
-
-#include <filesystem>
-#include <fstream>
 #include <iostream>
-#include <map>
-#include <sstream>
 
 using namespace std;
 
 #include <spdlog/spdlog.h>
-#include <yaml-cpp/yaml.h>
 
-#include <argh.hpp>
+#include <MicroCI.hpp>
 #include <inja.hpp>
 #include <nlohmann/json.hpp>
 
-// using namespace inja;
+namespace microci {
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 string banner() {
-  return R"(
+  return fmt::format(R"(
                            ░░░░░░░░░░░░░░░░░
                            ░░░░░░░█▀▀░▀█▀░░░
                            ░░░█░█░█░░░░█░░░░
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.0.1
+                             microCI {}.{}.{}
                             Geraldo Ribeiro
-)";
+)",
+                     MAJOR, MINOR, PATCH);
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string help() {
-  return R"(
-Opções:
-  -h --help                Ajuda
-  -i,--input arquivo.yml   Carrega arquivo de configuração
+MicroCI::MicroCI() { initBash(); }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+MicroCI::~MicroCI() {}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::Bash() const { return mBash.str(); }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+bool MicroCI::LoadYaml(const string& filename) {
+  YAML::Node CI;
+
+  try {
+    CI = YAML::LoadFile(filename);
+  } catch (YAML::BadFile bf) {
+    spdlog::error("Falha ao carregar o arquivo .microCI.yml");
+    spdlog::error(bf.what());
+    return false;
+  }
+
+  // Variáveis de ambiente
+  if (CI["envs"] and CI["envs"].IsMap()) {
+    for (auto it : CI["envs"]) {
+      mEnvs.emplace(it.first.as<string>(), it.second.as<string>());
+    }
+  }
+
+  // Imagem docker global (opcional)
+  if (CI["docker"].IsScalar()) {
+    mDockerImageGlobal = CI["docker"].as<string>();
+    mBash << "# Imagem docker global: " << mDockerImageGlobal << endl;
+  }
+
+  if (CI["steps"].IsSequence()) {
+    for (auto step : CI["steps"]) {
+      if (step["bash"]) {
+        parseBashStep(step);
+      }
+
+      if (step["plugin"]) {
+        parsePluginStep(step);
+      }
+    }
+    mBash << R"(
+
+function main() {
+  date >> .microCI.log
+)";
+    for (auto step : CI["steps"]) {
+      string stepName = step["name"].as<string>();
+      mBash << "   step_" << sanitizeName(stepName) << endl;
+    }
+    mBash << R"(
+  date >> .microCI.log
+}
+
+main
 
 )";
+  }
+  return true;
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string sanitizeName(const string &s) {
+string MicroCI::sanitizeName(const string& name) const {
   // FIXME: tolower
-  auto ret = s;
+  auto ret = name;
   const auto allowedChars =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
   size_t found = ret.find_first_not_of(allowedChars);
@@ -64,28 +115,38 @@ string sanitizeName(const string &s) {
   return ret;
 }
 
-void parsePluginStep() {}
+void MicroCI::parsePluginStep(YAML::Node& step) {}
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void parseBashStep(const map<string, string> &envs, const string &dockerImage,
-                   const string &stepName, const string &stepDescription,
-                   const string s) {
-  auto ss = stringstream{s};
+void MicroCI::parseBashStep(YAML::Node& step) {
+  auto ss = stringstream{step["bash"].as<string>()};
   auto cmds = vector<string>{};
   auto line = string{};
+  auto stepDescription = string{};
   nlohmann::json data;
+  string dockerImage = mDockerImageGlobal;
 
   while (getline(ss, line, '\n')) {
     cmds.push_back(line);
+  }
+
+  string stepName = step["name"].as<string>();
+
+  if (step["docker"]) {
+    dockerImage = step["docker"].as<string>();
+  }
+
+  if (step["description"]) {
+    stepDescription = step["description"].as<string>();
   }
 
   data["STEP_NAME"] = stepName;
   data["STEP_DESCRIPTION"] = stepDescription;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
 
-  cout << inja::render(R"(
+  mBash << inja::render(R"(
 # ----------------------------------------------------------------------
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
@@ -103,22 +164,22 @@ function step_{{ FUNCTION_NAME }}() {
       --rm \
       --workdir /ws \
 )",
-                       data);
+                        data);
 
-  for (auto [key, val] : envs) {
-    cout << "      --env " << key << R"(=")" << val << R"(" \
+  for (auto [key, val] : mEnvs) {
+    mBash << "      --env " << key << R"(=")" << val << R"(" \
 )";
   }
-  cout << R"(      --volume "${PWD}":/ws \
+  mBash << R"(      --volume "${PWD}":/ws \
     )" << dockerImage
-       << R"( \
+        << R"( \
       /bin/bash -c "cd /ws)";
   for (auto cmd : cmds) {
-    cout << R"( \
+    mBash << R"( \
          && )"
-         << cmd << " 2>&1";
+          << cmd << " 2>&1";
   }
-  cout << R"("
+  mBash << R"("
     status=$?
     echo "Status: ${status}"
   } 2>&1 >> .microCI.log
@@ -134,39 +195,11 @@ function step_{{ FUNCTION_NAME }}() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
-  //{{{
-  argh::parser cmdl(
-      argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);  // -i arq
-  YAML::Node CI;
-  string yamlFilename = ".microCI.yml";
+void MicroCI::initBash() {
+  nlohmann::json data;
+  data["VERSION"] = fmt::format( "{}.{}.{}    ", MAJOR, MINOR, PATCH ).substr( 0, 10 );
 
-  if (cmdl[{"-h", "--help"}]) {
-    cout << banner() << help() << endl;
-    return 0;
-  }
-
-  if (!(cmdl({"-i", "--input"}) >> yamlFilename)) {
-    spdlog::debug("Usando arquivo de entrada padrão {}", yamlFilename);
-  }
-
-  if (!filesystem::exists(yamlFilename)) {
-    spdlog::error("Arquivo de entrada {} não encontrado.", yamlFilename);
-    return 1;
-  }
-
-  try {
-    CI = YAML::LoadFile(yamlFilename);
-  } catch (YAML::BadFile bf) {
-    spdlog::error("Falha ao carregar o arquivo .microCI.yml");
-    spdlog::error(bf.what());
-    return 1;
-  }
-
-  string dockerImageGlobal;
-  map<string, string> envs;
-
-  cout << R"(#!/bin/bash
+  mBash << inja::render( R"(#!/bin/bash
 red='\033[0;31m'
 green='\033[0;32m'
 yellow='\033[0;33m'
@@ -184,7 +217,7 @@ clearColor='\033[0m'
   echo -e "${blue}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃${clearColor}"
   echo -e "${blue}┃                          ░░░▀░░░░░░░░░░░░░                         ┃${clearColor}"
   echo -e "${blue}┃                          ░░░░░░░░░░░░░░░░░                         ┃${clearColor}"
-  echo -e "${blue}┃                            microCI 0.0.1                           ┃${clearColor}"
+  echo -e "${blue}┃                            microCI {{ VERSION }}                       ┃${clearColor}"
   echo -e "${blue}┃                           Geraldo Ribeiro                          ┃${clearColor}"
   echo -e "${blue}┃                                                                    ┃${clearColor}"
   echo -e "${blue}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${clearColor}"
@@ -232,61 +265,7 @@ function assert_function() {
   assert "\"$(type -t ${func})\" == \"function\""
 }
 
-)" << endl;
-
-  // Variáveis de ambiente
-  if (CI["envs"] and CI["envs"].IsMap()) {
-    for (auto it : CI["envs"]) {
-      envs.emplace(it.first.as<string>(), it.second.as<string>());
-    }
-  }
-
-  // Imagem docker global (opcional)
-  if (CI["docker"].IsScalar()) {
-    dockerImageGlobal = CI["docker"].as<string>();
-    cout << "# Imagem docker global: " << dockerImageGlobal << endl;
-  }
-
-  if (CI["steps"].IsSequence()) {
-    for (auto step : CI["steps"]) {
-      string dockerImage = dockerImageGlobal;
-      string stepName = step["name"].as<string>();
-      string stepDescription;
-
-      if (step["docker"]) {
-        dockerImage = step["docker"].as<string>();
-      }
-
-      if (step["description"]) {
-        stepDescription = step["description"].as<string>();
-      }
-
-      if (step["bash"]) {
-        parseBashStep(envs, dockerImage, stepName, stepDescription,
-                      step["bash"].as<string>());
-      }
-
-      if (step["plugin"]) {
-        parsePluginStep();
-      }
-    }
-    cout << R"(
-
-function main() {
-  date >> .microCI.log
-)";
-    for (auto step : CI["steps"]) {
-      string stepName = step["name"].as<string>();
-      cout << "   step_" << sanitizeName(stepName) << endl;
-    }
-    cout << R"(
-  date >> .microCI.log
+)", data ) << endl;
 }
 
-main
-
-)";
-  }
-  return 0;
-}
-
+}  // namespace microci

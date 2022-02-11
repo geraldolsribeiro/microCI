@@ -20,7 +20,7 @@ test:
 	./microCI -i y.yml      || echo "OK"
 	./microCI --input=x.yml || echo "OK"
 
-microCI: microCI.cpp
+microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	strip --strip-unneeded $@
 
