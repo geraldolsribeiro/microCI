@@ -11,6 +11,7 @@ chmod 755 /usr/local/bin/microCI
 ## Por fazer
 
 * passar usuário atual para container para evitar geração de arquivos como `root` na pasta de trabalho
+* incluir mensagem de como usar no final do script
 
 ## Versões
 

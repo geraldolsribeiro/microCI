@@ -63,7 +63,11 @@ function assert_function() {
 }
 
 
-# Imagem docker global: ubuntu:18.04
+# Atualiza as imagens docker utilizadas no passos
+{
+  docker pull node:16 2>&1
+  docker pull ubuntu:18.04 2>&1
+} >> .microCI.log
 
 # ----------------------------------------------------------------------
 # Descrição do passo

@@ -36,6 +36,7 @@ MicroCI::MicroCI() {
   mPluginParserMap.emplace("git_deploy", &MicroCI::parseGitDeployPluginStep);
   mPluginParserMap.emplace("mkdocs_material",
                            &MicroCI::parseMkdocsMaterialPluginStep);
+  mDockerImageGlobal = "debian:stable-slim";
   initBash();
 }
 
@@ -59,6 +60,7 @@ string MicroCI::Script() const { return mScript.str(); }
 // ----------------------------------------------------------------------
 bool MicroCI::ReadConfig(const string& filename) {
   YAML::Node CI;
+  set<string> dockerImages;
 
   try {
     CI = YAML::LoadFile(filename);
@@ -79,11 +81,24 @@ bool MicroCI::ReadConfig(const string& filename) {
     }
   }
 
+  // Localiza imagens docker necessárias
+  for (auto step : CI["steps"]) {
+    if (step["docker"]) {
+      dockerImages.insert(step["docker"].as<string>());
+    }
+  }
+
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
     mDockerImageGlobal = CI["docker"].as<string>();
-    mScript << "# Imagem docker global: " << mDockerImageGlobal << endl;
+    dockerImages.insert(mDockerImageGlobal);
   }
+
+  mScript << "# Atualiza as imagens docker utilizadas no passos\n{\n";
+  for (const auto& dockerImage : dockerImages) {
+    mScript << fmt::format("  docker pull {} 2>&1\n", dockerImage);
+  }
+  mScript << "} >> .microCI.log\n";
 
   if (!mOnlyStep.empty()) {
     for (auto step : CI["steps"]) {
@@ -183,7 +198,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   }
   if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
-    if( action == "serve" ) {
+    if (action == "serve") {
       action += " --dev-addr=0.0.0.0:8000";
     }
   }
