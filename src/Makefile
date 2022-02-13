@@ -12,17 +12,16 @@ CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 
-all: deps microCI test
+all: deps microCI
+	make -C ../test test
 
-test:
-	./microCI -i y.yml      || echo "OK"
-	./microCI --input=x.yml || echo "OK"
-	./microCI -h > help.txt
-	./microCI > default.sh
-	./microCI -i git_deploy.yml > git_deploy.sh
-	./microCI -i mkdocs_material.yml > mkdocs_material.sh
-	./microCI -i mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+../include/new/%.hpp: ../new/%.yml
+	xxd -i $^ > $@
 
+MicroCI.cpp: \
+	../include/new/mkdocs_material.hpp \
+	../include/new/git_deploy.hpp \
+	../include/new/npm.hpp
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

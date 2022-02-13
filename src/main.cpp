@@ -2,6 +2,13 @@
 // https://github.com/p-ranav/tabulate
 // https://docs.docker.com/engine/reference/commandline/run/
 // https://plantuml.com/yaml
+//
+//
+// FIXME: 5 Simple Steps On How To Debug A Bash Shell Script
+// https://www.shell-tips.com/bash/debug-script/
+
+// 📎 You can replace the default + character used in the xtrace output by
+// changing the Bash Prompt $PS4 Variableicon mdi-link-variant.
 
 /*
  *https://codefresh.io/docs/docs/learn-by-example/cc/c-make/
@@ -45,6 +52,10 @@ using namespace std;
 #include <argh.hpp>
 using namespace microci;
 
+#include <new/git_deploy.hpp>
+#include <new/mkdocs_material.hpp>
+#include <new/npm.hpp>
+
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
@@ -53,6 +64,7 @@ string help() {
 Opções:
   -h --help                Ajuda
   -i,--input arquivo.yml   Carrega arquivo de configuração (default .microCI.yml)
+  -n,--new tipo            [bash|mkdocs_material|git_deploy]
 
 )";
 }
@@ -65,6 +77,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
   auto yamlFilename = string{".microCI.yml"};
   auto onlyStep = string{};
+  auto newType = string{};
 
   MicroCI uCI{};
 
@@ -74,6 +87,29 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   }
 
   cmdl({"-i", "--input"}) >> yamlFilename;
+
+  if ((cmdl({"-c", "--create"}) >> newType)) {
+    map<string, pair<unsigned char *, unsigned int>> newTypeTemplates;
+#define YAML_TPL(X) \
+  newTypeTemplates[#X] = make_pair(___new_##X##_yml, ___new_##X##_yml_len)
+    YAML_TPL(mkdocs_material);
+    YAML_TPL(npm);
+    YAML_TPL(git_deploy);
+#undef YAML_TPL
+
+    if (newTypeTemplates.count(newType)) {
+      auto [buf, len] = newTypeTemplates[newType];
+      ofstream out(yamlFilename);
+      out.write((char *)buf, len);
+      cout.write((char *)buf, len);
+      return 0;
+    }
+    spdlog::error("Impossível criar para tipo inválido: {}", newType);
+    for (const auto tpl : newTypeTemplates) {
+      spdlog::info("Exemplo: microCI --create {}", tpl.first);
+    }
+    return -1;
+  }
 
   if (!filesystem::exists(yamlFilename)) {
     cout << microci::banner() << endl;

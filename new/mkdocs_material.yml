@@ -1,7 +1,7 @@
 ---
 steps:
   - name: "Construir documentação em formato HTML"
-    description: "Documentação do projetos"
+    description: "Documentação do projeto"
     plugin:
       name: "mkdocs_material"
       action: "build"
@@ -13,4 +13,5 @@ steps:
       name: "mkdocs_material"
       action: "serve"
       port: 9001
+
 

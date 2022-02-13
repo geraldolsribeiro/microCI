@@ -12,7 +12,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.3.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.2.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -63,25 +63,69 @@ function assert_function() {
 }
 
 
+# Imagem docker global: ubuntu:18.04
 
 # ----------------------------------------------------------------------
-# Documentação do projetos
+# Descrição do passo
 # ----------------------------------------------------------------------
-function step_construir_documentacao_em_formato_html() {
-  printf "[0;36m%60s[0m: " "Construir documentação em formato HTML"
+function step_instalar_dependencias() {
+  printf "[0;36m%60s[0m: " "Instalar dependências"
   {
     (
       set -e
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Instalar dependências"
       docker run \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /docs \
-        --volume "${PWD}":/docs \
-        --publish 8000:8000 \
-        squidfunk/mkdocs-material \
-        build 2>&1
+        --workdir /ws \
+        --env ENV1="xxx" \
+        --env ENV2="yyy" \
+        --volume "${PWD}":/ws \
+        node:16 \
+        /bin/bash -c "cd /ws \
+           && npm install 2>&1"
+    )
+    status=$?
+    echo "Status: ${status}"
+  } >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "[0;32mOK[0m"
+  else
+    echo -e "[0;31mFALHOU[0m"
+  fi
+}
+
+# ----------------------------------------------------------------------
+# 
+# ----------------------------------------------------------------------
+function step_construir() {
+  printf "[0;36m%60s[0m: " "Construir"
+  {
+    (
+      set -e
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Construir"
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /ws \
+        --env ENV1="xxx" \
+        --env ENV2="yyy" \
+        --volume "${PWD}":/ws \
+        node:16 \
+        /bin/bash -c "cd /ws \
+           && npm run lint --fix 2>&1 \
+           && npm run build 2>&1"
     )
     status=$?
     echo "Status: ${status}"
@@ -98,7 +142,8 @@ function step_construir_documentacao_em_formato_html() {
 function main() {
   date >> .microCI.log
 
-  step_construir_documentacao_em_formato_html
+  step_instalar_dependencias
+  step_construir
 
   date >> .microCI.log
 }

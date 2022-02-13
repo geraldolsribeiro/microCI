@@ -12,7 +12,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.3.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.2.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -65,10 +65,10 @@ function assert_function() {
 
 
 # ----------------------------------------------------------------------
-# Executa servidor local para preview da documentação
+# Documentação do projeto
 # ----------------------------------------------------------------------
-function step_servidor_local_na_porta_8000() {
-  printf "[0;36m%60s[0m: " "Servidor local na porta 8000"
+function step_construir_documentacao_em_formato_html() {
+  printf "[0;36m%60s[0m: " "Construir documentação em formato HTML"
   {
     (
       set -e
@@ -81,7 +81,7 @@ function step_servidor_local_na_porta_8000() {
         --volume "${PWD}":/docs \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
-        serve --dev-addr=0.0.0.0:8000 2>&1
+        build 2>&1
     )
     status=$?
     echo "Status: ${status}"
@@ -93,6 +93,16 @@ function step_servidor_local_na_porta_8000() {
     echo -e "[0;31mFALHOU[0m"
   fi
 }
-# Executa somente este passo
-step_servidor_local_na_porta_8000
-exit 0;
+
+
+function main() {
+  date >> .microCI.log
+
+  step_construir_documentacao_em_formato_html
+
+  date >> .microCI.log
+}
+
+# Executa todos os passos
+main
+

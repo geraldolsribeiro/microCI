@@ -1,0 +1,17 @@
+---
+steps:
+  - name: "Construir documentação em formato HTML"
+    description: "Documentação do projeto"
+    plugin:
+      name: "mkdocs_material"
+      action: "build"
+  - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
+    description: "Executa servidor local para preview da documentação"
+    # passo executado localmente
+    only: "local-step"
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
+      port: 9001
+
+

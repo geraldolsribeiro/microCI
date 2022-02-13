@@ -12,7 +12,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.3.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.2.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -65,33 +65,33 @@ function assert_function() {
 
 
 # ----------------------------------------------------------------------
-# Ferramenta de gerenciamento de riscos
+# Descrição do passo
 # ----------------------------------------------------------------------
-function step_deploy_de_pagina_de_aplicacao_vue() {
-  printf "[0;36m%60s[0m: " "Deploy de página de aplicação Vue"
+function step_deploy_de_pagina_de_aplicacao_vuejs() {
+  printf "[0;36m%60s[0m: " "Deploy de página de aplicação VueJS"
   {
     (
       set -e
       # Caso ainda não exista realiza o clone inicial
-      if [ ! -d "/opt/microCI/repos/risk_frontend_deploy" ]; then
-        git clone "git@gitlabcorp.stefanini.com.br:str/risk_frontend_deploy.git" \
-          --separate-git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-          "/var/www/str-intranet/html/risk" 2>&1
+      if [ ! -d "/opt/microCI/repos/app_frontend_deploy" ]; then
+        git clone "git@gitlab.xyx.com.br:str/app_frontend_deploy.git" \
+          --separate-git-dir="/opt/microCI/repos/app_frontend_deploy" \
+          "/var/www/my-intranet/html/app" 2>&1
       fi
 
       # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
-      git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
+      git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
+        --work-tree="/var/www/my-intranet/html/app" \
         clean -xfd 2>&1 \
-      && git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
+      && git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
+        --work-tree="/var/www/my-intranet/html/app" \
         checkout -f 2>&1 \
-      && git --git-dir="/opt/microCI/repos/risk_frontend_deploy" \
-        --work-tree="/var/www/str-intranet/html/risk" \
+      && git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
+        --work-tree="/var/www/my-intranet/html/app" \
         pull 2>&1
 
       # Remove o arquivo .git que aponta para o git-dir
-      rm -f "/var/www/str-intranet/html/risk/.git" 2>&1
+      rm -f "/var/www/my-intranet/html/app/.git" 2>&1
 
       date
     )
@@ -110,7 +110,7 @@ function step_deploy_de_pagina_de_aplicacao_vue() {
 function main() {
   date >> .microCI.log
 
-  step_deploy_de_pagina_de_aplicacao_vue
+  step_deploy_de_pagina_de_aplicacao_vuejs
 
   date >> .microCI.log
 }
