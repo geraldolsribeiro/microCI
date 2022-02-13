@@ -3,7 +3,7 @@
 ## Instalação
 
 ```bash
-curl https://github.com/geraldolsribeiro/microCI/releases/download/0.3.0/microCI \
+curl -L https://github.com/geraldolsribeiro/microCI/releases/download/0.3.0/microCI \
   -o /usr/local/bin/microCI
 chmod 755 /usr/local/bin/microCI
 ```
