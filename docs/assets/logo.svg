@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="logo.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath34">
+      <rect
+         style="fill:#f4a460;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+         id="rect36"
+         width="88.842827"
+         height="64.299568"
+         x="174.12889"
+         y="17.050224" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.2996324"
+     inkscape:cx="509.23135"
+     inkscape:cy="275.53115"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="true"
+     units="px"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1056"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid30"
+       spacingx="4.2333333"
+       spacingy="4.2333333" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#21454e;fill-opacity:1;stroke-width:6.59129;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       id="rect895"
+       width="135.46667"
+       height="135.46666"
+       x="-4.8541065e-06"
+       y="0" />
+    <path
+       id="path70"
+       style="fill:#002b36;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="m 88.899993,42.333334 v 8.466667 h 8.46667 v 25.4 h -8.46667 v 8.466667 H 114.3 v -8.466667 h -8.46667 v -25.4 H 114.3 v -8.466667 z" />
+    <path
+       id="rect38"
+       style="fill:#ff8c00;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="m 88.899993,33.866668 v 8.466666 h 8.46667 v 25.4 h -8.46667 v 8.466667 H 114.3 v -8.466667 h -8.46667 v -25.4 H 114.3 v -8.466666 z" />
+    <path
+       id="path68"
+       style="fill:#002b36;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="M 55.033333,42.333334 V 50.8 76.2 84.666667 h 25.4 V 76.2 H 63.499993 V 50.8 h 16.93334 v -8.466666 z" />
+    <path
+       id="rect46"
+       style="fill:#ff8c00;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="m 55.033333,33.866668 v 8.466666 25.4 8.466667 h 25.4 v -8.466667 h -16.93334 v -25.4 h 16.93334 v -8.466666 z" />
+    <path
+       id="path66"
+       style="fill:#002b36;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="M 21.166663,59.266667 V 101.6 h 8.46667 V 84.666667 h 8.46666 8.46667 v -25.4 h -8.46667 V 76.2 h -8.46666 V 59.266667 Z" />
+    <path
+       id="rect57"
+       style="fill:#00bfff;fill-opacity:1;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+       d="m 21.166663,50.800001 v 42.333333 h 8.46667 V 76.200001 h 8.46666 8.46667 v -25.4 h -8.46667 v 16.933333 h -8.46666 V 50.800001 Z" />
+  </g>
+</svg>

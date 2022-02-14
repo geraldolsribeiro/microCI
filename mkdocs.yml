@@ -1,2 +1,24 @@
 site_name: Documentação do microCI
+theme:
+  name: material
+  language: pt-BR
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  extra:
+    homepage: https://microci.dev
+  palette:
+    primary: teal
+markdown_extensions:
+  - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+plugins:
+  - search:
+      lang: pt
 
