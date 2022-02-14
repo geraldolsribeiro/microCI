@@ -25,6 +25,6 @@ steps:
       apt update
       apt install -y libspdlog-dev
       apt install -y libyaml-cpp-dev
-      make -C src
+      make -C src clean all
       make -C test
 

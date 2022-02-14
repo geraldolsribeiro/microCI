@@ -49,7 +49,10 @@ microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	strip --strip-unneeded $@
 
-deps: ../include/argh.hpp ../include/inja.hpp ../include/nlohmann/json.hpp
+deps: \
+	../include/argh.hpp \
+	../include/inja.hpp \
+	../include/nlohmann/json.hpp
 
 ../include/argh.hpp:
 	curl https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o $@
