@@ -5,6 +5,8 @@ steps:
     plugin:
       name: "mkdocs_material"
       action: "build"
+      # Contruindo para uma pasta personalizada
+      # action: "build --site-dir public
   - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
     # passo executado localmente
@@ -12,6 +14,7 @@ steps:
     plugin:
       name: "mkdocs_material"
       action: "serve"
-      port: 9001
+      # Porta personalizada, caso já esteja utilizando a padrão 8000
+      # port: 9001
 
 

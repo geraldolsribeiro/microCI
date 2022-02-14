@@ -36,7 +36,6 @@ LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 
 all: deps microCI
-	make -C ../test test
 
 ../include/new/%.hpp: ../new/%.yml
 	xxd -i $^ > $@

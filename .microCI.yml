@@ -1,0 +1,30 @@
+---
+# Se não especificado usa uma imagem debian
+docker: "debian:stable-slim"
+steps:
+  - name: "Construir documentação em formato HTML"
+    description: "Documentação do projeto"
+    plugin:
+      name: "mkdocs_material"
+      action: "build"
+  - name: "Configurar github pages"
+    bash: |
+      cp github-pages/CNAME site/
+      chown 1000.1000 -Rv site/
+  - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
+    description: "Executa servidor local para preview da documentação"
+    # passo executado localmente
+    only: "serve"
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
+      port: 9001
+  - name: "Compilar a aplicação"
+    docker: "gcc:11"
+    bash: |
+      apt update
+      apt install -y libspdlog-dev
+      apt install -y libyaml-cpp-dev
+      make -C src
+      make -C test
+

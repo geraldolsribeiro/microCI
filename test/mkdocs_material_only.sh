@@ -82,7 +82,7 @@ function step_servidor_local_na_porta_9001__ctrl_c_para_finalizar_() {
         --rm \
         --workdir /docs \
         --volume "${PWD}":/docs \
-        --publish 9001:8000 \
+        --publish 8000:8000 \
         squidfunk/mkdocs-material \
         serve --dev-addr=0.0.0.0:8000 2>&1
     )
