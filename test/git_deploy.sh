@@ -71,10 +71,13 @@ function assert_function() {
 # Descrição do passo
 # ----------------------------------------------------------------------
 function step_deploy_de_pagina_de_aplicacao_vuejs() {
-  printf "[0;36m%60s[0m: " "Deploy de página de aplicação VueJS"
+  title="Deploy de página de aplicação VueJS.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Deploy de página de aplicação VueJS"
   {
     (
       set -e
+
       # Caso ainda não exista realiza o clone inicial
       if [ ! -d "/opt/microCI/repos/app_frontend_deploy" ]; then
         git clone "git@gitlab.xyx.com.br:str/app_frontend_deploy.git" \
@@ -97,6 +100,7 @@ function step_deploy_de_pagina_de_aplicacao_vuejs() {
       rm -f "/var/www/my-intranet/html/app/.git" 2>&1
 
       date
+
     )
     status=$?
     echo "Status: ${status}"

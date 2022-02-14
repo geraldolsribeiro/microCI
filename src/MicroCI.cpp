@@ -1,26 +1,31 @@
-// ░░░░░░░░░░░░░░░░░ microCI
+// MIT License
+//
+// Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+//
+// ░░░░░░░░░░░░░░░░░
 // ░░░░░░░█▀▀░▀█▀░░░
-// ░░░█░█░█░░░░█░░░░ https://github.com/geraldolsribeiro/microCI
-// ░░░█▀▀░▀▀▀░▀▀▀░░░ Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+// ░░░█░█░█░░░░█░░░░
+// ░░░█▀▀░▀▀▀░▀▀▀░░░
 // ░░░▀░░░░░░░░░░░░░
-// ░░░░░░░░░░░░░░░░░ Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+// ░░░░░░░░░░░░░░░░░
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of
-// this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to
-// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-// the Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 
 #include <iostream>
 
@@ -205,6 +210,45 @@ string MicroCI::sanitizeName(const string& name) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::beginFunction(const json& data) {
+  mScript << inja::render(R"(
+# ----------------------------------------------------------------------
+# {{ STEP_DESCRIPTION }}
+# ----------------------------------------------------------------------
+function step_{{ FUNCTION_NAME }}() {
+  title="{{ STEP_NAME }}.............................................................."
+  echo -ne "{{CYAN}}${title:0:60}{{CLEAR}}: "
+  # printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
+  {
+    (
+      set -e
+)",
+                          data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::endFunction(const json& data) {
+  mScript << inja::render(R"(
+    )
+    status=$?
+    echo "Status: ${status}"
+  } >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "{{GREEN}}OK{{CLEAR}}"
+  else
+    echo -e "{{RED}}FALHOU{{CLEAR}}"
+  fi
+}
+)",
+                          data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   auto stepName = string{};
   auto stepDescription = string{};
@@ -242,15 +286,8 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   //
   // # Place your code here
 
+  beginFunction(data);
   mScript << inja::render(R"(
-# ----------------------------------------------------------------------
-# {{ STEP_DESCRIPTION }}
-# ----------------------------------------------------------------------
-function step_{{ FUNCTION_NAME }}() {
-  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
-  {
-    (
-      set -e
       docker run \
         --interactive \
         --attach stdout \
@@ -261,19 +298,9 @@ function step_{{ FUNCTION_NAME }}() {
         --publish {{PORT}}:8000 \
         squidfunk/mkdocs-material \
         {{ACTION}} 2>&1
-    )
-    status=$?
-    echo "Status: ${status}"
-  } >> .microCI.log
-
-  if [ "${status}" = "0" ]; then
-    echo -e "{{GREEN}}OK{{CLEAR}}"
-  else
-    echo -e "{{RED}}FALHOU{{CLEAR}}"
-  fi
-}
 )",
                           data);
+  endFunction(data);
 }
 
 // ----------------------------------------------------------------------
@@ -303,15 +330,8 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["STEP_DESCRIPTION"] = stepDescription;
 
+  beginFunction(data);
   mScript << inja::render(R"(
-# ----------------------------------------------------------------------
-# {{ STEP_DESCRIPTION }}
-# ----------------------------------------------------------------------
-function step_{{ FUNCTION_NAME }}() {
-  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
-  {
-    (
-      set -e
       # Caso ainda não exista realiza o clone inicial
       if [ ! -d "{{GIT_DIR}}" ]; then
         git clone "{{GIT_URL}}" \
@@ -334,19 +354,9 @@ function step_{{ FUNCTION_NAME }}() {
       rm -f "{{GIT_WORK}}/.git" 2>&1
 
       date
-    )
-    status=$?
-    echo "Status: ${status}"
-  } >> .microCI.log
-
-  if [ "${status}" = "0" ]; then
-    echo -e "{{GREEN}}OK{{CLEAR}}"
-  else
-    echo -e "{{RED}}FALHOU{{CLEAR}}"
-  fi
-}
 )",
                           data);
+  endFunction(data);
 }
 
 // ----------------------------------------------------------------------
@@ -395,15 +405,8 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   data["STEP_DESCRIPTION"] = stepDescription;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
 
+  beginFunction(data);
   mScript << inja::render(R"(
-# ----------------------------------------------------------------------
-# {{ STEP_DESCRIPTION }}
-# ----------------------------------------------------------------------
-function step_{{ FUNCTION_NAME }}() {
-  printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
-  {
-    (
-      set -e
       echo ""
       echo ""
       echo ""
@@ -418,32 +421,16 @@ function step_{{ FUNCTION_NAME }}() {
                           data);
 
   for (auto [key, val] : mEnvs) {
-    mScript << "        --env " << key << R"(=")" << val << R"(" \
-)";
+    mScript << fmt::format("        --env {}=\"{}\" \\\n", key, val);
   }
-  mScript << R"(        --volume "${PWD}":/ws \
-        )" << dockerImage
-          << R"( \
-        /bin/bash -c "cd /ws)";
+  mScript << "        --volume \"${PWD}\":/ws \\\n";
+  mScript << fmt::format("        {} \\\n", dockerImage);
+  mScript << "        /bin/bash -c \"cd /ws";
   for (auto cmd : cmds) {
-    mScript << R"( \
-           && )"
-            << cmd << " 2>&1";
+    mScript << fmt::format(" \\\n           && {} 2>&1", cmd);
   }
-  mScript << inja::render(R"("
-    )
-    status=$?
-    echo "Status: ${status}"
-  } >> .microCI.log
-
-  if [ "${status}" = "0" ]; then
-    echo -e "{{GREEN}}OK{{CLEAR}}"
-  else
-    echo -e "{{RED}}FALHOU{{CLEAR}}"
-  fi
-}
-)",
-                          data);
+  mScript << "\"\n";
+  endFunction(data);
 }
 
 // ----------------------------------------------------------------------

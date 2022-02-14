@@ -1,5 +1,9 @@
 # microCI
 
+## Requisitos
+
+* Ambiente docker corretamente configurado
+
 ## Instalação
 
 ```bash

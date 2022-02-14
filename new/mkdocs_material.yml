@@ -1,5 +1,10 @@
 ---
 steps:
+  # Remova este passo após a primeira execução
+  - name: "Cria arquivos iniciais do mkdocs"
+    plugin:
+      name: "mkdocs_material"
+      action: "init"
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"
     plugin:
@@ -7,7 +12,7 @@ steps:
       action: "build"
       # Contruindo para uma pasta personalizada
       # action: "build --site-dir public
-  - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
+  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
     # passo executado localmente
     only: "local-step"

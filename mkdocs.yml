@@ -2,12 +2,12 @@ site_name: Documentação do microCI
 theme:
   name: material
   language: pt-BR
-  logo: assets/logo.png
+  logo: assets/logo.svg
   favicon: assets/favicon.png
   extra:
     homepage: https://microci.dev
   palette:
-    primary: teal
+    primary: black
 markdown_extensions:
   - admonition
   - pymdownx.emoji:

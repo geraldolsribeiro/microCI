@@ -70,11 +70,14 @@ function assert_function() {
 # ----------------------------------------------------------------------
 # Executa servidor local para preview da documentação
 # ----------------------------------------------------------------------
-function step_servidor_local_na_porta_9001__ctrl_c_para_finalizar_() {
-  printf "[0;36m%60s[0m: " "Servidor local na porta 9001 (Ctrl+C para finalizar)"
+function step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_() {
+  title="Servidor local na porta 8000 (Ctrl+C para finalizar).............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Servidor local na porta 8000 (Ctrl+C para finalizar)"
   {
     (
       set -e
+
       docker run \
         --interactive \
         --attach stdout \
@@ -85,6 +88,7 @@ function step_servidor_local_na_porta_9001__ctrl_c_para_finalizar_() {
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         serve --dev-addr=0.0.0.0:8000 2>&1
+
     )
     status=$?
     echo "Status: ${status}"
@@ -97,5 +101,5 @@ function step_servidor_local_na_porta_9001__ctrl_c_para_finalizar_() {
   fi
 }
 # Executa somente este passo
-step_servidor_local_na_porta_9001__ctrl_c_para_finalizar_
+step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_
 exit 0;

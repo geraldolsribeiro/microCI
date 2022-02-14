@@ -73,10 +73,13 @@ function assert_function() {
 # Descrição do passo
 # ----------------------------------------------------------------------
 function step_instalar_dependencias() {
-  printf "[0;36m%60s[0m: " "Instalar dependências"
+  title="Instalar dependências.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Instalar dependências"
   {
     (
       set -e
+
       echo ""
       echo ""
       echo ""
@@ -93,6 +96,7 @@ function step_instalar_dependencias() {
         node:16 \
         /bin/bash -c "cd /ws \
            && npm install 2>&1"
+
     )
     status=$?
     echo "Status: ${status}"
@@ -109,10 +113,13 @@ function step_instalar_dependencias() {
 # 
 # ----------------------------------------------------------------------
 function step_construir() {
-  printf "[0;36m%60s[0m: " "Construir"
+  title="Construir.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Construir"
   {
     (
       set -e
+
       echo ""
       echo ""
       echo ""
@@ -130,6 +137,7 @@ function step_construir() {
         /bin/bash -c "cd /ws \
            && npm run lint --fix 2>&1 \
            && npm run build 2>&1"
+
     )
     status=$?
     echo "Status: ${status}"

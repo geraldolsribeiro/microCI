@@ -68,13 +68,50 @@ function assert_function() {
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Documentação do projeto
+# 
 # ----------------------------------------------------------------------
-function step_construir_documentacao_em_formato_html() {
-  printf "[0;36m%60s[0m: " "Construir documentação em formato HTML"
+function step_cria_arquivos_iniciais_do_mkdocs() {
+  title="Cria arquivos iniciais do mkdocs.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Cria arquivos iniciais do mkdocs"
   {
     (
       set -e
+
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /docs \
+        --volume "${PWD}":/docs \
+        --publish 8000:8000 \
+        squidfunk/mkdocs-material \
+        init 2>&1
+
+    )
+    status=$?
+    echo "Status: ${status}"
+  } >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "[0;32mOK[0m"
+  else
+    echo -e "[0;31mFALHOU[0m"
+  fi
+}
+
+# ----------------------------------------------------------------------
+# Documentação do projeto
+# ----------------------------------------------------------------------
+function step_construir_documentacao_em_formato_html() {
+  title="Construir documentação em formato HTML.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Construir documentação em formato HTML"
+  {
+    (
+      set -e
+
       docker run \
         --interactive \
         --attach stdout \
@@ -85,6 +122,7 @@ function step_construir_documentacao_em_formato_html() {
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         build 2>&1
+
     )
     status=$?
     echo "Status: ${status}"
@@ -101,6 +139,7 @@ function step_construir_documentacao_em_formato_html() {
 function main() {
   date >> .microCI.log
 
+  step_cria_arquivos_iniciais_do_mkdocs
   step_construir_documentacao_em_formato_html
 
   date >> .microCI.log
