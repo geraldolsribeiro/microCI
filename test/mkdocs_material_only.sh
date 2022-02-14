@@ -63,6 +63,9 @@ function assert_function() {
 }
 
 
+# Atualiza as imagens docker utilizadas no passos
+{
+} >> .microCI.log
 
 # ----------------------------------------------------------------------
 # Executa servidor local para preview da documentação

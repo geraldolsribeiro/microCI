@@ -1,42 +1,26 @@
-// TODO: saída para relatório
-// https://github.com/p-ranav/tabulate
-// https://docs.docker.com/engine/reference/commandline/run/
-// https://plantuml.com/yaml
+// ░░░░░░░░░░░░░░░░░ microCI
+// ░░░░░░░█▀▀░▀█▀░░░
+// ░░░█░█░█░░░░█░░░░ https://github.com/geraldolsribeiro/microCI
+// ░░░█▀▀░▀▀▀░▀▀▀░░░ Licensed under the MIT License <http://opensource.org/licenses/MIT>.
+// ░░░▀░░░░░░░░░░░░░
+// ░░░░░░░░░░░░░░░░░ Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
 //
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
 //
-// FIXME: 5 Simple Steps On How To Debug A Bash Shell Script
-// https://www.shell-tips.com/bash/debug-script/
-
-// 📎 You can replace the default + character used in the xtrace output by
-// changing the Bash Prompt $PS4 Variableicon mdi-link-variant.
-
-/*
- *https://codefresh.io/docs/docs/learn-by-example/cc/c-make/
-version: '1.0'
-stages:
-  - checkout
-  - build
-steps:
-  main_clone:
-    title: Cloning main repository...
-    stage: checkout
-    type: git-clone
-    repo: 'codefresh-contrib/c-sample-app'
-    revision: master
-    git: github
-  compile_my_sources:
-    title: Compile
-    stage: build
-    image: gcc
-    commands:
-      - make
-  run_my_tests:
-    title: Test
-    stage: build
-    image: gcc
-    commands:
-      - make test
-      */
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <filesystem>
 #include <fstream>
