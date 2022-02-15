@@ -44,7 +44,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 4;
+const int MINOR = 5;
 const int PATCH = 0;
 
 string banner();

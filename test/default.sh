@@ -1,5 +1,8 @@
 #!/bin/bash
 {
+  # Modo de conformidade com POSIX
+  set -o posix
+
   exec 5> .microCI.dbg
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
@@ -12,7 +15,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.4.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.5.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -92,8 +95,8 @@ function step_instalar_dependencias() {
         --workdir /ws \
         --env ENV1="xxx" \
         --env ENV2="yyy" \
-        --volume "${PWD}":/ws \
-        node:16 \
+        --volume "${PWD}":"/ws":rw \
+        "node:16" \
         /bin/bash -c "cd /ws \
            && npm install 2>&1"
 
@@ -132,8 +135,8 @@ function step_construir() {
         --workdir /ws \
         --env ENV1="xxx" \
         --env ENV2="yyy" \
-        --volume "${PWD}":/ws \
-        node:16 \
+        --volume "${PWD}":"/ws":rw \
+        "node:16" \
         /bin/bash -c "cd /ws \
            && npm run lint --fix 2>&1 \
            && npm run build 2>&1"
@@ -151,6 +154,7 @@ function step_construir() {
 }
 
 
+# Executa todos os passos do pipeline
 function main() {
   date >> .microCI.log
 
@@ -160,6 +164,8 @@ function main() {
   date >> .microCI.log
 }
 
-# Executa todos os passos
 main
+
+# Para executar use
+# microCI | bash
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 {
+  # Modo de conformidade com POSIX
+  set -o posix
+
   exec 5> .microCI.dbg
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
@@ -12,7 +15,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.4.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.5.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -65,6 +68,7 @@ function assert_function() {
 
 # Atualiza as imagens docker utilizadas no passos
 {
+  docker pull debian:stable-slim 2>&1
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
@@ -114,6 +118,7 @@ function step_deploy_de_pagina_de_aplicacao_vuejs() {
 }
 
 
+# Executa todos os passos do pipeline
 function main() {
   date >> .microCI.log
 
@@ -122,6 +127,8 @@ function main() {
   date >> .microCI.log
 }
 
-# Executa todos os passos
 main
+
+# Para executar use
+# microCI | bash
 

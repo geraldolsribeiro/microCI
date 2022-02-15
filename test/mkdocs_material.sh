@@ -1,5 +1,8 @@
 #!/bin/bash
 {
+  # Modo de conformidade com POSIX
+  set -o posix
+
   exec 5> .microCI.dbg
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
@@ -12,7 +15,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.4.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.5.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -65,6 +68,7 @@ function assert_function() {
 
 # Atualiza as imagens docker utilizadas no passos
 {
+  docker pull debian:stable-slim 2>&1
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
@@ -83,8 +87,8 @@ function step_cria_arquivos_iniciais_do_mkdocs() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /docs \
-        --volume "${PWD}":/docs \
+        --workdir /ws \
+        --volume "${PWD}":/ws \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         init 2>&1
@@ -117,8 +121,8 @@ function step_construir_documentacao_em_formato_html() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /docs \
-        --volume "${PWD}":/docs \
+        --workdir /ws \
+        --volume "${PWD}":/ws \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         build 2>&1
@@ -136,6 +140,7 @@ function step_construir_documentacao_em_formato_html() {
 }
 
 
+# Executa todos os passos do pipeline
 function main() {
   date >> .microCI.log
 
@@ -145,6 +150,8 @@ function main() {
   date >> .microCI.log
 }
 
-# Executa todos os passos
 main
+
+# Para executar use
+# microCI | bash
 
