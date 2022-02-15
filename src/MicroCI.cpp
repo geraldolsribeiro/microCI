@@ -117,19 +117,24 @@ bool MicroCI::ReadConfig(const string& filename) {
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
     mDockerImageGlobal = CI["docker"].as<string>();
+  }
+
+  if (!mDockerImageGlobal.empty()) {
     dockerImages.insert(mDockerImageGlobal);
   }
 
-  mScript << "# Atualiza as imagens docker utilizadas no passos\n{\n";
-  for (const auto& dockerImage : dockerImages) {
-    mScript << fmt::format("  docker pull {} 2>&1\n", dockerImage);
+  if (dockerImages.size()) {
+    mScript << "# Atualiza as imagens docker utilizadas no passos\n{\n";
+    for (const auto& dockerImage : dockerImages) {
+      mScript << fmt::format("  docker pull {} 2>&1\n", dockerImage);
+    }
+    mScript << "} >> .microCI.log\n";
   }
-  mScript << "} >> .microCI.log\n";
 
   if (!mOnlyStep.empty()) {
     for (auto step : CI["steps"]) {
       if (step["only"] and step["only"].as<string>() == mOnlyStep) {
-        if (step["bash"]) {
+        if (step["bash"] || step["sh"]) {
           parseBashStep(step);
         } else if (step["plugin"]) {
           parsePluginStep(step);
@@ -144,7 +149,7 @@ bool MicroCI::ReadConfig(const string& filename) {
       for (auto step : CI["steps"]) {
         if (step["only"]) {
           continue;
-        } else if (step["bash"]) {
+        } else if (step["bash"] || step["sh"]) {
           parseBashStep(step);
         } else if (step["plugin"]) {
           parsePluginStep(step);
@@ -152,6 +157,7 @@ bool MicroCI::ReadConfig(const string& filename) {
       }
       mScript << R"(
 
+# Executa todos os passos do pipeline
 function main() {
   date >> .microCI.log
 
@@ -167,8 +173,10 @@ function main() {
   date >> .microCI.log
 }
 
-# Executa todos os passos
 main
+
+# Para executar use
+# microCI | bash
 
 )";
     }
@@ -287,19 +295,21 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   // # Place your code here
 
   beginFunction(data);
+
   mScript << inja::render(R"(
       docker run \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /docs \
-        --volume "${PWD}":/docs \
+        --workdir /ws \
+        --volume "${PWD}":/ws \
         --publish {{PORT}}:8000 \
         squidfunk/mkdocs-material \
         {{ACTION}} 2>&1
 )",
                           data);
+
   endFunction(data);
 }
 
@@ -380,30 +390,79 @@ void MicroCI::parsePluginStep(YAML::Node& step) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::parseBashStep(YAML::Node& step) {
-  auto ss = stringstream{step["bash"].as<string>()};
+  auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
   auto stepDescription = string{};
+  auto volumes = map<string, string>{};
+  auto volumesMode = map<string, string>{};
   auto data = defaultDataTemplate();
+  auto sshCopyFrom = string{};
+  auto sshCopyTo = string{};
   string dockerImage = mDockerImageGlobal;
 
+  if (step["bash"]) {
+    cmdsStr = step["bash"].as<string>();
+  } else if (step["sh"]) {
+    cmdsStr = step["sh"].as<string>();
+  }
+
+  auto ss = stringstream{cmdsStr};
   while (getline(ss, line, '\n')) {
-    cmds.push_back(line);
+    if( !line.empty() && line.at(0) != '#' ) {
+      cmds.push_back(line);
+    }
   }
 
   auto stepName = step["name"].as<string>();
 
+  // Usa uma imagem específica para este passo?
   if (step["docker"]) {
     dockerImage = step["docker"].as<string>();
   }
 
+  // Documentação
   if (step["description"]) {
     stepDescription = step["description"].as<string>();
+  }
+
+  volumes["/ws"] = "${PWD}";
+  volumesMode["/ws"] = "rw";
+  if (step["volumes"] && step["volumes"].IsSequence()) {
+    for (const auto& volume : step["volumes"]) {
+      // Usando o destino como chave para permitir montar a mesma pasta em mais
+      // de um local
+      volumes.emplace(volume["destination"].as<string>(),
+                      volume["source"].as<string>());
+      if (volume["mode"]) {
+        volumesMode.emplace(volume["destination"].as<string>(),
+                            volume["mode"].as<string>());
+      } else {
+        volumesMode.emplace(volume["destination"].as<string>(), "ro");
+      }
+    }
+  }
+
+  if (step["ssh"]) {
+    sshCopyFrom = "${HOME}/.ssh";
+    sshCopyTo = "/root/.ssh";
+
+    if (step["ssh"]["copy_from"]) {
+      sshCopyFrom = step["ssh"]["copy_from"].as<string>();
+    }
+    volumes["/.microCI_ssh"] = sshCopyFrom;
+    volumesMode["/.microCI_ssh"] = "ro";
+
+    if (step["ssh"]["copy_to"]) {
+      sshCopyTo = step["ssh"]["copy_to"].as<string>();
+    }
   }
 
   data["STEP_NAME"] = stepName;
   data["STEP_DESCRIPTION"] = stepDescription;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
+  data["SSH_COPY_TO"] = sshCopyTo;
+  data["SSH_COPY_FROM"] = "/.microCI_ssh";
 
   beginFunction(data);
   mScript << inja::render(R"(
@@ -423,9 +482,30 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   for (auto [key, val] : mEnvs) {
     mScript << fmt::format("        --env {}=\"{}\" \\\n", key, val);
   }
-  mScript << "        --volume \"${PWD}\":/ws \\\n";
-  mScript << fmt::format("        {} \\\n", dockerImage);
-  mScript << "        /bin/bash -c \"cd /ws";
+  for (const auto& [destination, source] : volumes) {
+    mScript << fmt::format("        --volume \"{}\":\"{}\":{} \\\n", source,
+                           destination, volumesMode[destination]);
+  }
+  // mScript << "        --volume \"${PWD}\":/ws \\\n";
+  mScript << fmt::format("        \"{}\" \\\n", dockerImage);
+  if (step["sh"]) {
+    mScript << "        /bin/sh -c \"cd /ws";
+  } else if (step["bash"]) {
+    mScript << "        /bin/bash -c \"cd /ws";
+  } else {
+    spdlog::error("Tratar erro aqui");
+  }
+
+  // Copia credencias SSH e ajusta as permissões
+  if (step["ssh"]) {
+    mScript << inja::render(R"( \
+           && cp -Rv /.microCI_ssh {{ SSH_COPY_TO }} 2>&1 \
+           && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
+           && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
+           && chmod 600 {{ SSH_COPY_TO }}/id_rsa 2>&1)",
+                            data);
+  }
+
   for (auto cmd : cmds) {
     mScript << fmt::format(" \\\n           && {} 2>&1", cmd);
   }
@@ -458,6 +538,9 @@ void MicroCI::initBash() {
 
   mScript << inja::render(R"(#!/bin/bash
 {
+  # Modo de conformidade com POSIX
+  set -o posix
+
   exec 5> .microCI.dbg
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
