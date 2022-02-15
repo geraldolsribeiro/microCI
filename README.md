@@ -9,7 +9,7 @@ A documentação completa pode ser encontrada em [microCI.dev](https://microci.d
 ## Instalação
 
 ```bash
-curl -L https://github.com/geraldolsribeiro/microCI/releases/download/0.4.0/microCI \
+curl -L https://github.com/geraldolsribeiro/microCI/releases/download/0.5.0/microCI \
   -o /usr/local/bin/microCI
 chmod 755 /usr/local/bin/microCI
 ```
@@ -27,6 +27,7 @@ chmod 755 /usr/local/bin/microCI
 
 ## Versões
 
+* `0.5.0` Montagem de volumes; Cópia de chave SSH
 * `0.4.0` Construção do microCI pelo microCI
 * `0.3.0` Cria arquivos de configuração
 * `0.2.0` Plugin mkdocs
