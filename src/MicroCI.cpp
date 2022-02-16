@@ -43,6 +43,8 @@ namespace microci {
 // ----------------------------------------------------------------------
 string banner() {
   return fmt::format(R"(
+
+
                            ░░░░░░░░░░░░░░░░░
                            ░░░░░░░█▀▀░▀█▀░░░
                            ░░░█░█░█░░░░█░░░░
@@ -51,6 +53,7 @@ string banner() {
                            ░░░░░░░░░░░░░░░░░
                              microCI {}.{}.{}
                             Geraldo Ribeiro
+
 )",
                      MAJOR, MINOR, PATCH);
 }
@@ -409,7 +412,7 @@ void MicroCI::parseBashStep(YAML::Node& step) {
 
   auto ss = stringstream{cmdsStr};
   while (getline(ss, line, '\n')) {
-    if( !line.empty() && line.at(0) != '#' ) {
+    if (!line.empty() && line.at(0) != '#') {
       cmds.push_back(line);
     }
   }
@@ -545,6 +548,9 @@ void MicroCI::initBash() {
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
 
+  echo ""
+  echo ""
+  echo ""
   echo -e "{{BLUE}}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"

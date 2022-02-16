@@ -45,6 +45,7 @@ all: deps microCI
 ../include/new/%.hpp: ../new/%.yml
 	cat .header.cpp > $@
 	xxd -i $^ >> $@
+	touch main.cpp
 
 MicroCI.cpp: \
 	../include/new/mkdocs_material.hpp \

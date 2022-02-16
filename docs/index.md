@@ -1,12 +1,52 @@
 # Bem-vindo ao microCI
 
-A documentação completa pode ser encontrada em [microCI.dev](https://microci.dev).
+A documentação completa pode ser encontrada em [microci.dev](https://microci.dev).
 
-## Requisitos
+O `microCI` é uma ferramenta para auxiliar a construção de pipelines de
+integração contínua.
 
-* Ambiente docker corretamente configurado
+O principal diferencial do `microCI` é a geração de **scripts portáveis** e
+totalmente **auditáveis** para execução de tarefas em **containers docker**.
+
+Como todos os passos são executados em um ou mais containers docker, todo
+o processo se torna reprodutível em: a) qualquer máquina do time de
+desenvolvimento, b) no servidor que realizará o build automático após os
+commits, c) no servidor que realizará o deploy para produção... Enfim a mesma
+ferramenta, sem dependência, pode ser usada tanto na máquina do dev quanto no
+servidor.
+
+## No desktop
+
+A utilização do `microCI` no desktop do dev é muito simples:
+
+```bash
+microCI | bash
+```
+
+No comando acima o `microCI` leu um arquivo `.microCI.yml` contendo a descrição
+dos passos da pipeline e gerou um script para execução destes passos. Este
+script é escrito na saída padrão e pode ser encadeado com outras ferramentas ou
+passado para um interpretador `bash` para a execução.
+
+Um arquivo chamado `.microCI.log` é gerado com todas as mensagens, warning,
+erros de todos os comandos executados e pode ser analisado para resolver algum
+problema que possa ocorrer.
+
+## No servidor
+
+Para execução no servidor basta expor **webhooks** que, ao serem acionados,
+executam `microCI` nas respectivas pastas do projeto.
+
+## Requisitos mínimos
+
+* Um ambiente docker corretamente configurado
+* Bash
 
 ## Instalação
+
+A instalação é igualmente simples, bastando copiar o executável para uma pasta
+que esteja no `PATH`. Para remover o `microCI` completamente do sistema basta
+apagar o arquivo copiado para o PATH.
 
 ```bash
 curl -L https://github.com/geraldolsribeiro/microCI/releases/download/0.5.0/microCI \
@@ -14,16 +54,30 @@ curl -L https://github.com/geraldolsribeiro/microCI/releases/download/0.5.0/micr
 chmod 755 /usr/local/bin/microCI
 ```
 
+## Container docker
+
+Você pode utilizar **qualquer container docker** para execução, tanto os
+públicos do [Docker HUB](https://hub.docker.com/) quanto os que você
+desenvolver internamente.
+
+## Integração com github, gitlab, ...
+
+O modo mais simples e seguro de utilizar o `microCI` para ler ou escrever nos
+repositórios é realizar o acesso através de chave SSH.
+
 ## Por fazer
+
+Abaixo estão algumas funcionalidades que poderão estar presente nos próximos
+releases.
 
 * criar pacote deb
 * criar pacote rpm
-* passar usuário atual para container para evitar geração de arquivos como `root` na pasta de trabalho
-* incluir mensagem de como usar no final do script
-* abortar caso algum passo falhar
-* exibir mensagem de erro do passo
+* passar usuário atual para container para evitar geração de arquivos como
+  `root` na pasta de trabalho
+* exibir mensagem de erro do passo que falhou
 * substituição de variáveis nos steps
 * uso de variáveis de ambiente e segredos configurados no servidor
+* criar imagem docker a partir de repositório git
 
 ## Versões
 

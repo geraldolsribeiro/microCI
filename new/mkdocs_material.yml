@@ -4,7 +4,7 @@ steps:
   - name: "Cria arquivos iniciais do mkdocs"
     plugin:
       name: "mkdocs_material"
-      action: "init"
+      action: "new ."
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"
     plugin:

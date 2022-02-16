@@ -91,7 +91,7 @@ function step_cria_arquivos_iniciais_do_mkdocs() {
         --volume "${PWD}":/ws \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
-        init 2>&1
+        new . 2>&1
 
     )
     status=$?

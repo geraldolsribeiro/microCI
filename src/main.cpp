@@ -52,7 +52,7 @@ string help() {
   return R"(
 Opções:
   -h --help                Ajuda
-  -i,--input arquivo.yml   Carrega arquivo de configuração (default .microCI.yml)
+  -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new tipo            [bash|mkdocs_material|git_deploy]
 
 )";
@@ -78,7 +78,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   cmdl({"-i", "--input"}) >> yamlFilename;
 
   // Cria arquivo de configuração
-  if ((cmdl({"-c", "--create"}) >> newType)) {
+  if ((cmdl({"-n", "--new"}) >> newType)) {
     map<string, pair<unsigned char *, unsigned int>> newTypeTemplates;
 #define YAML_TPL(X) \
   newTypeTemplates[#X] = make_pair(___new_##X##_yml, ___new_##X##_yml_len)
@@ -96,7 +96,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     }
     spdlog::error("Impossível criar para tipo inválido: {}", newType);
     for (const auto tpl : newTypeTemplates) {
-      spdlog::info("Exemplo: microCI --create {}", tpl.first);
+      spdlog::info("Exemplo: microCI --new {}", tpl.first);
     }
     return -1;
   }

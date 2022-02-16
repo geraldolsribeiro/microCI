@@ -10,7 +10,7 @@
 
 Opções:
   -h --help                Ajuda
-  -i,--input arquivo.yml   Carrega arquivo de configuração (default .microCI.yml)
+  -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new tipo            [bash|mkdocs_material|git_deploy]
 
 
