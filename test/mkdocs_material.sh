@@ -7,6 +7,9 @@
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
 
+  echo ""
+  echo ""
+  echo ""
   echo -e "[0;34m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
@@ -87,8 +90,8 @@ function step_cria_arquivos_iniciais_do_mkdocs() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /ws \
-        --volume "${PWD}":/ws \
+        --workdir /microci_workspace \
+        --volume "${PWD}":/microci_workspace \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         new . 2>&1
@@ -121,12 +124,58 @@ function step_construir_documentacao_em_formato_html() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /ws \
-        --volume "${PWD}":/ws \
+        --workdir /microci_workspace \
+        --volume "${PWD}":/microci_workspace \
         --publish 8000:8000 \
         squidfunk/mkdocs-material \
         build 2>&1
 
+    )
+    status=$?
+    echo "Status: ${status}"
+  } >> .microCI.log
+
+  if [ "${status}" = "0" ]; then
+    echo -e "[0;32mOK[0m"
+  else
+    echo -e "[0;31mFALHOU[0m"
+  fi
+}
+
+# ----------------------------------------------------------------------
+# Publica arquivos em um repositório git
+# ----------------------------------------------------------------------
+function step_publicar_html_para_repositorio_git() {
+  title="Publicar HTML para repositório git.............................................................."
+  echo -ne "[0;36m${title:0:60}[0m: "
+  # printf "[0;36m%60s[0m: " "Publicar HTML para repositório git"
+  {
+    (
+      set -e
+
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Publicar HTML para repositório git"
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir /microci_workspace \
+        --volume "${PWD}":"/microci_workspace":rw \
+        "bitnami/git:latest" \
+        /bin/bash -c "cd /microci_workspace \
+          && git clone "ssh://git@someurl.com/site.git" --depth 1 "/deploy" 2>&1 \
+          && git -C /deploy config user.name  '$(git config --get user.name)' 2>&1 \
+          && git -C /deploy config user.email '$(git config --get user.email)' 2>&1 \
+          && git -C {{ COPY_TO }} rm '*' 2>&1 \
+          && cp -rv site/* /deploy/ 2>&1 \
+          && git -C /deploy add . 2>&1 \
+          && git -C /deploy commit -am ':rocket:Publicação' 2>&1 \
+          && git -C /deploy push origin master 2>&1 \
+          && chwon $(id -u):$(id -g) -Rv site
+  "
     )
     status=$?
     echo "Status: ${status}"
@@ -146,6 +195,7 @@ function main() {
 
   step_cria_arquivos_iniciais_do_mkdocs
   step_construir_documentacao_em_formato_html
+  step_publicar_html_para_repositorio_git
 
   date >> .microCI.log
 }

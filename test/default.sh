@@ -7,6 +7,9 @@
   BASH_XTRACEFD="5"
   PS4='$LINENO: '
 
+  echo ""
+  echo ""
+  echo ""
   echo -e "[0;34m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
@@ -92,12 +95,12 @@ function step_instalar_dependencias() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /ws \
+        --workdir /microci_workspace \
         --env ENV1="xxx" \
         --env ENV2="yyy" \
-        --volume "${PWD}":"/ws":rw \
+        --volume "${PWD}":"/microci_workspace":rw \
         "node:16" \
-        /bin/bash -c "cd /ws \
+        /bin/bash -c "cd /microci_workspace \
            && npm install 2>&1"
 
     )
@@ -132,12 +135,12 @@ function step_construir() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /ws \
+        --workdir /microci_workspace \
         --env ENV1="xxx" \
         --env ENV2="yyy" \
-        --volume "${PWD}":"/ws":rw \
+        --volume "${PWD}":"/microci_workspace":rw \
         "node:16" \
-        /bin/bash -c "cd /ws \
+        /bin/bash -c "cd /microci_workspace \
            && npm run lint --fix 2>&1 \
            && npm run build 2>&1"
 

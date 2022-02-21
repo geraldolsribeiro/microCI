@@ -10,6 +10,11 @@ theme:
     primary: black
 markdown_extensions:
   - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
@@ -19,6 +24,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 plugins:
+  - mermaid2
   - search:
       lang: pt
-
+extra_javascript:
+    - https://unpkg.com/mermaid/dist/mermaid.min.js

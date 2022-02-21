@@ -19,7 +19,7 @@ steps:
     plugin:
       name: "mkdocs_material"
       action: "serve"
-      port: 9001 # Porta personalizada para teste
+      # port: 9001 # Porta personalizada para teste
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
     bash: |

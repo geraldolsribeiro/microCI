@@ -12,6 +12,12 @@ steps:
       action: "build"
       # Contruindo para uma pasta personalizada
       # action: "build --site-dir public
+  - name: "Publicar HTML"
+    plugin:
+      name: "git_publish"
+      git_url: "ssh://git@someurl.com/site.git"
+      copy_to: "/deploy" # Opcional
+      copy_from: "site"
   - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
     # passo executado localmente

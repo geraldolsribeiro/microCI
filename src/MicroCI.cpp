@@ -63,6 +63,7 @@ string banner() {
 // ----------------------------------------------------------------------
 MicroCI::MicroCI() {
   mPluginParserMap.emplace("git_deploy", &MicroCI::parseGitDeployPluginStep);
+  mPluginParserMap.emplace("git_publish", &MicroCI::parseGitPublishPluginStep);
   mPluginParserMap.emplace("mkdocs_material",
                            &MicroCI::parseMkdocsMaterialPluginStep);
   mDockerImageGlobal = "debian:stable-slim";
@@ -191,11 +192,11 @@ main
 //
 // ----------------------------------------------------------------------
 string MicroCI::sanitizeName(const string& name) const {
-  // FIXME: tolower
   auto ret = name;
 
   // Troca os caracteres acentuados por versão sem acento
-  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}};
+  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"},
+                            {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto [from, to] : tr) {
     size_t pos = 0;
     while ((pos = ret.find(from, pos)) != string::npos) {
@@ -221,6 +222,23 @@ string MicroCI::sanitizeName(const string& name) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parsePluginStep(YAML::Node& step) {
+  auto pluginName = step["plugin"]["name"].as<string>();
+  if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
+    auto stepName = step["name"].as<string>();
+    spdlog::error("Plugin '{}' não encontrado no passo '{}'", pluginName,
+                  stepName);
+    return;
+  }
+
+  // Executa o plugin
+  parseFunctionPtr parser = mPluginParserMap[pluginName];
+  (this->*parser)(step);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::beginFunction(const json& data) {
   mScript << inja::render(R"(
 # ----------------------------------------------------------------------
@@ -229,7 +247,6 @@ void MicroCI::beginFunction(const json& data) {
 function step_{{ FUNCTION_NAME }}() {
   title="{{ STEP_NAME }}.............................................................."
   echo -ne "{{CYAN}}${title:0:60}{{CLEAR}}: "
-  # printf "{{CYAN}}%60s{{CLEAR}}: " "{{ STEP_NAME }}"
   {
     (
       set -e
@@ -255,6 +272,36 @@ void MicroCI::endFunction(const json& data) {
 }
 )",
                           data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::prepareRunDocker(const json& data, set<DockerVolume>& volumes) {
+  mScript << inja::render(R"(
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: {{ STEP_NAME }}"
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir {{ WORKSPACE }} \
+)",
+                          data);
+
+  for (auto [key, val] : mEnvs) {
+    mScript << fmt::format("        --env {}=\"{}\" \\\n", key, val);
+  }
+
+  for (const auto& vol : volumes) {
+    mScript << fmt::format("        --volume \"{}\":\"{}\":{} \\\n", vol.source,
+                           vol.destination, vol.mode);
+  }
+
+  mScript << inja::render("        \"{{ DOCKER_IMAGE }}\" \\\n", data);
 }
 
 // ----------------------------------------------------------------------
@@ -288,6 +335,8 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   data["STEP_NAME"] = stepName;
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["STEP_DESCRIPTION"] = stepDescription;
+  data["DOCKER_IMAGE"] = "squidfunk/mkdocs-material";
+  // data["DOCKER_IMAGE"] = "microci_mkdocs_material";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
   // exec 5> >(logger -t $0)
@@ -305,12 +354,98 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /ws \
-        --volume "${PWD}":/ws \
+        --workdir {{ WORKSPACE }} \
+        --volume "${PWD}":{{ WORKSPACE }} \
         --publish {{PORT}}:8000 \
-        squidfunk/mkdocs-material \
-        {{ACTION}} 2>&1
+        {{ DOCKER_IMAGE }} \
+        {{ ACTION }} 2>&1
 )",
+                          data);
+
+  endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
+  auto stepName = string{};
+  auto stepDescription = string{"Publica arquivos em um repositório git"};
+  auto copyTo = string{"/microci_deploy"};
+  auto copyFrom = string{"site"};
+  auto cleanBefore = true;
+
+  if (step["name"]) {
+    stepName = step["name"].as<string>();
+  }
+  if (step["description"]) {
+    stepDescription = step["description"].as<string>();
+  }
+
+  auto volumes = parseVolumes(step);
+  auto dockerImage = parseDockerImage(step, "bitnami/git:latest");
+
+  const auto name = step["plugin"]["name"].as<string>();
+  const auto gitURL = step["plugin"]["git_url"].as<string>();
+
+  if (step["plugin"]["copy_from"]) {
+    copyFrom = step["plugin"]["copy_from"].as<string>();
+  }
+
+  if (step["plugin"]["copy_to"]) {
+    copyTo = step["plugin"]["copy_to"].as<string>();
+  }
+
+  if (step["plugin"]["clean_before"]) {
+    cleanBefore = step["plugin"]["clean_before"].as<bool>();
+  }
+
+  auto data = defaultDataTemplate();
+  data["GIT_URL"] = gitURL;
+  data["COPY_TO"] = copyTo;
+  data["COPY_FROM"] = copyFrom;
+  data["STEP_NAME"] = stepName;
+  data["DOCKER_IMAGE"] = dockerImage;
+  data["FUNCTION_NAME"] = sanitizeName(stepName);
+  data["STEP_DESCRIPTION"] = stepDescription;
+
+  // # Este clone é feito dentro do container e não ficará salvo no workspace
+  // git clone --depth 1
+  // git@gitlabcorp.stefanini.com.br:glribeiro/awesome_deploy.git /deploy #
+  // Configura o git (nas futuras versões incluir como default) git -C /deploy/
+  // config user.email 'geraldo@stefaninirafael.com' git -C /deploy/ config
+  // user.name 'Geraldo Ribeiro' # Remove todos os arquivos antigos do
+  // repositório # Usei '*' para impedir a expansão no primeiro nível do script
+  // git -C /deploy/ rm '*'
+  // # Adiciona os novo arquivoso
+  // cp -rv site/* /deploy/
+  // git -C /deploy/ add .
+  // git -C /deploy/ commit -am ':rocket:Deploy'
+  // git -C /deploy/ push origin master
+  // # Corrige o dono do passo anterior que ficaram como root
+  // chown $(id -u):$(id -g) -Rv site/
+
+  beginFunction(data);
+  prepareRunDocker(data, volumes);
+
+  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+          && git clone "{{ GIT_URL }}" --depth 1 "{{ COPY_TO }}" 2>&1 \
+          && git -C {{ COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
+          && git -C {{ COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
+                          data);
+
+  if (cleanBefore) {
+    mScript << R"(
+          && git -C {{ COPY_TO }} rm '*' 2>&1 \)";
+  }
+
+  mScript << inja::render(R"(
+          && cp -rv {{ COPY_FROM }}/* {{ COPY_TO }}/ 2>&1 \
+          && git -C {{ COPY_TO }} add . 2>&1 \
+          && git -C {{ COPY_TO }} commit -am ':rocket:Publicação' 2>&1 \
+          && git -C {{ COPY_TO }} push origin master 2>&1 \
+          && chwon $(id -u):$(id -g) -Rv {{ COPY_FROM }}
+  ")",
                           data);
 
   endFunction(data);
@@ -375,18 +510,41 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parsePluginStep(YAML::Node& step) {
-  auto pluginName = step["plugin"]["name"].as<string>();
-  if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
-    auto stepName = step["name"].as<string>();
-    spdlog::error("Plugin '{}' não encontrado no passo '{}'", pluginName,
-                  stepName);
-    return;
+set<DockerVolume> MicroCI::parseVolumes(YAML::Node& step) const {
+  auto volumes = defaultVolumes();
+
+  if (step["volumes"] && step["volumes"].IsSequence()) {
+    for (const auto& volume : step["volumes"]) {
+      DockerVolume vol;
+      vol.destination = volume["destination"].as<string>();
+      vol.source = volume["source"].as<string>();
+      if (volume["mode"]) {
+        vol.mode = volume["mode"].as<string>();
+      } else {
+        vol.mode = "ro";
+      }
+      volumes.insert(vol);
+    }
   }
 
-  // Executa o plugin
-  parseFunctionPtr parser = mPluginParserMap[pluginName];
-  (this->*parser)(step);
+  return volumes;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::parseDockerImage(YAML::Node& step, const string& image) const {
+  string dockerImage = mDockerImageGlobal;
+
+  if (!image.empty()) {
+    dockerImage = image;
+  }
+
+  if (step["docker"]) {
+    dockerImage = step["docker"].as<string>();
+  }
+
+  return dockerImage;
 }
 
 // ----------------------------------------------------------------------
@@ -397,12 +555,12 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   auto cmds = vector<string>{};
   auto line = string{};
   auto stepDescription = string{};
-  auto volumes = map<string, string>{};
-  auto volumesMode = map<string, string>{};
+
+  // auto volumes = map<string, string>{};
+  // auto volumesMode = map<string, string>{};
   auto data = defaultDataTemplate();
   auto sshCopyFrom = string{};
   auto sshCopyTo = string{};
-  string dockerImage = mDockerImageGlobal;
 
   if (step["bash"]) {
     cmdsStr = step["bash"].as<string>();
@@ -419,32 +577,14 @@ void MicroCI::parseBashStep(YAML::Node& step) {
 
   auto stepName = step["name"].as<string>();
 
-  // Usa uma imagem específica para este passo?
-  if (step["docker"]) {
-    dockerImage = step["docker"].as<string>();
-  }
+  auto dockerImage = parseDockerImage(step);
 
   // Documentação
   if (step["description"]) {
     stepDescription = step["description"].as<string>();
   }
 
-  volumes["/ws"] = "${PWD}";
-  volumesMode["/ws"] = "rw";
-  if (step["volumes"] && step["volumes"].IsSequence()) {
-    for (const auto& volume : step["volumes"]) {
-      // Usando o destino como chave para permitir montar a mesma pasta em mais
-      // de um local
-      volumes.emplace(volume["destination"].as<string>(),
-                      volume["source"].as<string>());
-      if (volume["mode"]) {
-        volumesMode.emplace(volume["destination"].as<string>(),
-                            volume["mode"].as<string>());
-      } else {
-        volumesMode.emplace(volume["destination"].as<string>(), "ro");
-      }
-    }
-  }
+  auto volumes = parseVolumes(step);
 
   if (step["ssh"]) {
     sshCopyFrom = "${HOME}/.ssh";
@@ -453,12 +593,19 @@ void MicroCI::parseBashStep(YAML::Node& step) {
     if (step["ssh"]["copy_from"]) {
       sshCopyFrom = step["ssh"]["copy_from"].as<string>();
     }
-    volumes["/.microCI_ssh"] = sshCopyFrom;
-    volumesMode["/.microCI_ssh"] = "ro";
+
+    // volumes["/.microCI_ssh"] = sshCopyFrom;
+    // volumesMode["/.microCI_ssh"] = "ro";
 
     if (step["ssh"]["copy_to"]) {
       sshCopyTo = step["ssh"]["copy_to"].as<string>();
     }
+
+    // Montagem temporária para copia
+    DockerVolume vol;
+    vol.destination = "/.microCI_ssh";
+    vol.source = sshCopyFrom;
+    vol.mode = "ro";
   }
 
   data["STEP_NAME"] = stepName;
@@ -466,35 +613,15 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["SSH_COPY_TO"] = sshCopyTo;
   data["SSH_COPY_FROM"] = "/.microCI_ssh";
+  data["DOCKER_IMAGE"] = dockerImage;
 
   beginFunction(data);
-  mScript << inja::render(R"(
-      echo ""
-      echo ""
-      echo ""
-      echo "Passo: {{ STEP_NAME }}"
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --workdir /ws \
-)",
-                          data);
+  prepareRunDocker(data, volumes);
 
-  for (auto [key, val] : mEnvs) {
-    mScript << fmt::format("        --env {}=\"{}\" \\\n", key, val);
-  }
-  for (const auto& [destination, source] : volumes) {
-    mScript << fmt::format("        --volume \"{}\":\"{}\":{} \\\n", source,
-                           destination, volumesMode[destination]);
-  }
-  // mScript << "        --volume \"${PWD}\":/ws \\\n";
-  mScript << fmt::format("        \"{}\" \\\n", dockerImage);
   if (step["sh"]) {
-    mScript << "        /bin/sh -c \"cd /ws";
+    mScript << inja::render("        /bin/sh -c \"cd {{ WORKSPACE }}", data);
   } else if (step["bash"]) {
-    mScript << "        /bin/bash -c \"cd /ws";
+    mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
   } else {
     spdlog::error("Tratar erro aqui");
   }
@@ -519,10 +646,21 @@ void MicroCI::parseBashStep(YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+set<DockerVolume> MicroCI::defaultVolumes() const {
+  set<DockerVolume> volumes{{"/microci_workspace", "${PWD}", "rw"}};
+
+  return volumes;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 json MicroCI::defaultDataTemplate() const {
   json data;
   data["VERSION"] =
       fmt::format("{}.{}.{}    ", MAJOR, MINOR, PATCH).substr(0, 10);
+  data["WORKSPACE"] = "/microci_workspace";
+
   data["BLUE"] = "\033[0;34m";
   data["YELLOW"] = "\033[0;33m";
   data["MAGENTA"] = "\033[0;35m";
@@ -530,6 +668,7 @@ json MicroCI::defaultDataTemplate() const {
   data["GREEN"] = "\033[0;32m";
   data["CYAN"] = "\033[0;36m";
   data["CLEAR"] = "\033[0m";
+
   return data;
 }
 

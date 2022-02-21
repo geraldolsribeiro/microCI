@@ -27,11 +27,11 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-
 #ifndef MICRO_CI_HPP
 #define MICRO_CI_HPP
 
 #include <map>
+#include <set>
 #include <string>
 
 using namespace std;
@@ -44,10 +44,22 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 5;
+const int MINOR = 6;
 const int PATCH = 0;
 
 string banner();
+
+struct DockerVolume {
+  string destination;
+  string source;
+  string mode;
+};
+
+// Usando o destino como chave para permitir montar a mesma pasta em mais
+// de um local
+inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
+  return lhs.destination < rhs.destination;
+}
 
 class MicroCI {
  public:
@@ -62,11 +74,18 @@ class MicroCI {
   void parseBashStep(YAML::Node& step);
   void parsePluginStep(YAML::Node& step);
   void parseGitDeployPluginStep(YAML::Node& step);
+  void parseGitPublishPluginStep(YAML::Node& step);
   void parseMkdocsMaterialPluginStep(YAML::Node& step);
+  void prepareRunDocker(const json&data, set<DockerVolume>& volumes);
+  string parseDockerImage(YAML::Node& step, const string & image = "") const;
+  set<DockerVolume> parseVolumes(YAML::Node& step) const;
+
   json defaultDataTemplate() const;
+  set<DockerVolume> defaultVolumes() const;
+
   string sanitizeName(const string& name) const;
-  void beginFunction(const json &data);
-  void endFunction(const json &data);
+  void beginFunction(const json& data);
+  void endFunction(const json& data);
 
   string mOnlyStep;
   map<string, string> mEnvs;

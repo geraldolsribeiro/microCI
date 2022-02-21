@@ -42,6 +42,9 @@ LDFLAGS+= -lyaml-cpp
 
 all: deps microCI
 
+tidy:
+	clang-tidy *.cpp -- $(CXXFLAGS)
+
 ../include/new/%.hpp: ../new/%.yml
 	cat .header.cpp > $@
 	xxd -i $^ >> $@
