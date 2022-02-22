@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.6.0` Plugin git_publish
 * `0.5.0` Montagem de volumes; Cópia de chave SSH
 * `0.4.0` Construção do microCI pelo microCI
 * `0.3.0` Cria arquivos de configuração
