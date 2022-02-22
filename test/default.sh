@@ -89,6 +89,7 @@ function step_instalar_dependencias() {
       echo ""
       echo ""
       echo "Passo: Instalar dependências"
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -128,6 +129,7 @@ function step_construir() {
       echo ""
       echo ""
       echo "Passo: Construir"
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \

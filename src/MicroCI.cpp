@@ -283,6 +283,7 @@ void MicroCI::prepareRunDocker(const json& data, set<DockerVolume>& volumes) {
       echo ""
       echo ""
       echo "Passo: {{ STEP_NAME }}"
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -341,6 +342,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   beginFunction(data);
 
   mScript << inja::render(R"(
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -400,27 +402,11 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["STEP_DESCRIPTION"] = stepDescription;
 
-  // # Este clone é feito dentro do container e não ficará salvo no workspace
-  // git clone --depth 1
-  // git@gitlabcorp.stefanini.com.br:glribeiro/awesome_deploy.git /deploy #
-  // Configura o git (nas futuras versões incluir como default) git -C /deploy/
-  // config user.email 'geraldo@stefaninirafael.com' git -C /deploy/ config
-  // user.name 'Geraldo Ribeiro' # Remove todos os arquivos antigos do
-  // repositório # Usei '*' para impedir a expansão no primeiro nível do script
-  // git -C /deploy/ rm '*'
-  // # Adiciona os novo arquivoso
-  // cp -rv site/* /deploy/
-  // git -C /deploy/ add .
-  // git -C /deploy/ commit -am ':rocket:Deploy'
-  // git -C /deploy/ push origin master
-  // # Corrige o dono do passo anterior que ficaram como root
-  // chown $(id -u):$(id -g) -Rv site/
-
   beginFunction(data);
   prepareRunDocker(data, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-          && git clone "{{ GIT_URL }}" --depth 1 "{{ COPY_TO }}" 2>&1 \
+          && git clone '{{ GIT_URL }}' --depth 1 '{{ COPY_TO }}' 2>&1 \
           && git -C {{ COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
           && git -C {{ COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
                           data);

@@ -84,6 +84,7 @@ function step_cria_arquivos_iniciais_do_mkdocs() {
     (
       set -e
 
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -117,6 +118,7 @@ function step_construir_documentacao_em_formato_html() {
     (
       set -e
 
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -154,6 +156,7 @@ function step_publicar_html_para_repositorio_git() {
       echo ""
       echo ""
       echo "Passo: Publicar HTML para repositório git"
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
@@ -163,7 +166,7 @@ function step_publicar_html_para_repositorio_git() {
         --volume "${PWD}":"/microci_workspace":rw \
         "bitnami/git:latest" \
         /bin/bash -c "cd /microci_workspace \
-          && git clone "ssh://git@someurl.com/site.git" --depth 1 "/deploy" 2>&1 \
+          && git clone 'ssh://git@someurl.com/site.git' --depth 1 '/deploy' 2>&1 \
           && git -C /deploy config user.name  '$(git config --get user.name)' 2>&1 \
           && git -C /deploy config user.email '$(git config --get user.email)' 2>&1 \
           && git -C {{ COPY_TO }} rm '*' 2>&1 \

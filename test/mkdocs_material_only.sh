@@ -84,6 +84,7 @@ function step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_() {
     (
       set -e
 
+      # shellcheck disable=SC2140
       docker run \
         --interactive \
         --attach stdout \
