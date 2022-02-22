@@ -6,11 +6,20 @@ steps:
       name: "mkdocs_material"
       action: "build"
   - name: "Configurar github pages"
-    description: "Configura dominio Apex para github pages e ajusta usuário"
+    description: "Configura dominio Apex para github pages, arquivo README e ajusta usuário"
     bash: |
       cp github-pages/CNAME site/
+      cat docs/index.md > README.md
+      # Apenas para disponibilizar uma página de rosto para o github
+      cp README.md site/
       chown $(id -u).$(id -g) -Rv site/
-  - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
+  - name: "Publicar documentação em microci.dev"
+    # only: "publish"
+    ssh:
+    plugin:
+      name: "git_publish"
+      git_url: "git@github.com:geraldolsribeiro/microci.dev.git"
+  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
     only: "serve"
     plugin:
@@ -20,6 +29,7 @@ steps:
     docker: "gcc:11"
     bash: |
       apt update
+      apt upgrade -y
       apt install -y xxd libspdlog-dev libyaml-cpp-dev
       make -C src clean all
       make -C test
