@@ -13,6 +13,9 @@ steps:
       # Contruindo para uma pasta personalizada
       # action: "build --site-dir public
   - name: "Publicar HTML para repositório git"
+    ssh:
+      copy_from: "${HOME}/.ssh"
+      copy_to: "/root/.ssh"
     plugin:
       name: "git_publish"
       git_url: "ssh://git@someurl.com/site.git"

@@ -94,11 +94,11 @@ bool MicroCI::ReadConfig(const string& filename) {
 
   try {
     CI = YAML::LoadFile(filename);
-  } catch (YAML::BadFile e) {
+  } catch (const YAML::BadFile e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
-  } catch (YAML::ParserException e) {
+  } catch (const YAML::ParserException e) {
     spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
@@ -222,7 +222,7 @@ string MicroCI::sanitizeName(const string& name) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parsePluginStep(YAML::Node& step) {
+void MicroCI::parsePluginStep(const YAML::Node& step) {
   auto pluginName = step["plugin"]["name"].as<string>();
   if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
     auto stepName = step["name"].as<string>();
@@ -277,7 +277,8 @@ void MicroCI::endFunction(const json& data) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::prepareRunDocker(const json& data, set<DockerVolume>& volumes) {
+void MicroCI::prepareRunDocker(const json& data,
+                               const set<DockerVolume>& volumes) {
   mScript << inja::render(R"(
       echo ""
       echo ""
@@ -308,7 +309,7 @@ void MicroCI::prepareRunDocker(const json& data, set<DockerVolume>& volumes) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
+void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
   auto action = string{"build"};
   auto port = string{"8000"};
 
@@ -327,7 +328,8 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   data["PORT"] = port;
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
+  data["STEP_DESCRIPTION"] =
+      stepDescription(step, "Documentação usando mkdocs_material");
   data["DOCKER_IMAGE"] = "squidfunk/mkdocs-material";
   // data["DOCKER_IMAGE"] = "microci_mkdocs_material";
 
@@ -362,7 +364,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
+void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   auto stepName = string{};
   auto stepDescription = string{"Publica arquivos em um repositório git"};
   auto copyTo = string{"/microci_deploy"};
@@ -376,7 +378,9 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
     stepDescription = step["description"].as<string>();
   }
 
+  auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
+  tie(data, volumes) = parseSsh(step, data, volumes);
 
   const auto name = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();
@@ -393,7 +397,6 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
     cleanBefore = step["plugin"]["clean_before"].as<bool>();
   }
 
-  auto data = defaultDataTemplate();
   data["GIT_URL"] = gitURL;
   data["COPY_TO"] = copyTo;
   data["COPY_FROM"] = copyFrom;
@@ -405,23 +408,30 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
   beginFunction(data);
   prepareRunDocker(data, volumes);
 
-  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-          && git clone '{{ GIT_URL }}' --depth 1 '{{ COPY_TO }}' 2>&1 \
-          && git -C {{ COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
-          && git -C {{ COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
+  mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
+
+  if (step["ssh"]) {
+    copySsh(step, data);
+  }
+
+  mScript << inja::render(R"( \
+           && git clone '{{ GIT_URL }}' --depth 1 '{{ COPY_TO }}' 2>&1 \
+           && git -C {{ COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
+           && git -C {{ COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
                           data);
 
   if (cleanBefore) {
-    mScript << R"(
-          && git -C {{ COPY_TO }} rm '*' 2>&1 \)";
+    mScript << inja::render(R"(
+           && git -C {{ COPY_TO }} rm '*' 2>&1 \)",
+                            data);
   }
 
   mScript << inja::render(R"(
-          && cp -rv {{ COPY_FROM }}/* {{ COPY_TO }}/ 2>&1 \
-          && git -C {{ COPY_TO }} add . 2>&1 \
-          && git -C {{ COPY_TO }} commit -am ':rocket:Publicação' 2>&1 \
-          && git -C {{ COPY_TO }} push origin master 2>&1 \
-          && chwon $(id -u):$(id -g) -Rv {{ COPY_FROM }}
+           && cp -rv {{ COPY_FROM }}/* {{ COPY_TO }}/ 2>&1 \
+           && git -C {{ COPY_TO }} add . 2>&1 \
+           && git -C {{ COPY_TO }} commit -am ':rocket:Publicação' 2>&1 \
+           && git -C {{ COPY_TO }} push origin master 2>&1 \
+           && chwon $(id -u):$(id -g) -Rv {{ COPY_FROM }}
   ")",
                           data);
 
@@ -431,7 +441,7 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
+void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
   const auto name = step["plugin"]["name"].as<string>();
   const auto repo = step["plugin"]["repo"].as<string>();
   const auto gitDir = step["plugin"]["git_dir"].as<string>();
@@ -477,7 +487,7 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<DockerVolume> MicroCI::parseVolumes(YAML::Node& step) const {
+set<DockerVolume> MicroCI::parseVolumes(const YAML::Node& step) const {
   auto volumes = defaultVolumes();
 
   if (step["volumes"] && step["volumes"].IsSequence()) {
@@ -500,7 +510,8 @@ set<DockerVolume> MicroCI::parseVolumes(YAML::Node& step) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::stepRequiredValue(YAML::Node& step, const string& var) const {
+string MicroCI::stepRequiredValue(const YAML::Node& step,
+                                  const string& var) const {
   if (!step[var]) {
     throw std::invalid_argument(
         fmt::format("Campo {} não encontrado no passo", var));
@@ -511,7 +522,7 @@ string MicroCI::stepRequiredValue(YAML::Node& step, const string& var) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::stepOptionalValue(YAML::Node& step, const string& var,
+string MicroCI::stepOptionalValue(const YAML::Node& step, const string& var,
                                   const string& defaultValue) const {
   if (step[var]) {
     return step[var].as<string>();
@@ -523,14 +534,14 @@ string MicroCI::stepOptionalValue(YAML::Node& step, const string& var,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::stepName(YAML::Node& step) const {
+string MicroCI::stepName(const YAML::Node& step) const {
   return stepRequiredValue(step, "name");
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::stepDescription(YAML::Node& step,
+string MicroCI::stepDescription(const YAML::Node& step,
                                 const string& defaultValue) const {
   return stepOptionalValue(step, "description", defaultValue);
   return defaultValue;
@@ -539,7 +550,8 @@ string MicroCI::stepDescription(YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::stepDockerImage(YAML::Node& step, const string& image) const {
+string MicroCI::stepDockerImage(const YAML::Node& step,
+                                const string& image) const {
   string dockerImage = mDockerImageGlobal;
 
   if (!image.empty()) {
@@ -556,14 +568,61 @@ string MicroCI::stepDockerImage(YAML::Node& step, const string& image) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parseBashStep(YAML::Node& step) {
+tuple<json, set<DockerVolume>> MicroCI::parseSsh(
+    const YAML::Node& step, const json& data,
+    const set<DockerVolume>& volumes) const {
+  auto sshCopyFrom = string{};
+  auto sshCopyTo = string{};
+
+  auto volumes_ = volumes;
+  auto data_ = data;
+
+  if (step["ssh"]) {
+    sshCopyFrom = "${HOME}/.ssh";
+    sshCopyTo = "/root/.ssh";
+
+    if (step["ssh"]["copy_from"]) {
+      sshCopyFrom = step["ssh"]["copy_from"].as<string>();
+    }
+
+    if (step["ssh"]["copy_to"]) {
+      sshCopyTo = step["ssh"]["copy_to"].as<string>();
+    }
+
+    // Montagem temporária para copia
+    DockerVolume vol;
+    vol.destination = "/.microCI_ssh";
+    vol.source = sshCopyFrom;
+    vol.mode = "ro";
+    volumes_.insert(vol);
+
+    data_["SSH_COPY_TO"] = sshCopyTo;
+    data_["SSH_COPY_FROM"] = "/.microCI_ssh";
+  }
+  return {data_, volumes_};
+}
+
+// ----------------------------------------------------------------------
+// Copia credencias SSH e ajusta as permissões
+// ----------------------------------------------------------------------
+void MicroCI::copySsh(const YAML::Node& step, const json& data) {
+  mScript << inja::render(R"( \
+           && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
+           && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
+           && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
+           && chmod 600 {{ SSH_COPY_TO }}/id_rsa 2>&1)",
+                          data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parseBashStep(const YAML::Node& step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
 
   auto data = defaultDataTemplate();
-  auto sshCopyFrom = string{};
-  auto sshCopyTo = string{};
 
   if (step["bash"]) {
     cmdsStr = step["bash"].as<string>();
@@ -579,34 +638,11 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   }
 
   auto volumes = parseVolumes(step);
-
-  if (step["ssh"]) {
-    sshCopyFrom = "${HOME}/.ssh";
-    sshCopyTo = "/root/.ssh";
-
-    if (step["ssh"]["copy_from"]) {
-      sshCopyFrom = step["ssh"]["copy_from"].as<string>();
-    }
-
-    // volumes["/.microCI_ssh"] = sshCopyFrom;
-    // volumesMode["/.microCI_ssh"] = "ro";
-
-    if (step["ssh"]["copy_to"]) {
-      sshCopyTo = step["ssh"]["copy_to"].as<string>();
-    }
-
-    // Montagem temporária para copia
-    DockerVolume vol;
-    vol.destination = "/.microCI_ssh";
-    vol.source = sshCopyFrom;
-    vol.mode = "ro";
-  }
+  tie(data, volumes) = parseSsh(step, data, volumes);
 
   data["STEP_NAME"] = stepName(step);
   data["STEP_DESCRIPTION"] = stepDescription(step, "Executa comandos no bash");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["SSH_COPY_TO"] = sshCopyTo;
-  data["SSH_COPY_FROM"] = "/.microCI_ssh";
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
   beginFunction(data);
@@ -620,14 +656,8 @@ void MicroCI::parseBashStep(YAML::Node& step) {
     spdlog::error("Tratar erro aqui");
   }
 
-  // Copia credencias SSH e ajusta as permissões
   if (step["ssh"]) {
-    mScript << inja::render(R"( \
-           && cp -Rv /.microCI_ssh {{ SSH_COPY_TO }} 2>&1 \
-           && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
-           && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
-           && chmod 600 {{ SSH_COPY_TO }}/id_rsa 2>&1)",
-                            data);
+    copySsh(step, data);
   }
 
   for (auto cmd : cmds) {

@@ -71,20 +71,22 @@ class MicroCI {
 
  private:
   void initBash();
-  void parseBashStep(YAML::Node& step);
-  void parsePluginStep(YAML::Node& step);
-  void parseGitDeployPluginStep(YAML::Node& step);
-  void parseGitPublishPluginStep(YAML::Node& step);
-  void parseMkdocsMaterialPluginStep(YAML::Node& step);
-  void prepareRunDocker(const json& data, set<DockerVolume>& volumes);
-  string stepRequiredValue(YAML::Node& step, const string& var) const;
-  string stepOptionalValue(YAML::Node& step, const string& var,
+  void parseBashStep(const YAML::Node& step);
+  void parsePluginStep(const YAML::Node& step);
+  void parseGitDeployPluginStep(const YAML::Node& step);
+  void parseGitPublishPluginStep(const YAML::Node& step);
+  void parseMkdocsMaterialPluginStep(const YAML::Node& step);
+  void prepareRunDocker(const json& data, const set<DockerVolume>& volumes);
+  tuple<json,set<DockerVolume>> parseSsh(const YAML::Node& step, const json& data, const set<DockerVolume>& volumes) const;
+  void copySsh(const YAML::Node& step, const json& data);
+  string stepRequiredValue(const YAML::Node& step, const string& var) const;
+  string stepOptionalValue(const YAML::Node& step, const string& var,
                            const string& defaultValue) const;
-  string stepDockerImage(YAML::Node& step, const string& image = "") const;
-  string stepDescription(YAML::Node& step,
+  string stepDockerImage(const YAML::Node& step, const string& image = "") const;
+  string stepDescription(const YAML::Node& step,
                          const string& defaultDescription = "") const;
-  string stepName(YAML::Node& step) const;
-  set<DockerVolume> parseVolumes(YAML::Node& step) const;
+  string stepName(const YAML::Node& step) const;
+  set<DockerVolume> parseVolumes(const YAML::Node& step) const;
 
   json defaultDataTemplate() const;
   set<DockerVolume> defaultVolumes() const;
@@ -98,7 +100,7 @@ class MicroCI {
   string mDockerImageGlobal;
   stringstream mScript;
 
-  typedef void (MicroCI::*parseFunctionPtr)(YAML::Node& step);
+  typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node& step);
   map<string, parseFunctionPtr> mPluginParserMap;
 };
 
