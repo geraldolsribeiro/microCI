@@ -18,7 +18,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.6.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.6.1                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -177,9 +177,9 @@ function step_publicar_html_para_repositorio_git() {
            && git -C /deploy rm '*' 2>&1 \
            && cp -rv site/* /deploy/ 2>&1 \
            && git -C /deploy add . 2>&1 \
-           && git -C /deploy commit -am ':rocket:Publicação' 2>&1 \
+           && git -C /deploy commit -am ':rocket:microCI git_publish' 2>&1 \
            && git -C /deploy push origin master 2>&1 \
-           && chwon $(id -u):$(id -g) -Rv site
+           && chown $(id -u):$(id -g) -Rv site 2>&1
   "
     )
     status=$?

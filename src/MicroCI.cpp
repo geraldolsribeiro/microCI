@@ -429,9 +429,9 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   mScript << inja::render(R"(
            && cp -rv {{ COPY_FROM }}/* {{ COPY_TO }}/ 2>&1 \
            && git -C {{ COPY_TO }} add . 2>&1 \
-           && git -C {{ COPY_TO }} commit -am ':rocket:Publicação' 2>&1 \
+           && git -C {{ COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
            && git -C {{ COPY_TO }} push origin master 2>&1 \
-           && chwon $(id -u):$(id -g) -Rv {{ COPY_FROM }}
+           && chown $(id -u):$(id -g) -Rv {{ COPY_FROM }} 2>&1
   ")",
                           data);
 
