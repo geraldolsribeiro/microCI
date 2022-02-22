@@ -24,8 +24,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
 plugins:
-  - mermaid2
   - search:
       lang: pt
-extra_javascript:
-    - https://unpkg.com/mermaid/dist/mermaid.min.js
+#   - mermaid2
+# extra_javascript:
+#     - https://unpkg.com/mermaid/dist/mermaid.min.js

@@ -1,13 +1,16 @@
-# Tutorial mkdocs
+# Tutorial mkdocs local
 
 ## Introdução
+
+O objetivo deste tutorial é a execução do `microCI` localmente para criar
+documentação.
 
 A ferramenta [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
 oferece uma maneira prática para documentar o projeto usando arquivos no
 formato markdown. Neste tutorial veremos como criar um projeto mkdocs e gerar
 uma documentação usando o `microCI`.
 
-## Configuração
+## Configuração do microCI
 
 O `microCI` cria um arquivo de configuração inicial para executar  o `mkdocs-material`:
 

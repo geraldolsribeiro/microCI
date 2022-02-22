@@ -1,6 +1,4 @@
 ---
-# Se nenhuma imagem for especificada usará um imagem Debian
-# docker: "debian:stable-slim"
 steps:
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"
@@ -8,18 +6,16 @@ steps:
       name: "mkdocs_material"
       action: "build"
   - name: "Configurar github pages"
-    description: "Configura dominio Apex e ajusta usuário"
+    description: "Configura dominio Apex para github pages e ajusta usuário"
     bash: |
       cp github-pages/CNAME site/
       chown $(id -u).$(id -g) -Rv site/
   - name: "Servidor local na porta 9001 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
-    # Este passo deve ser executado localmente
     only: "serve"
     plugin:
       name: "mkdocs_material"
       action: "serve"
-      # port: 9001 # Porta personalizada para teste
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
     bash: |
