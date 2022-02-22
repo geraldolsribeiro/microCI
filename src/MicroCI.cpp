@@ -308,17 +308,9 @@ void MicroCI::prepareRunDocker(const json& data, set<DockerVolume>& volumes) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
-  auto stepName = string{};
-  auto stepDescription = string{};
   auto action = string{"build"};
   auto port = string{"8000"};
 
-  if (step["name"]) {
-    stepName = step["name"].as<string>();
-  }
-  if (step["description"]) {
-    stepDescription = step["description"].as<string>();
-  }
   if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
     if (action == "serve") {
@@ -332,9 +324,9 @@ void MicroCI::parseMkdocsMaterialPluginStep(YAML::Node& step) {
   auto data = defaultDataTemplate();
   data["ACTION"] = action;
   data["PORT"] = port;
-  data["STEP_NAME"] = stepName;
-  data["FUNCTION_NAME"] = sanitizeName(stepName);
-  data["STEP_DESCRIPTION"] = stepDescription;
+  data["STEP_NAME"] = stepName(step);
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
   data["DOCKER_IMAGE"] = "squidfunk/mkdocs-material";
   // data["DOCKER_IMAGE"] = "microci_mkdocs_material";
 
@@ -383,7 +375,6 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
   }
 
   auto volumes = parseVolumes(step);
-  auto dockerImage = parseDockerImage(step, "bitnami/git:latest");
 
   const auto name = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();
@@ -405,7 +396,7 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
   data["COPY_TO"] = copyTo;
   data["COPY_FROM"] = copyFrom;
   data["STEP_NAME"] = stepName;
-  data["DOCKER_IMAGE"] = dockerImage;
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName);
   data["STEP_DESCRIPTION"] = stepDescription;
 
@@ -455,16 +446,6 @@ void MicroCI::parseGitPublishPluginStep(YAML::Node& step) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
-  auto stepName = string{};
-  auto stepDescription = string{};
-
-  if (step["name"]) {
-    stepName = step["name"].as<string>();
-  }
-  if (step["description"]) {
-    stepDescription = step["description"].as<string>();
-  }
-
   const auto name = step["plugin"]["name"].as<string>();
   const auto repo = step["plugin"]["repo"].as<string>();
   const auto gitDir = step["plugin"]["git_dir"].as<string>();
@@ -474,9 +455,9 @@ void MicroCI::parseGitDeployPluginStep(YAML::Node& step) {
   data["GIT_URL"] = repo;
   data["GIT_DIR"] = gitDir;
   data["GIT_WORK"] = workTree;
-  data["STEP_NAME"] = stepName;
-  data["FUNCTION_NAME"] = sanitizeName(stepName);
-  data["STEP_DESCRIPTION"] = stepDescription;
+  data["STEP_NAME"] = stepName(step);
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] = stepDescription(step);
 
   beginFunction(data);
   mScript << inja::render(R"(
@@ -533,7 +514,46 @@ set<DockerVolume> MicroCI::parseVolumes(YAML::Node& step) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::parseDockerImage(YAML::Node& step, const string& image) const {
+string MicroCI::stepRequiredValue(YAML::Node& step, const string& var) const {
+  if (!step[var]) {
+    throw std::invalid_argument(
+        fmt::format("Campo {} não encontrado no passo", var));
+  }
+  return step[var].as<string>();
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::stepOptionalValue(YAML::Node& step, const string& var,
+                                  const string& defaultValue) const {
+  if (step[var]) {
+    return step[var].as<string>();
+  } else {
+    return defaultValue;
+  }
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::stepName(YAML::Node& step) const {
+  return stepRequiredValue(step, "name");
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::stepDescription(YAML::Node& step,
+                                const string& defaultValue) const {
+  return stepOptionalValue(step, "description", defaultValue);
+  return defaultValue;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string MicroCI::stepDockerImage(YAML::Node& step, const string& image) const {
   string dockerImage = mDockerImageGlobal;
 
   if (!image.empty()) {
@@ -554,10 +574,7 @@ void MicroCI::parseBashStep(YAML::Node& step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
-  auto stepDescription = string{};
 
-  // auto volumes = map<string, string>{};
-  // auto volumesMode = map<string, string>{};
   auto data = defaultDataTemplate();
   auto sshCopyFrom = string{};
   auto sshCopyTo = string{};
@@ -573,15 +590,6 @@ void MicroCI::parseBashStep(YAML::Node& step) {
     if (!line.empty() && line.at(0) != '#') {
       cmds.push_back(line);
     }
-  }
-
-  auto stepName = step["name"].as<string>();
-
-  auto dockerImage = parseDockerImage(step);
-
-  // Documentação
-  if (step["description"]) {
-    stepDescription = step["description"].as<string>();
   }
 
   auto volumes = parseVolumes(step);
@@ -608,12 +616,12 @@ void MicroCI::parseBashStep(YAML::Node& step) {
     vol.mode = "ro";
   }
 
-  data["STEP_NAME"] = stepName;
-  data["STEP_DESCRIPTION"] = stepDescription;
-  data["FUNCTION_NAME"] = sanitizeName(stepName);
+  data["STEP_NAME"] = stepName(step);
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Executa comandos no bash");
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["SSH_COPY_TO"] = sshCopyTo;
   data["SSH_COPY_FROM"] = "/.microCI_ssh";
-  data["DOCKER_IMAGE"] = dockerImage;
+  data["DOCKER_IMAGE"] = stepDockerImage(step);
 
   beginFunction(data);
   prepareRunDocker(data, volumes);

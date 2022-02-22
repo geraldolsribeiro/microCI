@@ -18,7 +18,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.5.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.6.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -75,12 +75,11 @@ function assert_function() {
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# 
+# Documentação usando mkdocs_material
 # ----------------------------------------------------------------------
 function step_cria_arquivos_iniciais_do_mkdocs() {
   title="Cria arquivos iniciais do mkdocs.............................................................."
   echo -ne "[0;36m${title:0:60}[0m: "
-  # printf "[0;36m%60s[0m: " "Cria arquivos iniciais do mkdocs"
   {
     (
       set -e
@@ -114,7 +113,6 @@ function step_cria_arquivos_iniciais_do_mkdocs() {
 function step_construir_documentacao_em_formato_html() {
   title="Construir documentação em formato HTML.............................................................."
   echo -ne "[0;36m${title:0:60}[0m: "
-  # printf "[0;36m%60s[0m: " "Construir documentação em formato HTML"
   {
     (
       set -e
@@ -148,7 +146,6 @@ function step_construir_documentacao_em_formato_html() {
 function step_publicar_html_para_repositorio_git() {
   title="Publicar HTML para repositório git.............................................................."
   echo -ne "[0;36m${title:0:60}[0m: "
-  # printf "[0;36m%60s[0m: " "Publicar HTML para repositório git"
   {
     (
       set -e

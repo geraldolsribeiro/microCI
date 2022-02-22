@@ -76,8 +76,14 @@ class MicroCI {
   void parseGitDeployPluginStep(YAML::Node& step);
   void parseGitPublishPluginStep(YAML::Node& step);
   void parseMkdocsMaterialPluginStep(YAML::Node& step);
-  void prepareRunDocker(const json&data, set<DockerVolume>& volumes);
-  string parseDockerImage(YAML::Node& step, const string & image = "") const;
+  void prepareRunDocker(const json& data, set<DockerVolume>& volumes);
+  string stepRequiredValue(YAML::Node& step, const string& var) const;
+  string stepOptionalValue(YAML::Node& step, const string& var,
+                           const string& defaultValue) const;
+  string stepDockerImage(YAML::Node& step, const string& image = "") const;
+  string stepDescription(YAML::Node& step,
+                         const string& defaultDescription = "") const;
+  string stepName(YAML::Node& step) const;
   set<DockerVolume> parseVolumes(YAML::Node& step) const;
 
   json defaultDataTemplate() const;
