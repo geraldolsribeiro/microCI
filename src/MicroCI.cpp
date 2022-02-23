@@ -66,6 +66,8 @@ MicroCI::MicroCI() {
   mPluginParserMap.emplace("git_publish", &MicroCI::parseGitPublishPluginStep);
   mPluginParserMap.emplace("mkdocs_material",
                            &MicroCI::parseMkdocsMaterialPluginStep);
+  mPluginParserMap.emplace("cppcheck", &MicroCI::parseCppCheckPluginStep);
+
   mDockerImageGlobal = "debian:stable-slim";
   initBash();
 }
@@ -364,20 +366,104 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  auto volumes = parseVolumes(step);
+  auto platform = string{"unix64"};
+  auto standard = string{"c++11"};
+  list<string> includeList;
+  list<string> sourceList;
+  list<string> opts{"--enable=all", "--inconclusive", "--xml",
+                    "--xml-version=2"};
+
+  // opções disponíveis:
+  // cppcheck [--check-config] [--check-library] [-D<id>] [-U<id>]
+  // [--enable=<id>] [--error-exitcode=<n>] [--errorlist]
+  // [--exitcode-suppressions=<file>]
+  // [--file-list=<file>] [--force]
+  // [--includes-file=<file>] [--config-exclude=<dir>]
+  // [--config-excludes-file=<file>] [--include=<file>]
+  // [-i<dir>] [--inline-suppr] [-j<jobs>]
+  // [-l<load>] [--language=<language>] [--library=<cfg>]
+  // [--max-configs=<limit>] [--max-ctu-depth=<limit>]
+  // [--platform=<type>] [--quiet]
+  // [--relative-paths=<paths>] [--report-progress]
+  // [--rule=<rule>] [--rule-file=<file>]
+  // [--suppress=<spec>]
+  // [--suppressions-list=<file>]
+  // [--suppress-xml=<.xml file>]
+  // [--template='<text>'] [--verbose]
+
+  if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
+    for (const auto& inc : step["plugin"]["include"]) {
+      includeList.push_back(inc.as<string>());
+    }
+  }
+
+  if (step["plugin"]["src"] && step["plugin"]["src"].IsSequence()) {
+    for (const auto& src : step["plugin"]["src"]) {
+      sourceList.push_back(src.as<string>());
+    }
+  }
+
+  if (step["plugin"]["platform"]) {
+    platform = step["plugin"]["platform"].as<string>();
+  }
+
+  if (step["plugin"]["std"]) {
+    standard = step["plugin"]["std"].as<string>();
+  }
+
+  data["STEP_NAME"] = stepName(step);
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
+  data["PLATFORM"] = platform;
+  data["STD"] = standard;
+  data["REPORT_TITLE"] = "MicroCI::CppCheck";
+
+  beginFunction(data);
+  prepareRunDocker(data, volumes);
+
+  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+      && mkdir -p auditing/cppcheck \
+      && cppcheck \
+        --platform={{ PLATFORM }} \
+        --std={{ STD }} \
+)", data);
+
+  for (const auto& opt : opts) {
+    mScript << "        " << opt << " \\\n";
+  }
+
+  for (const auto& inc : includeList) {
+    mScript << "        --include=" << inc << " \\\n";
+  }
+
+  for (const auto& src : sourceList) {
+    mScript << "        " << src << " \\\n";
+  }
+
+  // xml é escrito na saída de erro
+  mScript << inja::render( R"(        2> auditing/cppcheck.xml \
+      && cppcheck-htmlreport \
+        --title='{{ REPORT_TITLE }}' \
+        --report-dir='auditing/cppcheck/' \
+        --source-dir='.' \
+        --file='auditing/cppcheck.xml' 2>&1 \
+      && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+)", data );
+
+  endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
-  auto stepName = string{};
-  auto stepDescription = string{"Publica arquivos em um repositório git"};
   auto copyTo = string{"/microci_deploy"};
   auto copyFrom = string{"site"};
   auto cleanBefore = true;
-
-  if (step["name"]) {
-    stepName = step["name"].as<string>();
-  }
-  if (step["description"]) {
-    stepDescription = step["description"].as<string>();
-  }
-
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
   tie(data, volumes) = parseSsh(step, data, volumes);
@@ -400,10 +486,11 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   data["GIT_URL"] = gitURL;
   data["COPY_TO"] = copyTo;
   data["COPY_FROM"] = copyFrom;
-  data["STEP_NAME"] = stepName;
+  data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName);
-  data["STEP_DESCRIPTION"] = stepDescription;
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] =
+      stepDescription(step, "Publica arquivos em um repositório git");
 
   beginFunction(data);
   prepareRunDocker(data, volumes);

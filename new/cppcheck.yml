@@ -1,0 +1,12 @@
+# Exemplo de uso
+steps:
+  - name: "Gerar relatório de verificação do código C++"
+    description: "Verifica o código C++ e gera relatório em formato HTML"
+    plugin:
+      name: "cppcheck"
+      include:
+        - "include"
+      src:
+        - "src"
+        - "test"
+      platform: "unix64"

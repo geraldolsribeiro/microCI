@@ -53,7 +53,8 @@ string help() {
 Opções:
   -h --help                Ajuda
   -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new tipo            [bash|mkdocs_material|git_deploy]
+  -n,--new tipo            [bash|mkdocs_material|git_deploy|git_publish
+                            cppcheck]
 
 )";
 }
@@ -89,7 +90,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
 
     if (newTypeTemplates.count(newType)) {
       auto [buf, len] = newTypeTemplates[newType];
-      ofstream out(yamlFilename);
+      ofstream out;
+      if (filesystem::exists(yamlFilename)) {
+        out.open(yamlFilename, ios_base::app);
+        out << "\n# ---------- MESCLE MANUALMENTE CONTEÚDO ABAIXO ---------\n";
+      } else {
+        out.open(yamlFilename);
+      }
       out.write((char *)buf, len);
       cout.write((char *)buf, len);
       return 0;
