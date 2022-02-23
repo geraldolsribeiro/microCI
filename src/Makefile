@@ -53,7 +53,9 @@ tidy:
 MicroCI.cpp: \
 	../include/new/mkdocs_material.hpp \
 	../include/new/git_deploy.hpp \
-	../include/new/npm.hpp
+	../include/new/git_publish.hpp \
+	../include/new/npm.hpp \
+	../include/new/cppcheck.hpp
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

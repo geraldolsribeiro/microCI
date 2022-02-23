@@ -1,4 +1,5 @@
 site
 .microCI.dbg
 .microCI.log
+src/microCI
 

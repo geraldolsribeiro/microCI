@@ -41,7 +41,9 @@ using namespace std;
 #include <argh.hpp>
 using namespace microci;
 
+#include <new/cppcheck.hpp>
 #include <new/git_deploy.hpp>
+#include <new/git_publish.hpp>
 #include <new/mkdocs_material.hpp>
 #include <new/npm.hpp>
 
@@ -86,6 +88,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     YAML_TPL(mkdocs_material);
     YAML_TPL(npm);
     YAML_TPL(git_deploy);
+    YAML_TPL(git_publish);
+    YAML_TPL(cppcheck);
 #undef YAML_TPL
 
     if (newTypeTemplates.count(newType)) {
