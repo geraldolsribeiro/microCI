@@ -4,7 +4,7 @@ MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 RUN PIP_NO_CACHE_DIR=1 pip3 install --no-cache --upgrade pip setuptools Pygments
 RUN set -eux; \
   apt-get update \
-  && apt-get install -y git build-essential libpcre3-dev \
+  && apt-get install -y git build-essential libpcre3-dev clang clang-format clang-tools clang-tidy \
   && mkdir -p /usr/src \
   && git clone --depth 1 --branch 2.7 --single-branch  https://github.com/danmar/cppcheck.git /usr/src/cppcheck \
   && cd /usr/src/cppcheck \

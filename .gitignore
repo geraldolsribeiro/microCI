@@ -2,4 +2,5 @@ site
 .microCI.dbg
 .microCI.log
 src/microCI
+src/NOTES.md
 

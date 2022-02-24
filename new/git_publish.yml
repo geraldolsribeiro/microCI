@@ -11,3 +11,5 @@ steps:
       copy_to: "/deploy" # Pasta padrão dentro do container
       copy_from: "site"  # Pasta padrão que contêm os arquivos
       clean_before: true # Remove todos os arquivos antes de copiar o novos
+
+# vim: spell spelllang=pt,en

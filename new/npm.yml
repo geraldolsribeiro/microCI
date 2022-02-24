@@ -12,3 +12,4 @@ steps:
     bash: |
       npm run build
 
+# vim: spell spelllang=pt,en

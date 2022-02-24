@@ -332,8 +332,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Documentação usando mkdocs_material");
-  data["DOCKER_IMAGE"] = "squidfunk/mkdocs-material";
-  // data["DOCKER_IMAGE"] = "microci_mkdocs_material";
+  data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:latest";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
   // exec 5> >(logger -t $0)
@@ -356,7 +355,7 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
         --volume "${PWD}":{{ WORKSPACE }} \
         --publish {{PORT}}:8000 \
         {{ DOCKER_IMAGE }} \
-        {{ ACTION }} 2>&1
+        mkdocs {{ ACTION }} 2>&1
 )",
                           data);
 
@@ -374,7 +373,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   list<string> includeList;
   list<string> sourceList;
   list<string> opts{"--enable=all", "--inconclusive", "--xml",
-                    "--xml-version=2"};
+                    "--xml-version=2" };
 
   // opções disponíveis:
   // cppcheck [--check-config] [--check-library] [-D<id>] [-U<id>]
@@ -394,14 +393,20 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   // [--suppress-xml=<.xml file>]
   // [--template='<text>'] [--verbose]
 
+  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
+    for (const auto& opt : step["plugin"]["options"]) {
+      opts.push_back(opt.as<string>());
+    }
+  }
+
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
     for (const auto& inc : step["plugin"]["include"]) {
       includeList.push_back(inc.as<string>());
     }
   }
 
-  if (step["plugin"]["src"] && step["plugin"]["src"].IsSequence()) {
-    for (const auto& src : step["plugin"]["src"]) {
+  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+    for (const auto& src : step["plugin"]["source"]) {
       sourceList.push_back(src.as<string>());
     }
   }
@@ -415,7 +420,8 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] =
+      stepDockerImage(step, "intmain/microci_cppcheck:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
   data["PLATFORM"] = platform;
@@ -430,7 +436,8 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
       && cppcheck \
         --platform={{ PLATFORM }} \
         --std={{ STD }} \
-)", data);
+)",
+                          data);
 
   for (const auto& opt : opts) {
     mScript << "        " << opt << " \\\n";
@@ -445,14 +452,15 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   }
 
   // xml é escrito na saída de erro
-  mScript << inja::render( R"(        2> auditing/cppcheck.xml \
+  mScript << inja::render(R"(        2> auditing/cppcheck.xml \
       && cppcheck-htmlreport \
         --title='{{ REPORT_TITLE }}' \
         --report-dir='auditing/cppcheck/' \
         --source-dir='.' \
         --file='auditing/cppcheck.xml' 2>&1 \
       && chown $(id -u):$(id -g) -Rv auditing 2>&1"
-)", data );
+)",
+                          data);
 
   endFunction(data);
 }

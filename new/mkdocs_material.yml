@@ -10,7 +10,7 @@ steps:
     plugin:
       name: "mkdocs_material"
       action: "build"
-      # Contruindo para uma pasta personalizada
+      # Construindo para uma pasta personalizada
       # action: "build --site-dir public
   - name: "Publicar HTML para repositório git"
     ssh:
@@ -32,4 +32,4 @@ steps:
       # Porta personalizada, caso já esteja utilizando a padrão 8000
       # port: 9001
 
-
+# vim: spell spelllang=pt,en
