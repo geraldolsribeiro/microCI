@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.7.0
+                             microCI 0.8.0
                             Geraldo Ribeiro
 
 
@@ -15,6 +15,6 @@ Opções:
   -h --help                Ajuda
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new tipo            [bash|mkdocs_material|git_deploy|git_publish
-                            cppcheck]
+                            cppcheck|clang-tidy]
 
 

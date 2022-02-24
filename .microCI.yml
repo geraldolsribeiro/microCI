@@ -1,22 +1,35 @@
 ---
 steps:
-  - name: "Gerar relatório de verificação do código C++"
+  - name: "Gerar relatório de verificação do código C++ clang-tidy"
+    description: "Verifica o código C++ e gera relatório em formato HTML"
+    # only: "clang-tidy"
+    plugin:
+      name: "clang-tidy"
+      options:
+        - "-std=c++17"
+      include:
+        - "/usr/include/"
+      source:
+        - "src/*pp"
+        - "test/*pp"
+  - name: "Gerar relatório de verificação do código C++ cppcheck"
     # only: "cppcheck"
     plugin:
       name: "cppcheck"
       include:
         - "include"
-      src:
+      source:
         - "src"
         - "test"
       platform: "unix64"
+      std: "c++17"
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"
     plugin:
       name: "mkdocs_material"
       action: "build"
   - name: "Configurar github pages"
-    description: "Configura dominio Apex para github pages, arquivo README e ajusta usuário"
+    description: "Configura domínio Apex para github pages, arquivo README e ajusta usuário"
     bash: |
       cp github-pages/CNAME site/
       cat docs/index.md > README.md
@@ -44,3 +57,6 @@ steps:
       make -C src clean all
       make -C test
       chown $(id -u).$(id -g) -Rv src/microCI
+
+# vim: spell spelllang=pt,en
+

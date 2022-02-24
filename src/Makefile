@@ -55,6 +55,7 @@ MicroCI.cpp: \
 	../include/new/git_deploy.hpp \
 	../include/new/git_publish.hpp \
 	../include/new/npm.hpp \
+	../include/new/clang-tidy.hpp \
 	../include/new/cppcheck.hpp
 
 microCI: MicroCI.cpp main.cpp

@@ -44,7 +44,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 7;
+const int MINOR = 8;
 const int PATCH = 0;
 
 string banner();
@@ -65,8 +65,6 @@ inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
 //   void parse(const YAML::Node& step, stringstream& ss) = 0;
 // };
 
-
-
 class MicroCI {
  public:
   MicroCI();
@@ -83,6 +81,7 @@ class MicroCI {
   void parseGitPublishPluginStep(const YAML::Node& step);
   void parseCppCheckPluginStep(const YAML::Node& step);
   void parseMkdocsMaterialPluginStep(const YAML::Node& step);
+  void parseClangTidyPluginStep(const YAML::Node& step);
   void prepareRunDocker(const json& data, const set<DockerVolume>& volumes);
   tuple<json, set<DockerVolume>> parseSsh(
       const YAML::Node& step, const json& data,

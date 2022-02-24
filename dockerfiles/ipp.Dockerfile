@@ -9,7 +9,8 @@ RUN apt-get update \
   | gpg --dearmor \
   | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null \
   && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-  | tee /etc/apt/sources.list.d/oneAPI.list
+  | tee /etc/apt/sources.list.d/oneAPI.list \
+  && apt-get update && apt-get install -y intel-oneapi-ipp-devel-2021.3.0 intel-oneapi-ipp-2021.3.0 \
+  && apt-get clean
 
-RUN apt-get update && apt-get install -y intel-oneapi-ipp-devel-2021.3.0 intel-oneapi-ipp-2021.3.0
 

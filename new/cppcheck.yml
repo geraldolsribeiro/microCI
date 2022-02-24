@@ -1,6 +1,6 @@
 # Exemplo de uso
 steps:
-  - name: "Gerar relatório de verificação do código C++"
+  - name: "Gerar relatório de verificação do código C++ - cppcheck"
     description: "Verifica o código C++ e gera relatório em formato HTML"
     plugin:
       name: "cppcheck"

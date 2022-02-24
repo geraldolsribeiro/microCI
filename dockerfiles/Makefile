@@ -12,6 +12,7 @@ all: \
 
 microci_cppcheck_image:
 	docker build -t intmain/microci_cppcheck:0.3 -f cppcheck.Dockerfile .
+	docker run -it intmain/microci_cppcheck:0.3 clang-tidy-html
 
 microci_cppcheck_test: microci_cppcheck_image
 	docker run -it intmain/microci_cppcheck:0.3 cppcheck --help

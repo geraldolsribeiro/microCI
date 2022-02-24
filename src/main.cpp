@@ -46,6 +46,7 @@ using namespace microci;
 #include <new/git_publish.hpp>
 #include <new/mkdocs_material.hpp>
 #include <new/npm.hpp>
+#include <new/clang-tidy.hpp>
 
 // ----------------------------------------------------------------------
 //
@@ -56,7 +57,7 @@ Opções:
   -h --help                Ajuda
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new tipo            [bash|mkdocs_material|git_deploy|git_publish
-                            cppcheck]
+                            cppcheck|clang-tidy]
 
 )";
 }
@@ -85,12 +86,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     map<string, pair<unsigned char *, unsigned int>> newTypeTemplates;
 #define YAML_TPL(X) \
   newTypeTemplates[#X] = make_pair(___new_##X##_yml, ___new_##X##_yml_len)
+#define YAML_TPL2(X,Y) \
+  newTypeTemplates[#Y] = make_pair(___new_##X##_yml, ___new_##X##_yml_len)
     YAML_TPL(mkdocs_material);
     YAML_TPL(npm);
     YAML_TPL(git_deploy);
     YAML_TPL(git_publish);
     YAML_TPL(cppcheck);
+    YAML_TPL2(clang_tidy,clang-tidy);
 #undef YAML_TPL
+#undef YAML_TPL2
 
     if (newTypeTemplates.count(newType)) {
       auto [buf, len] = newTypeTemplates[newType];

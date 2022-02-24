@@ -67,6 +67,7 @@ MicroCI::MicroCI() {
   mPluginParserMap.emplace("mkdocs_material",
                            &MicroCI::parseMkdocsMaterialPluginStep);
   mPluginParserMap.emplace("cppcheck", &MicroCI::parseCppCheckPluginStep);
+  mPluginParserMap.emplace("clang-tidy", &MicroCI::parseClangTidyPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
   initBash();
@@ -365,6 +366,73 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  auto volumes = parseVolumes(step);
+  list<string> includeList;
+  list<string> sourceList;
+  list<string> opts{"--"};
+
+  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
+    for (const auto& opt : step["plugin"]["options"]) {
+      opts.push_back(opt.as<string>());
+    }
+  }
+
+  if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
+    for (const auto& inc : step["plugin"]["include"]) {
+      includeList.push_back(inc.as<string>());
+    }
+  }
+
+  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+    for (const auto& src : step["plugin"]["source"]) {
+      sourceList.push_back(src.as<string>());
+    }
+  }
+
+  data["STEP_NAME"] = stepName(step);
+  data["DOCKER_IMAGE"] =
+      stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
+
+  beginFunction(data);
+  prepareRunDocker(data, volumes);
+
+  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+      && mkdir -p auditing/ \
+      && date > auditing/clang-tidy.log \
+      && clang-tidy \
+)",
+                          data);
+  for (const auto& src : sourceList) {
+    mScript << "        " << src << " \\\n";
+  }
+
+  mScript << "        -checks='*' \\\n";
+
+  for (const auto& opt : opts) {
+    mScript << "        " << opt << " \\\n";
+  }
+
+  for (const auto& inc : includeList) {
+    mScript << "        -I" << inc << " \\\n";
+  }
+
+  mScript << inja::render(R"(        2>&1 | tee auditing/clang-tidy.log 2>&1 \
+       && clang-tidy-html auditing/clang-tidy.log 2>&1 \
+       && mv -v clang.html auditing/clang-tidy.html 2>&1 \
+       && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+)",
+                          data);
+
+  endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
@@ -373,25 +441,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   list<string> includeList;
   list<string> sourceList;
   list<string> opts{"--enable=all", "--inconclusive", "--xml",
-                    "--xml-version=2" };
-
-  // opções disponíveis:
-  // cppcheck [--check-config] [--check-library] [-D<id>] [-U<id>]
-  // [--enable=<id>] [--error-exitcode=<n>] [--errorlist]
-  // [--exitcode-suppressions=<file>]
-  // [--file-list=<file>] [--force]
-  // [--includes-file=<file>] [--config-exclude=<dir>]
-  // [--config-excludes-file=<file>] [--include=<file>]
-  // [-i<dir>] [--inline-suppr] [-j<jobs>]
-  // [-l<load>] [--language=<language>] [--library=<cfg>]
-  // [--max-configs=<limit>] [--max-ctu-depth=<limit>]
-  // [--platform=<type>] [--quiet]
-  // [--relative-paths=<paths>] [--report-progress]
-  // [--rule=<rule>] [--rule-file=<file>]
-  // [--suppress=<spec>]
-  // [--suppressions-list=<file>]
-  // [--suppress-xml=<.xml file>]
-  // [--template='<text>'] [--verbose]
+                    "--xml-version=2"};
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto& opt : step["plugin"]["options"]) {

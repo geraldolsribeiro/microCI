@@ -13,6 +13,7 @@ RUN set -eux; \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN PIP_NO_CACHE_DIR=1 pip3 install --no-cache --upgrade pip clang-html
 CMD [ "/bin/echo", "microCI cppcheck" ]
 
 # vim: ft=dockerfile

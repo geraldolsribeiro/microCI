@@ -75,78 +75,10 @@ function assert_function() {
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Documentação usando mkdocs_material
+# Verifica o código C++ e gera relatório em formato HTML
 # ----------------------------------------------------------------------
-function step_cria_arquivos_iniciais_do_mkdocs() {
-  title="Cria arquivos iniciais do mkdocs.............................................................."
-  echo -ne "[0;36m${title:0:60}[0m: "
-  {
-    (
-      set -e
-
-      # shellcheck disable=SC2140
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --workdir /microci_workspace \
-        --volume "${PWD}":/microci_workspace \
-        --publish 8000:8000 \
-        intmain/microci_mkdocs_material:latest \
-        mkdocs new . 2>&1
-
-    )
-    status=$?
-    echo "Status: ${status}"
-  } >> .microCI.log
-
-  if [ "${status}" = "0" ]; then
-    echo -e "[0;32mOK[0m"
-  else
-    echo -e "[0;31mFALHOU[0m"
-  fi
-}
-
-# ----------------------------------------------------------------------
-# Documentação do projeto
-# ----------------------------------------------------------------------
-function step_construir_documentacao_em_formato_html() {
-  title="Construir documentação em formato HTML.............................................................."
-  echo -ne "[0;36m${title:0:60}[0m: "
-  {
-    (
-      set -e
-
-      # shellcheck disable=SC2140
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --workdir /microci_workspace \
-        --volume "${PWD}":/microci_workspace \
-        --publish 8000:8000 \
-        intmain/microci_mkdocs_material:latest \
-        mkdocs build 2>&1
-
-    )
-    status=$?
-    echo "Status: ${status}"
-  } >> .microCI.log
-
-  if [ "${status}" = "0" ]; then
-    echo -e "[0;32mOK[0m"
-  else
-    echo -e "[0;31mFALHOU[0m"
-  fi
-}
-
-# ----------------------------------------------------------------------
-# Publica arquivos em um repositório git
-# ----------------------------------------------------------------------
-function step_publicar_html_para_repositorio_git() {
-  title="Publicar HTML para repositório git.............................................................."
+function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
+  title="Gerar relatório de verificação do código C++ - cppcheck.............................................................."
   echo -ne "[0;36m${title:0:60}[0m: "
   {
     (
@@ -155,7 +87,7 @@ function step_publicar_html_para_repositorio_git() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Publicar HTML para repositório git"
+      echo "Passo: Gerar relatório de verificação do código C++ - cppcheck"
       # shellcheck disable=SC2140
       docker run \
         --interactive \
@@ -163,24 +95,29 @@ function step_publicar_html_para_repositorio_git() {
         --attach stderr \
         --rm \
         --workdir /microci_workspace \
-        --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
         --volume "${PWD}":"/microci_workspace":rw \
-        "bitnami/git:latest" \
+        "intmain/microci_cppcheck:latest" \
         /bin/bash -c "cd /microci_workspace \
-           && cp -Rv /.microCI_ssh /root/.ssh 2>&1 \
-           && chmod 700 /root/.ssh/ 2>&1 \
-           && chmod 644 /root/.ssh/id_rsa.pub 2>&1 \
-           && chmod 600 /root/.ssh/id_rsa 2>&1 \
-           && git clone 'ssh://git@someurl.com/site.git' --depth 1 '/deploy' 2>&1 \
-           && git -C /deploy config user.name  '$(git config --get user.name)' 2>&1 \
-           && git -C /deploy config user.email '$(git config --get user.email)' 2>&1 \
-           && git -C /deploy rm '*' 2>&1 \
-           && cp -rv site/* /deploy/ 2>&1 \
-           && git -C /deploy add . 2>&1 \
-           && git -C /deploy commit -am ':rocket:microCI git_publish' 2>&1 \
-           && git -C /deploy push origin master 2>&1 \
-           && chown $(id -u):$(id -g) -Rv site 2>&1
-  "
+      && mkdir -p auditing/cppcheck \
+      && cppcheck \
+        --platform=unix64 \
+        --std=c++11 \
+        --enable=all \
+        --inconclusive \
+        --xml \
+        --xml-version=2 \
+        -j 2 \
+        --include=include \
+        src \
+        test \
+        2> auditing/cppcheck.xml \
+      && cppcheck-htmlreport \
+        --title='MicroCI::CppCheck' \
+        --report-dir='auditing/cppcheck/' \
+        --source-dir='.' \
+        --file='auditing/cppcheck.xml' 2>&1 \
+      && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+
     )
     status=$?
     echo "Status: ${status}"
@@ -198,9 +135,7 @@ function step_publicar_html_para_repositorio_git() {
 function main() {
   date >> .microCI.log
 
-  step_cria_arquivos_iniciais_do_mkdocs
-  step_construir_documentacao_em_formato_html
-  step_publicar_html_para_repositorio_git
+  step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck
 
   date >> .microCI.log
 }

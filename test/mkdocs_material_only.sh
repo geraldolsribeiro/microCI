@@ -18,7 +18,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.7.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.8.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -93,8 +93,8 @@ function step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_() {
         --workdir /microci_workspace \
         --volume "${PWD}":/microci_workspace \
         --publish 8000:8000 \
-        squidfunk/mkdocs-material \
-        serve --dev-addr=0.0.0.0:8000 2>&1
+        intmain/microci_mkdocs_material:latest \
+        mkdocs serve --dev-addr=0.0.0.0:8000 2>&1
 
     )
     status=$?

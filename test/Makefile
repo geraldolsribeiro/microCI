@@ -32,3 +32,5 @@ test:
 	../src/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
 	../src/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
 	../src/microCI -c npm -i test_npm.yml
+	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
+	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
