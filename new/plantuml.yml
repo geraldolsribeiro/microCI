@@ -1,0 +1,11 @@
+# Exemplo de uso
+steps:
+  - name: "Gerar diagramas plantuml"
+    plugin:
+      name: "plantuml"
+      source:
+        - "src/**.cpp"         # Vasculha recursivamente os arquivos cpp
+        - "docs/**.puml"
+      type: svg                # svg, png ou pdf
+      output: "docs/diagrams/" # Pasta onde serão salvos os arquivos
+

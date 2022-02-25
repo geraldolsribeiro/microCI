@@ -68,6 +68,7 @@ MicroCI::MicroCI() {
                            &MicroCI::parseMkdocsMaterialPluginStep);
   mPluginParserMap.emplace("cppcheck", &MicroCI::parseCppCheckPluginStep);
   mPluginParserMap.emplace("clang-tidy", &MicroCI::parseClangTidyPluginStep);
+  mPluginParserMap.emplace("plantuml", &MicroCI::parsePlantumlPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
   initBash();
@@ -107,10 +108,13 @@ bool MicroCI::ReadConfig(const string& filename) {
     return false;
   }
 
-  // Variáveis de ambiente
+  // Variáveis de ambiente globais
   if (CI["envs"] and CI["envs"].IsMap()) {
     for (auto it : CI["envs"]) {
-      mEnvs.emplace(it.first.as<string>(), it.second.as<string>());
+      DockerEnv env;
+      env.name = it.first.as<string>();
+      env.value = it.second.as<string>();
+      mEnvs.insert(env);
     }
   }
 
@@ -242,6 +246,17 @@ void MicroCI::parsePluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+string MicroCI::parseRunAs(const YAML::Node& step) const {
+  auto ret = string{"root"};
+  if (step["run_as"]) {
+    ret = step["run_as"].as<string>();
+  }
+  return ret;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::beginFunction(const json& data) {
   mScript << inja::render(R"(
 # ----------------------------------------------------------------------
@@ -280,15 +295,24 @@ void MicroCI::endFunction(const json& data) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::prepareRunDocker(const json& data,
+void MicroCI::prepareRunDocker(const string& runAs, const json& data,
+                               const set<DockerEnv>& envs,
                                const set<DockerVolume>& volumes) {
   mScript << inja::render(R"(
       echo ""
       echo ""
       echo ""
       echo "Passo: {{ STEP_NAME }}"
-      # shellcheck disable=SC2140
-      docker run \
+      # shellcheck disable=SC2140,SC2046
+      docker run \)",
+                          data);
+
+  if (runAs != "root") {
+    mScript << inja::render(R"(
+        --user $(id -u):$(id -g) \)", data);
+  }
+
+  mScript << inja::render(R"(
         --interactive \
         --attach stdout \
         --attach stderr \
@@ -297,8 +321,8 @@ void MicroCI::prepareRunDocker(const json& data,
 )",
                           data);
 
-  for (auto [key, val] : mEnvs) {
-    mScript << fmt::format("        --env {}=\"{}\" \\\n", key, val);
+  for (auto& env : envs) {
+    mScript << fmt::format("        --env {}=\"{}\" \\\n", env.name, env.value);
   }
 
   for (const auto& vol : volumes) {
@@ -366,9 +390,87 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
+  auto type = string{"png"};
+  auto output = string{};
+  list<string> sourceList;
+  list<string> opts = {"-r"};
+
+  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
+    for (const auto& opt : step["plugin"]["options"]) {
+      opts.push_back(opt.as<string>());
+    }
+  }
+
+  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+    for (const auto& src : step["plugin"]["source"]) {
+      sourceList.push_back(src.as<string>());
+    }
+  }
+
+  if (step["plugin"]["type"]) {
+    type = step["plugin"]["type"].as<string>();
+  }
+
+  if (step["plugin"]["output"]) {
+    output = step["plugin"]["output"].as<string>();
+  }
+
+  // para executar com GUI
+  // -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/
+
+  opts.push_back("-t" + type);
+  if (!output.empty()) {
+    opts.push_back("-o " + output);
+  }
+
+  data["STEP_NAME"] = stepName(step);
+  data["DOCKER_IMAGE"] =
+      stepDockerImage(step, "intmain/microci_plantuml:latest");
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] =
+      stepDescription(step, "Constroi diagramas plantuml");
+  data["OUTPUT"] = output;
+
+  beginFunction(data);
+  prepareRunDocker(runAs, data, envs, volumes);
+
+  //&& mkdir -p {{ OUTPUT }} \
+
+  mScript << inja::render(
+      R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+          && java -jar /opt/plantuml/plantuml.jar \
+)",
+      data);
+
+  for (const auto& opt : opts) {
+    mScript << "          " << opt << " \\\n";
+  }
+
+  for (const auto& src : sourceList) {
+    mScript << "          " << src << " \\\n";
+  }
+
+  mScript << inja::render(
+      R"(          2>&1"
+)",
+      data);
+
+  endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
   list<string> includeList;
   list<string> sourceList;
   list<string> opts{"--"};
@@ -398,11 +500,11 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
 
   beginFunction(data);
-  prepareRunDocker(data, volumes);
+  prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-      && mkdir -p auditing/ \
-      && date > auditing/clang-tidy.log \
+      && mkdir -p auditing/clang-tidy/ \
+      && date > auditing/clang-tidy/clang-tidy.log \
       && clang-tidy \
 )",
                           data);
@@ -420,12 +522,14 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
     mScript << "        -I" << inc << " \\\n";
   }
 
-  mScript << inja::render(R"(        2>&1 | tee auditing/clang-tidy.log 2>&1 \
-       && clang-tidy-html auditing/clang-tidy.log 2>&1 \
-       && mv -v clang.html auditing/clang-tidy.html 2>&1 \
+  mScript << inja::render(
+      R"(        2>&1 | tee auditing/clang-tidy/clang-tidy.log 2>&1 \
+       && clang-tidy-html auditing/clang-tidy/clang-tidy.log 2>&1 \
+       && mv -v clang-tidy-checks.py auditing/clang-tidy/ 2>&1 \
+       && mv -v clang.html auditing/clang-tidy/index.html 2>&1 \
        && chown $(id -u):$(id -g) -Rv auditing 2>&1"
 )",
-                          data);
+      data);
 
   endFunction(data);
 }
@@ -436,6 +540,8 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
 void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
   auto platform = string{"unix64"};
   auto standard = string{"c++11"};
   list<string> includeList;
@@ -479,7 +585,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   data["REPORT_TITLE"] = "MicroCI::CppCheck";
 
   beginFunction(data);
-  prepareRunDocker(data, volumes);
+  prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
       && mkdir -p auditing/cppcheck \
@@ -524,6 +630,8 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   auto cleanBefore = true;
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
   tie(data, volumes) = parseSsh(step, data, volumes);
 
   const auto name = step["plugin"]["name"].as<string>();
@@ -551,7 +659,7 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
       stepDescription(step, "Publica arquivos em um repositório git");
 
   beginFunction(data);
-  prepareRunDocker(data, volumes);
+  prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
 
@@ -591,6 +699,11 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
   const auto repo = step["plugin"]["repo"].as<string>();
   const auto gitDir = step["plugin"]["git_dir"].as<string>();
   const auto workTree = step["plugin"]["work_tree"].as<string>();
+  auto clean = true;
+
+  if (step["plugin"]["clean"]) {
+    clean = step["plugin"]["clean"].as<bool>();
+  }
 
   auto data = defaultDataTemplate();
   data["GIT_URL"] = repo;
@@ -609,11 +722,22 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
           "{{GIT_WORK}}" 2>&1
       fi
 
+)",
+                          data);
+
+  if (clean) {
+    mScript << inja::render(R"(
       # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
       git --git-dir="{{GIT_DIR}}" \
         --work-tree="{{GIT_WORK}}" \
-        clean -xfd 2>&1 \
-      && git --git-dir="{{GIT_DIR}}" \
+        clean -xfd 2>&1
+)",
+                            data);
+  }
+
+  mScript << inja::render(R"(
+      # Extrai a versão atual
+      git --git-dir="{{GIT_DIR}}" \
         --work-tree="{{GIT_WORK}}" \
         checkout -f 2>&1 \
       && git --git-dir="{{GIT_DIR}}" \
@@ -627,6 +751,22 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
 )",
                           data);
   endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+set<DockerEnv> MicroCI::parseEnvs(const YAML::Node& step) const {
+  auto ret = defaultEnvs();
+  if (step["envs"] and step["envs"].IsMap()) {
+    for (auto it : step["envs"]) {
+      DockerEnv env;
+      env.name = it.first.as<string>();
+      env.value = it.second.as<string>();
+      ret.insert(env);
+    }
+  }
+  return ret;
 }
 
 // ----------------------------------------------------------------------
@@ -783,6 +923,8 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   }
 
   auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
   tie(data, volumes) = parseSsh(step, data, volumes);
 
   data["STEP_NAME"] = stepName(step);
@@ -791,7 +933,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
   beginFunction(data);
-  prepareRunDocker(data, volumes);
+  prepareRunDocker(runAs, data, envs, volumes);
 
   if (step["sh"]) {
     mScript << inja::render("        /bin/sh -c \"cd {{ WORKSPACE }}", data);
@@ -817,9 +959,13 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 set<DockerVolume> MicroCI::defaultVolumes() const {
   set<DockerVolume> volumes{{"/microci_workspace", "${PWD}", "rw"}};
-
   return volumes;
 }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+set<DockerEnv> MicroCI::defaultEnvs() const { return mEnvs; }
 
 // ----------------------------------------------------------------------
 //

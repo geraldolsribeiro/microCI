@@ -10,5 +10,6 @@ steps:
       git_dir: "/opt/microCI/repos/app_frontend_deploy"
       # Local no servidor onde será feito o deploy dos arquivos
       work_tree: "/var/www/my-intranet/html/app"
+      clean: true
 
 # vim: spell spelllang=pt,en

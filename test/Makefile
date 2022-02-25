@@ -34,3 +34,4 @@ test:
 	../src/microCI -c npm -i test_npm.yml
 	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
 	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
+	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh

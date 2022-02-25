@@ -50,6 +50,7 @@ steps:
       action: "serve"
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
+    run_as: root
     bash: |
       apt update
       apt upgrade -y
@@ -59,4 +60,3 @@ steps:
       chown $(id -u).$(id -g) -Rv src/microCI
 
 # vim: spell spelllang=pt,en
-

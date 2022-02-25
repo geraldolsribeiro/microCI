@@ -18,7 +18,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.8.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.9.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -91,11 +91,14 @@ function step_deploy_de_pagina_de_aplicacao_vuejs() {
           "/var/www/my-intranet/html/app" 2>&1
       fi
 
+
       # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
       git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
         --work-tree="/var/www/my-intranet/html/app" \
-        clean -xfd 2>&1 \
-      && git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
+        clean -xfd 2>&1
+
+      # Extrai a versão atual
+      git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
         --work-tree="/var/www/my-intranet/html/app" \
         checkout -f 2>&1 \
       && git --git-dir="/opt/microCI/repos/app_frontend_deploy" \

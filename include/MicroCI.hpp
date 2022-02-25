@@ -44,7 +44,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 8;
+const int MINOR = 9;
 const int PATCH = 0;
 
 string banner();
@@ -59,6 +59,15 @@ struct DockerVolume {
 // de um local
 inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
   return lhs.destination < rhs.destination;
+}
+
+struct DockerEnv {
+  string name;
+  string value;
+};
+
+inline bool operator<(const DockerEnv& lhs, const DockerEnv& rhs) {
+  return lhs.name < rhs.name;
 }
 
 // struct PluginStepParser {
@@ -81,8 +90,11 @@ class MicroCI {
   void parseGitPublishPluginStep(const YAML::Node& step);
   void parseCppCheckPluginStep(const YAML::Node& step);
   void parseMkdocsMaterialPluginStep(const YAML::Node& step);
+  void parsePlantumlPluginStep(const YAML::Node& step);
   void parseClangTidyPluginStep(const YAML::Node& step);
-  void prepareRunDocker(const json& data, const set<DockerVolume>& volumes);
+  void prepareRunDocker(const string& runAs, const json& data,
+                        const set<DockerEnv>& envs,
+                        const set<DockerVolume>& volumes);
   tuple<json, set<DockerVolume>> parseSsh(
       const YAML::Node& step, const json& data,
       const set<DockerVolume>& volumes) const;
@@ -96,16 +108,19 @@ class MicroCI {
                          const string& defaultDescription = "") const;
   string stepName(const YAML::Node& step) const;
   set<DockerVolume> parseVolumes(const YAML::Node& step) const;
+  set<DockerEnv> parseEnvs(const YAML::Node& step) const;
+  string parseRunAs(const YAML::Node& step) const;
 
   json defaultDataTemplate() const;
   set<DockerVolume> defaultVolumes() const;
+  set<DockerEnv> defaultEnvs() const;
 
   string sanitizeName(const string& name) const;
   void beginFunction(const json& data);
   void endFunction(const json& data);
 
+  set<DockerEnv> mEnvs;
   string mOnlyStep;
-  map<string, string> mEnvs;
   string mDockerImageGlobal;
   stringstream mScript;
 

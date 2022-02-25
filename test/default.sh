@@ -18,7 +18,7 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.8.0                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.9.0                           ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -89,7 +89,7 @@ function step_instalar_dependencias() {
       echo ""
       echo ""
       echo "Passo: Instalar dependências"
-      # shellcheck disable=SC2140
+      # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
         --attach stdout \
@@ -129,7 +129,7 @@ function step_construir() {
       echo ""
       echo ""
       echo "Passo: Construir"
-      # shellcheck disable=SC2140
+      # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
         --attach stdout \

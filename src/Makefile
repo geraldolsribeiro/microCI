@@ -56,7 +56,8 @@ MicroCI.cpp: \
 	../include/new/git_publish.hpp \
 	../include/new/npm.hpp \
 	../include/new/clang-tidy.hpp \
-	../include/new/cppcheck.hpp
+	../include/new/cppcheck.hpp \
+	../include/new/plantuml.hpp
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
