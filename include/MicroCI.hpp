@@ -45,7 +45,7 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 10;
-const int PATCH = 0;
+const int PATCH = 1;
 
 string banner();
 

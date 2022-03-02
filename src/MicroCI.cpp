@@ -1013,7 +1013,7 @@ void MicroCI::initBash() {
   echo -e "{{BLUE}}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░▀░░░░░░░░░░░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                            microCI {{ VERSION }}                       ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                            microCI {{ VERSION }}                      ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                           Geraldo Ribeiro                          ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
   echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"

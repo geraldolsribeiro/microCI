@@ -104,15 +104,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
                    ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len}));
 
-    MICROCI_TPL("mkdocs_material", ".microCI", yml, mkdocs_material);
-    MICROCI_TPL("mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
-    MICROCI_TPL("mkdocs_material", "docs/index.md", md, mkdocs_material_index);
-    MICROCI_TPL("npm", ".microCI.yml", yml, npm);
     MICROCI_TPL("bash", ".microCI.yml", yml, bash);
+    MICROCI_TPL("clang-tidy", ".microCI.yml", yml, clang_tidy);
+    MICROCI_TPL("cppcheck", ".microCI.yml", yml, cppcheck);
     MICROCI_TPL("git_deploy", ".microCI.yml", yml, git_deploy);
     MICROCI_TPL("git_publish", ".microCI.yml", yml, git_publish);
-    MICROCI_TPL("cppcheck", ".microCI.yml", yml, cppcheck);
-    MICROCI_TPL("clang-tidy", ".microCI.yml", yml, clang_tidy);
+    MICROCI_TPL("mkdocs_material", "docs/index.md", md, mkdocs_material_index);
+    MICROCI_TPL("mkdocs_material", ".microCI.yml", yml, mkdocs_material);
+    MICROCI_TPL("mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
+    MICROCI_TPL("npm", ".microCI.yml", yml, npm);
     MICROCI_TPL("plantuml", ".microCI.yml", yml, plantuml);
 
     bool found = false;
