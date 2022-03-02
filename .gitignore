@@ -1,7 +1,7 @@
-site
+auditing/
 .microCI.dbg
 .microCI.log
+site
 src/microCI
 src/NOTES.md
 xxx/
-

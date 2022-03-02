@@ -50,6 +50,11 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
+../include/new/%.hpp: ../new/%.md
+	cat .header.cpp > $@
+	xxd -i $^ >> $@
+	touch main.cpp
+
 MicroCI.cpp: \
 	../include/new/mkdocs_material.hpp \
 	../include/new/git_deploy.hpp \
@@ -57,7 +62,10 @@ MicroCI.cpp: \
 	../include/new/npm.hpp \
 	../include/new/clang-tidy.hpp \
 	../include/new/cppcheck.hpp \
-	../include/new/plantuml.hpp
+	../include/new/plantuml.hpp \
+	../include/new/bash.hpp \
+	../include/new/mkdocs_material_config.hpp \
+	../include/new/mkdocs_material_index.hpp
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

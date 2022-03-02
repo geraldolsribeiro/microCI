@@ -1,0 +1,16 @@
+# Exemplo de uso
+steps:
+  - name: "Gerar relatório de verificação do código C++ - clang-tidy"
+    description: "Verifica o código C++ e gera relatório em formato HTML"
+    plugin:
+      name: "clang-tidy"
+      options:
+        - "-std=c++11"
+      include:
+        - "/usr/include/"
+      source:
+        - "src"
+        - "test"
+
+# vim: spell spelllang=pt,en
+

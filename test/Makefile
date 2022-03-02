@@ -22,6 +22,9 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+# Para usar pushd no makefile
+SHELL=bash
+
 test:
 	../src/microCI -i y.yml      || echo "OK"
 	../src/microCI --input=x.yml || echo "OK"
@@ -35,3 +38,10 @@ test:
 	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
 	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
 	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh
+	for i in bash clang-tidy cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
+    echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
+		&& pushd "new_$$i" && pwd && ../../src/microCI -n "$$i" && popd; \
+	done
+doctest.h:
+	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@
+

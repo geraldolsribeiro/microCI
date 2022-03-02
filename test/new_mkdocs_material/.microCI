@@ -1,0 +1,35 @@
+---
+steps:
+  # Remova este passo após a primeira execução
+  - name: "Cria arquivos iniciais do mkdocs"
+    plugin:
+      name: "mkdocs_material"
+      action: "new ."
+  - name: "Construir documentação em formato HTML"
+    description: "Documentação do projeto"
+    plugin:
+      name: "mkdocs_material"
+      action: "build"
+      # Construindo para uma pasta personalizada
+      # action: "build --site-dir public
+  - name: "Publicar HTML para repositório git"
+    ssh:
+      copy_from: "${HOME}/.ssh"
+      copy_to: "/root/.ssh"
+    plugin:
+      name: "git_publish"
+      git_url: "ssh://git@someurl.com/site.git"
+      copy_to: "/deploy" # Default
+      copy_from: "site"  # Default
+      clean_before: true # Default
+  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
+    description: "Executa servidor local para preview da documentação"
+    # passo executado localmente
+    only: "local-step"
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
+      # Porta personalizada, caso já esteja utilizando a padrão 8000
+      # port: 9001
+
+# vim: spell spelllang=pt,en
