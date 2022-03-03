@@ -34,6 +34,7 @@ using namespace std;
 #include <spdlog/spdlog.h>
 
 #include <MicroCI.hpp>
+#include <MicroCI_sh.hpp>
 #include <inja.hpp>
 
 namespace microci {
@@ -309,7 +310,8 @@ void MicroCI::prepareRunDocker(const string& runAs, const json& data,
 
   if (runAs != "root") {
     mScript << inja::render(R"(
-        --user $(id -u):$(id -g) \)", data);
+        --user $(id -u):$(id -g) \)",
+                            data);
   }
 
   mScript << inja::render(R"(
@@ -973,7 +975,7 @@ set<DockerEnv> MicroCI::defaultEnvs() const { return mEnvs; }
 json MicroCI::defaultDataTemplate() const {
   json data;
   data["VERSION"] =
-      fmt::format("{}.{}.{}    ", MAJOR, MINOR, PATCH).substr(0, 10);
+      fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
   data["WORKSPACE"] = "/microci_workspace";
 
   data["BLUE"] = "\033[0;34m";
@@ -992,80 +994,9 @@ json MicroCI::defaultDataTemplate() const {
 // ----------------------------------------------------------------------
 void MicroCI::initBash() {
   auto data = defaultDataTemplate();
-
-  mScript << inja::render(R"(#!/bin/bash
-{
-  # Modo de conformidade com POSIX
-  set -o posix
-
-  exec 5> .microCI.dbg
-  BASH_XTRACEFD="5"
-  PS4='$LINENO: '
-
-  echo ""
-  echo ""
-  echo ""
-  echo -e "{{BLUE}}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{{CLEAR}}"
-  echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░░░░░█▀▀░▀█▀░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░█░█░█░░░░█░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░▀░░░░░░░░░░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                            microCI {{ VERSION }}                      ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                           Geraldo Ribeiro                          ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"
-  echo ""
-  echo ""
-} | tee .microCI.log
-
-PWD=$(pwd)
-
-function assert_fail() {
-  # Print assert errors to stderr!
-  echo "assert failed: \"$*\"" >&2
-  _backtrace >&2
-
-  # And crash immediately.
-  kill -s USR1 ${TOP_PID}
-}
-
-function assert() {
-  if [ $# -ne 1 ]
-  then
-    assert_fail "assert called with wrong number of parameters!"
-  fi
-
-  if [ ! "$1" ]
-  then
-    assert_fail "$1"
-  fi
-}
-
-function assert_eq() {
-  if [ $# -ne 2 ]
-  then
-    assert_fail "assert_eq called with wrong number of parameters!"
-  fi
-
-  assert "${1} -eq ${2}"
-}
-
-function assert_function() {
-  if [ $# -ne 1 ]
-  then
-    assert_fail "assert_function called with wrong number of parameters!"
-  fi
-
-  local func=$1
-  assert "\"$(type -t ${func})\" == \"function\""
-}
-
-)",
-                          data)
-          << endl;
+  auto script = string{reinterpret_cast<const char*>(___include_MicroCI_sh),
+                       ___include_MicroCI_sh_len};
+  mScript << inja::render(script, data) << endl;
 }
 
 }  // namespace microci
