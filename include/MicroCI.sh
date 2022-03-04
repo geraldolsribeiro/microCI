@@ -90,8 +90,11 @@ function assert_function() {
 function notify_discord() {
   # [[ -z "$MICROCI_DISCORD_WEBHOOK" ]] && exit 0
 
+  GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
+  GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+
   local result
-  local content=$1
+  local content=":bucket: $GIT_ORIGIN   :ticket: $GIT_COMMIT\\n$1"
   shift
 
   # shellcheck disable=SC2215
