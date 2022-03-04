@@ -272,9 +272,10 @@ void MicroCI::beginFunction(const json& data,
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
-  title="{{ STEP_NAME }}.............................................................."
-  title=${title:0:60}
-  echo -ne "{{CYAN}}${title}{{CLEAR}}: "
+  title="{{ STEP_NAME }}"
+  title60="${title}.............................................................."
+  title60=${title:0:60}
+  echo -ne "{{CYAN}}${title60}{{CLEAR}}: "
 )",
                           data);
   for (auto env : envs) {
