@@ -60,11 +60,6 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
-# ../include/MicroCI_sh.hpp: ../include/MicroCI.sh
-# 	cat .header.cpp > $@
-# 	xxd -i $^ >> $@
-# 	touch main.cpp
-
 MicroCI.cpp: \
 	../include/sh/MicroCI.hpp \
 	../include/sh/NotifyDiscord.hpp \
