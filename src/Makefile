@@ -55,13 +55,19 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
-../include/MicroCI_sh.hpp: ../include/MicroCI.sh
+../include/sh/%.hpp: ../sh/%.sh
 	cat .header.cpp > $@
 	xxd -i $^ >> $@
 	touch main.cpp
 
+# ../include/MicroCI_sh.hpp: ../include/MicroCI.sh
+# 	cat .header.cpp > $@
+# 	xxd -i $^ >> $@
+# 	touch main.cpp
+
 MicroCI.cpp: \
-	../include/MicroCI_sh.hpp \
+	../include/sh/MicroCI.hpp \
+	../include/sh/NotifyDiscord.hpp \
 	../include/new/mkdocs_material.hpp \
 	../include/new/git_deploy.hpp \
 	../include/new/git_publish.hpp \

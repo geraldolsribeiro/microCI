@@ -34,8 +34,9 @@ using namespace std;
 #include <spdlog/spdlog.h>
 
 #include <MicroCI.hpp>
-#include <MicroCI_sh.hpp>
 #include <inja.hpp>
+#include <sh/MicroCI.hpp>
+#include <sh/NotifyDiscord.hpp>
 
 namespace microci {
 
@@ -72,7 +73,6 @@ MicroCI::MicroCI() {
   mPluginParserMap.emplace("plantuml", &MicroCI::parsePlantumlPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
-  initBash();
 }
 
 // ----------------------------------------------------------------------
@@ -125,6 +125,8 @@ bool MicroCI::ReadConfig(const string& filename) {
       mEnvs.insert(env);
     }
   }
+
+  initBash();
 
   // Localiza imagens docker necessárias
   for (auto step : CI["steps"]) {
@@ -272,15 +274,23 @@ void MicroCI::beginFunction(const json& data,
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
-  title="{{ STEP_NAME }}"
-  title60="${title}.............................................................."
-  title60=${title:0:60}
-  echo -ne "{{CYAN}}${title60}{{CLEAR}}: "
+  SECONDS=0
+  MICROCI_STEP_NAME="{{ STEP_NAME }}"
+  MICROCI_STEP_DESCRIPTION="{{ STEP_DESCRIPTION }}"
+  MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
+  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  MICROCI_STEP_STATUS=":ok:"
+  MICROCI_STEP_DURATION=$SECONDS
+  title="${MICROCI_STEP_NAME}.............................................................."
+  title=${title:0:60}
+  echo -ne "{{CYAN}}${title}{{CLEAR}}: "
 )",
                           data);
   for (auto env : envs) {
-    mScript << fmt::format("      {}=\"{}\"\n", env.name, env.value);
+    mScript << fmt::format("  {}=\"{}\"\n", env.name, env.value);
   }
+
   mScript << inja::render(R"(
   {
     (
@@ -296,19 +306,38 @@ void MicroCI::endFunction(const json& data) {
   mScript << inja::render(R"(
     )
     status=$?
+    MICROCI_STEP_DURATION=$SECONDS
     echo "Status: ${status}"
   } >> .microCI.log
 
+  # Notificação no terminal
   if [ "${status}" = "0" ]; then
     echo -e "{{GREEN}}OK{{CLEAR}}"
-    notify_discord ":ok: $title"
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
-    notify_discord ":face_with_symbols_over_mouth: $title"
   fi
-}
 )",
                           data);
+
+  auto envs = defaultEnvs();
+  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK"};
+  if (envs.count(webhookEnv)) {
+    mScript << inja::render(R"(
+  # Notificação via Discord
+  # Usar spycolor.com para obter a cor em decimal
+  if [ "${status}" = "0" ]; then
+    MICROCI_STEP_STATUS=":ok:"
+    MICROCI_STEP_STATUS_COLOR=4382765
+  else
+    MICROCI_STEP_STATUS=":face_with_symbols_over_mouth:"
+    MICROCI_STEP_STATUS_COLOR=16711680
+  fi
+  notify_discord
+)",
+                            data);
+  }
+
+  mScript << "}" << endl;
 }
 
 // ----------------------------------------------------------------------
@@ -1016,9 +1045,21 @@ json MicroCI::defaultDataTemplate() const {
 // ----------------------------------------------------------------------
 void MicroCI::initBash() {
   auto data = defaultDataTemplate();
-  auto script = string{reinterpret_cast<const char*>(___include_MicroCI_sh),
-                       ___include_MicroCI_sh_len};
-  mScript << inja::render(script, data) << endl;
+  auto scriptMicroCI = string{reinterpret_cast<const char*>(___sh_MicroCI_sh),
+                              ___sh_MicroCI_sh_len};
+  mScript << inja::render(scriptMicroCI, data) << endl;
+
+  auto envs = defaultEnvs();
+  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK"};
+  if (envs.count(webhookEnv)) {
+    auto scriptNotifyDiscord =
+        string{reinterpret_cast<const char*>(___sh_NotifyDiscord_sh),
+               ___sh_NotifyDiscord_sh_len};
+
+    mScript << inja::render(scriptNotifyDiscord, data) << endl;
+  } else {
+    mScript << "# Notificação via Discord não será possível" << endl;
+  }
 }
 
 }  // namespace microci

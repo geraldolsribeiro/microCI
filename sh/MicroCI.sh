@@ -86,31 +86,3 @@ function assert_function() {
   assert "\"$(type -t ${func})\" == \"function\""
 }
 
-
-function notify_discord() {
-  # [[ -z "$MICROCI_DISCORD_WEBHOOK" ]] && exit 0
-
-  GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
-
-  local result
-  local content=":bucket: $GIT_ORIGIN   :ticket: $GIT_COMMIT\\n$1"
-  shift
-
-  # shellcheck disable=SC2215
-  result=$( curl \
-    -H "Content-Type: application/json" \
-    -H "Expect: application/json" \
-    --data "{\"content\": \"$content\"}" \
-    -X POST "$MICROCI_DISCORD_WEBHOOK" 2>/dev/null
-  )
-  send_ok=$?
-  [[ "${send_ok}" -ne 0 ]] && echo "fatal: curl failed with code ${send_ok}" # && exit $send_ok
-  result=$(echo "${result}" | jq '.')
-  echo "DISCORD: $result"
-}
-
-# :ok:
-# :no_entry:
-# :face_with_symbols_over_mouth:
-# notify_discord ":face_with_symbols_over_mouth: Texto da notificação :pause_button: texto"

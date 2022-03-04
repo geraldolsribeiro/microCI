@@ -1,6 +1,6 @@
 ---
 envs:
-  - MICROCI_DISCORD_WEBHOOK: https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si 
+  MICROCI_DISCORD_WEBHOOK: https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si 
 steps:
   - name: "Gerar relatório de verificação do código C++ clang-tidy"
     description: "Verifica o código C++ e gera relatório em formato HTML"

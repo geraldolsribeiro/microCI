@@ -88,29 +88,66 @@ function assert_function() {
 
 
 function notify_discord() {
-  # [[ -z "$MICROCI_DISCORD_WEBHOOK" ]] && exit 0
+  {
+    if [[ -z "$MICROCI_DISCORD_WEBHOOK" ]]; then
+      echo "Erro: MICROCI_DISCORD_WEBHOOK não foi definida"
+      return 1
+    fi
 
-  local result
-  local content=$1
-  shift
+    DISCORD_PAYLOAD=$( jq --null-input \
+      --arg content       "$MICROCI_STEP_NAME: $MICROCI_STEP_STATUS" \
+      --arg title         "$MICROCI_STEP_NAME" \
+      --arg description   "$MICROCI_STEP_DESCRIPTION" \
+      --arg repo          "$MICROCI_GIT_ORIGIN" \
+      --arg commit        "$MICROCI_GIT_COMMIT" \
+      --arg commit_msg    "$MICROCI_GIT_COMMIT_MSG" \
+      --arg step_status   "$MICROCI_STEP_STATUS" \
+      --arg status_color  $MICROCI_STEP_STATUS_COLOR \
+      --arg step_duration "$MICROCI_STEP_DURATION" \
+      '
+      .content = $content                         |
+      .embeds[0].title = $title                   |
+      .embeds[0].color = $status_color            |
+      .embeds[0].description = $description       |
+      .embeds[0].fields[0].name = "Repositório"   |
+      .embeds[0].fields[0].value = $repo          |
+      .embeds[0].fields[0].inline = false         |
+      .embeds[0].fields[1].name = "Commit"        |
+      .embeds[0].fields[1].value = $commit        |
+      .embeds[0].fields[1].inline = true          |
+      .embeds[0].fields[2].name = "Comentário"    |
+      .embeds[0].fields[2].value = $commit_msg    |
+      .embeds[0].fields[2].inline = true          |
+      .embeds[0].fields[3].name = "Status"        |
+      .embeds[0].fields[3].value = $step_status   |
+      .embeds[0].fields[3].inline = true          |
+      .embeds[0].fields[4].name = "Duração"       |
+      .embeds[0].fields[4].value = $step_duration |
+      .embeds[0].fields[4].inline = true
+      '
+    )
 
-  # shellcheck disable=SC2215
-  result=$( curl \
-    -H "Content-Type: application/json" \
-    -H "Expect: application/json" \
-    --data "{\"content\": \"$content\"}" \
-    -X POST "$MICROCI_DISCORD_WEBHOOK" #2>/dev/null
-  )
-  send_ok=$?
-  [[ "${send_ok}" -ne 0 ]] && echo "fatal: curl failed with code ${send_ok}" # && exit $send_ok
-  result=$(echo "${result}" | jq '.')
-  echo "DISCORD: $result"
+    echo "$DISCORD_PAYLOAD"
+
+    notify_result=$( curl \
+      -H "Content-Type: application/json" \
+      -H "Expect: application/json" \
+      --data "$DISCORD_PAYLOAD" \
+      -X POST "$MICROCI_DISCORD_WEBHOOK" 2>/dev/null
+    )
+    notify_status=$?
+
+    if [[ "${notify_status}" -ne 0 ]]; then
+      echo "Erro: curl falhou ao notificar discord com código ${notify_status}"
+      return 1
+    fi
+
+    echo "Resultado da notificação:"
+    echo "${notify_result}" | jq '.'
+  } >> .microCI.log
 }
 
-# :ok:
-# :no_entry:
-# :face_with_symbols_over_mouth:
-# notify_discord ":face_with_symbols_over_mouth: Texto da notificação :pause_button: texto"
+# vim: ft=bash
 
 # Atualiza as imagens docker utilizadas no passos
 {
@@ -121,10 +158,18 @@ function notify_discord() {
 # Verifica o código C++ e gera relatório em formato HTML
 # ----------------------------------------------------------------------
 function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
-  title="Gerar relatório de verificação do código C++ - cppcheck.............................................................."
+  SECONDS=0
+  MICROCI_STEP_NAME="Gerar relatório de verificação do código C++ - cppcheck"
+  MICROCI_STEP_DESCRIPTION="Verifica o código C++ e gera relatório em formato HTML"
+  MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
+  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  MICROCI_STEP_STATUS=":ok:"
+  MICROCI_STEP_DURATION=$SECONDS
+  title="${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
-      MICROCI_DISCORD_WEBHOOK="https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si"
+  MICROCI_DISCORD_WEBHOOK="https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si"
 
   {
     (
@@ -167,16 +212,27 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
 
     )
     status=$?
+    MICROCI_STEP_DURATION=$SECONDS
     echo "Status: ${status}"
   } >> .microCI.log
 
+  # Notificação no terminal
   if [ "${status}" = "0" ]; then
     echo -e "[0;32mOK[0m"
-    notify_discord ":ok: $title"
   else
     echo -e "[0;31mFALHOU[0m"
-    notify_discord ":face_with_symbols_over_mouth: $title"
   fi
+
+  # Notificação via Discord
+  # Usar spycolor.com para obter a cor em decimal
+  if [ "${status}" = "0" ]; then
+    MICROCI_STEP_STATUS=":ok:"
+    MICROCI_STEP_STATUS_COLOR=4382765
+  else
+    MICROCI_STEP_STATUS=":face_with_symbols_over_mouth:"
+    MICROCI_STEP_STATUS_COLOR=16711680
+  fi
+  notify_discord
 }
 
 

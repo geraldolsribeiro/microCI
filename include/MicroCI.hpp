@@ -45,10 +45,13 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 11;
-const int PATCH = 0;
+const int PATCH = 1;
 
 string banner();
 
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 struct DockerVolume {
   string destination;
   string source;
@@ -61,11 +64,17 @@ inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
   return lhs.destination < rhs.destination;
 }
 
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 struct EnvironmentVariable {
   string name;
   string value;
 };
 
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 inline bool operator<(const EnvironmentVariable& lhs,
                       const EnvironmentVariable& rhs) {
   return lhs.name < rhs.name;
