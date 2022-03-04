@@ -77,14 +77,27 @@ using TemplateType = string;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, char **argv, char **envp) {
   //{{{
-  argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
   auto yamlfileName = string{".microCI.yml"};
   auto onlyStep = string{};
   auto newType = string{};
 
+  argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
+
   MicroCI uCI{};
+
+  // Carrega as variáveis de ambiente
+  for (char **env = envp; *env != 0; env++) {
+    auto tmp = string{*env};
+    if (tmp.size() > 7 and tmp.substr(0, 8) == "MICROCI_") {
+      auto pos = tmp.find_first_of("=");
+      EnvironmentVariable environmentVariable;
+      environmentVariable.name = tmp.substr(0, pos);
+      environmentVariable.value = tmp.substr(pos + 1);
+      uCI.SetEnvironmentVariable(environmentVariable);
+    }
+  }
 
   if (cmdl[{"-h", "--help"}]) {
     cout << microci::banner() << help() << endl;
@@ -114,17 +127,17 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     MICROCI_TPL("mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
     MICROCI_TPL("npm", ".microCI.yml", yml, npm);
     MICROCI_TPL("plantuml", ".microCI.yml", yml, plantuml);
+#undef MICROCI_TPL
 
-    bool found = false;
-
+    bool isTypeFound = false;
     for (const auto &[type, tpl] : templates) {
       if (newType == type) {
-        found = true;
+        isTypeFound = true;
 
         ofstream out;
         auto fileName = tpl.fileName;
 
-        // Caso seja utilizado algum path diferente do defaul
+        // Caso seja utilizado algum path diferente do default
         if (fileName == ".microCI.yml") {
           fileName = yamlfileName;
         }
@@ -149,10 +162,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
         spdlog::info("Arquivo {} foi editado a partir do modelo", fileName);
       }
     }
-    if (found) {
+    if (isTypeFound) {
       return 0;
     }
-#undef MICROCI_TPL
     spdlog::error("Impossível criar para tipo inválido: {}", newType);
     for (auto it = templates.begin(), end = templates.end(); it != end;
          it = templates.upper_bound(it->first)) {

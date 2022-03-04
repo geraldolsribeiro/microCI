@@ -83,6 +83,13 @@ MicroCI::~MicroCI() {}
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetEnvironmentVariable(EnvironmentVariable& env) {
+  mEnvs.insert(env);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::SetOnlyStep(const string& onlyStep) { mOnlyStep = onlyStep; }
 
 // ----------------------------------------------------------------------
@@ -112,7 +119,7 @@ bool MicroCI::ReadConfig(const string& filename) {
   // Variáveis de ambiente globais
   if (CI["envs"] and CI["envs"].IsMap()) {
     for (auto it : CI["envs"]) {
-      DockerEnv env;
+      EnvironmentVariable env;
       env.name = it.first.as<string>();
       env.value = it.second.as<string>();
       mEnvs.insert(env);
@@ -258,14 +265,22 @@ string MicroCI::parseRunAs(const YAML::Node& step) const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::beginFunction(const json& data) {
+void MicroCI::beginFunction(const json& data,
+                            const set<EnvironmentVariable>& envs) {
   mScript << inja::render(R"(
 # ----------------------------------------------------------------------
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
   title="{{ STEP_NAME }}.............................................................."
-  echo -ne "{{CYAN}}${title:0:60}{{CLEAR}}: "
+  title=${title:0:60}
+  echo -ne "{{CYAN}}${title}{{CLEAR}}: "
+)",
+                          data);
+  for (auto env : envs) {
+    mScript << fmt::format("      {}=\"{}\"\n", env.name, env.value);
+  }
+  mScript << inja::render(R"(
   {
     (
       set -e
@@ -285,8 +300,10 @@ void MicroCI::endFunction(const json& data) {
 
   if [ "${status}" = "0" ]; then
     echo -e "{{GREEN}}OK{{CLEAR}}"
+    notify_discord ":ok: $title"
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
+    notify_discord ":face_with_symbols_over_mouth: $title"
   fi
 }
 )",
@@ -297,7 +314,7 @@ void MicroCI::endFunction(const json& data) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::prepareRunDocker(const string& runAs, const json& data,
-                               const set<DockerEnv>& envs,
+                               const set<EnvironmentVariable>& envs,
                                const set<DockerVolume>& volumes) {
   mScript << inja::render(R"(
       echo ""
@@ -369,7 +386,8 @@ void MicroCI::parseMkdocsMaterialPluginStep(const YAML::Node& step) {
   //
   // # Place your code here
 
-  beginFunction(data);
+  auto envs = parseEnvs(step);
+  beginFunction(data, envs);
 
   mScript << inja::render(R"(
       # shellcheck disable=SC2140
@@ -438,7 +456,7 @@ void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
       stepDescription(step, "Constroi diagramas plantuml");
   data["OUTPUT"] = output;
 
-  beginFunction(data);
+  beginFunction(data, envs);
   prepareRunDocker(runAs, data, envs, volumes);
 
   //&& mkdir -p {{ OUTPUT }} \
@@ -501,7 +519,7 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
 
-  beginFunction(data);
+  beginFunction(data, envs);
   prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
@@ -586,7 +604,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   data["STD"] = standard;
   data["REPORT_TITLE"] = "MicroCI::CppCheck";
 
-  beginFunction(data);
+  beginFunction(data, envs);
   prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
@@ -660,7 +678,7 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Publica arquivos em um repositório git");
 
-  beginFunction(data);
+  beginFunction(data, envs);
   prepareRunDocker(runAs, data, envs, volumes);
 
   mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
@@ -715,7 +733,9 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step);
 
-  beginFunction(data);
+  auto envs = parseEnvs(step);
+
+  beginFunction(data, envs);
   mScript << inja::render(R"(
       # Caso ainda não exista realiza o clone inicial
       if [ ! -d "{{GIT_DIR}}" ]; then
@@ -758,14 +778,15 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<DockerEnv> MicroCI::parseEnvs(const YAML::Node& step) const {
+set<EnvironmentVariable> MicroCI::parseEnvs(const YAML::Node& step) const {
   auto ret = defaultEnvs();
   if (step["envs"] and step["envs"].IsMap()) {
     for (auto it : step["envs"]) {
-      DockerEnv env;
+      EnvironmentVariable env;
       env.name = it.first.as<string>();
       env.value = it.second.as<string>();
       ret.insert(env);
+      spdlog::info("Environment variable: {} -> {}", env.name, env.value);
     }
   }
   return ret;
@@ -934,7 +955,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
-  beginFunction(data);
+  beginFunction(data, envs);
   prepareRunDocker(runAs, data, envs, volumes);
 
   if (step["sh"]) {
@@ -967,7 +988,7 @@ set<DockerVolume> MicroCI::defaultVolumes() const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<DockerEnv> MicroCI::defaultEnvs() const { return mEnvs; }
+set<EnvironmentVariable> MicroCI::defaultEnvs() const { return mEnvs; }
 
 // ----------------------------------------------------------------------
 //

@@ -1,12 +1,13 @@
 #!/bin/bash
+
+set -o posix
+shopt -so pipefail
+
+exec 5> .microCI.dbg
+BASH_XTRACEFD="5"
+PS4='$LINENO: '
+
 {
-  # Modo de conformidade com POSIX
-  set -o posix
-
-  exec 5> .microCI.dbg
-  BASH_XTRACEFD="5"
-  PS4='$LINENO: '
-
   echo ""
   echo ""
   echo ""
@@ -18,13 +19,30 @@
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.10.1                           ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.11.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
   echo ""
   echo ""
 } | tee .microCI.log
+
+# Verifica se o jq está instalado
+
+jq --version >/dev/null 2>&1
+jq_ok=$?
+
+[[ "$jq_ok" -eq 127 ]] && \
+  echo "fatal: jq not installed" && exit 2
+[[ "$jq_ok" -ne 0 ]] && \
+  echo "fatal: unknown error in jq" && exit 2
+
+# Verifica se o curl está instalado
+curl --version >/dev/null 2>&1
+curl_ok=$?
+
+[[ "$curl_ok" -eq 127 ]] && \
+  echo "fatal: curl not installed" && exit 2
 
 PWD=$(pwd)
 
@@ -69,6 +87,31 @@ function assert_function() {
 }
 
 
+function notify_discord() {
+  # [[ -z "$MICROCI_DISCORD_WEBHOOK" ]] && exit 0
+
+  local result
+  local content=$1
+  shift
+
+  # shellcheck disable=SC2215
+  result=$( curl \
+    -H "Content-Type: application/json" \
+    -H "Expect: application/json" \
+    --data "{\"content\": \"$content\"}" \
+    -X POST "$MICROCI_DISCORD_WEBHOOK" #2>/dev/null
+  )
+  send_ok=$?
+  [[ "${send_ok}" -ne 0 ]] && echo "fatal: curl failed with code ${send_ok}" # && exit $send_ok
+  result=$(echo "${result}" | jq '.')
+  echo "DISCORD: $result"
+}
+
+# :ok:
+# :no_entry:
+# :face_with_symbols_over_mouth:
+# notify_discord ":face_with_symbols_over_mouth: Texto da notificação :pause_button: texto"
+
 # Atualiza as imagens docker utilizadas no passos
 {
   docker pull debian:stable-slim 2>&1
@@ -79,7 +122,10 @@ function assert_function() {
 # ----------------------------------------------------------------------
 function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
   title="Gerar relatório de verificação do código C++ - clang-tidy.............................................................."
-  echo -ne "[0;36m${title:0:60}[0m: "
+  title=${title:0:60}
+  echo -ne "[0;36m${title}[0m: "
+      MICROCI_DISCORD_WEBHOOK="https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si"
+
   {
     (
       set -e
@@ -95,6 +141,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
         --attach stderr \
         --rm \
         --workdir /microci_workspace \
+        --env MICROCI_DISCORD_WEBHOOK="https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si" \
         --volume "${PWD}":"/microci_workspace":rw \
         "intmain/microci_cppcheck:latest" \
         /bin/bash -c "cd /microci_workspace \
@@ -120,8 +167,10 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
 
   if [ "${status}" = "0" ]; then
     echo -e "[0;32mOK[0m"
+    notify_discord ":ok: $title"
   else
     echo -e "[0;31mFALHOU[0m"
+    notify_discord ":face_with_symbols_over_mouth: $title"
   fi
 }
 

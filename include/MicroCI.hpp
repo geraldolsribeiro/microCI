@@ -44,8 +44,8 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 10;
-const int PATCH = 1;
+const int MINOR = 11;
+const int PATCH = 0;
 
 string banner();
 
@@ -61,12 +61,13 @@ inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
   return lhs.destination < rhs.destination;
 }
 
-struct DockerEnv {
+struct EnvironmentVariable {
   string name;
   string value;
 };
 
-inline bool operator<(const DockerEnv& lhs, const DockerEnv& rhs) {
+inline bool operator<(const EnvironmentVariable& lhs,
+                      const EnvironmentVariable& rhs) {
   return lhs.name < rhs.name;
 }
 
@@ -78,6 +79,7 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
+  void SetEnvironmentVariable(EnvironmentVariable& env);
   bool ReadConfig(const string& yaml);
   string Script() const;
   void SetOnlyStep(const string& onlyStep);
@@ -93,7 +95,7 @@ class MicroCI {
   void parsePlantumlPluginStep(const YAML::Node& step);
   void parseClangTidyPluginStep(const YAML::Node& step);
   void prepareRunDocker(const string& runAs, const json& data,
-                        const set<DockerEnv>& envs,
+                        const set<EnvironmentVariable>& envs,
                         const set<DockerVolume>& volumes);
   tuple<json, set<DockerVolume>> parseSsh(
       const YAML::Node& step, const json& data,
@@ -108,18 +110,18 @@ class MicroCI {
                          const string& defaultDescription = "") const;
   string stepName(const YAML::Node& step) const;
   set<DockerVolume> parseVolumes(const YAML::Node& step) const;
-  set<DockerEnv> parseEnvs(const YAML::Node& step) const;
+  set<EnvironmentVariable> parseEnvs(const YAML::Node& step) const;
   string parseRunAs(const YAML::Node& step) const;
 
   json defaultDataTemplate() const;
   set<DockerVolume> defaultVolumes() const;
-  set<DockerEnv> defaultEnvs() const;
+  set<EnvironmentVariable> defaultEnvs() const;
 
   string sanitizeName(const string& name) const;
-  void beginFunction(const json& data);
+  void beginFunction(const json& data, const set<EnvironmentVariable>& envs);
   void endFunction(const json& data);
 
-  set<DockerEnv> mEnvs;
+  set<EnvironmentVariable> mEnvs;
   string mOnlyStep;
   string mDockerImageGlobal;
   stringstream mScript;
