@@ -7,14 +7,20 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.11.1
+                             microCI 0.12.0
                             Geraldo Ribeiro
 
 
 Opções:
   -h --help                Ajuda
+  -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new tipo            [bash|mkdocs_material|git_deploy|git_publish
-                            cppcheck|clang-tidy|plantuml]
-
+  -n,--new bash            Cria passo bash
+  -n,--new mkdocs_material Cria passo para documentação
+  -n,--new git_publish     Cria passo para publicar um diretório para repositório
+  -n,--new git_deploy      Cria passo para colocar repositório em produção
+  -n,--new cppcheck        Cria passo para verificação de código C++
+  -n,--new clang-tidy      Cria passo para verificação de código C++
+  -n,--new plantuml        Cria passo para geração de diagramas
+  -n,--new clang-format    Cria passo para formatação de código
 

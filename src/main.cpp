@@ -42,6 +42,8 @@ using namespace std;
 using namespace microci;
 
 #include <new/bash.hpp>
+#include <new/clang-format.hpp>
+#include <new/clang-format_config.hpp>
 #include <new/clang-tidy.hpp>
 #include <new/cppcheck.hpp>
 #include <new/git_deploy.hpp>
@@ -59,10 +61,16 @@ string help() {
   return R"(
 Opções:
   -h --help                Ajuda
+  -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new tipo            [bash|mkdocs_material|git_deploy|git_publish
-                            cppcheck|clang-tidy|plantuml]
-
+  -n,--new bash            Cria passo bash
+  -n,--new mkdocs_material Cria passo para documentação
+  -n,--new git_publish     Cria passo para publicar um diretório para repositório
+  -n,--new git_deploy      Cria passo para colocar repositório em produção
+  -n,--new cppcheck        Cria passo para verificação de código C++
+  -n,--new clang-tidy      Cria passo para verificação de código C++
+  -n,--new plantuml        Cria passo para geração de diagramas
+  -n,--new clang-format    Cria passo para formatação de código
 )";
 }
 
@@ -70,6 +78,7 @@ struct TemplateFile {
   string fileName;
   unsigned char *fileContent;
   unsigned int fileSize;
+  bool appendIfExists;
 };
 
 using TemplateType = string;
@@ -111,22 +120,29 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
   if ((cmdl({"-n", "--new"}) >> newType)) {
     multimap<TemplateType, TemplateFile> templates;
 
-#define MICROCI_TPL(TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)      \
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION,      \
+                    INCLUDE_VAR_NAME)                                       \
   templates.insert(make_pair(                                               \
       TYPE,                                                                 \
       TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
-                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len}));
+                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len,      \
+                   APPEND_IF_EXISTS}));
 
-    MICROCI_TPL("bash", ".microCI.yml", yml, bash);
-    MICROCI_TPL("clang-tidy", ".microCI.yml", yml, clang_tidy);
-    MICROCI_TPL("cppcheck", ".microCI.yml", yml, cppcheck);
-    MICROCI_TPL("git_deploy", ".microCI.yml", yml, git_deploy);
-    MICROCI_TPL("git_publish", ".microCI.yml", yml, git_publish);
-    MICROCI_TPL("mkdocs_material", "docs/index.md", md, mkdocs_material_index);
-    MICROCI_TPL("mkdocs_material", ".microCI.yml", yml, mkdocs_material);
-    MICROCI_TPL("mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
-    MICROCI_TPL("npm", ".microCI.yml", yml, npm);
-    MICROCI_TPL("plantuml", ".microCI.yml", yml, plantuml);
+    MICROCI_TPL(true, "bash", ".microCI.yml", yml, bash);
+    MICROCI_TPL(true, "clang-tidy", ".microCI.yml", yml, clang_tidy);
+    MICROCI_TPL(true, "cppcheck", ".microCI.yml", yml, cppcheck);
+    MICROCI_TPL(true, "git_deploy", ".microCI.yml", yml, git_deploy);
+    MICROCI_TPL(true, "git_publish", ".microCI.yml", yml, git_publish);
+    MICROCI_TPL(false, "mkdocs_material", "docs/index.md", md,
+                mkdocs_material_index);
+    MICROCI_TPL(true, "mkdocs_material", ".microCI.yml", yml, mkdocs_material);
+    MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml", yml,
+                mkdocs_material_config);
+    MICROCI_TPL(true, "npm", ".microCI.yml", yml, npm);
+    MICROCI_TPL(true, "plantuml", ".microCI.yml", yml, plantuml);
+    MICROCI_TPL(true, "clang-format", ".microCI.yml", yml, clang_format);
+    MICROCI_TPL(false, "clang-format", ".clang-format", yml,
+                clang_format_config);
 #undef MICROCI_TPL
 
     bool isTypeFound = false;
@@ -149,17 +165,22 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           filesystem::create_directories(folderName);
         }
 
-        if (filesystem::exists(fileName)) {
+        if (!tpl.appendIfExists and filesystem::exists(fileName)) {
+          spdlog::info("Ignorando criação, pois o arquivo {} já existe",
+                       fileName);
+          continue;
+        } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
           out.open(fileName, ios_base::app);
           out << "\n# ---------- "
                  "MESCLE MANUALMENTE CONTEÚDO ABAIXO "
                  "---------\n";
+          spdlog::info("Arquivo {} foi editado a partir do modelo", fileName);
         } else {
           out.open(fileName);
+          spdlog::info("Arquivo {} foi criado a partir do modelo", fileName);
         }
 
         out.write((char *)tpl.fileContent, tpl.fileSize);
-        spdlog::info("Arquivo {} foi editado a partir do modelo", fileName);
       }
     }
     if (isTypeFound) {
@@ -192,4 +213,3 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
   cout << uCI.Script();
   return 0;
 }
-

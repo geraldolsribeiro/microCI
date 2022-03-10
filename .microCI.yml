@@ -1,6 +1,4 @@
 ---
-envs:
-  MICROCI_DISCORD_WEBHOOK: https://discord.com/api/webhooks/943613047375802470/sG8Esn7vuKfgqywFf2Uc30ISQLQDl__GffglPGQ5nxySNVHwApRiWL6KW8XOcw7NO-Si 
 steps:
   - name: "Gerar relatório de verificação do código C++ clang-tidy"
     description: "Verifica o código C++ e gera relatório em formato HTML"
@@ -44,12 +42,15 @@ steps:
     plugin:
       name: "git_publish"
       git_url: "git@github.com:geraldolsribeiro/microci.dev.git"
-  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
-    description: "Executa servidor local para preview da documentação"
-    only: "serve"
+  - name: "Formatar código C++ com clang-format"
+    description: "Padroniza formato do código usando regras"
     plugin:
-      name: "mkdocs_material"
-      action: "serve"
+      name: "clang-format"
+      source: # Lista arquivos a serem formatados
+        - "src/*.cpp"
+        - "test/*.cpp"
+        - "include/*.hpp"
+
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
     run_as: root
@@ -60,5 +61,12 @@ steps:
       make -C src clean all
       make -C test
       chown $(id -u).$(id -g) -Rv src/microCI
+      chown $(id -u).$(id -g) -Rv test/
+  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
+    description: "Executa servidor local para preview da documentação"
+    only: "serve"
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
 
 # vim: spell spelllang=pt,en

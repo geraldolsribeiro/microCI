@@ -26,22 +26,24 @@
 SHELL=bash
 
 test:
-	../src/microCI -i y.yml      || echo "OK"
-	../src/microCI --input=x.yml || echo "OK"
-	../src/microCI -c tipo_invalido || echo "OK"
-	../src/microCI -h                                            > help.txt
-	../src/microCI                                               > default.sh
-	../src/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
-	../src/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
-	../src/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
-	../src/microCI -c npm -i test_npm.yml
-	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
-	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
-	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh
-	for i in bash clang-tidy cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
+	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
 		&& pushd "new_$$i" && pwd && ../../src/microCI -n "$$i" && popd; \
 	done
+	../src/microCI -i y.yml         || echo "OK"
+	../src/microCI --input=x.yml    || echo "OK"
+	../src/microCI -c tipo_invalido || echo "OK"
+	../src/microCI                                               > default.sh
+	../src/microCI -h                                            > help.txt
+	../src/microCI -c npm -i test_npm.yml
+	../src/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
+	../src/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
+	../src/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
+	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
+	../src/microCI -i ../new/clang-format.yml                    > clang-format.sh
+	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh
+
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@
 

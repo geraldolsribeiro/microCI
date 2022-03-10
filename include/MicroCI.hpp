@@ -44,8 +44,8 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 11;
-const int PATCH = 1;
+const int MINOR = 12;
+const int PATCH = 0;
 
 string banner();
 
@@ -103,6 +103,7 @@ class MicroCI {
   void parseMkdocsMaterialPluginStep(const YAML::Node& step);
   void parsePlantumlPluginStep(const YAML::Node& step);
   void parseClangTidyPluginStep(const YAML::Node& step);
+  void parseClangFormatPluginStep(const YAML::Node& step);
   void prepareRunDocker(const string& runAs, const json& data,
                         const set<EnvironmentVariable>& envs,
                         const set<DockerVolume>& volumes);

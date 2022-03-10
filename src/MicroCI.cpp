@@ -70,6 +70,8 @@ MicroCI::MicroCI() {
                            &MicroCI::parseMkdocsMaterialPluginStep);
   mPluginParserMap.emplace("cppcheck", &MicroCI::parseCppCheckPluginStep);
   mPluginParserMap.emplace("clang-tidy", &MicroCI::parseClangTidyPluginStep);
+  mPluginParserMap.emplace("clang-format",
+                           &MicroCI::parseClangFormatPluginStep);
   mPluginParserMap.emplace("plantuml", &MicroCI::parsePlantumlPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
@@ -581,6 +583,43 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
 )",
       data);
 
+  endFunction(data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  auto runAs = parseRunAs(step);
+  list<string> sourceList;
+
+  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+    for (const auto& src : step["plugin"]["source"]) {
+      sourceList.push_back(src.as<string>());
+    }
+  }
+
+  data["STEP_NAME"] = stepName(step);
+  data["DOCKER_IMAGE"] =
+      stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
+
+  beginFunction(data, envs);
+  prepareRunDocker(runAs, data, envs, volumes);
+
+  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+)",
+                          data);
+  for (const auto& src : sourceList) {
+    mScript << "        && cat <(compgen -G '" << src << "') \\\n"
+            << "        | xargs -I {} clang-format -i {} 2>&1 \\\n";
+  }
+
+  mScript << "        \"\n";
   endFunction(data);
 }
 

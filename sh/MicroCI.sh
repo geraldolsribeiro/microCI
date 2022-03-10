@@ -27,22 +27,12 @@ PS4='$LINENO: '
   echo ""
 } | tee .microCI.log
 
-# Verifica se o jq está instalado
-
-jq --version >/dev/null 2>&1
-jq_ok=$?
-
-[[ "$jq_ok" -eq 127 ]] && \
-  echo "fatal: jq not installed" && exit 2
-[[ "$jq_ok" -ne 0 ]] && \
-  echo "fatal: unknown error in jq" && exit 2
-
-# Verifica se o curl está instalado
-curl --version >/dev/null 2>&1
-curl_ok=$?
-
-[[ "$curl_ok" -eq 127 ]] && \
-  echo "fatal: curl not installed" && exit 2
+command -v jq &> /dev/null \
+  || { echo -e "{{RED}}Comando jq não foi encontrado{{CLEAR}}";  exit 1; }
+command -v curl &> /dev/null \
+  || { echo -e "{{RED}}Comando curl não foi encontrado{{CLEAR}}";  exit 1; }
+command -v docker &> /dev/null \
+  || { echo -e "{{RED}}Comando docker não foi encontrado{{CLEAR}}";  exit 1; }
 
 PWD=$(pwd)
 

@@ -1,0 +1,12 @@
+# Exemplo de uso
+steps:
+  - name: "Formatar código C++ com clang-format"
+    description: "Padroniza formato do código usando regras"
+    plugin:
+      name: "clang-format"
+      source: # Lista arquivos a serem formatados
+        - "src/*.cpp"
+        - "test/*.cpp"
+        - "include/*.hpp"
+
+# vim: spell spelllang=pt,en

@@ -55,6 +55,11 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
+../include/new/%.hpp: ../new/%.txt
+	cat .header.cpp > $@
+	xxd -i $^ >> $@
+	touch main.cpp
+
 ../include/sh/%.hpp: ../sh/%.sh
 	cat .header.cpp > $@
 	xxd -i $^ >> $@
@@ -67,6 +72,8 @@ MicroCI.cpp: \
 	../include/new/git_deploy.hpp \
 	../include/new/git_publish.hpp \
 	../include/new/npm.hpp \
+	../include/new/clang-format.hpp \
+	../include/new/clang-format_config.hpp \
 	../include/new/clang-tidy.hpp \
 	../include/new/cppcheck.hpp \
 	../include/new/plantuml.hpp \
