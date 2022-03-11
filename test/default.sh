@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.12.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.13.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -116,6 +116,7 @@ function step_instalar_dependencias() {
         --attach stdout \
         --attach stderr \
         --rm \
+        --network none \
         --workdir /microci_workspace \
         --env ENV1="xxx" \
         --env ENV2="yyy" \
@@ -170,6 +171,7 @@ function step_construir() {
         --attach stdout \
         --attach stderr \
         --rm \
+        --network none \
         --workdir /microci_workspace \
         --env ENV1="xxx" \
         --env ENV2="yyy" \

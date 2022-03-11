@@ -1,6 +1,7 @@
 ---
 steps:
   - name: "Publicar em outro repositório git"
+    network: bridge
     # only: "publish"
     ssh:
       copy_from: "${HOME}/.ssh"

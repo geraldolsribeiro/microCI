@@ -19,8 +19,8 @@ steps:
       clean_before: true # Parâmetro default
   - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
     description: "Executa servidor local para preview da documentação"
-    # passo executado localmente para auxiliar na edição/preview
-    only: "serve"
+    only: "serve" # passo executado localmente para auxiliar na edição/preview
+    network: host
     plugin:
       name: "mkdocs_material"
       action: "serve"

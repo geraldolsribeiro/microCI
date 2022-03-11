@@ -44,7 +44,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 12;
+const int MINOR = 13;
 const int PATCH = 0;
 
 string banner();
@@ -104,8 +104,7 @@ class MicroCI {
   void parsePlantumlPluginStep(const YAML::Node& step);
   void parseClangTidyPluginStep(const YAML::Node& step);
   void parseClangFormatPluginStep(const YAML::Node& step);
-  void prepareRunDocker(const string& runAs, const json& data,
-                        const set<EnvironmentVariable>& envs,
+  void prepareRunDocker(const json& data, const set<EnvironmentVariable>& envs,
                         const set<DockerVolume>& volumes);
   tuple<json, set<DockerVolume>> parseSsh(
       const YAML::Node& step, const json& data,
@@ -121,8 +120,8 @@ class MicroCI {
   string stepName(const YAML::Node& step) const;
   set<DockerVolume> parseVolumes(const YAML::Node& step) const;
   set<EnvironmentVariable> parseEnvs(const YAML::Node& step) const;
-  string parseRunAs(const YAML::Node& step) const;
-
+  json parseRunAs(const YAML::Node& step, const json& data) const;
+  json parseNetwork(const YAML::Node& step, const json& data) const;
   json defaultDataTemplate() const;
   set<DockerVolume> defaultVolumes() const;
   set<EnvironmentVariable> defaultEnvs() const;

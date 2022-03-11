@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.12.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.13.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -159,6 +159,7 @@ function step_publicar_html_para_repositorio_git() {
         --attach stdout \
         --attach stderr \
         --rm \
+        --network bridge \
         --workdir /microci_workspace \
         --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
         --volume "${PWD}":"/microci_workspace":rw \

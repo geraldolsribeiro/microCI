@@ -258,12 +258,24 @@ void MicroCI::parsePluginStep(const YAML::Node& step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::parseRunAs(const YAML::Node& step) const {
-  auto ret = string{"root"};
+json MicroCI::parseRunAs(const YAML::Node& step, const json& data) const {
+  auto data_ = data;
+  data_["RUN_AS"] = "root";
   if (step["run_as"]) {
-    ret = step["run_as"].as<string>();
+    data_["RUN_AS"] = step["run_as"].as<string>();
   }
-  return ret;
+  return data_;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+json MicroCI::parseNetwork(const YAML::Node& step, const json& data) const {
+  auto data_ = data;
+  if (step["network"]) {
+    data_["DOCKER_NETWORK"] = step["network"].as<string>();
+  }
+  return data_;
 }
 
 // ----------------------------------------------------------------------
@@ -345,9 +357,11 @@ void MicroCI::endFunction(const json& data) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::prepareRunDocker(const string& runAs, const json& data,
+void MicroCI::prepareRunDocker(const json& data,
                                const set<EnvironmentVariable>& envs,
                                const set<DockerVolume>& volumes) {
+  const string runAs = data["RUN_AS"];
+
   mScript << inja::render(R"(
       echo ""
       echo ""
@@ -368,6 +382,7 @@ void MicroCI::prepareRunDocker(const string& runAs, const json& data,
         --attach stdout \
         --attach stderr \
         --rm \
+        --network {{ DOCKER_NETWORK }} \
         --workdir {{ WORKSPACE }} \
 )",
                           data);
@@ -446,11 +461,14 @@ void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
+  auto runAs = string{};
   auto type = string{"png"};
   auto output = string{};
   list<string> sourceList;
   list<string> opts = {"-r"};
+
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto& opt : step["plugin"]["options"]) {
@@ -489,7 +507,7 @@ void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
   data["OUTPUT"] = output;
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   //&& mkdir -p {{ OUTPUT }} \
 
@@ -522,10 +540,13 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
+  auto runAs = string{};
   list<string> includeList;
   list<string> sourceList;
   list<string> opts{"--"};
+
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto& opt : step["plugin"]["options"]) {
@@ -552,7 +573,7 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
       && mkdir -p auditing/clang-tidy/ \
@@ -593,8 +614,10 @@ void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
   list<string> sourceList;
+
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto& src : step["plugin"]["source"]) {
@@ -609,7 +632,7 @@ void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
 )",
@@ -627,16 +650,18 @@ void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
-  auto data = defaultDataTemplate();
-  auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
   auto platform = string{"unix64"};
   auto standard = string{"c++11"};
   list<string> includeList;
   list<string> sourceList;
   list<string> opts{"--enable=all", "--inconclusive", "--xml",
                     "--xml-version=2"};
+
+  auto data = defaultDataTemplate();
+  auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto& opt : step["plugin"]["options"]) {
@@ -674,7 +699,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   data["REPORT_TITLE"] = "MicroCI::CppCheck";
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
       && mkdir -p auditing/cppcheck \
@@ -720,7 +745,11 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
+
+  data["DOCKER_NETWORK"] = "bridge";
+
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
   tie(data, volumes) = parseSsh(step, data, volumes);
 
   const auto name = step["plugin"]["name"].as<string>();
@@ -748,7 +777,7 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
       stepDescription(step, "Publica arquivos em um repositório git");
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
 
@@ -795,6 +824,7 @@ void MicroCI::parseGitDeployPluginStep(const YAML::Node& step) {
   }
 
   auto data = defaultDataTemplate();
+  data["RUN_AS"] = "root";
   data["GIT_URL"] = repo;
   data["GIT_DIR"] = gitDir;
   data["GIT_WORK"] = workTree;
@@ -998,6 +1028,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
+  auto runAs = string{};
 
   auto data = defaultDataTemplate();
 
@@ -1016,7 +1047,8 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
 
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = parseRunAs(step);
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
   tie(data, volumes) = parseSsh(step, data, volumes);
 
   data["STEP_NAME"] = stepName(step);
@@ -1025,7 +1057,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
   beginFunction(data, envs);
-  prepareRunDocker(runAs, data, envs, volumes);
+  prepareRunDocker(data, envs, volumes);
 
   if (step["sh"]) {
     mScript << inja::render("        /bin/sh -c \"cd {{ WORKSPACE }}", data);
@@ -1067,6 +1099,10 @@ json MicroCI::defaultDataTemplate() const {
   data["VERSION"] =
       fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
   data["WORKSPACE"] = "/microci_workspace";
+
+  // Network docker: bridge (default), host, none
+  data["DOCKER_NETWORK"] = "none";
+  data["RUN_AS"] = "root";
 
   data["BLUE"] = "\033[0;34m";
   data["YELLOW"] = "\033[0;33m";

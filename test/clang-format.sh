@@ -84,12 +84,12 @@ function assert_function() {
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Descrição do passo
+# Padroniza formato do código usando regras
 # ----------------------------------------------------------------------
-function step_deploy_de_pagina_de_aplicacao_vuejs() {
+function step_formatar_codigo_c___com_clang_format() {
   SECONDS=0
-  MICROCI_STEP_NAME="Deploy de página de aplicação VueJS"
-  MICROCI_STEP_DESCRIPTION="Descrição do passo"
+  MICROCI_STEP_NAME="Formatar código C++ com clang-format"
+  MICROCI_STEP_DESCRIPTION="Padroniza formato do código usando regras"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -103,31 +103,28 @@ function step_deploy_de_pagina_de_aplicacao_vuejs() {
     (
       set -e
 
-      # Caso ainda não exista realiza o clone inicial
-      if [ ! -d "/opt/microCI/repos/app_frontend_deploy" ]; then
-        git clone "git@gitlab.xyx.com.br:str/app_frontend_deploy.git" \
-          --separate-git-dir="/opt/microCI/repos/app_frontend_deploy" \
-          "/var/www/my-intranet/html/app" 2>&1
-      fi
-
-
-      # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
-      git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
-        --work-tree="/var/www/my-intranet/html/app" \
-        clean -xfd 2>&1
-
-      # Extrai a versão atual
-      git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
-        --work-tree="/var/www/my-intranet/html/app" \
-        checkout -f 2>&1 \
-      && git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
-        --work-tree="/var/www/my-intranet/html/app" \
-        pull 2>&1
-
-      # Remove o arquivo .git que aponta para o git-dir
-      rm -f "/var/www/my-intranet/html/app/.git" 2>&1
-
-      date
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Formatar código C++ com clang-format"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --volume "${PWD}":"/microci_workspace":rw \
+        "intmain/microci_cppcheck:latest" \
+        /bin/bash -c "cd /microci_workspace \
+        && cat <(compgen -G 'src/*.cpp') \
+        | xargs -I {} clang-format -i {} 2>&1 \
+        && cat <(compgen -G 'test/*.cpp') \
+        | xargs -I {} clang-format -i {} 2>&1 \
+        && cat <(compgen -G 'include/*.hpp') \
+        | xargs -I {} clang-format -i {} 2>&1 \
+        "
 
     )
     status=$?
@@ -148,7 +145,7 @@ function step_deploy_de_pagina_de_aplicacao_vuejs() {
 function main() {
   date >> .microCI.log
 
-  step_deploy_de_pagina_de_aplicacao_vuejs
+  step_formatar_codigo_c___com_clang_format
 
   date >> .microCI.log
 }

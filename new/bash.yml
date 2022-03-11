@@ -2,6 +2,7 @@
 steps:
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
+    network: bridge
     run_as: root
     bash: |
       apt update
