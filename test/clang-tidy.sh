@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.13.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.14.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -121,8 +121,8 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
       && mkdir -p auditing/clang-tidy/ \
       && date > auditing/clang-tidy/clang-tidy.log \
       && clang-tidy \
-        src \
-        test \
+        src/*.cpp \
+        test/*.cpp \
         -checks='*' \
         -- \
         -std=c++11 \

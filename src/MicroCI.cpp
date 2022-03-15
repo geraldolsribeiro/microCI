@@ -73,6 +73,7 @@ MicroCI::MicroCI() {
   mPluginParserMap.emplace("clang-format",
                            &MicroCI::parseClangFormatPluginStep);
   mPluginParserMap.emplace("plantuml", &MicroCI::parsePlantumlPluginStep);
+  mPluginParserMap.emplace("beamer", &MicroCI::parseBeamerPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
 }
@@ -108,11 +109,11 @@ bool MicroCI::ReadConfig(const string& filename) {
 
   try {
     CI = YAML::LoadFile(filename);
-  } catch (const YAML::BadFile e) {
+  } catch (const YAML::BadFile& e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
-  } catch (const YAML::ParserException e) {
+  } catch (const YAML::ParserException& e) {
     spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
@@ -334,7 +335,7 @@ void MicroCI::endFunction(const json& data) {
                           data);
 
   auto envs = defaultEnvs();
-  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK"};
+  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     mScript << inja::render(R"(
   # Notificação via Discord
@@ -397,6 +398,126 @@ void MicroCI::prepareRunDocker(const json& data,
   }
 
   mScript << inja::render("        \"{{ DOCKER_IMAGE }}\" \\\n", data);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
+
+  data["STEP_NAME"] = stepName(step);
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] =
+      stepDescription(step, "Apresentação PDF criada a partir do markdown");
+  data["DOCKER_IMAGE"] = "pandoc/latex:latest";
+  data["WORKSPACE"] = "/data";
+
+  auto inputMD = string{};
+  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+    for (const auto& opt : step["plugin"]["source"]) {
+      inputMD += opt.as<string>() + " ";
+    }
+  }
+  if (!inputMD.empty()) {
+    data["INPUT_MD"] = inputMD;
+  } else {
+    spdlog::error("É obrigatório especificar uma lista de arquivos de entrada");
+    throw std::runtime_error(
+        "É obrigatório especificar uma lista de arquivos de entrada");
+  }
+
+  data["LANG"] = step["plugin"]["lang"].as<string>("pt-BR");
+  data["DATE"] = step["plugin"]["date"].as<string>("01 de Abril de 2023");
+  data["INSTITUTE"] =
+      step["plugin"]["institute"].as<string>("Nome da instituição");
+  data["TITLE"] = step["plugin"]["title"].as<string>("Título da apresentação");
+  data["SUBTITLE"] =
+      step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
+  data["SUBJECT"] = step["plugin"]["subject"].as<string>(
+      "Informação da propriedade Assunto do PDF");
+  data["SLIDE_LEVEL"] = step["plugin"]["slide_level"].as<string>("2");
+  data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<string>("169");
+  data["OUTPUT_PDF"] = step["plugin"]["output"].as<string>("output.pdf");
+
+  data["HEADER_INCLUDES"] = "";
+  auto filename = string{"header-includes.yaml"};
+  ofstream yaml(filename);
+  YAML::Node strippedHeaderIncludes = Clone(step["plugin"]);
+
+  if (step["plugin"]["theme"].as<string>("default") == "STR") {
+    strippedHeaderIncludes["header-includes"].push_back(
+        R"(\useoutertheme{shadow})");
+    strippedHeaderIncludes["header-includes"].push_back(
+        R"(\usecolortheme{str})");
+    strippedHeaderIncludes["header-includes"].push_back(
+        R"(\logo{\includegraphics[height=7mm]{img/str-logo.png}})");
+
+// Encontrar uma solução mais elegante para disponibilizar arquivos de terceiros
+#include <3rd/beamercolorthemestr.sty.hpp>
+#include <3rd/str-logo.png.hpp>
+    ofstream strLogoPng("img/str-logo.png");
+    strLogoPng.write((char*)___3rd_str_logo_png, ___3rd_str_logo_png_len);
+    ofstream beamercolorthemestr("beamercolorthemestr.sty");
+    beamercolorthemestr.write((char*)___3rd_beamercolorthemestr_sty,
+                              ___3rd_beamercolorthemestr_sty_len);
+  }
+
+  for (const auto& key :
+       {/* keys a seguir não são usadas pelo pandoc: */ "name", "output",
+        "source", "theme",
+        /* keys a seguir já foram passadas via linha de comando: */ "lang",
+        "date", "institute", "title", "subtitle", "subject", "slide_level",
+        "aspectratio"}) {
+    strippedHeaderIncludes.remove(key);
+  }
+
+  yaml << "---\n";
+  yaml << "# Atenção, este arquivo é gerado automaticamente!\n";
+  yaml << "# Se necessário edite o arquivo .microCI.yml\n";
+  yaml << strippedHeaderIncludes;
+  yaml << "\n..." << endl;
+  data["HEADER_INCLUDES"] = filename;
+
+  if (step["plugin"]["natbib"] and step["plugin"]["natbib"].as<bool>()) {
+    data["CITEPROC"] = "--citeproc";
+  }
+
+  auto envs = parseEnvs(step);
+  beginFunction(data, envs);
+
+  mScript << inja::render(R"(
+      # shellcheck disable=SC2140
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir {{ WORKSPACE }} \
+        --volume "${PWD}":{{ WORKSPACE }} \
+        --user $(id -u):$(id -g) \
+        {{ DOCKER_IMAGE }} \
+        --variable lang='{{ LANG }}' \
+        --variable date='{{ DATE }}' \
+        --variable institute='{{ INSTITUTE }}' \
+        --variable title='{{ TITLE }}' \
+        --variable subtitle='{{ SUBTITLE }}' \
+        --variable subject='{{ SUBJECT }}' \
+        --variable slide_level={{ SLIDE_LEVEL }} \
+        --variable aspectratio={{ ASPECTRATIO }} \
+        --to=beamer \
+        {{ CITEPROC }} \
+        {{ HEADER_INCLUDES }} \
+        {{ INPUT_MD }} \
+        -o {{ OUTPUT_PDF }} \
+        2>&1; \
+      rm -f {{ HEADER_INCLUDES }} img/str-logo.png beamercolorthemestr.sty 2>&1
+)",
+                          data);
+
+  endFunction(data);
 }
 
 // ----------------------------------------------------------------------
@@ -508,8 +629,6 @@ void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
-
-  //&& mkdir -p {{ OUTPUT }} \
 
   mScript << inja::render(
       R"(        /bin/bash -c "cd {{ WORKSPACE }} \
@@ -1012,7 +1131,8 @@ tuple<json, set<DockerVolume>> MicroCI::parseSsh(
 // ----------------------------------------------------------------------
 // Copia credencias SSH e ajusta as permissões
 // ----------------------------------------------------------------------
-void MicroCI::copySsh(const YAML::Node& step, const json& data) {
+void MicroCI::copySsh([[maybe_unused]] const YAML::Node& step,
+                      const json& data) {
   mScript << inja::render(R"( \
            && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
            && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
@@ -1125,7 +1245,7 @@ void MicroCI::initBash() {
   mScript << inja::render(scriptMicroCI, data) << endl;
 
   auto envs = defaultEnvs();
-  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK"};
+  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     auto scriptNotifyDiscord =
         string{reinterpret_cast<const char*>(___sh_NotifyDiscord_sh),

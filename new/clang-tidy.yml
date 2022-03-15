@@ -9,8 +9,8 @@ steps:
       include:
         - "/usr/include/"
       source:
-        - "src"
-        - "test"
+        - "src/*.cpp"
+        - "test/*.cpp"
 
 # vim: spell spelllang=pt,en
 

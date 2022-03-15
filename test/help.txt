@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.13.0
+                             microCI 0.14.0
                             Geraldo Ribeiro
 
 
@@ -23,4 +23,5 @@ Opções:
   -n,--new clang-tidy      Cria passo para verificação de código C++
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
+  -n,--new beamer          Cria passo para criação de apresentação PDF
 

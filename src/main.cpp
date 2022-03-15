@@ -71,6 +71,7 @@ Opções:
   -n,--new clang-tidy      Cria passo para verificação de código C++
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
+  -n,--new beamer          Cria passo para criação de apresentação PDF
 )";
 }
 

@@ -44,7 +44,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 13;
+const int MINOR = 14;
 const int PATCH = 0;
 
 string banner();
@@ -97,6 +97,7 @@ class MicroCI {
   void initBash();
   void parseBashStep(const YAML::Node& step);
   void parsePluginStep(const YAML::Node& step);
+  void parseBeamerPluginStep(const YAML::Node& step);
   void parseGitDeployPluginStep(const YAML::Node& step);
   void parseGitPublishPluginStep(const YAML::Node& step);
   void parseCppCheckPluginStep(const YAML::Node& step);

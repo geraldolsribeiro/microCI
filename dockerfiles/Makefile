@@ -54,7 +54,7 @@ microci_cppcheck_push_dockerhub: microci_cppcheck
 	docker tag intmain/microci_cppcheck:0.3 intmain/microci_cppcheck:latest
 	docker push intmain/microci_cppcheck:latest
 
-microci_junit2html_push_dockerhub: microci_cppcheck
+microci_junit2html_push_dockerhub: microci_junit2html
 	docker login
 	docker push intmain/microci_junit2html:0.1
 	docker tag intmain/microci_junit2html:0.1 intmain/microci_junit2html:latest

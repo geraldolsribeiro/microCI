@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.14.0` Plugin beamer
 * `0.13.0` Configuração de rede docker
 * `0.12.0` Plugin clang-format e junit2html
 * `0.11.1` Notificação em canal do discord

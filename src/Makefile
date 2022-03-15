@@ -32,6 +32,7 @@ CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
 
 CXXFLAGS+= -I../include/
 
+CXXFLAGS+= -Wall -Wextra
 CXXFLAGS+= -s
 CXXFLAGS+= -O3
 CXXFLAGS+= -static
@@ -65,7 +66,14 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
+../include/3rd/%.hpp: ../3rd/%
+	cat .header.cpp > $@
+	xxd -i $^ >> $@
+	touch main.cpp
+
 MicroCI.cpp: \
+	../include/3rd/str-logo.png.hpp \
+	../include/3rd/beamercolorthemestr.sty.hpp \
 	../include/sh/MicroCI.hpp \
 	../include/sh/NotifyDiscord.hpp \
 	../include/new/mkdocs_material.hpp \
