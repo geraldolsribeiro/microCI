@@ -42,6 +42,7 @@ using namespace std;
 using namespace microci;
 
 #include <new/bash.hpp>
+#include <new/beamer.hpp>
 #include <new/clang-format.hpp>
 #include <new/clang-format_config.hpp>
 #include <new/clang-tidy.hpp>
@@ -144,6 +145,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     MICROCI_TPL(true, "clang-format", ".microCI.yml", yml, clang_format);
     MICROCI_TPL(false, "clang-format", ".clang-format", yml,
                 clang_format_config);
+    MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
 #undef MICROCI_TPL
 
     bool isTypeFound = false;

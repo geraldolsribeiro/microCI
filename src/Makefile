@@ -72,22 +72,24 @@ tidy:
 	touch main.cpp
 
 MicroCI.cpp: \
-	../include/3rd/str-logo.png.hpp \
 	../include/3rd/beamercolorthemestr.sty.hpp \
-	../include/sh/MicroCI.hpp \
-	../include/sh/NotifyDiscord.hpp \
-	../include/new/mkdocs_material.hpp \
-	../include/new/git_deploy.hpp \
-	../include/new/git_publish.hpp \
-	../include/new/npm.hpp \
-	../include/new/clang-format.hpp \
+	../include/3rd/str-logo.png.hpp \
+	../include/new/bash.hpp \
+	../include/new/beamer.hpp \
 	../include/new/clang-format_config.hpp \
+	../include/new/clang-format.hpp \
 	../include/new/clang-tidy.hpp \
 	../include/new/cppcheck.hpp \
-	../include/new/plantuml.hpp \
-	../include/new/bash.hpp \
+	../include/new/git_deploy.hpp \
+	../include/new/git_publish.hpp \
 	../include/new/mkdocs_material_config.hpp \
-	../include/new/mkdocs_material_index.hpp
+	../include/new/mkdocs_material.hpp \
+	../include/new/mkdocs_material_index.hpp \
+	../include/new/npm.hpp \
+	../include/new/plantuml.hpp \
+	../include/sh/MicroCI.hpp \
+	../include/sh/NotifyDiscord.hpp \
+
 
 microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)

@@ -1,0 +1,9 @@
+---
+# Atenção, este arquivo é gerado automaticamente!
+# Se necessário edite o arquivo .microCI.yml
+author:
+  - Geraldo Ribeiro
+  - Outro Nome de Autor
+header-includes:
+  - \usepackage{tikz}
+...

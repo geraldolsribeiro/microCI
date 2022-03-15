@@ -483,6 +483,8 @@ void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
 
   if (step["plugin"]["natbib"] and step["plugin"]["natbib"].as<bool>()) {
     data["CITEPROC"] = "--citeproc";
+  } else {
+    data["CITEPROC"] = "";
   }
 
   auto envs = parseEnvs(step);
