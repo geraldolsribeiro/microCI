@@ -18,7 +18,7 @@ steps:
         - Outro Nome de Autor
       # subject: Informação da propriedade Assunto do PDF
       # keywords: [palavra-chave1, palavra-chave2, palavra-chave3, PDF]
-      # slide_level: 2   # usa o título de segundo nível para iniciar um slide
+      # slide-level: 2   # usa o título de segundo nível para iniciar um slide
       # aspectratio: 169 # Formato 16:9
       # links-as-notes: true
       # natbib: true
