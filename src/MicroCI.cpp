@@ -438,7 +438,7 @@ void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
       step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
   data["SUBJECT"] = step["plugin"]["subject"].as<string>(
       "Informação da propriedade Assunto do PDF");
-  data["SLIDE_LEVEL"] = step["plugin"]["slide_level"].as<string>("2");
+  data["SLIDE_LEVEL"] = step["plugin"]["slide-level"].as<string>("2");
   data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<string>("169");
   data["OUTPUT_PDF"] = step["plugin"]["output"].as<string>("output.pdf");
 
@@ -469,7 +469,7 @@ void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
        {/* keys a seguir não são usadas pelo pandoc: */ "name", "output",
         "source", "theme",
         /* keys a seguir já foram passadas via linha de comando: */ "lang",
-        "date", "institute", "title", "subtitle", "subject", "slide_level",
+        "date", "institute", "title", "subtitle", "subject", "slide-level",
         "aspectratio"}) {
     strippedHeaderIncludes.remove(key);
   }
@@ -507,8 +507,8 @@ void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
         --variable title='{{ TITLE }}' \
         --variable subtitle='{{ SUBTITLE }}' \
         --variable subject='{{ SUBJECT }}' \
-        --variable slide_level={{ SLIDE_LEVEL }} \
         --variable aspectratio={{ ASPECTRATIO }} \
+        --slide-level={{ SLIDE_LEVEL }} \
         --to=beamer \
         {{ CITEPROC }} \
         {{ HEADER_INCLUDES }} \
