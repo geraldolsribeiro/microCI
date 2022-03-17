@@ -4,7 +4,6 @@ steps:
     description: "Download de dependências utilizadas na compilação"
     ssh: # usado pelo git_archive
       copy_from: "${HOME}/.ssh"
-      # copy_to: "/home/bitnami/.ssh" # Usuário da imagem
     plugin:
       name: "fetch"
       target: include # local padrão para os arquivos

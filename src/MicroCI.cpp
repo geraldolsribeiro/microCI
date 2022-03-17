@@ -388,20 +388,24 @@ void MicroCI::prepareRunDocker(const json& data,
         --attach stderr \
         --rm \
         --network {{ DOCKER_NETWORK }} \
-        --workdir {{ WORKSPACE }} \
-)",
+        --workdir {{ WORKSPACE }})",
                           data);
 
   for (auto& env : envs) {
-    mScript << fmt::format("        --env {}=\"{}\" \\\n", env.name, env.value);
+    mScript << fmt::format(R"( \
+        --env {}="{}")",
+                           env.name, env.value);
   }
 
   for (const auto& vol : volumes) {
-    mScript << fmt::format("        --volume \"{}\":\"{}\":{} \\\n", vol.source,
-                           vol.destination, vol.mode);
+    mScript << fmt::format(R"( \
+        --volume "{}":"{}":{})",
+                           vol.source, vol.destination, vol.mode);
   }
 
-  mScript << inja::render("        \"{{ DOCKER_IMAGE }}\" \\\n", data);
+  mScript << inja::render(R"( \
+        "{{ DOCKER_IMAGE }}")",
+                          data);
 }
 
 // ----------------------------------------------------------------------
@@ -420,32 +424,17 @@ void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
 
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  tie(data, volumes) = parseSsh(step, data, volumes);
-  data["SSH_COPY_TO"] = "/home/bitnami/.ssh";
+  tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     auto defaultTarget = step["plugin"]["target"].as<string>("include/");
 
     beginFunction(data, envs);
-    mScript << inja::render(R"(
-      # shellcheck disable=SC2140
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --workdir {{ WORKSPACE }} )",
-                            data);
-    for (const auto& vol : volumes) {
-      mScript << fmt::format(" \\\n        --volume \"{}\":\"{}\":{}",
-                             vol.source, vol.destination, vol.mode);
-    }
+    prepareRunDocker(data, envs, volumes);
     mScript << inja::render(R"( \
-        --user $(id -u):$(id -g) \
-        {{ DOCKER_IMAGE }} \
         /bin/bash -c "cd {{ WORKSPACE }})",
                             data);
-    if (step["ssh"]) {
+    if (step["ssh"]["copy_to"]) {
       copySsh(step, data);
     }
 
@@ -453,7 +442,8 @@ void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
       if (item["git_archive"]) {
         auto files = string{};
         for (const auto& f : item["files"]) {
-          files += fmt::format( "'{}' ", f.as<string>() ); // aspas simples para não expandir
+          files += fmt::format(
+              "'{}' ", f.as<string>());  // aspas simples para não expandir
         }
         if (files.empty()) {
           throw std::runtime_error(
@@ -462,6 +452,7 @@ void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
         data["FILES"] = files;
         data["GIT_REMOTE"] = item["git_archive"].as<string>();
         data["TARGET"] = item["target"].as<string>(defaultTarget);
+
         mScript << inja::render(
             R"( \
            && mkdir -p {{ TARGET }} \
@@ -717,22 +708,22 @@ void MicroCI::parsePlantumlPluginStep(const YAML::Node& step) {
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
 
-  mScript << inja::render(
-      R"(        /bin/bash -c "cd {{ WORKSPACE }} \
+  mScript << inja::render(R"( \
+          /bin/bash -c "cd {{ WORKSPACE }} \
           && java -jar /opt/plantuml/plantuml.jar \
 )",
-      data);
+                          data);
 
   for (const auto& opt : opts) {
-    mScript << "          " << opt << " \\\n";
+    mScript << "            " << opt << " \\\n";
   }
 
   for (const auto& src : sourceList) {
-    mScript << "          " << src << " \\\n";
+    mScript << "            " << src << " \\\n";
   }
 
   mScript << inja::render(
-      R"(          2>&1"
+      R"(            2>&1"
 )",
       data);
 
@@ -780,11 +771,11 @@ void MicroCI::parseClangTidyPluginStep(const YAML::Node& step) {
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
-
-  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-      && mkdir -p auditing/clang-tidy/ \
-      && date > auditing/clang-tidy/clang-tidy.log \
-      && clang-tidy \
+  mScript << inja::render(R"( \
+        /bin/bash -c "cd {{ WORKSPACE }} \
+        && mkdir -p auditing/clang-tidy/ \
+        && date > auditing/clang-tidy/clang-tidy.log \
+        && clang-tidy \
 )",
                           data);
   for (const auto& src : sourceList) {
@@ -840,16 +831,19 @@ void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
-
-  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-)",
+  mScript << inja::render(R"( \
+        /bin/bash -c "cd {{ WORKSPACE }})",
                           data);
   for (const auto& src : sourceList) {
-    mScript << "        && cat <(compgen -G '" << src << "') \\\n"
-            << "        | xargs -I {} clang-format -i {} 2>&1 \\\n";
+    mScript << fmt::format(R"( \
+        && cat <(compgen -G '{}') \
+          | )",
+                           src);
+    mScript << R"(xargs -I {} clang-format -i {} 2>&1 )";
   }
 
-  mScript << "        \"\n";
+  mScript << R"("
+)";
   endFunction(data);
 }
 
@@ -909,34 +903,35 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
 
-  mScript << inja::render(R"(        /bin/bash -c "cd {{ WORKSPACE }} \
-      && mkdir -p auditing/cppcheck \
-      && cppcheck \
-        --platform={{ PLATFORM }} \
-        --std={{ STD }} \
+  mScript << inja::render(R"( \
+        /bin/bash -c "cd {{ WORKSPACE }} \
+        && mkdir -p auditing/cppcheck \
+        && cppcheck \
+          --platform={{ PLATFORM }} \
+          --std={{ STD }} \
 )",
                           data);
 
   for (const auto& opt : opts) {
-    mScript << "        " << opt << " \\\n";
+    mScript << "          " << opt << " \\\n";
   }
 
   for (const auto& inc : includeList) {
-    mScript << "        --include=" << inc << " \\\n";
+    mScript << "          --include=" << inc << " \\\n";
   }
 
   for (const auto& src : sourceList) {
-    mScript << "        " << src << " \\\n";
+    mScript << "          " << src << " \\\n";
   }
 
   // xml é escrito na saída de erro
-  mScript << inja::render(R"(        2> auditing/cppcheck.xml \
-      && cppcheck-htmlreport \
-        --title='{{ REPORT_TITLE }}' \
-        --report-dir='auditing/cppcheck/' \
-        --source-dir='.' \
-        --file='auditing/cppcheck.xml' 2>&1 \
-      && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+  mScript << inja::render(R"(          2> auditing/cppcheck.xml \
+        && cppcheck-htmlreport \
+          --title='{{ REPORT_TITLE }}' \
+          --report-dir='auditing/cppcheck/' \
+          --source-dir='.' \
+          --file='auditing/cppcheck.xml' 2>&1 \
+        && chown $(id -u):$(id -g) -Rv auditing 2>&1"
 )",
                           data);
 
@@ -958,7 +953,7 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
 
   data = parseRunAs(step, data);
   data = parseNetwork(step, data);
-  tie(data, volumes) = parseSsh(step, data, volumes);
+  tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   const auto name = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();
@@ -987,10 +982,11 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   // data["RUN_AS"] = "user"; // verificar!
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
+  mScript << inja::render(R"( \
+        /bin/bash -c "cd {{ WORKSPACE }})",
+                          data);
 
-  mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
-
-  if (step["ssh"]) {
+  if (step["ssh"]["copy_to"]) {
     copySsh(step, data);
   }
 
@@ -1202,14 +1198,15 @@ string MicroCI::stepDockerWorkspace(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-tuple<json, set<DockerVolume>> MicroCI::parseSsh(
-    const YAML::Node& step, const json& data,
-    const set<DockerVolume>& volumes) const {
+tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
+    const YAML::Node& step, const json& data, const set<DockerVolume>& volumes,
+    const set<EnvironmentVariable>& envs) const {
   auto sshCopyFrom = string{};
   auto sshCopyTo = string{};
 
   auto volumes_ = volumes;
   auto data_ = data;
+  auto envs_ = envs;
 
   if (step["ssh"]) {
     sshCopyFrom = "${HOME}/.ssh";
@@ -1221,6 +1218,15 @@ tuple<json, set<DockerVolume>> MicroCI::parseSsh(
 
     if (step["ssh"]["copy_to"]) {
       sshCopyTo = step["ssh"]["copy_to"].as<string>();
+    } else {
+      // Caso não tenha um pasta destino usar variável de ambiente para
+      // especificar a chave
+      auto gitSshCommandEnv = EnvironmentVariable{
+          "GIT_SSH_COMMAND",
+          "ssh -i /.microCI_ssh/id_rsa"
+          " -F /dev/null"
+          " -o UserKnownHostsFile=/.microCI_ssh/known_hosts"};
+      envs_.insert(gitSshCommandEnv);
     }
 
     // Montagem temporária para copia
@@ -1233,7 +1239,7 @@ tuple<json, set<DockerVolume>> MicroCI::parseSsh(
     data_["SSH_COPY_TO"] = sshCopyTo;
     data_["SSH_COPY_FROM"] = "/.microCI_ssh";
   }
-  return {data_, volumes_};
+  return {data_, volumes_, envs_};
 }
 
 // ----------------------------------------------------------------------
@@ -1241,12 +1247,14 @@ tuple<json, set<DockerVolume>> MicroCI::parseSsh(
 // ----------------------------------------------------------------------
 void MicroCI::copySsh([[maybe_unused]] const YAML::Node& step,
                       const json& data) {
-  mScript << inja::render(R"( \
+  if (!data["SSH_COPY_TO"].empty()) {
+    mScript << inja::render(R"( \
            && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
            && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
            && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
            && chmod 600 {{ SSH_COPY_TO }}/id_rsa 2>&1)",
-                          data);
+                            data);
+  }
 }
 
 // ----------------------------------------------------------------------
@@ -1277,7 +1285,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   auto envs = parseEnvs(step);
   data = parseRunAs(step, data);
   data = parseNetwork(step, data);
-  tie(data, volumes) = parseSsh(step, data, volumes);
+  tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   data["STEP_NAME"] = stepName(step);
   data["STEP_DESCRIPTION"] = stepDescription(step, "Executa comandos no bash");
@@ -1288,14 +1296,18 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
   prepareRunDocker(data, envs, volumes);
 
   if (step["sh"]) {
-    mScript << inja::render("        /bin/sh -c \"cd {{ WORKSPACE }}", data);
+    mScript << inja::render(R"( \
+        /bin/sh -c "cd {{ WORKSPACE }})",
+                            data);
   } else if (step["bash"]) {
-    mScript << inja::render("        /bin/bash -c \"cd {{ WORKSPACE }}", data);
+    mScript << inja::render(R"( \
+        /bin/bash -c "cd {{ WORKSPACE }})",
+                            data);
   } else {
     spdlog::error("Tratar erro aqui");
   }
 
-  if (step["ssh"]) {
+  if (step["ssh"]["copy_to") {
     copySsh(step, data);
   }
 

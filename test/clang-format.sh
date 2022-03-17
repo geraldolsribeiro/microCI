@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.15.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.15.1                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -120,12 +120,11 @@ function step_formatar_codigo_c___com_clang_format() {
         "intmain/microci_cppcheck:latest" \
         /bin/bash -c "cd /microci_workspace \
         && cat <(compgen -G 'src/*.cpp') \
-        | xargs -I {} clang-format -i {} 2>&1 \
+          | xargs -I {} clang-format -i {} 2>&1  \
         && cat <(compgen -G 'test/*.cpp') \
-        | xargs -I {} clang-format -i {} 2>&1 \
+          | xargs -I {} clang-format -i {} 2>&1  \
         && cat <(compgen -G 'include/*.hpp') \
-        | xargs -I {} clang-format -i {} 2>&1 \
-        "
+          | xargs -I {} clang-format -i {} 2>&1 "
 
     )
 

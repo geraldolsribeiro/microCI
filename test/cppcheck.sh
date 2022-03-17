@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.15.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.15.1                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -118,25 +118,25 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
         --volume "${PWD}":"/microci_workspace":rw \
         "intmain/microci_cppcheck:latest" \
         /bin/bash -c "cd /microci_workspace \
-      && mkdir -p auditing/cppcheck \
-      && cppcheck \
-        --platform=unix64 \
-        --std=c++11 \
-        --enable=all \
-        --inconclusive \
-        --xml \
-        --xml-version=2 \
-        -j 2 \
-        --include=include \
-        src \
-        test \
-        2> auditing/cppcheck.xml \
-      && cppcheck-htmlreport \
-        --title='MicroCI::CppCheck' \
-        --report-dir='auditing/cppcheck/' \
-        --source-dir='.' \
-        --file='auditing/cppcheck.xml' 2>&1 \
-      && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+        && mkdir -p auditing/cppcheck \
+        && cppcheck \
+          --platform=unix64 \
+          --std=c++11 \
+          --enable=all \
+          --inconclusive \
+          --xml \
+          --xml-version=2 \
+          -j 2 \
+          --include=include \
+          src \
+          test \
+          2> auditing/cppcheck.xml \
+        && cppcheck-htmlreport \
+          --title='MicroCI::CppCheck' \
+          --report-dir='auditing/cppcheck/' \
+          --source-dir='.' \
+          --file='auditing/cppcheck.xml' 2>&1 \
+        && chown $(id -u):$(id -g) -Rv auditing 2>&1"
 
     )
 

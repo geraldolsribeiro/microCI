@@ -80,17 +80,16 @@ function assert_function() {
 # Notificação via Discord não será possível
 # Atualiza as imagens docker utilizadas no passos
 {
-  docker pull node:16 2>&1
-  docker pull ubuntu:18.04 2>&1
+  docker pull debian:stable-slim 2>&1
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Descrição do passo
+# Download de dependências utilizadas na compilação
 # ----------------------------------------------------------------------
-function step_instalar_dependencias() {
+function step_baixar_arquivos_externos_ao_projeto() {
   SECONDS=0
-  MICROCI_STEP_NAME="Instalar dependências"
-  MICROCI_STEP_DESCRIPTION="Descrição do passo"
+  MICROCI_STEP_NAME="Baixar arquivos externos ao projeto"
+  MICROCI_STEP_DESCRIPTION="Download de dependências utilizadas na compilação"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -99,8 +98,7 @@ function step_instalar_dependencias() {
   title="${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
-  ENV1="xxx"
-  ENV2="yyy"
+  GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_rsa -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts"
 
   {
     (
@@ -109,7 +107,7 @@ function step_instalar_dependencias() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Instalar dependências"
+      echo "Passo: Baixar arquivos externos ao projeto"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -118,70 +116,29 @@ function step_instalar_dependencias() {
         --rm \
         --network none \
         --workdir /microci_workspace \
-        --env ENV1="xxx" \
-        --env ENV2="yyy" \
+        --env GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_rsa -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts" \
+        --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
         --volume "${PWD}":"/microci_workspace":rw \
-        "node:16" \
+        "bitnami/git:latest" \
         /bin/bash -c "cd /microci_workspace \
-           && npm install 2>&1"
-
-    )
-
-    status=$?
-    MICROCI_STEP_DURATION=$SECONDS
-    echo "Status: ${status}"
-    echo "Duration: ${MICROCI_STEP_DURATION}"
-  } >> .microCI.log
-
-  # Notificação no terminal
-  if [ "${status}" = "0" ]; then
-    echo -e "[0;32mOK[0m"
-  else
-    echo -e "[0;31mFALHOU[0m"
-  fi
-}
-
-# ----------------------------------------------------------------------
-# Executa comandos no bash
-# ----------------------------------------------------------------------
-function step_construir() {
-  SECONDS=0
-  MICROCI_STEP_NAME="Construir"
-  MICROCI_STEP_DESCRIPTION="Executa comandos no bash"
-  MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
-  MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
-  MICROCI_STEP_STATUS=":ok:"
-  MICROCI_STEP_DURATION=$SECONDS
-  title="${MICROCI_STEP_NAME}.............................................................."
-  title=${title:0:60}
-  echo -ne "[0;36m${title}[0m: "
-  ENV1="xxx"
-  ENV2="yyy"
-
-  {
-    (
-      set -e
-
-      echo ""
-      echo ""
-      echo ""
-      echo "Passo: Construir"
-      # shellcheck disable=SC2140,SC2046
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --network none \
-        --workdir /microci_workspace \
-        --env ENV1="xxx" \
-        --env ENV2="yyy" \
-        --volume "${PWD}":"/microci_workspace":rw \
-        "node:16" \
-        /bin/bash -c "cd /microci_workspace \
-           && npm run lint --fix 2>&1 \
-           && npm run build 2>&1"
+           && mkdir -p /tmp/include/ \
+           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'README.md' 'include/*.h'  \
+             | tar -C /tmp/include/ -vxf - 2>&1 \
+           && mkdir -p /tmp/lib/ \
+           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'lib/*.so'  \
+             | tar -C /tmp/lib/ -vxf - 2>&1 \
+           && mkdir -p /tmp/include \
+           && pushd /tmp/include \
+           && curl -fSL -R -J -O https://raw.githubusercontent.com/adishavit/argh/master/argh.h 2>&1 \
+           && popd \
+           && mkdir -p include \
+           && pushd include \
+           && curl -fSL -R -J -O https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp 2>&1 \
+           && popd \
+           && mkdir -p include \
+           && pushd include \
+           && curl -fSL -R -J -O https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp 2>&1 \
+           && popd"
 
     )
 
@@ -204,8 +161,7 @@ function step_construir() {
 function main() {
   date >> .microCI.log
 
-  step_instalar_dependencias
-  step_construir
+  step_baixar_arquivos_externos_ao_projeto
 
   date >> .microCI.log
 }

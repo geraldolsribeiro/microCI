@@ -45,7 +45,7 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 15;
-const int PATCH = 0;
+const int PATCH = 1;
 
 string banner();
 
@@ -88,6 +88,7 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
+  // Variável de ambiente global a todos os passos
   void SetEnvironmentVariable(EnvironmentVariable& env);
   bool ReadConfig(const string& yaml);
   string Script() const;
@@ -108,9 +109,10 @@ class MicroCI {
   void parseClangFormatPluginStep(const YAML::Node& step);
   void prepareRunDocker(const json& data, const set<EnvironmentVariable>& envs,
                         const set<DockerVolume>& volumes);
-  tuple<json, set<DockerVolume>> parseSsh(
+  tuple<json, set<DockerVolume>, set<EnvironmentVariable>> parseSsh(
       const YAML::Node& step, const json& data,
-      const set<DockerVolume>& volumes) const;
+      const set<DockerVolume>& volumes,
+      const set<EnvironmentVariable>& envs) const;
   void copySsh(const YAML::Node& step, const json& data);
   string stepRequiredValue(const YAML::Node& step, const string& var) const;
   string stepOptionalValue(const YAML::Node& step, const string& var,
