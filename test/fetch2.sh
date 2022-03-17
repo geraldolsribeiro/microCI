@@ -98,7 +98,6 @@ function step_baixar_arquivos_externos_ao_projeto() {
   title="${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
-  GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_rsa -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts"
 
   {
     (
@@ -116,11 +115,14 @@ function step_baixar_arquivos_externos_ao_projeto() {
         --rm \
         --network bridge \
         --workdir /microci_workspace \
-        --env GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_rsa -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts" \
         --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
         --volume "${PWD}":"/microci_workspace":rw \
         "bitnami/git:latest" \
         /bin/bash -c "cd /microci_workspace \
+           && cp -Rv /.microCI_ssh /home/bitnami/.ssh 2>&1 \
+           && chmod 700 /home/bitnami/.ssh/ 2>&1 \
+           && chmod 644 /home/bitnami/.ssh/id_rsa.pub 2>&1 \
+           && chmod 600 /home/bitnami/.ssh/id_rsa 2>&1 \
            && mkdir -p /tmp/include/ \
            && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'README.md' 'include/*.h'  \
              | tar -C /tmp/include/ -vxf - 2>&1 \

@@ -413,9 +413,9 @@ void MicroCI::prepareRunDocker(const json& data,
 // ----------------------------------------------------------------------
 void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
+  data["DOCKER_NETWORK"] = "bridge";
   data = parseRunAs(step, data);
   data = parseNetwork(step, data);
-
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] =
@@ -948,7 +948,6 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   auto envs = parseEnvs(step);
 
   data["DOCKER_NETWORK"] = "bridge";
-
   data = parseRunAs(step, data);
   data = parseNetwork(step, data);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
@@ -1197,23 +1196,22 @@ string MicroCI::stepDockerWorkspace(const YAML::Node& step,
 tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
     const YAML::Node& step, const json& data, const set<DockerVolume>& volumes,
     const set<EnvironmentVariable>& envs) const {
-  auto sshCopyFrom = string{};
-  auto sshCopyTo = string{};
-
+  auto sshMountForCopy = string{"${HOME}/.ssh"};
   auto volumes_ = volumes;
   auto data_ = data;
   auto envs_ = envs;
 
-  if (step["ssh"]) {
-    sshCopyFrom = "${HOME}/.ssh";
-    sshCopyTo = "/root/.ssh";
+  data_["SSH_COPY_TO"] = string{};
+  data_["SSH_COPY_FROM"] = "/.microCI_ssh";
 
+  if (step["ssh"]) {
+    // o copy_from será montado em /.microCI_ssh
     if (step["ssh"]["copy_from"]) {
-      sshCopyFrom = step["ssh"]["copy_from"].as<string>();
+      sshMountForCopy = step["ssh"]["copy_from"].as<string>();
     }
 
-    if (step["ssh"] and step["ssh"]["copy_to"]) {
-      sshCopyTo = step["ssh"]["copy_to"].as<string>();
+    if (step["ssh"]["copy_to"]) {
+      data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<string>();
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
           "GIT_SSH_COMMAND",
@@ -1226,12 +1224,9 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
     // Montagem temporária para copia
     DockerVolume vol;
     vol.destination = "/.microCI_ssh";
-    vol.source = sshCopyFrom;
+    vol.source = sshMountForCopy;
     vol.mode = "ro";
     volumes_.insert(vol);
-
-    data_["SSH_COPY_TO"] = sshCopyTo;
-    data_["SSH_COPY_FROM"] = "/.microCI_ssh";
   }
   return {data_, volumes_, envs_};
 }
@@ -1240,15 +1235,16 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
 //
 // ----------------------------------------------------------------------
 void MicroCI::copySshIfAvailable(const YAML::Node& step, const json& data) {
-  if (step["ssh"] && !data["SSH_COPY_TO"].empty() and
-      !data["SSH_COPY_FROM"].empty()) {
-    mScript << inja::render(R"( \
+  if (!step["ssh"] or !step["ssh"]["copy_to"]) {
+    return;
+  }
+
+  mScript << inja::render(R"( \
            && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
            && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
            && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
            && chmod 600 {{ SSH_COPY_TO }}/id_rsa 2>&1)",
-                            data);
-  }
+                          data);
 }
 
 // ----------------------------------------------------------------------
