@@ -74,8 +74,10 @@ MicroCI::MicroCI() {
                            &MicroCI::parseClangFormatPluginStep);
   mPluginParserMap.emplace("plantuml", &MicroCI::parsePlantumlPluginStep);
   mPluginParserMap.emplace("beamer", &MicroCI::parseBeamerPluginStep);
+  mPluginParserMap.emplace("fetch", &MicroCI::parseFetchPluginStep);
 
   mDockerImageGlobal = "debian:stable-slim";
+  mDockerWorkspaceGlobal = "/microci_workspace";
 }
 
 // ----------------------------------------------------------------------
@@ -320,9 +322,11 @@ function step_{{ FUNCTION_NAME }}() {
 void MicroCI::endFunction(const json& data) {
   mScript << inja::render(R"(
     )
+
     status=$?
     MICROCI_STEP_DURATION=$SECONDS
     echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
   } >> .microCI.log
 
   # Notificação no terminal
@@ -403,6 +407,87 @@ void MicroCI::prepareRunDocker(const json& data,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
+  auto data = defaultDataTemplate();
+  data = parseRunAs(step, data);
+  data = parseNetwork(step, data);
+
+  data["STEP_NAME"] = stepName(step);
+  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"] =
+      stepDescription(step, "Baixa arquivos externos ao projeto");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
+
+  auto volumes = parseVolumes(step);
+  auto envs = parseEnvs(step);
+  tie(data, volumes) = parseSsh(step, data, volumes);
+  data["SSH_COPY_TO"] = "/home/bitnami/.ssh";
+
+  if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
+    auto defaultTarget = step["plugin"]["target"].as<string>("include/");
+
+    beginFunction(data, envs);
+    mScript << inja::render(R"(
+      # shellcheck disable=SC2140
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --workdir {{ WORKSPACE }} )",
+                            data);
+    for (const auto& vol : volumes) {
+      mScript << fmt::format(" \\\n        --volume \"{}\":\"{}\":{}",
+                             vol.source, vol.destination, vol.mode);
+    }
+    mScript << inja::render(R"( \
+        --user $(id -u):$(id -g) \
+        {{ DOCKER_IMAGE }} \
+        /bin/bash -c "cd {{ WORKSPACE }})",
+                            data);
+    if (step["ssh"]) {
+      copySsh(step, data);
+    }
+
+    for (const auto& item : step["plugin"]["items"]) {
+      if (item["git_archive"]) {
+        auto files = string{};
+        for (const auto& f : item["files"]) {
+          files += f.as<string>() + " ";
+        }
+        if (files.empty()) {
+          throw std::runtime_error(
+              "É obrigatório especificar uma lista de arquivos de entrada");
+        }
+        data["FILES"] = files;
+        data["GIT_REMOTE"] = item["git_archive"].as<string>();
+        data["TARGET"] = item["target"].as<string>(defaultTarget);
+        mScript << inja::render(
+            R"( \
+           && mkdir -p {{ TARGET }} \
+           && git archive --format=tar --remote={{ GIT_REMOTE }} HEAD {{ FILES }} \
+             | tar -C {{ TARGET }} -vxf - 2>&1)",
+            data);
+      } else if (item["url"]) {
+        data["TARGET"] = item["target"].as<string>(defaultTarget);
+        data["URL"] = item["url"].as<string>();
+        mScript << inja::render(
+            R"( \
+           && mkdir -p {{ TARGET }} \
+           && pushd {{ TARGET }} \
+           && curl -fSL -R -J -O {{ URL }} 2>&1 \
+           && popd)",
+            data);
+      }
+    }
+    mScript << "\"\n";
+    endFunction(data);
+  }
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
   auto data = defaultDataTemplate();
   data = parseRunAs(step, data);
@@ -412,8 +497,8 @@ void MicroCI::parseBeamerPluginStep(const YAML::Node& step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Apresentação PDF criada a partir do markdown");
-  data["DOCKER_IMAGE"] = "pandoc/latex:latest";
-  data["WORKSPACE"] = "/data";
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "pandoc/latex:latest");
+  data["WORKSPACE"] = stepDockerWorkspace(step, "/data");
 
   auto inputMD = string{};
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
@@ -751,6 +836,7 @@ void MicroCI::parseClangFormatPluginStep(const YAML::Node& step) {
       stepDockerImage(step, "intmain/microci_cppcheck:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
+  data["RUN_AS"] = "user";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
@@ -818,6 +904,7 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
   data["PLATFORM"] = platform;
   data["STD"] = standard;
   data["REPORT_TITLE"] = "MicroCI::CppCheck";
+  // data["RUN_AS"] = "user";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
@@ -897,6 +984,7 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Publica arquivos em um repositório git");
 
+  // data["RUN_AS"] = "user"; // verificar!
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
 
@@ -1096,6 +1184,24 @@ string MicroCI::stepDockerImage(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+string MicroCI::stepDockerWorkspace(const YAML::Node& step,
+                                    const string& workspace) const {
+  string dockerWorkspace = mDockerWorkspaceGlobal;
+
+  if (!workspace.empty()) {
+    dockerWorkspace = workspace;
+  }
+
+  if (step["workspace"]) {
+    dockerWorkspace = step["workspace"].as<string>();
+  }
+
+  return dockerWorkspace;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 tuple<json, set<DockerVolume>> MicroCI::parseSsh(
     const YAML::Node& step, const json& data,
     const set<DockerVolume>& volumes) const {
@@ -1220,10 +1326,11 @@ json MicroCI::defaultDataTemplate() const {
   json data;
   data["VERSION"] =
       fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
-  data["WORKSPACE"] = "/microci_workspace";
+  data["WORKSPACE"] = mDockerWorkspaceGlobal;
 
   // Network docker: bridge (default), host, none
   data["DOCKER_NETWORK"] = "none";
+  data["DOCKER_IMAGE"] = mDockerImageGlobal;
   data["RUN_AS"] = "root";
 
   data["BLUE"] = "\033[0;34m";

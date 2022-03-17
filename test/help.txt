@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.14.1
+                             microCI 0.15.0
                             Geraldo Ribeiro
 
 
@@ -24,4 +24,5 @@ Opções:
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
   -n,--new beamer          Cria passo para criação de apresentação PDF
+  -n,--new fetch           Cria passo para download de arquivos
 

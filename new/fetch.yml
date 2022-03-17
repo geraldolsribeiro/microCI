@@ -1,0 +1,26 @@
+---
+steps:
+  - name: "Baixar arquivos externos ao projeto"
+    description: "Download de dependências utilizadas na compilação"
+    ssh: # usado pelo git_archive
+      copy_from: "${HOME}/.ssh"
+      copy_to: "/root/.ssh"
+    plugin:
+      name: "fetch"
+      target: include # se não especificado usar este
+      items:
+        - git_archive: git@gitlabcorp.stefanini.com.br:rafael/BDK.git
+          target: /tmp/include/
+          files:
+            - README.md
+            - include/*.h
+        - git_archive: git@gitlabcorp.stefanini.com.br:rafael/BDK.git
+          target: /tmp/lib/
+          files:
+            - lib/*.so
+        - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+          target: /tmp/include
+        - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+        - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+
+# vim: spell spelllang=pt,en

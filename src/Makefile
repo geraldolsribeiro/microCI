@@ -41,7 +41,7 @@ CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 
-all: deps microCI
+all: microCI
 
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)
@@ -80,6 +80,7 @@ MicroCI.cpp: \
 	../include/new/clang-format.hpp \
 	../include/new/clang-tidy.hpp \
 	../include/new/cppcheck.hpp \
+	../include/new/fetch.hpp \
 	../include/new/git_deploy.hpp \
 	../include/new/git_publish.hpp \
 	../include/new/mkdocs_material_config.hpp \
@@ -95,22 +96,5 @@ microCI: MicroCI.cpp main.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	strip --strip-unneeded $@
 
-deps: \
-	../include/argh.hpp \
-	../include/inja.hpp \
-	../include/nlohmann/json.hpp
-
-../include/argh.hpp:
-	curl https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o $@
-
-../include/inja.hpp:
-	curl https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp -o $@
-
-../include/nlohmann/json.hpp:
-	curl https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o $@
-
 clean:
 	rm -f microCI
-	rm -f ../include/argh.hpp
-	rm -f ../include/inja.hpp
-	rm -f ../include/nlohmann/json.hpp

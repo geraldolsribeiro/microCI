@@ -13,6 +13,7 @@ steps:
       source:
         - "src/*pp"
         - "test/*pp"
+
   - name: "Gerar relatório de verificação do código C++ cppcheck"
     # only: "cppcheck"
     plugin:
@@ -24,11 +25,20 @@ steps:
         - "test"
       platform: "unix64"
       std: "c++17"
+
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"
     plugin:
       name: "mkdocs_material"
       action: "build"
+
+  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
+    description: "Executa servidor local para preview da documentação"
+    only: "serve"
+    plugin:
+      name: "mkdocs_material"
+      action: "serve"
+
   - name: "Configurar github pages"
     description: "Configura domínio Apex para github pages, arquivo README e ajusta usuário"
     bash: |
@@ -37,6 +47,7 @@ steps:
       # Apenas para disponibilizar uma página de rosto para o github
       cp README.md site/
       chown $(id -u).$(id -g) -Rv site/
+
   - name: "Publicar documentação em microci.dev"
     network: bridge
     # only: "publish"
@@ -44,6 +55,7 @@ steps:
     plugin:
       name: "git_publish"
       git_url: "git@github.com:geraldolsribeiro/microci.dev.git"
+
   - name: "Formatar código C++ com clang-format"
     description: "Padroniza formato do código usando regras"
     plugin:
@@ -52,6 +64,17 @@ steps:
         - "src/*.cpp"
         - "test/*.cpp"
         - "include/*.hpp"
+
+  - name: "Baixar arquivos externos ao projeto"
+    description: "Download de dependências utilizadas na compilação"
+    plugin:
+      name: "fetch"
+      target: include
+      items:
+        - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+        - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+          target: include/nlohmann
 
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
@@ -65,11 +88,5 @@ steps:
       make -C test
       chown $(id -u).$(id -g) -Rv src/microCI
       chown $(id -u).$(id -g) -Rv test/
-  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
-    description: "Executa servidor local para preview da documentação"
-    only: "serve"
-    plugin:
-      name: "mkdocs_material"
-      action: "serve"
 
 # vim: spell spelllang=pt,en

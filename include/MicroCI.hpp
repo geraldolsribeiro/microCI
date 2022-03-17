@@ -44,8 +44,8 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 14;
-const int PATCH = 1;
+const int MINOR = 15;
+const int PATCH = 0;
 
 string banner();
 
@@ -98,6 +98,7 @@ class MicroCI {
   void parseBashStep(const YAML::Node& step);
   void parsePluginStep(const YAML::Node& step);
   void parseBeamerPluginStep(const YAML::Node& step);
+  void parseFetchPluginStep(const YAML::Node& step);
   void parseGitDeployPluginStep(const YAML::Node& step);
   void parseGitPublishPluginStep(const YAML::Node& step);
   void parseCppCheckPluginStep(const YAML::Node& step);
@@ -116,6 +117,8 @@ class MicroCI {
                            const string& defaultValue) const;
   string stepDockerImage(const YAML::Node& step,
                          const string& image = "") const;
+  string stepDockerWorkspace(const YAML::Node& step,
+                             const string& workspace = "") const;
   string stepDescription(const YAML::Node& step,
                          const string& defaultDescription = "") const;
   string stepName(const YAML::Node& step) const;
@@ -134,6 +137,7 @@ class MicroCI {
   set<EnvironmentVariable> mEnvs;
   string mOnlyStep;
   string mDockerImageGlobal;
+  string mDockerWorkspaceGlobal;
   stringstream mScript;
 
   typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node& step);

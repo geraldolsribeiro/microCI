@@ -35,10 +35,10 @@
 
 using namespace std;
 
+#include <argh.h>
 #include <spdlog/spdlog.h>
 
 #include <MicroCI.hpp>
-#include <argh.hpp>
 using namespace microci;
 
 #include <new/bash.hpp>
@@ -47,6 +47,7 @@ using namespace microci;
 #include <new/clang-format_config.hpp>
 #include <new/clang-tidy.hpp>
 #include <new/cppcheck.hpp>
+#include <new/fetch.hpp>
 #include <new/git_deploy.hpp>
 #include <new/git_publish.hpp>
 #include <new/mkdocs_material.hpp>
@@ -73,6 +74,7 @@ Opções:
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
   -n,--new beamer          Cria passo para criação de apresentação PDF
+  -n,--new fetch           Cria passo para download de arquivos
 )";
 }
 
@@ -146,6 +148,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     MICROCI_TPL(false, "clang-format", ".clang-format", yml,
                 clang_format_config);
     MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
+    MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
 #undef MICROCI_TPL
 
     bool isTypeFound = false;

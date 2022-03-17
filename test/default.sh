@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.14.1                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.15.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -126,9 +126,11 @@ function step_instalar_dependencias() {
            && npm install 2>&1"
 
     )
+
     status=$?
     MICROCI_STEP_DURATION=$SECONDS
     echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
   } >> .microCI.log
 
   # Notificação no terminal
@@ -182,9 +184,11 @@ function step_construir() {
            && npm run build 2>&1"
 
     )
+
     status=$?
     MICROCI_STEP_DURATION=$SECONDS
     echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
   } >> .microCI.log
 
   # Notificação no terminal

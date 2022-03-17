@@ -44,6 +44,7 @@ test:
 	../src/microCI -i ../new/clang-format.yml                    > clang-format.sh
 	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh
 	../src/microCI -i ../new/beamer.yml                          > beamer.sh
+	../src/microCI -i ../new/fetch.yml                           > fetch.sh
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@
