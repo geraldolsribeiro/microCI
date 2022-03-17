@@ -453,7 +453,7 @@ void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
       if (item["git_archive"]) {
         auto files = string{};
         for (const auto& f : item["files"]) {
-          files += f.as<string>() + " ";
+          files += fmt::format( "'{}' ", f.as<string>() ); // aspas simples para não expandir
         }
         if (files.empty()) {
           throw std::runtime_error(
