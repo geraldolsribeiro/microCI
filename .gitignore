@@ -5,3 +5,7 @@ site
 src/microCI
 src/NOTES.md
 xxx/
+include/argh.h
+include/inja.hpp
+include/nlohmann/json.hpp
+
