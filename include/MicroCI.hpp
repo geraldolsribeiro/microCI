@@ -113,7 +113,7 @@ class MicroCI {
       const YAML::Node& step, const json& data,
       const set<DockerVolume>& volumes,
       const set<EnvironmentVariable>& envs) const;
-  void copySsh(const YAML::Node& step, const json& data);
+  void copySshIfAvailable(const YAML::Node& step, const json& data);
   string stepRequiredValue(const YAML::Node& step, const string& var) const;
   string stepOptionalValue(const YAML::Node& step, const string& var,
                            const string& defaultValue) const;

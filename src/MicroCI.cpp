@@ -434,9 +434,7 @@ void MicroCI::parseFetchPluginStep(const YAML::Node& step) {
     mScript << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }})",
                             data);
-    if (step["ssh"]["copy_to"]) {
-      copySsh(step, data);
-    }
+    copySshIfAvailable(step, data);
 
     for (const auto& item : step["plugin"]["items"]) {
       if (item["git_archive"]) {
@@ -942,8 +940,8 @@ void MicroCI::parseCppCheckPluginStep(const YAML::Node& step) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
-  auto copyTo = string{"/microci_deploy"};
-  auto copyFrom = string{"site"};
+  auto pluginCopyTo = string{"/microci_deploy"};
+  auto pluginCopyFrom = string{"site"};
   auto cleanBefore = true;
   auto data = defaultDataTemplate();
   auto volumes = parseVolumes(step);
@@ -959,11 +957,11 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   const auto gitURL = step["plugin"]["git_url"].as<string>();
 
   if (step["plugin"]["copy_from"]) {
-    copyFrom = step["plugin"]["copy_from"].as<string>();
+    pluginCopyFrom = step["plugin"]["copy_from"].as<string>();
   }
 
   if (step["plugin"]["copy_to"]) {
-    copyTo = step["plugin"]["copy_to"].as<string>();
+    pluginCopyTo = step["plugin"]["copy_to"].as<string>();
   }
 
   if (step["plugin"]["clean_before"]) {
@@ -971,8 +969,8 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
   }
 
   data["GIT_URL"] = gitURL;
-  data["COPY_TO"] = copyTo;
-  data["COPY_FROM"] = copyFrom;
+  data["PLUGIN_COPY_TO"] = pluginCopyTo;
+  data["PLUGIN_COPY_FROM"] = pluginCopyFrom;
   data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
@@ -986,28 +984,26 @@ void MicroCI::parseGitPublishPluginStep(const YAML::Node& step) {
         /bin/bash -c "cd {{ WORKSPACE }})",
                           data);
 
-  if (step["ssh"]["copy_to"]) {
-    copySsh(step, data);
-  }
+  copySshIfAvailable(step, data);
 
   mScript << inja::render(R"( \
-           && git clone '{{ GIT_URL }}' --depth 1 '{{ COPY_TO }}' 2>&1 \
-           && git -C {{ COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
-           && git -C {{ COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
+           && git clone '{{ GIT_URL }}' --depth 1 '{{ PLUGIN_COPY_TO }}' 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
                           data);
 
   if (cleanBefore) {
     mScript << inja::render(R"(
-           && git -C {{ COPY_TO }} rm '*' 2>&1 \)",
+           && git -C {{ PLUGIN_COPY_TO }} rm '*' 2>&1 \)",
                             data);
   }
 
   mScript << inja::render(R"(
-           && cp -rv {{ COPY_FROM }}/* {{ COPY_TO }}/ 2>&1 \
-           && git -C {{ COPY_TO }} add . 2>&1 \
-           && git -C {{ COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
-           && git -C {{ COPY_TO }} push origin master 2>&1 \
-           && chown $(id -u):$(id -g) -Rv {{ COPY_FROM }} 2>&1
+           && cp -rv {{ PLUGIN_COPY_FROM }}/* {{ PLUGIN_COPY_TO }}/ 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} push origin master 2>&1 \
+           && chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1
   ")",
                           data);
 
@@ -1216,11 +1212,9 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
       sshCopyFrom = step["ssh"]["copy_from"].as<string>();
     }
 
-    if (step["ssh"]["copy_to"]) {
+    if (step["ssh"] and step["ssh"]["copy_to"]) {
       sshCopyTo = step["ssh"]["copy_to"].as<string>();
     } else {
-      // Caso não tenha um pasta destino usar variável de ambiente para
-      // especificar a chave
       auto gitSshCommandEnv = EnvironmentVariable{
           "GIT_SSH_COMMAND",
           "ssh -i /.microCI_ssh/id_rsa"
@@ -1243,11 +1237,11 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> MicroCI::parseSsh(
 }
 
 // ----------------------------------------------------------------------
-// Copia credencias SSH e ajusta as permissões
+//
 // ----------------------------------------------------------------------
-void MicroCI::copySsh([[maybe_unused]] const YAML::Node& step,
-                      const json& data) {
-  if (!data["SSH_COPY_TO"].empty()) {
+void MicroCI::copySshIfAvailable(const YAML::Node& step, const json& data) {
+  if (step["ssh"] && !data["SSH_COPY_TO"].empty() and
+      !data["SSH_COPY_FROM"].empty()) {
     mScript << inja::render(R"( \
            && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
            && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
@@ -1307,9 +1301,7 @@ void MicroCI::parseBashStep(const YAML::Node& step) {
     spdlog::error("Tratar erro aqui");
   }
 
-  if (step["ssh"]["copy_to") {
-    copySsh(step, data);
-  }
+  copySshIfAvailable(step, data);
 
   for (auto cmd : cmds) {
     mScript << fmt::format(" \\\n           && {} 2>&1", cmd);
