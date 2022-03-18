@@ -1,9 +1,14 @@
 site_name: Documentação do microCI
+repo_url: https://github.com/geraldolsribeiro/microCI
+repo_name: geraldolsribeiro/microCI
+edit_uri: edit/master/docs/
 theme:
   name: material
   language: pt-BR
   logo: assets/logo.svg
   favicon: assets/favicon.png
+  icon:
+    repo: fontawesome/brands/github
   extra:
     homepage: https://microci.dev
   palette:
