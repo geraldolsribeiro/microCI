@@ -7,12 +7,13 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.15.1
+                             microCI 0.15.2
                             Geraldo Ribeiro
 
 
 Opções:
   -h --help                Ajuda
+  -V --version             Versão
   -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new bash            Cria passo bash

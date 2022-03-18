@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.15.1                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.15.2                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -27,14 +27,27 @@ PS4='$LINENO: '
   echo ""
 } | tee .microCI.log
 
+# Verifica se as dependências estão presentes
 command -v jq &> /dev/null \
   || { echo -e "[0;31mComando jq não foi encontrado[0m";  exit 1; }
+
 command -v curl &> /dev/null \
   || { echo -e "[0;31mComando curl não foi encontrado[0m";  exit 1; }
+
 command -v docker &> /dev/null \
   || { echo -e "[0;31mComando docker não foi encontrado[0m";  exit 1; }
 
 PWD=$(pwd)
+
+function microCI_latest_download_URL_with_version {
+  curl -s https://api.github.com/repos/geraldolsribeiro/microci/releases/latest \
+    | grep browser_download_url \
+    | grep -o -E "https://github.com/geraldolsribeiro/microCI/releases/download/(.*)/microCI"
+}
+
+function microCI_download_latest_binary {
+  curl -fsSL github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/local/bin/microCI
+}
 
 function assert_fail() {
   # Print assert errors to stderr!
