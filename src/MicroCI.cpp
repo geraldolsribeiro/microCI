@@ -63,6 +63,13 @@ string banner() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+string version() {
+  return fmt::format("v{}.{}.{}", MAJOR, MINOR, PATCH);
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 MicroCI::MicroCI() {
   mPluginParserMap.emplace("git_deploy", &MicroCI::parseGitDeployPluginStep);
   mPluginParserMap.emplace("git_publish", &MicroCI::parseGitPublishPluginStep);

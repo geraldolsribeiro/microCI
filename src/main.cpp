@@ -63,6 +63,7 @@ string help() {
   return R"(
 Opções:
   -h --help                Ajuda
+  -V --version             Versão
   -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new bash            Cria passo bash
@@ -110,6 +111,11 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       environmentVariable.value = tmp.substr(pos + 1);
       uCI.SetEnvironmentVariable(environmentVariable);
     }
+  }
+
+  if (cmdl[{"-V", "--version"}]) {
+    cout << microci::version() << endl;
+    return 0;
   }
 
   if (cmdl[{"-h", "--help"}]) {
