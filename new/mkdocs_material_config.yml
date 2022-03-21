@@ -44,6 +44,8 @@ plugins:
         en:
           name: English
           build: true
+          site_name: microCI documentation
         pt:
           name: Português
           build: true
+          site_name: Documentação do microCI
