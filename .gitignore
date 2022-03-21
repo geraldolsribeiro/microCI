@@ -1,4 +1,5 @@
 auditing/
+bin/microCI
 include/argh.h
 include/inja.hpp
 include/nlohmann/json.hpp
@@ -6,8 +7,6 @@ include/sha2_256.h
 .microCI.dbg
 .microCI.log
 site
-src/microCI
 src/NOTES.md
-xxx/
-
 src/single_compilation_unit.cpp
+xxx/
