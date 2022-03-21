@@ -3,12 +3,18 @@ docker: "node:16"
 steps:
   - name: "Instalar dependências"
     description: "Descrição do passo"
-    bash: |
-      npm install
+    plugin:
+      name: bash
+      bash: |
+        npm install
   - name: "Verificar o código"
-    bash: |
-      npm run lint --fix
+    plugin:
+      name: bash
+      bash: |
+        npm run lint --fix
   - name: "Construir"
-    bash: |
-      npm run build
+    plugin:
+      name: bash
+      bash: |
+        npm run build
 

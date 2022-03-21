@@ -41,12 +41,14 @@ steps:
 
   - name: "Configurar github pages"
     description: "Configura domínio Apex para github pages, arquivo README e ajusta usuário"
-    bash: |
-      cp github-pages/CNAME site/
-      cat docs/index.md > README.md
-      # Apenas para disponibilizar uma página de rosto para o github
-      cp README.md site/
-      chown $(id -u).$(id -g) -Rv site/
+    plugin:
+      name: bash
+      bash: |
+        cp github-pages/CNAME site/
+        cat docs/index.md > README.md
+        # Apenas para disponibilizar uma página de rosto para o github
+        cp README.md site/
+        chown $(id -u).$(id -g) -Rv site/
 
   - name: "Publicar documentação em microci.dev"
     network: bridge
@@ -75,18 +77,21 @@ steps:
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
           target: include/nlohmann
+        - url: https://raw.githubusercontent.com/Chocobo1/Hash/master/src/sha2_256.h
 
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
     run_as: root
     network: bridge
-    bash: |
-      apt update
-      apt upgrade -y
-      apt install -y xxd libspdlog-dev libyaml-cpp-dev
-      make -C src clean all
-      make -C test
-      chown $(id -u).$(id -g) -Rv src/microCI
-      chown $(id -u).$(id -g) -Rv test/
+    plugin:
+      name: bash
+      bash: |
+        apt update
+        apt upgrade -y
+        apt install -y xxd libspdlog-dev libyaml-cpp-dev
+        make -C src clean all
+        make -C test
+        chown $(id -u).$(id -g) -Rv bin/microCI
+        chown $(id -u).$(id -g) -Rv test/
 
 # vim: spell spelllang=pt,en

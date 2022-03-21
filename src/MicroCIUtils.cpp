@@ -27,98 +27,40 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#ifndef MICRO_CI_HPP
-#define MICRO_CI_HPP
-
-#include <map>
-#include <memory>
-#include <set>
-#include <string>
-
-using namespace std;
-
-#include <yaml-cpp/yaml.h>
-
-#include <MicroCI.hpp>
-#include <nlohmann/json.hpp>
-
-namespace microci {
-
-using nlohmann::json;
-
-const int MAJOR = 0;
-const int MINOR = 16;
-const int PATCH = 0;
-
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-struct DockerVolume {
-  string destination;
-  string source;
-  string mode;
-};
-
-// Usando o destino como chave para permitir montar a mesma pasta em mais
-// de um local
-inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
-  return lhs.destination < rhs.destination;
+string stepRequiredValue(const YAML::Node& step, const string& var) {
+  if (!step[var]) {
+    throw std::invalid_argument(
+        fmt::format("Campo {} não encontrado no passo", var));
+  }
+  return step[var].as<string>();
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-struct EnvironmentVariable {
-  string name;
-  string value;
-};
-
-// ----------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------
-inline bool operator<(const EnvironmentVariable& lhs,
-                      const EnvironmentVariable& rhs) {
-  return lhs.name < rhs.name;
+string stepOptionalValue(const YAML::Node& step, const string& var,
+                         const string& defaultValue) {
+  if (step[var]) {
+    return step[var].as<string>();
+  } else {
+    return defaultValue;
+  }
 }
 
-class PluginStepParser;
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+string stepName(const YAML::Node& step) {
+  return stepRequiredValue(step, "name");
+}
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-class MicroCI {
- public:
-  MicroCI();
-  virtual ~MicroCI();
-  // Variável de ambiente global a todos os passos
-  void SetEnvironmentVariable(EnvironmentVariable& env);
-  bool ReadConfig(const string& yaml);
-  string ToString() const;
-  stringstream& Script();
-  void SetOnlyStep(const string& onlyStep);
-
-  json DefaultDataTemplate() const;
-  string DefaultDockerImage() const;
-  string DefaultWorkspace() const;
-  set<DockerVolume> DefaultVolumes() const;
-  set<EnvironmentVariable> DefaultEnvs() const;
-  void RegisterPlugin(const string& name,
-                      shared_ptr<microci::PluginStepParser> pluginStepParser);
-
- private:
-  void initBash();
-  void parsePluginStep(const YAML::Node& step);
-
-  set<EnvironmentVariable> mEnvs;
-  string mOnlyStep;
-  string mDefaultDockerImage;
-  string mDefaultWorkspace;
-  stringstream mScript;
-
-  typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node& step);
-  map<string, parseFunctionPtr> mPluginParserMap;
-  map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap2;
-};
-
-}  // namespace microci
-#endif
+string stepDescription(const YAML::Node& step, const string& defaultValue) {
+  return stepOptionalValue(step, "description", defaultValue);
+  return defaultValue;
+}

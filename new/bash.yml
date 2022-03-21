@@ -4,11 +4,13 @@ steps:
     docker: "gcc:11"
     network: bridge
     run_as: root
-    bash: |
-      apt update
-      apt upgrade -y
-      apt install -y xxd libspdlog-dev libyaml-cpp-dev
-      make -C src clean all
-      make -C test
-      chown $(id -u).$(id -g) -Rv src/microCI
+    plugin:
+      name: bash
+      bash: |
+        apt update
+        apt upgrade -y
+        apt install -y xxd libspdlog-dev libyaml-cpp-dev
+        make -C src clean all
+        make -C test
+        chown $(id -u).$(id -g) -Rv src/microCI
 

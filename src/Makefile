@@ -41,7 +41,7 @@ CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 
-all: microCI
+all: ../bin/microCI
 
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)
@@ -71,30 +71,38 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
-MicroCI.cpp: \
-	../include/3rd/beamercolorthemestr.sty.hpp \
-	../include/3rd/str-logo.png.hpp \
-	../include/new/bash.hpp \
-	../include/new/beamer.hpp \
-	../include/new/clang-format_config.hpp \
-	../include/new/clang-format.hpp \
-	../include/new/clang-tidy.hpp \
-	../include/new/cppcheck.hpp \
-	../include/new/fetch.hpp \
-	../include/new/git_deploy.hpp \
-	../include/new/git_publish.hpp \
-	../include/new/mkdocs_material_config.hpp \
-	../include/new/mkdocs_material.hpp \
-	../include/new/mkdocs_material_index.hpp \
-	../include/new/npm.hpp \
-	../include/new/plantuml.hpp \
-	../include/sh/MicroCI.hpp \
-	../include/sh/NotifyDiscord.hpp \
+single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
+  ../include/3rd/beamercolorthemestr.sty.hpp \
+  ../include/3rd/str-logo.png.hpp \
+  ../include/new/bash.hpp \
+  ../include/new/beamer.hpp \
+  ../include/new/clang-format_config.hpp \
+  ../include/new/clang-format.hpp \
+  ../include/new/clang-tidy.hpp \
+  ../include/new/cppcheck.hpp \
+  ../include/new/fetch.hpp \
+  ../include/new/git_deploy.hpp \
+  ../include/new/git_publish.hpp \
+  ../include/new/mkdocs_material_config.hpp \
+  ../include/new/mkdocs_material.hpp \
+  ../include/new/mkdocs_material_index.hpp \
+  ../include/new/npm.hpp \
+  ../include/new/plantuml.hpp \
+  ../include/sh/MicroCI.hpp \
+  ../include/sh/NotifyDiscord.hpp
+	@echo "// ARQUIVO GERADO! NÃO EDITAR" > $@
+	@echo "// clang-format off" >> $@
+	@find . -name "*.cpp" \
+		| grep -v $@ \
+		| grep -v main.cpp \
+		| sed 's|\./\(.*\)|#include "\1" // NOLINT|' >> $@
+	@echo '#include "main.cpp" // NOLINT' >> $@
+	@echo "// clang-format on" >> $@
+	@echo "Single compilation unit was generated"
 
-
-microCI: MicroCI.cpp main.cpp
+../bin/microCI: single_compilation_unit.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	strip --strip-unneeded $@
 
 clean:
-	rm -f microCI
+	rm -f ../bin/microCI

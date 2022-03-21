@@ -28,24 +28,24 @@ SHELL=bash
 test:
 	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
-		&& pushd "new_$$i" && pwd && ../../src/microCI -n "$$i" && popd; \
+		&& pushd "new_$$i" && pwd && ../../bin/microCI -n "$$i" && popd; \
 	done
-	../src/microCI -i y.yml         || echo "OK"
-	../src/microCI --input=x.yml    || echo "OK"
-	../src/microCI -c tipo_invalido || echo "OK"
-	../src/microCI                                               > default.sh
-	../src/microCI -h                                            > help.txt
-	../src/microCI -c npm -i test_npm.yml
-	../src/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
-	../src/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
-	../src/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
-	../src/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
-	../src/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
-	../src/microCI -i ../new/clang-format.yml                    > clang-format.sh
-	../src/microCI -i ../new/plantuml.yml                        > plantuml.sh
-	../src/microCI -i ../new/beamer.yml                          > beamer.sh
-	../src/microCI -i ../new/fetch.yml                           > fetch.sh
-	../src/microCI -i ../new/fetch2.yml                          > fetch2.sh
+	../bin/microCI -i y.yml         || echo "OK"
+	../bin/microCI --input=x.yml    || echo "OK"
+	../bin/microCI -c tipo_invalido || echo "OK"
+	../bin/microCI                                               > default.sh
+	../bin/microCI -h                                            > help.txt
+	../bin/microCI -c npm -i test_npm.yml
+	../bin/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
+	../bin/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
+	../bin/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+	../bin/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
+	../bin/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
+	../bin/microCI -i ../new/clang-format.yml                    > clang-format.sh
+	../bin/microCI -i ../new/plantuml.yml                        > plantuml.sh
+	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
+	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
+	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@
