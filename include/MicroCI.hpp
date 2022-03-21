@@ -90,10 +90,12 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
+  string ToString() const;
+  bool IsValid() const;
+
   // Variável de ambiente global a todos os passos
   void SetEnvironmentVariable(EnvironmentVariable& env);
   bool ReadConfig(const string& yaml);
-  string ToString() const;
   stringstream& Script();
   void SetOnlyStep(const string& onlyStep);
 

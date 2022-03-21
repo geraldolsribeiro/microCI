@@ -20,10 +20,10 @@ microci_plantuml:
 	docker run -it --user $(shell id -u):$(shell id -g) -v${PWD}:/ws --workdir /ws intmain/microci_plantuml:0.1 plantuml teste.pu
 
 microci_mkdocs_material:
-	docker build -t intmain/microci_mkdocs_material:0.1 -f mkdocs_material.Dockerfile .
-	docker tag intmain/microci_mkdocs_material:0.1 intmain/microci_mkdocs_material:latest
-	docker run -it intmain/microci_mkdocs_material:0.1 mkdocs --help
-	docker run -it intmain/microci_mkdocs_material:0.1 python -c "import os; print(*os.environ['PATH'].split(os.pathsep), sep='\n')"
+	docker build -t intmain/microci_mkdocs_material:0.2 -f mkdocs_material.Dockerfile .
+	docker tag intmain/microci_mkdocs_material:0.2 intmain/microci_mkdocs_material:latest
+	docker run -it intmain/microci_mkdocs_material:0.2 mkdocs --help
+	docker run -it intmain/microci_mkdocs_material:0.2 python -c "import os; print(*os.environ['PATH'].split(os.pathsep), sep='\n')"
 
 microci_cppcheck:
 	docker build -t intmain/microci_cppcheck:0.3 -f cppcheck.Dockerfile .
@@ -44,8 +44,8 @@ microci_plantuml_push_dockerhub: microci_plantuml
 
 microci_mkdocs_material_push_dockerhub: microci_mkdocs_material
 	docker login
-	docker push intmain/microci_mkdocs_material:0.1
-	docker tag intmain/microci_mkdocs_material:0.1 intmain/microci_mkdocs_material:latest
+	docker push intmain/microci_mkdocs_material:0.2
+	docker tag intmain/microci_mkdocs_material:0.2 intmain/microci_mkdocs_material:latest
 	docker push intmain/microci_mkdocs_material:latest
 
 microci_cppcheck_push_dockerhub: microci_cppcheck

@@ -76,6 +76,7 @@ string help() {
 Opções:
   -h --help                Ajuda
   -V --version             Versão
+  -T --test-config         Testa a configuração
   -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new bash            Cria passo bash
@@ -249,6 +250,10 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       cout << microci::banner() << endl;
       spdlog::error("Falha na leitura do arquivo {}", yamlfileName);
       return 1;
+    }
+
+    if (cmdl[{"-T", "--test-config"}]) {
+      return uCI.IsValid() ? 0 : 1;
     }
 
     cout << uCI.ToString();

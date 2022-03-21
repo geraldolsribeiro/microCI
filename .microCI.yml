@@ -2,7 +2,6 @@
 steps:
   - name: "Gerar relatório de verificação do código C++ clang-tidy"
     description: "Verifica o código C++ e gera relatório em formato HTML"
-    # only: "clang-tidy"
     network: bridge
     plugin:
       name: "clang-tidy"
@@ -12,10 +11,9 @@ steps:
         - "/usr/include/"
       source:
         - "src/*pp"
-        - "test/*pp"
+        - "include/*pp"
 
   - name: "Gerar relatório de verificação do código C++ cppcheck"
-    # only: "cppcheck"
     plugin:
       name: "cppcheck"
       include:

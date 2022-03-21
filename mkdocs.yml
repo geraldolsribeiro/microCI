@@ -27,8 +27,16 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
 plugins:
   - search:
       lang: pt
   - mermaid2
+  - i18n:
+      default_language: pt
+      languages:
+        en:
+          name: English
+          build: true
+        pt:
+          name: Português
+          build: true
