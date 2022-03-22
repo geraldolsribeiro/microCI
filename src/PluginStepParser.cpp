@@ -37,8 +37,7 @@ namespace microci {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-json PluginStepParser::parseRunAs(const YAML::Node& step, const json& data,
-                                  const string& defaultValue) const {
+json PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const {
   auto data_ = data;
   data_["RUN_AS"] = defaultValue;
   if (step["run_as"]) {
@@ -50,8 +49,7 @@ json PluginStepParser::parseRunAs(const YAML::Node& step, const json& data,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-json PluginStepParser::parseNetwork(const YAML::Node& step,
-                                    const json& data) const {
+json PluginStepParser::parseNetwork(const YAML::Node &step, const json &data) const {
   auto data_ = data;
   if (step["network"]) {
     data_["DOCKER_NETWORK"] = step["network"].as<string>();
@@ -62,8 +60,7 @@ json PluginStepParser::parseNetwork(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string PluginStepParser::stepDockerImage(const YAML::Node& step,
-                                         const string& image) const {
+string PluginStepParser::stepDockerImage(const YAML::Node &step, const string &image) const {
   string dockerImage = mMicroCI->DefaultDockerImage();
 
   if (!image.empty()) {
@@ -80,8 +77,7 @@ string PluginStepParser::stepDockerImage(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string PluginStepParser::stepDockerWorkspace(const YAML::Node& step,
-                                             const string& workspace) const {
+string PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const string &workspace) const {
   string dockerWorkspace = mMicroCI->DefaultWorkspace();
 
   if (!workspace.empty()) {
@@ -98,8 +94,7 @@ string PluginStepParser::stepDockerWorkspace(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<EnvironmentVariable> PluginStepParser::parseEnvs(
-    const YAML::Node& step) const {
+set<EnvironmentVariable> PluginStepParser::parseEnvs(const YAML::Node &step) const {
   auto ret = mMicroCI->DefaultEnvs();
   if (step["envs"] and step["envs"].IsMap()) {
     for (auto it : step["envs"]) {
@@ -116,8 +111,7 @@ set<EnvironmentVariable> PluginStepParser::parseEnvs(
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::beginFunction(const json& data,
-                                     const set<EnvironmentVariable>& envs) {
+void PluginStepParser::beginFunction(const json &data, const set<EnvironmentVariable> &envs) {
   mMicroCI->Script() << inja::render(R"(
 # ----------------------------------------------------------------------
 # {{ STEP_DESCRIPTION }}
@@ -152,7 +146,7 @@ function step_{{ FUNCTION_NAME }}() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::endFunction(const json& data) {
+void PluginStepParser::endFunction(const json &data) {
   mMicroCI->Script() << inja::render(R"(
     )
 
@@ -201,9 +195,8 @@ void PluginStepParser::endFunction(const json& data) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::prepareRunDocker(const json& data,
-                                        const set<EnvironmentVariable>& envs,
-                                        const set<DockerVolume>& volumes) {
+void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs,
+                                        const set<DockerVolume> &volumes) {
   mMicroCI->Script() << inja::render(R"(
       echo ""
       echo ""
@@ -228,13 +221,13 @@ void PluginStepParser::prepareRunDocker(const json& data,
         --workdir {{ WORKSPACE }})",
                                      data);
 
-  for (auto& env : envs) {
+  for (auto &env : envs) {
     mMicroCI->Script() << fmt::format(R"( \
         --env {}="{}")",
                                       env.name, env.value);
   }
 
-  for (const auto& vol : volumes) {
+  for (const auto &vol : volumes) {
     mMicroCI->Script() << fmt::format(R"( \
         --volume "{}":"{}":{})",
                                       vol.source, vol.destination, vol.mode);
@@ -248,10 +241,9 @@ void PluginStepParser::prepareRunDocker(const json& data,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-tuple<json, set<DockerVolume>, set<EnvironmentVariable>>
-PluginStepParser::parseSsh(const YAML::Node& step, const json& data,
-                           const set<DockerVolume>& volumes,
-                           const set<EnvironmentVariable>& envs) const {
+tuple<json, set<DockerVolume>, set<EnvironmentVariable>> PluginStepParser::parseSsh(
+    const YAML::Node &step, const json &data, const set<DockerVolume> &volumes,
+    const set<EnvironmentVariable> &envs) const {
   auto sshMountForCopy = string{"${HOME}/.ssh"};
   auto volumes_ = volumes;
   auto data_ = data;
@@ -269,11 +261,10 @@ PluginStepParser::parseSsh(const YAML::Node& step, const json& data,
     if (step["ssh"]["copy_to"]) {
       data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<string>();
     } else {
-      auto gitSshCommandEnv = EnvironmentVariable{
-          "GIT_SSH_COMMAND",
-          "ssh -i /.microCI_ssh/id_rsa"
-          " -F /dev/null"
-          " -o UserKnownHostsFile=/.microCI_ssh/known_hosts"};
+      auto gitSshCommandEnv = EnvironmentVariable{"GIT_SSH_COMMAND",
+                                                  "ssh -i /.microCI_ssh/id_rsa"
+                                                  " -F /dev/null"
+                                                  " -o UserKnownHostsFile=/.microCI_ssh/known_hosts"};
       envs_.insert(gitSshCommandEnv);
     }
 
@@ -290,8 +281,7 @@ PluginStepParser::parseSsh(const YAML::Node& step, const json& data,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::copySshIfAvailable(const YAML::Node& step,
-                                          const json& data) {
+void PluginStepParser::copySshIfAvailable(const YAML::Node &step, const json &data) {
   if (!step["ssh"] or !step["ssh"]["copy_to"]) {
     return;
   }
@@ -307,11 +297,11 @@ void PluginStepParser::copySshIfAvailable(const YAML::Node& step,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<DockerVolume> PluginStepParser::parseVolumes(const YAML::Node& step) const {
+set<DockerVolume> PluginStepParser::parseVolumes(const YAML::Node &step) const {
   auto volumes = mMicroCI->DefaultVolumes();
 
   if (step["volumes"] && step["volumes"].IsSequence()) {
-    for (const auto& volume : step["volumes"]) {
+    for (const auto &volume : step["volumes"]) {
       DockerVolume vol;
       vol.destination = volume["destination"].as<string>();
       vol.source = volume["source"].as<string>();

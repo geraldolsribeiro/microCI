@@ -50,7 +50,8 @@ function gitOrigin {
 }
 
 function gitRepoId {
-  gitOrigin | md5sum | cut -b 1-6
+  # id deve começar por letra
+  gitOrigin | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6
 }
 
 function microCI_latest_download_URL_with_version {
@@ -72,7 +73,7 @@ function updateStepStatusJson {
     local ts
     local id
     ts=$(date +%s)
-    id=$( echo "${repoId} ${stepName}" | md5sum | cut -b 1-6)
+    id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
     echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg name   "$name"   ".repos.$repoId.steps[$stepNum].name   = (\$name)"   ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --argjson ts "$ts"     ".repos.$repoId.steps[$stepNum].ts     = (\$ts)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
@@ -143,3 +144,5 @@ function assert_function() {
 }
 
 resetStepStatusesJson
+reformatJson
+

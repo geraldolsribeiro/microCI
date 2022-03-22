@@ -124,17 +124,12 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("git_deploy",
-                       make_shared<GitDeployPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("git_publish",
-                       make_shared<GitPublishPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("mkdocs_material",
-                       make_shared<MkdocsMaterialPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("git_deploy", make_shared<GitDeployPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("git_publish", make_shared<GitPublishPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("mkdocs_material", make_shared<MkdocsMaterialPluginStepParser>(&uCI));
     uCI.RegisterPlugin("cppcheck", make_shared<CppCheckPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("clang-tidy",
-                       make_shared<ClangTidyPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("clang-format",
-                       make_shared<ClangFormatPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("clang-tidy", make_shared<ClangTidyPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("clang-format", make_shared<ClangFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
 
     // Carrega as variáveis de ambiente
@@ -166,13 +161,10 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     if ((cmdl({"-n", "--new"}) >> newType)) {
       multimap<TemplateType, TemplateFile> templates;
 
-#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION,      \
-                    INCLUDE_VAR_NAME)                                       \
-  templates.insert(make_pair(                                               \
-      TYPE,                                                                 \
-      TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
-                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len,      \
-                   APPEND_IF_EXISTS}));
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)    \
+  templates.insert(                                                                         \
+      make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
+                                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
 
       MICROCI_TPL(true, "skip", ".microCI.yml", yml, skip);
       MICROCI_TPL(true, "bash", ".microCI.yml", yml, bash);
@@ -180,17 +172,13 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true, "cppcheck", ".microCI.yml", yml, cppcheck);
       MICROCI_TPL(true, "git_deploy", ".microCI.yml", yml, git_deploy);
       MICROCI_TPL(true, "git_publish", ".microCI.yml", yml, git_publish);
-      MICROCI_TPL(false, "mkdocs_material", "docs/index.md", md,
-                  mkdocs_material_index);
-      MICROCI_TPL(true, "mkdocs_material", ".microCI.yml", yml,
-                  mkdocs_material);
-      MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml", yml,
-                  mkdocs_material_config);
+      MICROCI_TPL(false, "mkdocs_material", "docs/index.md", md, mkdocs_material_index);
+      MICROCI_TPL(true, "mkdocs_material", ".microCI.yml", yml, mkdocs_material);
+      MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
       MICROCI_TPL(true, "npm", ".microCI.yml", yml, npm);
       MICROCI_TPL(true, "plantuml", ".microCI.yml", yml, plantuml);
       MICROCI_TPL(true, "clang-format", ".microCI.yml", yml, clang_format);
-      MICROCI_TPL(false, "clang-format", ".clang-format", yml,
-                  clang_format_config);
+      MICROCI_TPL(false, "clang-format", ".clang-format", yml, clang_format_config);
       MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
       MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
 #undef MICROCI_TPL
@@ -216,8 +204,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           }
 
           if (!tpl.appendIfExists and filesystem::exists(fileName)) {
-            spdlog::info("Ignorando criação, pois o arquivo {} já existe",
-                         fileName);
+            spdlog::info("Ignorando criação, pois o arquivo {} já existe", fileName);
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             out.open(fileName, ios_base::app);
@@ -237,8 +224,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
         return 0;
       }
       spdlog::error("Impossível criar para tipo inválido: {}", newType);
-      for (auto it = templates.begin(), end = templates.end(); it != end;
-           it = templates.upper_bound(it->first)) {
+      for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         spdlog::info("Exemplo: microCI --new {}", it->first);
       }
       return -1;

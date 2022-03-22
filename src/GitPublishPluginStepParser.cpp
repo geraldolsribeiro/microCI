@@ -38,9 +38,8 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
-  auto pluginCopyTo =
-      string{"/tmp/microci_deploy"};  // local onde user pode escrever
+void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
+  auto pluginCopyTo = string{"/tmp/microci_deploy"};  // local onde user pode escrever
   auto pluginCopyFrom = string{"site"};
   auto cleanBefore = true;
   auto data = mMicroCI->DefaultDataTemplate();
@@ -73,8 +72,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
   data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] =
-      stepDescription(step, "Publica arquivos em um repositório git");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Publica arquivos em um repositório git");
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

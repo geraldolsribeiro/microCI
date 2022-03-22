@@ -38,7 +38,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void SkipPluginStepParser::Parse(const YAML::Node& step) {
+void SkipPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto envs = parseEnvs(step);
   auto volumes = parseVolumes(step);

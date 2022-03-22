@@ -57,12 +57,11 @@ string version() { return fmt::format("v{}.{}.{}", MAJOR, MINOR, PATCH); }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string sanitizeName(const string& name) {
+string sanitizeName(const string &name) {
   auto ret = name;
 
   // Troca os caracteres acentuados por versão sem acento
-  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"},
-                            {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
+  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto const [from, to] : tr) {
     size_t pos = 0;
     while ((pos = ret.find(from, pos)) != string::npos) {
@@ -72,8 +71,7 @@ string sanitizeName(const string& name) {
   }
 
   // Converte tudo para minúsculas
-  transform(ret.begin(), ret.end(), ret.begin(),
-            [](unsigned char c) { return tolower(c); });
+  transform(ret.begin(), ret.end(), ret.begin(), [](unsigned char c) { return tolower(c); });
 
   // Caracteres não permitidos são trocados por _
   const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
@@ -88,10 +86,9 @@ string sanitizeName(const string& name) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepRequiredValue(const YAML::Node& step, const string& var) {
+string stepRequiredValue(const YAML::Node &step, const string &var) {
   if (!step[var]) {
-    throw std::invalid_argument(
-        fmt::format("Campo {} não encontrado no passo", var));
+    throw std::invalid_argument(fmt::format("Campo {} não encontrado no passo", var));
   }
   return step[var].as<string>();
 }
@@ -99,8 +96,7 @@ string stepRequiredValue(const YAML::Node& step, const string& var) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepOptionalValue(const YAML::Node& step, const string& var,
-                         const string& defaultValue) {
+string stepOptionalValue(const YAML::Node &step, const string &var, const string &defaultValue) {
   if (step[var]) {
     return step[var].as<string>();
   } else {
@@ -111,14 +107,12 @@ string stepOptionalValue(const YAML::Node& step, const string& var,
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepName(const YAML::Node& step) {
-  return stepRequiredValue(step, "name");
-}
+string stepName(const YAML::Node &step) { return stepRequiredValue(step, "name"); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepDescription(const YAML::Node& step, const string& defaultValue) {
+string stepDescription(const YAML::Node &step, const string &defaultValue) {
   return stepOptionalValue(step, "description", defaultValue);
   return defaultValue;
 }

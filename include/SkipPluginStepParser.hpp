@@ -36,9 +36,9 @@ namespace microci {
 
 class SkipPluginStepParser : public PluginStepParser {
  public:
-  SkipPluginStepParser(MicroCI* microCI) : PluginStepParser(microCI) {}
+  SkipPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   virtual ~SkipPluginStepParser() {}
-  virtual void Parse(const YAML::Node& step) override;
+  virtual void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

@@ -44,39 +44,30 @@ using nlohmann::json;
 
 class PluginStepParser {
  public:
-  PluginStepParser(MicroCI* microCI) : mMicroCI(microCI) {}
+  PluginStepParser(MicroCI *microCI) : mMicroCI(microCI) {}
   virtual ~PluginStepParser() {}
-  virtual void Parse(const YAML::Node& step) {
-    mMicroCI->Script() << step["name"].as<string>() << endl;
-  };
+  virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<string>() << endl; };
 
  protected:
-  void beginFunction(const json& data, const set<EnvironmentVariable>& envs);
-  void endFunction(const json& data);
+  void beginFunction(const json &data, const set<EnvironmentVariable> &envs);
+  void endFunction(const json &data);
 
-  [[nodiscard]] json parseRunAs(const YAML::Node& step, const json& data,
-                                const string& defaultValue) const;
-  [[nodiscard]] json parseNetwork(const YAML::Node& step,
-                                  const json& data) const;
-  [[nodiscard]] set<EnvironmentVariable> parseEnvs(
-      const YAML::Node& step) const;
-  [[nodiscard]] set<DockerVolume> parseVolumes(const YAML::Node& step) const;
-  [[nodiscard]] tuple<json, set<DockerVolume>, set<EnvironmentVariable>>
-  parseSsh(const YAML::Node& step, const json& data,
-           const set<DockerVolume>& volumes,
-           const set<EnvironmentVariable>& envs) const;
+  [[nodiscard]] json parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const;
+  [[nodiscard]] json parseNetwork(const YAML::Node &step, const json &data) const;
+  [[nodiscard]] set<EnvironmentVariable> parseEnvs(const YAML::Node &step) const;
+  [[nodiscard]] set<DockerVolume> parseVolumes(const YAML::Node &step) const;
+  [[nodiscard]] tuple<json, set<DockerVolume>, set<EnvironmentVariable>> parseSsh(
+      const YAML::Node &step, const json &data, const set<DockerVolume> &volumes,
+      const set<EnvironmentVariable> &envs) const;
 
-  void copySshIfAvailable(const YAML::Node& step, const json& data);
+  void copySshIfAvailable(const YAML::Node &step, const json &data);
 
-  [[nodiscard]] string stepDockerImage(const YAML::Node& step,
-                                       const string& image = "") const;
-  [[nodiscard]] string stepDockerWorkspace(const YAML::Node& step,
-                                           const string& workspace = "") const;
+  [[nodiscard]] string stepDockerImage(const YAML::Node &step, const string &image = "") const;
+  [[nodiscard]] string stepDockerWorkspace(const YAML::Node &step, const string &workspace = "") const;
 
-  void prepareRunDocker(const json& data, const set<EnvironmentVariable>& envs,
-                        const set<DockerVolume>& volumes);
+  void prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs, const set<DockerVolume> &volumes);
 
-  MicroCI* mMicroCI = nullptr;
+  MicroCI *mMicroCI = nullptr;
 };
 
 }  // namespace microci

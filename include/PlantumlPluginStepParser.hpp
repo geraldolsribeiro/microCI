@@ -36,9 +36,9 @@ namespace microci {
 
 class PlantumlPluginStepParser : public PluginStepParser {
  public:
-  PlantumlPluginStepParser(MicroCI* microCI) : PluginStepParser(microCI) {}
+  PlantumlPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   virtual ~PlantumlPluginStepParser() {}
-  virtual void Parse(const YAML::Node& step) override;
+  virtual void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

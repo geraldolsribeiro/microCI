@@ -38,7 +38,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void ClangFormatPluginStepParser::Parse(const YAML::Node& step) {
+void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
@@ -48,14 +48,13 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node& step) {
   data = parseNetwork(step, data);
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto& src : step["plugin"]["source"]) {
+    for (const auto &src : step["plugin"]["source"]) {
       sourceList.push_back(src.as<string>());
     }
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] =
-      stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
 
@@ -64,7 +63,7 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node& step) {
   mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }})",
                                      data);
-  for (const auto& src : sourceList) {
+  for (const auto &src : sourceList) {
     mMicroCI->Script() << fmt::format(R"( \
         && cat <(compgen -G '{}') \
           | )",

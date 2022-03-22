@@ -30,11 +30,9 @@
 namespace microci {
 string banner();
 string version();
-string sanitizeName(const string& name);
-string stepRequiredValue(const YAML::Node& step, const string& var);
-string stepOptionalValue(const YAML::Node& step, const string& var,
-                         const string& defaultValue = "");
-string stepName(const YAML::Node& step);
-string stepDescription(const YAML::Node& step,
-                       const string& defaultDescription = "");
+string sanitizeName(const string &name);
+string stepRequiredValue(const YAML::Node &step, const string &var);
+string stepOptionalValue(const YAML::Node &step, const string &var, const string &defaultValue = "");
+string stepName(const YAML::Node &step);
+string stepDescription(const YAML::Node &step, const string &defaultDescription = "");
 }  // namespace microci

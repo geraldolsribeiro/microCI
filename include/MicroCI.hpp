@@ -61,9 +61,7 @@ struct DockerVolume {
 
 // Usando o destino como chave para permitir montar a mesma pasta em mais
 // de um local
-inline bool operator<(const DockerVolume& lhs, const DockerVolume& rhs) {
-  return lhs.destination < rhs.destination;
-}
+inline bool operator<(const DockerVolume &lhs, const DockerVolume &rhs) { return lhs.destination < rhs.destination; }
 
 // ----------------------------------------------------------------------
 //
@@ -76,10 +74,7 @@ struct EnvironmentVariable {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-inline bool operator<(const EnvironmentVariable& lhs,
-                      const EnvironmentVariable& rhs) {
-  return lhs.name < rhs.name;
-}
+inline bool operator<(const EnvironmentVariable &lhs, const EnvironmentVariable &rhs) { return lhs.name < rhs.name; }
 
 class PluginStepParser;
 
@@ -94,22 +89,21 @@ class MicroCI {
   [[nodiscard]] bool IsValid() const;
 
   // Variável de ambiente global a todos os passos
-  void SetEnvironmentVariable(const EnvironmentVariable& env);
-  bool ReadConfig(const string& yaml);
-  stringstream& Script();
-  void SetOnlyStep(const string& onlyStep);
+  void SetEnvironmentVariable(const EnvironmentVariable &env);
+  bool ReadConfig(const string &yaml);
+  stringstream &Script();
+  void SetOnlyStep(const string &onlyStep);
 
   [[nodiscard]] json DefaultDataTemplate() const;
   string DefaultDockerImage() const;
   string DefaultWorkspace() const;
   [[nodiscard]] set<DockerVolume> DefaultVolumes() const;
   [[nodiscard]] set<EnvironmentVariable> DefaultEnvs() const;
-  void RegisterPlugin(const string& name,
-                      shared_ptr<microci::PluginStepParser> pluginStepParser);
+  void RegisterPlugin(const string &name, shared_ptr<microci::PluginStepParser> pluginStepParser);
 
  private:
   void initBash();
-  void parsePluginStep(const YAML::Node& step);
+  void parsePluginStep(const YAML::Node &step);
 
   set<EnvironmentVariable> mEnvs;
   string mOnlyStep;
@@ -117,7 +111,7 @@ class MicroCI {
   string mDefaultWorkspace;
   stringstream mScript;
 
-  typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node& step);
+  typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node &step);
   map<string, parseFunctionPtr> mPluginParserMap;
   map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap2;
 };

@@ -67,15 +67,14 @@ bool MicroCI::IsValid() const { return true; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::RegisterPlugin(const string& name,
-                             shared_ptr<PluginStepParser> pluginStepParser) {
+void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pluginStepParser) {
   mPluginParserMap2[name] = pluginStepParser;
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-stringstream& MicroCI::Script() { return mScript; }
+stringstream &MicroCI::Script() { return mScript; }
 
 // ----------------------------------------------------------------------
 //
@@ -90,14 +89,12 @@ string MicroCI::DefaultWorkspace() const { return mDefaultWorkspace; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetEnvironmentVariable(const EnvironmentVariable& env) {
-  mEnvs.insert(env);
-}
+void MicroCI::SetEnvironmentVariable(const EnvironmentVariable &env) { mEnvs.insert(env); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetOnlyStep(const string& onlyStep) { mOnlyStep = onlyStep; }
+void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
 
 // ----------------------------------------------------------------------
 //
@@ -107,17 +104,17 @@ string MicroCI::ToString() const { return mScript.str(); }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-bool MicroCI::ReadConfig(const string& filename) {
+bool MicroCI::ReadConfig(const string &filename) {
   YAML::Node CI;
   set<string> dockerImages;
 
   try {
     CI = YAML::LoadFile(filename);
-  } catch (const YAML::BadFile& e) {
+  } catch (const YAML::BadFile &e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
-  } catch (const YAML::ParserException& e) {
+  } catch (const YAML::ParserException &e) {
     spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
@@ -153,7 +150,7 @@ bool MicroCI::ReadConfig(const string& filename) {
 
   if (dockerImages.size()) {
     mScript << "# Atualiza as imagens docker utilizadas no passos\n{\n";
-    for (const auto& dockerImage : dockerImages) {
+    for (const auto &dockerImage : dockerImages) {
       mScript << fmt::format("  docker pull {} 2>&1\n", dockerImage);
     }
     mScript << "} >> .microCI.log\n";
@@ -163,8 +160,7 @@ bool MicroCI::ReadConfig(const string& filename) {
     // FIXME: Verificar se existe
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
-        throw invalid_argument(fmt::format("Plugin não definido no passo '{}'",
-                                           step["name"].as<string>()));
+        throw invalid_argument(fmt::format("Plugin não definido no passo '{}'", step["name"].as<string>()));
       }
       if (step["only"] and step["only"].as<string>() == mOnlyStep) {
         parsePluginStep(step);
@@ -177,8 +173,7 @@ bool MicroCI::ReadConfig(const string& filename) {
     if (CI["steps"].IsSequence()) {
       for (auto step : CI["steps"]) {
         if (!step["plugin"] or !step["plugin"]["name"]) {
-          throw invalid_argument(fmt::format(
-              "Plugin não definido no passo '{}'", step["name"].as<string>()));
+          throw invalid_argument(fmt::format("Plugin não definido no passo '{}'", step["name"].as<string>()));
         }
         if (step["only"]) {
           SkipPluginStepParser skipPluginStepParser{this};
@@ -219,7 +214,7 @@ main
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::parsePluginStep(const YAML::Node& step) {
+void MicroCI::parsePluginStep(const YAML::Node &step) {
   auto pluginName = step["plugin"]["name"].as<string>();
 
   if (mPluginParserMap2.count(pluginName)) {
@@ -227,8 +222,7 @@ void MicroCI::parsePluginStep(const YAML::Node& step) {
     return;
   } else {
     auto stepName = step["name"].as<string>();
-    spdlog::error("O plugin '{}' não foi encontrado no passo '{}'", pluginName,
-                  stepName);
+    spdlog::error("O plugin '{}' não foi encontrado no passo '{}'", pluginName, stepName);
     for (const auto p : mPluginParserMap2) {
       spdlog::warn("Plugin '{}'", p.first);
     }
@@ -265,8 +259,7 @@ set<EnvironmentVariable> MicroCI::DefaultEnvs() const { return mEnvs; }
 // ----------------------------------------------------------------------
 json MicroCI::DefaultDataTemplate() const {
   json data;
-  data["VERSION"] =
-      fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
+  data["VERSION"] = fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
   data["WORKSPACE"] = mDefaultWorkspace;
 
   // Network docker: bridge (default), host, none
@@ -291,16 +284,14 @@ json MicroCI::DefaultDataTemplate() const {
 // ----------------------------------------------------------------------
 void MicroCI::initBash() {
   auto data = DefaultDataTemplate();
-  auto scriptMicroCI = string{reinterpret_cast<const char*>(___sh_MicroCI_sh),
-                              ___sh_MicroCI_sh_len};
+  auto scriptMicroCI = string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
   mScript << inja::render(scriptMicroCI, data) << endl;
 
   auto envs = DefaultEnvs();
   auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     auto scriptNotifyDiscord =
-        string{reinterpret_cast<const char*>(___sh_NotifyDiscord_sh),
-               ___sh_NotifyDiscord_sh_len};
+        string{reinterpret_cast<const char *>(___sh_NotifyDiscord_sh), ___sh_NotifyDiscord_sh_len};
 
     mScript << inja::render(scriptNotifyDiscord, data) << endl;
   } else {

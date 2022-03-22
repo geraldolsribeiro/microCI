@@ -36,9 +36,9 @@ namespace microci {
 
 class GitPublishPluginStepParser : public PluginStepParser {
  public:
-  GitPublishPluginStepParser(MicroCI* microCI) : PluginStepParser(microCI) {}
+  GitPublishPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   virtual ~GitPublishPluginStepParser() {}
-  virtual void Parse(const YAML::Node& step) override;
+  virtual void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

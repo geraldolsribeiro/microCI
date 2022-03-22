@@ -38,7 +38,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void BashPluginStepParser::Parse(const YAML::Node& step) {
+void BashPluginStepParser::Parse(const YAML::Node &step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};

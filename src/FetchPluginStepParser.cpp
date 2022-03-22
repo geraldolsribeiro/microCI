@@ -38,15 +38,14 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void FetchPluginStepParser::Parse(const YAML::Node& step) {
+void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   data["DOCKER_NETWORK"] = "bridge";
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] =
-      stepDescription(step, "Baixa arquivos externos ao projeto");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Baixa arquivos externos ao projeto");
   data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
 
   auto volumes = parseVolumes(step);
@@ -63,24 +62,21 @@ void FetchPluginStepParser::Parse(const YAML::Node& step) {
                                        data);
     copySshIfAvailable(step, data);
 
-    for (const auto& item : step["plugin"]["items"]) {
+    for (const auto &item : step["plugin"]["items"]) {
       if (item["git_archive"]) {
         auto files = string{};
-        for (const auto& f : item["files"]) {
-          files += fmt::format(
-              "'{}' ", f.as<string>());  // aspas simples para não expandir
+        for (const auto &f : item["files"]) {
+          files += fmt::format("'{}' ", f.as<string>());  // aspas simples para não expandir
         }
         if (files.empty()) {
-          throw std::runtime_error(
-              "É obrigatório especificar uma lista de arquivos de entrada");
+          throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
         }
         data["FILES"] = files;
         data["GIT_REMOTE"] = item["git_archive"].as<string>();
         data["TARGET"] = item["target"].as<string>(defaultTarget);
 
         if (item["strip-components"]) {
-          data["STRIP_COMPONENTS"] =
-              " --strip-components=" + item["strip-components"].as<string>();
+          data["STRIP_COMPONENTS"] = " --strip-components=" + item["strip-components"].as<string>();
         } else {
           data["STRIP_COMPONENTS"] = "";
         }

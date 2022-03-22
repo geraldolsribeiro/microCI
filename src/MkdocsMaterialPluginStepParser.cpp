@@ -38,7 +38,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MkdocsMaterialPluginStepParser::Parse(const YAML::Node& step) {
+void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   auto action = string{"build"};
   auto port = string{"8000"};
 
@@ -57,8 +57,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node& step) {
   data["PORT"] = port;
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] =
-      stepDescription(step, "Documentação usando mkdocs_material");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
   data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:latest";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script

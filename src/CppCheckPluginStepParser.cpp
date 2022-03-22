@@ -38,13 +38,12 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
+void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   auto platform = string{"unix64"};
   auto standard = string{"c++11"};
   list<string> includeList;
   list<string> sourceList;
-  list<string> opts{"--enable=all", "--inconclusive", "--xml",
-                    "--xml-version=2"};
+  list<string> opts{"--enable=all", "--inconclusive", "--xml", "--xml-version=2"};
 
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
@@ -53,19 +52,19 @@ void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
   data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto& opt : step["plugin"]["options"]) {
+    for (const auto &opt : step["plugin"]["options"]) {
       opts.push_back(opt.as<string>());
     }
   }
 
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
-    for (const auto& inc : step["plugin"]["include"]) {
+    for (const auto &inc : step["plugin"]["include"]) {
       includeList.push_back(inc.as<string>());
     }
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto& src : step["plugin"]["source"]) {
+    for (const auto &src : step["plugin"]["source"]) {
       sourceList.push_back(src.as<string>());
     }
   }
@@ -79,8 +78,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] =
-      stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
   data["PLATFORM"] = platform;
@@ -99,15 +97,15 @@ void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
 )",
                                      data);
 
-  for (const auto& opt : opts) {
+  for (const auto &opt : opts) {
     mMicroCI->Script() << "          " << opt << " \\\n";
   }
 
-  for (const auto& inc : includeList) {
+  for (const auto &inc : includeList) {
     mMicroCI->Script() << "          --include=" << inc << " \\\n";
   }
 
-  for (const auto& src : sourceList) {
+  for (const auto &src : sourceList) {
     mMicroCI->Script() << "          " << src << " \\\n";
   }
 

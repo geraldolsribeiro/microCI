@@ -38,21 +38,20 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void BeamerPluginStepParser::Parse(const YAML::Node& step) {
+void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] =
-      stepDescription(step, "Apresentação PDF criada a partir do markdown");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Apresentação PDF criada a partir do markdown");
   data["DOCKER_IMAGE"] = stepDockerImage(step, "pandoc/latex:latest");
   data["WORKSPACE"] = stepDockerWorkspace(step, "/data");
 
   auto inputMD = string{};
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto& opt : step["plugin"]["source"]) {
+    for (const auto &opt : step["plugin"]["source"]) {
       inputMD += opt.as<string>() + " ";
     }
   }
@@ -60,19 +59,15 @@ void BeamerPluginStepParser::Parse(const YAML::Node& step) {
     data["INPUT_MD"] = inputMD;
   } else {
     spdlog::error("É obrigatório especificar uma lista de arquivos de entrada");
-    throw std::runtime_error(
-        "É obrigatório especificar uma lista de arquivos de entrada");
+    throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
   }
 
   data["LANG"] = step["plugin"]["lang"].as<string>("pt-BR");
   data["DATE"] = step["plugin"]["date"].as<string>("01 de Abril de 2023");
-  data["INSTITUTE"] =
-      step["plugin"]["institute"].as<string>("Nome da instituição");
+  data["INSTITUTE"] = step["plugin"]["institute"].as<string>("Nome da instituição");
   data["TITLE"] = step["plugin"]["title"].as<string>("Título da apresentação");
-  data["SUBTITLE"] =
-      step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
-  data["SUBJECT"] = step["plugin"]["subject"].as<string>(
-      "Informação da propriedade Assunto do PDF");
+  data["SUBTITLE"] = step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
+  data["SUBJECT"] = step["plugin"]["subject"].as<string>("Informação da propriedade Assunto do PDF");
   data["SLIDE_LEVEL"] = step["plugin"]["slide-level"].as<string>("2");
   data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<string>("169");
   data["OUTPUT_PDF"] = step["plugin"]["output"].as<string>("output.pdf");
@@ -83,29 +78,22 @@ void BeamerPluginStepParser::Parse(const YAML::Node& step) {
   YAML::Node strippedHeaderIncludes = Clone(step["plugin"]);
 
   if (step["plugin"]["theme"].as<string>("default") == "STR") {
-    strippedHeaderIncludes["header-includes"].push_back(
-        R"(\useoutertheme{shadow})");
-    strippedHeaderIncludes["header-includes"].push_back(
-        R"(\usecolortheme{str})");
-    strippedHeaderIncludes["header-includes"].push_back(
-        R"(\logo{\includegraphics[height=7mm]{img/str-logo.png}})");
+    strippedHeaderIncludes["header-includes"].push_back(R"(\useoutertheme{shadow})");
+    strippedHeaderIncludes["header-includes"].push_back(R"(\usecolortheme{str})");
+    strippedHeaderIncludes["header-includes"].push_back(R"(\logo{\includegraphics[height=7mm]{img/str-logo.png}})");
 
 // Encontrar uma solução mais elegante para disponibilizar arquivos de terceiros
 #include <3rd/beamercolorthemestr.sty.hpp>
 #include <3rd/str-logo.png.hpp>
     ofstream strLogoPng("img/str-logo.png");
-    strLogoPng.write((char*)___3rd_str_logo_png, ___3rd_str_logo_png_len);
+    strLogoPng.write((char *)___3rd_str_logo_png, ___3rd_str_logo_png_len);
     ofstream beamercolorthemestr("beamercolorthemestr.sty");
-    beamercolorthemestr.write((char*)___3rd_beamercolorthemestr_sty,
-                              ___3rd_beamercolorthemestr_sty_len);
+    beamercolorthemestr.write((char *)___3rd_beamercolorthemestr_sty, ___3rd_beamercolorthemestr_sty_len);
   }
 
-  for (const auto& key :
-       {/* keys a seguir não são usadas pelo pandoc: */ "name", "output",
-        "source", "theme",
-        /* keys a seguir já foram passadas via linha de comando: */ "lang",
-        "date", "institute", "title", "subtitle", "subject", "slide-level",
-        "aspectratio"}) {
+  for (const auto &key : {/* keys a seguir não são usadas pelo pandoc: */ "name", "output", "source", "theme",
+                          /* keys a seguir já foram passadas via linha de comando: */ "lang", "date", "institute",
+                          "title", "subtitle", "subject", "slide-level", "aspectratio"}) {
     strippedHeaderIncludes.remove(key);
   }
 
