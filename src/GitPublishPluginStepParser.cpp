@@ -39,7 +39,8 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
-  auto pluginCopyTo = string{"/microci_deploy"};
+  auto pluginCopyTo =
+      string{"/tmp/microci_deploy"};  // local onde user pode escrever
   auto pluginCopyFrom = string{"site"};
   auto cleanBefore = true;
   auto data = mMicroCI->DefaultDataTemplate();

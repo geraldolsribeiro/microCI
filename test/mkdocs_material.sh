@@ -118,6 +118,7 @@ function step_construir_documentacao_em_formato_html() {
 
       # shellcheck disable=SC2140
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \
@@ -170,6 +171,7 @@ function step_publicar_html_para_repositorio_git() {
       echo "Passo: Publicar HTML para repositório git"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

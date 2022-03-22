@@ -75,6 +75,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node& step) {
   mMicroCI->Script() << inja::render(R"(
       # shellcheck disable=SC2140
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

@@ -122,6 +122,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
       echo "Passo: Gerar relatório de verificação do código C++ - cppcheck"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

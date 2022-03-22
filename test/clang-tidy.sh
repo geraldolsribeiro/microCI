@@ -122,6 +122,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
       echo "Passo: Gerar relatório de verificação do código C++ - clang-tidy"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

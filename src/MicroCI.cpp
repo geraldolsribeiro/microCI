@@ -89,7 +89,7 @@ string MicroCI::DefaultWorkspace() const { return mDefaultWorkspace; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetEnvironmentVariable(EnvironmentVariable& env) {
+void MicroCI::SetEnvironmentVariable(const EnvironmentVariable& env) {
   mEnvs.insert(env);
 }
 

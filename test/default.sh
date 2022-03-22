@@ -125,6 +125,7 @@ function step_instalar_dependencias() {
       echo "Passo: Instalar dependências"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \
@@ -182,6 +183,7 @@ function step_construir() {
       echo "Passo: Construir"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

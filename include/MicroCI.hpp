@@ -90,20 +90,20 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
-  string ToString() const;
-  bool IsValid() const;
+  [[nodiscard]] string ToString() const;
+  [[nodiscard]] bool IsValid() const;
 
   // Variável de ambiente global a todos os passos
-  void SetEnvironmentVariable(EnvironmentVariable& env);
+  void SetEnvironmentVariable(const EnvironmentVariable& env);
   bool ReadConfig(const string& yaml);
   stringstream& Script();
   void SetOnlyStep(const string& onlyStep);
 
-  json DefaultDataTemplate() const;
+  [[nodiscard]] json DefaultDataTemplate() const;
   string DefaultDockerImage() const;
   string DefaultWorkspace() const;
-  set<DockerVolume> DefaultVolumes() const;
-  set<EnvironmentVariable> DefaultEnvs() const;
+  [[nodiscard]] set<DockerVolume> DefaultVolumes() const;
+  [[nodiscard]] set<EnvironmentVariable> DefaultEnvs() const;
   void RegisterPlugin(const string& name,
                       shared_ptr<microci::PluginStepParser> pluginStepParser);
 

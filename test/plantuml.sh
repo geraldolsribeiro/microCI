@@ -122,6 +122,7 @@ function step_gerar_diagramas_plantuml() {
       echo "Passo: Gerar diagramas plantuml"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

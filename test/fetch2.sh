@@ -122,6 +122,7 @@ function step_baixar_arquivos_externos_ao_projeto() {
       echo "Passo: Baixar arquivos externos ao projeto"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \

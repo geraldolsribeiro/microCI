@@ -46,11 +46,10 @@ steps:
         cat docs/index.md > README.md
         # Apenas para disponibilizar uma página de rosto para o github
         cp README.md site/
-        chown $(id -u).$(id -g) -Rv site/
+        # chown $(id -u).$(id -g) -Rv site/
 
   - name: "Publicar documentação em microci.dev"
     network: bridge
-    # only: "publish"
     ssh:
     plugin:
       name: "git_publish"
@@ -79,7 +78,7 @@ steps:
 
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
-    run_as: root
+    run_as: root # necessário para instalar as dependências
     network: bridge
     plugin:
       name: bash
