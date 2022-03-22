@@ -78,11 +78,18 @@ void FetchPluginStepParser::Parse(const YAML::Node& step) {
         data["GIT_REMOTE"] = item["git_archive"].as<string>();
         data["TARGET"] = item["target"].as<string>(defaultTarget);
 
+        if (item["strip-components"]) {
+          data["STRIP_COMPONENTS"] =
+              " --strip-components=" + item["strip-components"].as<string>();
+        } else {
+          data["STRIP_COMPONENTS"] = "";
+        }
+
         mMicroCI->Script() << inja::render(
             R"( \
            && mkdir -p {{ TARGET }} \
            && git archive --format=tar --remote={{ GIT_REMOTE }} HEAD {{ FILES }} \
-             | tar -C {{ TARGET }} -vxf - 2>&1)",
+             | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf - 2>&1)",
             data);
       } else if (item["url"]) {
         data["TARGET"] = item["target"].as<string>(defaultTarget);

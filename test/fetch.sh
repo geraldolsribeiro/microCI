@@ -141,6 +141,9 @@ function step_baixar_arquivos_externos_ao_projeto() {
            && mkdir -p /tmp/lib/ \
            && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'lib/*.so'  \
              | tar -C /tmp/lib/ -vxf - 2>&1 \
+           && mkdir -p /tmp/lib/ \
+           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'path1/path2/lib/*.so'  \
+             | tar -C /tmp/lib/ --strip-components=2 -vxf - 2>&1 \
            && mkdir -p /tmp/include \
            && pushd /tmp/include \
            && curl -fSL -R -J -O https://raw.githubusercontent.com/adishavit/argh/master/argh.h 2>&1 \

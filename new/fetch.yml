@@ -17,6 +17,11 @@ steps:
           target: /tmp/lib/
           files:
             - lib/*.so
+        - git_archive: git@gitlabcorp.xyz.com.br:group/repo.git
+          target: /tmp/lib/
+          strip-components: 2 # remove 2 níveis 
+          files:
+            - path1/path2/lib/*.so
         - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
           target: /tmp/include # Local onde será colocado este arquivo
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
