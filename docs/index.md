@@ -49,7 +49,7 @@ que esteja no `PATH`. Para remover o `microCI` completamente do sistema basta
 apagar o arquivo copiado para o PATH.
 
 ```bash
-curl -L https://github.com/geraldolsribeiro/microCI/releases/download/v0.16.1/microCI \
+curl -L https://github.com/geraldolsribeiro/microCI/releases/download/v0.17.0/microCI \
   -o /usr/local/bin/microCI
 chmod 755 /usr/local/bin/microCI
 ```
@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.17.0` Plugin skip; Status de execução
 * `0.16.1` Refatoração dos plugins; Execução default como não root
 * `0.15.2` Plugin fetch
 * `0.14.1` Plugin beamer

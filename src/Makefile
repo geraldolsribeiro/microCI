@@ -74,6 +74,7 @@ tidy:
 single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
   ../include/3rd/beamercolorthemestr.sty.hpp \
   ../include/3rd/str-logo.png.hpp \
+  ../include/new/skip.hpp \
   ../include/new/bash.hpp \
   ../include/new/beamer.hpp \
   ../include/new/clang-format_config.hpp \

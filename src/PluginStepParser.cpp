@@ -130,8 +130,9 @@ function step_{{ FUNCTION_NAME }}() {
   MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
+  MICROCI_STEP_SKIP="{{ MICROCI_STEP_SKIP }}"
   MICROCI_STEP_DURATION=$SECONDS
-  title="${MICROCI_STEP_NAME}.............................................................."
+  title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "{{CYAN}}${title}{{CLEAR}}: "
 )",
@@ -162,11 +163,17 @@ void PluginStepParser::endFunction(const json& data) {
   } >> .microCI.log
 
   # Notificação no terminal
-  if [ "${status}" = "0" ]; then
+  if [ "${MICROCI_STEP_SKIP}" = "yes" ]
+  then
+    echo -e "{{BLUE}}SKIP{{CLEAR}}"
+  elif [ "${status}" = "0" ]
+  then
     echo -e "{{GREEN}}OK{{CLEAR}}"
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
   fi
+
+  ((++MICROCI_STEP_NUMBER))
 )",
                                      data);
 

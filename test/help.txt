@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.16.1
+                             microCI 0.17.0
                             Geraldo Ribeiro
 
 
@@ -17,7 +17,8 @@ Opções:
   -T --test-config         Testa a configuração
   -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new bash            Cria passo bash
+  -n,--new skip            Cria passo que não faz nada
+  -n,--new bash            Cria passo para execução de linhas de comando
   -n,--new mkdocs_material Cria passo para documentação
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção

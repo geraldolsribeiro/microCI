@@ -35,10 +35,12 @@
 
 using namespace std;
 
+// #include <inicpp.h>
 #include <argh.h>
 #include <spdlog/spdlog.h>
 
 // Plugins
+#include <BashPluginStepParser.hpp>
 #include <BeamerPluginStepParser.hpp>
 #include <ClangFormatPluginStepParser.hpp>
 #include <ClangTidyPluginStepParser.hpp>
@@ -65,6 +67,7 @@ using namespace std;
 #include <new/mkdocs_material_index.hpp>
 #include <new/npm.hpp>
 #include <new/plantuml.hpp>
+#include <new/skip.hpp>
 
 // Classe principal
 #include <MicroCI.hpp>
@@ -81,7 +84,8 @@ Opções:
   -T --test-config         Testa a configuração
   -O --only                Executa somente o passo especificado
   -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new bash            Cria passo bash
+  -n,--new skip            Cria passo que não faz nada
+  -n,--new bash            Cria passo para execução de linhas de comando
   -n,--new mkdocs_material Cria passo para documentação
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção
@@ -116,6 +120,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     MicroCI uCI{};
+    uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
     uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
@@ -169,6 +174,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
                    ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len,      \
                    APPEND_IF_EXISTS}));
 
+      MICROCI_TPL(true, "skip", ".microCI.yml", yml, skip);
       MICROCI_TPL(true, "bash", ".microCI.yml", yml, bash);
       MICROCI_TPL(true, "clang-tidy", ".microCI.yml", yml, clang_tidy);
       MICROCI_TPL(true, "cppcheck", ".microCI.yml", yml, cppcheck);
@@ -253,6 +259,17 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       spdlog::error("Falha na leitura do arquivo {}", yamlfileName);
       return 1;
     }
+
+    // if (filesystem::exists(".git/config")) {
+    // ini::IniFile gitConfigIni;
+    // gitConfigIni.load(".git/config");
+    // auto gitRemote = gitConfigIni["remote \"origin\""]["url"].as<string>();
+    // cout << "# git remote: " << gitRemote << endl;
+    // std::string result2 =
+    //    Chocobo1::SHA1().addData("hello").finalize().toString();
+    // [remote "origin"]
+    //	url = git@github.com:geraldolsribeiro/microCI.git
+    //}
 
     if (cmdl[{"-T", "--test-config"}]) {
       return uCI.IsValid() ? 0 : 1;

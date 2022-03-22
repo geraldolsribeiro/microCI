@@ -47,8 +47,8 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 16;
-const int PATCH = 1;
+const int MINOR = 17;
+const int PATCH = 0;
 
 // ----------------------------------------------------------------------
 //

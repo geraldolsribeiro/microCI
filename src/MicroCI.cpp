@@ -40,6 +40,7 @@ using namespace std;
 
 // Resolve forward definition
 #include <PluginStepParser.hpp>
+#include <SkipPluginStepParser.hpp>
 
 namespace microci {
 
@@ -180,9 +181,11 @@ bool MicroCI::ReadConfig(const string& filename) {
               "Plugin não definido no passo '{}'", step["name"].as<string>()));
         }
         if (step["only"]) {
-          continue;
+          SkipPluginStepParser skipPluginStepParser{this};
+          skipPluginStepParser.Parse(step);
+        } else {
+          parsePluginStep(step);
         }
-        parsePluginStep(step);
       }
       mScript << R"(
 
@@ -192,9 +195,9 @@ function main() {
 
 )";
       for (auto step : CI["steps"]) {
-        if (step["only"]) {
-          continue;
-        }
+        // if (step["only"]) {
+        //   continue;
+        // }
         string stepName = step["name"].as<string>();
         mScript << "  step_" << sanitizeName(stepName) << endl;
       }
@@ -270,6 +273,7 @@ json MicroCI::DefaultDataTemplate() const {
   data["DOCKER_NETWORK"] = "none";
   data["DOCKER_IMAGE"] = mDefaultDockerImage;
   data["RUN_AS"] = "root";
+  data["MICROCI_STEP_SKIP"] = "no";
 
   data["BLUE"] = "\033[0;34m";
   data["YELLOW"] = "\033[0;33m";

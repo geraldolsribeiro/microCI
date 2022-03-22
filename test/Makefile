@@ -46,6 +46,7 @@ test:
 	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
+	../bin/microCI -i ../new/skip.yml                            > skip.sh
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@

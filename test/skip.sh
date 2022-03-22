@@ -148,20 +148,21 @@ resetStepStatusesJson
 # Atualiza as imagens docker utilizadas no passos
 {
   docker pull debian:stable-slim 2>&1
+  docker pull gcc:11 2>&1
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Apresentação PDF criada a partir do markdown
+# Este passo está desativado
 # ----------------------------------------------------------------------
-function step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown() {
+function step_passo_ignorado() {
   SECONDS=0
-  MICROCI_STEP_NAME="Criar apresentação PDF a partir de arquivos Markdown"
-  MICROCI_STEP_DESCRIPTION="Apresentação PDF criada a partir do markdown"
+  MICROCI_STEP_NAME="Passo ignorado"
+  MICROCI_STEP_DESCRIPTION="Este passo está desativado"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
-  MICROCI_STEP_SKIP="no"
+  MICROCI_STEP_SKIP="yes"
   MICROCI_STEP_DURATION=$SECONDS
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
@@ -170,32 +171,51 @@ function step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown() {
   {
     (
       set -e
+      echo 'Este passo não faz nada'
 
-      # shellcheck disable=SC2140
-      docker run \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --workdir /data \
-        --volume "${PWD}":/data \
-        --user $(id -u):$(id -g) \
-        pandoc/latex:latest \
-        --variable lang='pt-BR' \
-        --variable date='01 de Abril de 2023' \
-        --variable institute='Nome da instituição' \
-        --variable title='Título da apresentação' \
-        --variable subtitle='Subtítulo da apresentação' \
-        --variable subject='Informação da propriedade Assunto do PDF' \
-        --variable aspectratio=169 \
-        --slide-level=2 \
-        --to=beamer \
-         \
-        header-includes.yaml \
-        00-intro.md 01-outro.md 02-mais-um.md 99-referencias.md  \
-        -o nome_da_minha_apresentacao.pdf \
-        2>&1; \
-      rm -f header-includes.yaml img/str-logo.png beamercolorthemestr.sty 2>&1
+    )
+
+    status=$?
+    MICROCI_STEP_DURATION=$SECONDS
+    echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
+  } >> .microCI.log
+
+  # Notificação no terminal
+  if [ "${MICROCI_STEP_SKIP}" = "yes" ]
+  then
+    echo -e "[0;34mSKIP[0m"
+  elif [ "${status}" = "0" ]
+  then
+    echo -e "[0;32mOK[0m"
+  else
+    echo -e "[0;31mFALHOU[0m"
+  fi
+
+  ((++MICROCI_STEP_NUMBER))
+}
+
+# ----------------------------------------------------------------------
+# Este passo será ignorado
+# ----------------------------------------------------------------------
+function step_compilar_versao_estatica_do_microci() {
+  SECONDS=0
+  MICROCI_STEP_NAME="Compilar versão estática do microCI"
+  MICROCI_STEP_DESCRIPTION="Este passo será ignorado"
+  MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
+  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  MICROCI_STEP_STATUS=":ok:"
+  MICROCI_STEP_SKIP="yes"
+  MICROCI_STEP_DURATION=$SECONDS
+  title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
+  title=${title:0:60}
+  echo -ne "[0;36m${title}[0m: "
+
+  {
+    (
+      set -e
+      echo 'Este passo não faz nada'
 
     )
 
@@ -224,7 +244,8 @@ function step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown() {
 function main() {
   date >> .microCI.log
 
-  step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown
+  step_passo_ignorado
+  step_compilar_versao_estatica_do_microci
 
   date >> .microCI.log
 }
