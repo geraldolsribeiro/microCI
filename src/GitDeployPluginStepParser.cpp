@@ -39,6 +39,10 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void GitDeployPluginStepParser::Parse(const YAML::Node& step) {
+  auto envs = parseEnvs(step);
+  auto data = mMicroCI->DefaultDataTemplate();
+  data = parseRunAs(step, data, "user");
+
   const auto name = step["plugin"]["name"].as<string>();
   const auto repo = step["plugin"]["repo"].as<string>();
   const auto gitDir = step["plugin"]["git_dir"].as<string>();
@@ -49,16 +53,12 @@ void GitDeployPluginStepParser::Parse(const YAML::Node& step) {
     clean = step["plugin"]["clean"].as<bool>();
   }
 
-  auto data = mMicroCI->DefaultDataTemplate();
-  data["RUN_AS"] = "root";
   data["GIT_URL"] = repo;
   data["GIT_DIR"] = gitDir;
   data["GIT_WORK"] = workTree;
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step);
-
-  auto envs = parseEnvs(step);
 
   beginFunction(data, envs);
   mMicroCI->Script() << inja::render(R"(

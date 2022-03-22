@@ -49,6 +49,8 @@ using namespace std;
 #include <MkdocsMaterialPluginStepParser.hpp>
 #include <PlantumlPluginStepParser.hpp>
 #include <PluginStepParser.hpp>
+
+// Modelos de configuração
 #include <new/bash.hpp>
 #include <new/beamer.hpp>
 #include <new/clang-format.hpp>

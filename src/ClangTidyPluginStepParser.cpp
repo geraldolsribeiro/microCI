@@ -47,7 +47,7 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node& step) {
   list<string> sourceList;
   list<string> opts{"--"};
 
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {

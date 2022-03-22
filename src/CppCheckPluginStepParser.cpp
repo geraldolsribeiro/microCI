@@ -49,7 +49,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
@@ -86,7 +86,6 @@ void CppCheckPluginStepParser::Parse(const YAML::Node& step) {
   data["PLATFORM"] = platform;
   data["STD"] = standard;
   data["REPORT_TITLE"] = "MicroCI::CppCheck";
-  // data["RUN_AS"] = "user";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

@@ -42,13 +42,12 @@ void PlantumlPluginStepParser::Parse(const YAML::Node& step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto runAs = string{};
   auto type = string{"png"};
   auto output = string{};
   list<string> sourceList;
   list<string> opts = {"-r"};
 
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {

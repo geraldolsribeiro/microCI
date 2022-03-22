@@ -1,9 +1,10 @@
 auditing/
 bin/microCI
 include/argh.h
+include/inicpp.h
 include/inja.hpp
 include/nlohmann/json.hpp
-include/sha2_256.h
+include/sha1.h
 .microCI.dbg
 .microCI.log
 site

@@ -41,7 +41,7 @@ using namespace std;
 void FetchPluginStepParser::Parse(const YAML::Node& step) {
   auto data = mMicroCI->DefaultDataTemplate();
   data["DOCKER_NETWORK"] = "bridge";
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));

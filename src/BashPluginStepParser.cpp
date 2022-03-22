@@ -42,7 +42,6 @@ void BashPluginStepParser::Parse(const YAML::Node& step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
-  auto runAs = string{};
 
   auto data = mMicroCI->DefaultDataTemplate();
 
@@ -61,7 +60,7 @@ void BashPluginStepParser::Parse(const YAML::Node& step) {
 
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 

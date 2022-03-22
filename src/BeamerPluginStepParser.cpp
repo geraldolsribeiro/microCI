@@ -40,7 +40,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 void BeamerPluginStepParser::Parse(const YAML::Node& step) {
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   data["STEP_NAME"] = stepName(step);

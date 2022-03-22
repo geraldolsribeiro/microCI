@@ -37,10 +37,10 @@ namespace microci {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-json PluginStepParser::parseRunAs(const YAML::Node& step,
-                                  const json& data) const {
+json PluginStepParser::parseRunAs(const YAML::Node& step, const json& data,
+                                  const string& defaultValue) const {
   auto data_ = data;
-  data_["RUN_AS"] = "root";
+  data_["RUN_AS"] = defaultValue;
   if (step["run_as"]) {
     data_["RUN_AS"] = step["run_as"].as<string>();
   }
@@ -197,8 +197,6 @@ void PluginStepParser::endFunction(const json& data) {
 void PluginStepParser::prepareRunDocker(const json& data,
                                         const set<EnvironmentVariable>& envs,
                                         const set<DockerVolume>& volumes) {
-  const string runAs = data["RUN_AS"];
-
   mMicroCI->Script() << inja::render(R"(
       echo ""
       echo ""
@@ -208,7 +206,7 @@ void PluginStepParser::prepareRunDocker(const json& data,
       docker run \)",
                                      data);
 
-  if (runAs != "root") {
+  if (string{data["RUN_AS"]} != "root") {
     mMicroCI->Script() << inja::render(R"(
         --user $(id -u):$(id -g) \)",
                                        data);

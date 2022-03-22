@@ -73,9 +73,9 @@ steps:
       items:
         - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        - url: https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
           target: include/nlohmann
-        - url: https://raw.githubusercontent.com/Chocobo1/Hash/master/src/sha2_256.h
 
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"

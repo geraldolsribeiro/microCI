@@ -44,7 +44,7 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node& step) {
   auto envs = parseEnvs(step);
   list<string> sourceList;
 
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
@@ -58,7 +58,6 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node& step) {
       stepDockerImage(step, "intmain/microci_cppcheck:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
-  data["RUN_AS"] = "user";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

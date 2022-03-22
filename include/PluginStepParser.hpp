@@ -54,21 +54,24 @@ class PluginStepParser {
   void beginFunction(const json& data, const set<EnvironmentVariable>& envs);
   void endFunction(const json& data);
 
-  json parseRunAs(const YAML::Node& step, const json& data) const;
-  json parseNetwork(const YAML::Node& step, const json& data) const;
-  set<EnvironmentVariable> parseEnvs(const YAML::Node& step) const;
-  set<DockerVolume> parseVolumes(const YAML::Node& step) const;
-  tuple<json, set<DockerVolume>, set<EnvironmentVariable>> parseSsh(
-      const YAML::Node& step, const json& data,
-      const set<DockerVolume>& volumes,
-      const set<EnvironmentVariable>& envs) const;
+  [[nodiscard]] json parseRunAs(const YAML::Node& step, const json& data,
+                                const string& defaultValue) const;
+  [[nodiscard]] json parseNetwork(const YAML::Node& step,
+                                  const json& data) const;
+  [[nodiscard]] set<EnvironmentVariable> parseEnvs(
+      const YAML::Node& step) const;
+  [[nodiscard]] set<DockerVolume> parseVolumes(const YAML::Node& step) const;
+  [[nodiscard]] tuple<json, set<DockerVolume>, set<EnvironmentVariable>>
+  parseSsh(const YAML::Node& step, const json& data,
+           const set<DockerVolume>& volumes,
+           const set<EnvironmentVariable>& envs) const;
 
   void copySshIfAvailable(const YAML::Node& step, const json& data);
 
-  string stepDockerImage(const YAML::Node& step,
-                         const string& image = "") const;
-  string stepDockerWorkspace(const YAML::Node& step,
-                             const string& workspace = "") const;
+  [[nodiscard]] string stepDockerImage(const YAML::Node& step,
+                                       const string& image = "") const;
+  [[nodiscard]] string stepDockerWorkspace(const YAML::Node& step,
+                                           const string& workspace = "") const;
 
   void prepareRunDocker(const json& data, const set<EnvironmentVariable>& envs,
                         const set<DockerVolume>& volumes);

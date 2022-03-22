@@ -47,7 +47,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
   auto envs = parseEnvs(step);
 
   data["DOCKER_NETWORK"] = "bridge";
-  data = parseRunAs(step, data);
+  data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
@@ -75,7 +75,6 @@ void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Publica arquivos em um repositório git");
 
-  // data["RUN_AS"] = "user"; // verificar!
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
   mMicroCI->Script() << inja::render(R"( \
