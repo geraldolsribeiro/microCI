@@ -160,11 +160,14 @@ void PluginStepParser::endFunction(const json &data) {
   if [ "${MICROCI_STEP_SKIP}" = "yes" ]
   then
     echo -e "{{BLUE}}SKIP{{CLEAR}}"
+    setStepStatusSkipJson
   elif [ "${status}" = "0" ]
   then
     echo -e "{{GREEN}}OK{{CLEAR}}"
+    setStepStatusOkJson
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
+    setStepStatusFailJson
   fi
 
   ((++MICROCI_STEP_NUMBER))

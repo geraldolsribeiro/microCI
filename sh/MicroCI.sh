@@ -54,6 +54,10 @@ function gitRepoId {
   gitOrigin | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6
 }
 
+function pwdRepoId {
+  pwd | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6
+}
+
 function microCI_latest_download_URL_with_version {
   curl -s https://api.github.com/repos/geraldolsribeiro/microci/releases/latest \
     | grep browser_download_url \
@@ -84,22 +88,40 @@ function updateStepStatusJson {
 function resetStepStatusesJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
     local stepNum=0
-
-    echo $( jq --arg origin "$(gitOrigin)" ".repos.$(gitRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg status "unknown" ".repos.$(gitRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg path "$(pwd)" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
 
     yq -r .steps[].name .microCI.yml \
       | while IFS= read -r stepName
         do
-          updateStepStatusJson "$(gitRepoId)" "${stepNum}" "unknown" "${stepName}"
+          updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
           ((++stepNum))
         done
   fi
 }
 
+function setStepStatusOkJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "OK" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusFailJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "FAIL" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusSkipJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "SKIP" "${MICROCI_STEP_NAME}"
+  fi
+}
+
 function reformatJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
-    jq . ${MICROCI_DB_JSON} > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}; rm -f /tmp/$$.json
+    jq --sort-keys . ${MICROCI_DB_JSON} > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}; rm -f /tmp/$$.json
   fi
 }
 
