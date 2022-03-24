@@ -40,8 +40,7 @@ command -v curl &> /dev/null \
 command -v docker &> /dev/null \
   || { echo -e "{{RED}}Comando docker não foi encontrado{{CLEAR}}";  exit 1; }
 
-PWD=$(pwd)
-
+MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
 MICROCI_STEP_NUMBER=0
 
@@ -49,13 +48,9 @@ function gitOrigin {
   git config --get remote.origin.url || echo "SEM GIT ORIGIN"
 }
 
-function gitRepoId {
-  # id deve começar por letra
-  gitOrigin | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6
-}
-
 function pwdRepoId {
-  pwd | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6
+  # chave json não pode começar com número
+  echo "_$(echo "${MICROCI_PWD}" | md5sum)" | cut -b 1-7
 }
 
 function microCI_latest_download_URL_with_version {
@@ -75,10 +70,10 @@ function updateStepStatusJson {
     local status=$1  ; shift
     local name=$1    ; shift
     local ts
-    local id
+    #local id
     ts=$(date +%s)
-    id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
-    echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    # id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
+    # echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg name   "$name"   ".repos.$repoId.steps[$stepNum].name   = (\$name)"   ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --argjson ts "$ts"     ".repos.$repoId.steps[$stepNum].ts     = (\$ts)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg status "$status" ".repos.$repoId.steps[$stepNum].status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
@@ -90,7 +85,7 @@ function resetStepStatusesJson {
     local stepNum=0
     echo $( jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg path "$(pwd)" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg path "${MICROCI_PWD}" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
 
     yq -r .steps[].name .microCI.yml \
       | while IFS= read -r stepName

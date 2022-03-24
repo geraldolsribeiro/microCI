@@ -44,9 +44,8 @@ steps:
       bash: |
         cp github-pages/CNAME site/
         cat docs/index.md > README.md
-        # Apenas para disponibilizar uma página de rosto para o github
+        # Disponibiliza uma página de rosto para o github
         cp README.md site/
-        # chown $(id -u).$(id -g) -Rv site/
 
   - name: "Publicar documentação em microci.dev"
     network: bridge
@@ -85,7 +84,7 @@ steps:
       bash: |
         apt update
         apt upgrade -y
-        apt install -y xxd libspdlog-dev libyaml-cpp-dev
+        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev
         make -C src clean all
         make -C test
         chown $(id -u).$(id -g) -Rv bin/microCI

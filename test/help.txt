@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.17.0
+                             microCI 0.18.0
                             Geraldo Ribeiro
 
 
@@ -16,6 +16,7 @@ Opções:
   -V --version             Versão
   -T --test-config         Testa a configuração
   -O --only                Executa somente o passo especificado
+  -U --update-db           Atualiza dados de observabilidade
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando

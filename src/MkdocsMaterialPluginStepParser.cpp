@@ -80,7 +80,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
         --attach stderr \
         --rm \
         --workdir {{ WORKSPACE }} \
-        --volume "${PWD}":{{ WORKSPACE }} \
+        --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --publish {{PORT}}:8000 \
         {{ DOCKER_IMAGE }} \
         mkdocs {{ ACTION }} 2>&1

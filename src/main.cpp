@@ -27,6 +27,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include <openssl/md5.h>
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -35,8 +37,8 @@
 
 using namespace std;
 
-// #include <inicpp.h>
 #include <argh.h>
+#include <inicpp.h>
 #include <spdlog/spdlog.h>
 
 // Plugins
@@ -83,6 +85,7 @@ Opções:
   -V --version             Versão
   -T --test-config         Testa a configuração
   -O --only                Executa somente o passo especificado
+  -U --update-db           Atualiza dados de observabilidade
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando
@@ -112,7 +115,7 @@ using TemplateType = string;
 // ----------------------------------------------------------------------
 int main([[maybe_unused]] int argc, char **argv, char **envp) {
   //{{{
-  auto yamlfileName = string{".microCI.yml"};
+  auto yamlFileName = string{".microCI.yml"};
   auto onlyStep = string{};
   auto newType = string{};
 
@@ -155,7 +158,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     }
 
     // Aceita um arquivo de configuração num caminho alternativo
-    cmdl({"-i", "--input"}) >> yamlfileName;
+    cmdl({"-i", "--input"}) >> yamlFileName;
 
     // Cria arquivo de configuração
     if ((cmdl({"-n", "--new"}) >> newType)) {
@@ -193,28 +196,28 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
           // Caso seja utilizado algum path diferente do default
           if (fileName == ".microCI.yml") {
-            fileName = yamlfileName;
+            fileName = yamlFileName;
           }
 
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            spdlog::info("Criando diretório {}", folderName);
+            spdlog::debug("Criando diretório {}", folderName);
             filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and filesystem::exists(fileName)) {
-            spdlog::info("Ignorando criação, pois o arquivo {} já existe", fileName);
+            spdlog::debug("Ignorando criação, pois o arquivo {} já existe", fileName);
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             out.open(fileName, ios_base::app);
             out << "\n# ---------- "
                    "MESCLE MANUALMENTE CONTEÚDO ABAIXO "
                    "---------\n";
-            spdlog::info("Arquivo {} foi editado a partir do modelo", fileName);
+            spdlog::debug("Arquivo {} foi editado a partir do modelo", fileName);
           } else {
             out.open(fileName);
-            spdlog::info("Arquivo {} foi criado a partir do modelo", fileName);
+            spdlog::debug("Arquivo {} foi criado a partir do modelo", fileName);
           }
 
           out.write((char *)tpl.fileContent, tpl.fileSize);
@@ -225,14 +228,14 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       }
       spdlog::error("Impossível criar para tipo inválido: {}", newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        spdlog::info("Exemplo: microCI --new {}", it->first);
+        spdlog::debug("Exemplo: microCI --new {}", it->first);
       }
       return -1;
     }
 
-    if (!filesystem::exists(yamlfileName)) {
+    if (!filesystem::exists(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("Arquivo de entrada {} não encontrado.", yamlfileName);
+      spdlog::error("Arquivo de entrada {} não encontrado.", yamlFileName);
       return 1;
     }
 
@@ -240,25 +243,75 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       uCI.SetOnlyStep(onlyStep);
     }
 
-    if (!uCI.ReadConfig(yamlfileName)) {
+    if (!uCI.ReadConfig(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("Falha na leitura do arquivo {}", yamlfileName);
+      spdlog::error("Falha na leitura do arquivo {}", yamlFileName);
       return 1;
     }
 
-    // if (filesystem::exists(".git/config")) {
-    // ini::IniFile gitConfigIni;
-    // gitConfigIni.load(".git/config");
-    // auto gitRemote = gitConfigIni["remote \"origin\""]["url"].as<string>();
-    // cout << "# git remote: " << gitRemote << endl;
-    // std::string result2 =
-    //    Chocobo1::SHA1().addData("hello").finalize().toString();
-    // [remote "origin"]
-    //	url = git@github.com:geraldolsribeiro/microCI.git
-    //}
-
     if (cmdl[{"-T", "--test-config"}]) {
       return uCI.IsValid() ? 0 : 1;
+    }
+
+    if (cmdl[{"-U", "--update-db"}]) {
+      if (uCI.IsValid() and filesystem::exists("/opt/microCI/db.json")) {
+        json dbJson;
+        {
+          ifstream jsonFile("/opt/microCI/db.json");
+          jsonFile >> dbJson;
+        }
+        auto CI = YAML::LoadFile(yamlFileName);
+
+        string pwd = filesystem::absolute(yamlFileName).parent_path().lexically_normal();
+        pwd.erase(pwd.size() - 1);  // remove a barra no final
+
+        auto gitRemoteOrigin = string{};
+        auto gitConfigFilename = pwd + "/.git/config";
+        if (filesystem::exists(gitConfigFilename)) {
+          ini::IniFile gitConfigIni;
+          gitConfigIni.load(gitConfigFilename);
+          gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<string>();
+        }
+
+        spdlog::debug("PWD: {}", pwd);
+        spdlog::debug("Git config: {}", gitConfigFilename);
+        spdlog::debug("Origin: {}", gitRemoteOrigin);
+
+        auto pwdRepoId = string{"_"};  // para evitar que a chave comece com número
+        unsigned char hash[MD5_DIGEST_LENGTH];
+        MD5(reinterpret_cast<const unsigned char *>(pwd.c_str()), pwd.size(), hash);
+        static const char hexchars[] = "0123456789abcdef";
+        for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
+          unsigned char b = hash[i];
+          char hex[3];
+          hex[0] = hexchars[b >> 4];
+          hex[1] = hexchars[b & 0xF];
+          hex[2] = 0;
+          pwdRepoId.append(hex);
+        }
+        pwdRepoId = pwdRepoId.substr(0, 7);
+
+        dbJson["repos"][pwdRepoId]["path"] = pwd;
+        dbJson["repos"][pwdRepoId]["origin"] = gitRemoteOrigin;
+
+        size_t stepNo = 0;
+        for (auto step : CI["steps"]) {
+          spdlog::debug("{} {}", stepNo, step["name"].as<string>());
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"] = step["name"].as<string>();
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["plugin"] = step["plugin"]["name"].as<string>();
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["only"] = bool(step["only"]);
+          if (step["description"]) {
+            dbJson["repos"][pwdRepoId]["steps"][stepNo]["description"] = step["description"].as<string>();
+          }
+          ++stepNo;
+        }
+
+        {
+          ofstream jsonFile("/opt/microCI/db.json");
+          jsonFile << dbJson.dump(2);
+        }
+      }
+      return 0;
     }
 
     cout << uCI.ToString();

@@ -40,6 +40,7 @@ CXXFLAGS+= -fPIC
 CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
+LDFLAGS+= -lcrypto
 
 all: ../bin/microCI
 

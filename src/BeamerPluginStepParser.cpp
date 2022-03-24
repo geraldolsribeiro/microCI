@@ -121,7 +121,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
         --attach stderr \
         --rm \
         --workdir {{ WORKSPACE }} \
-        --volume "${PWD}":{{ WORKSPACE }} \
+        --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --user $(id -u):$(id -g) \
         {{ DOCKER_IMAGE }} \
         --variable lang='{{ LANG }}' \

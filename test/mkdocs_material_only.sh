@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.17.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.18.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -40,8 +40,7 @@ command -v curl &> /dev/null \
 command -v docker &> /dev/null \
   || { echo -e "[0;31mComando docker não foi encontrado[0m";  exit 1; }
 
-PWD=$(pwd)
-
+MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
 MICROCI_STEP_NUMBER=0
 
@@ -49,8 +48,9 @@ function gitOrigin {
   git config --get remote.origin.url || echo "SEM GIT ORIGIN"
 }
 
-function gitRepoId {
-  gitOrigin | md5sum | cut -b 1-6
+function pwdRepoId {
+  # chave json não pode começar com número
+  echo "_$(echo "${MICROCI_PWD}" | md5sum)" | cut -b 1-7
 }
 
 function microCI_latest_download_URL_with_version {
@@ -70,10 +70,10 @@ function updateStepStatusJson {
     local status=$1  ; shift
     local name=$1    ; shift
     local ts
-    local id
+    #local id
     ts=$(date +%s)
-    id=$( echo "${repoId} ${stepName}" | md5sum | cut -b 1-6)
-    echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    # id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
+    # echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg name   "$name"   ".repos.$repoId.steps[$stepNum].name   = (\$name)"   ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --argjson ts "$ts"     ".repos.$repoId.steps[$stepNum].ts     = (\$ts)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
     echo $( jq --arg status "$status" ".repos.$repoId.steps[$stepNum].status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
@@ -83,22 +83,40 @@ function updateStepStatusJson {
 function resetStepStatusesJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
     local stepNum=0
-
-    echo $( jq --arg origin "$(gitOrigin)" ".repos.$(gitRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg status "unknown" ".repos.$(gitRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    echo $( jq --arg path "${MICROCI_PWD}" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
 
     yq -r .steps[].name .microCI.yml \
       | while IFS= read -r stepName
         do
-          updateStepStatusJson "$(gitRepoId)" "${stepNum}" "unknown" "${stepName}"
+          updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
           ((++stepNum))
         done
   fi
 }
 
+function setStepStatusOkJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "OK" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusFailJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "FAIL" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusSkipJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "SKIP" "${MICROCI_STEP_NAME}"
+  fi
+}
+
 function reformatJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
-    jq . ${MICROCI_DB_JSON} > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}; rm -f /tmp/$$.json
+    jq --sort-keys . ${MICROCI_DB_JSON} > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}; rm -f /tmp/$$.json
   fi
 }
 
@@ -143,6 +161,8 @@ function assert_function() {
 }
 
 resetStepStatusesJson
+reformatJson
+
 
 # Notificação via Discord não será possível
 # Atualiza as imagens docker utilizadas no passos
