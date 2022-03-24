@@ -37,6 +37,11 @@ namespace microci {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+bool PluginStepParser::IsValid() const { return mIsValid; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 json PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const {
   auto data_ = data;
   data_["RUN_AS"] = defaultValue;
@@ -206,16 +211,22 @@ void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentV
       echo ""
       echo "Passo: {{ STEP_NAME }}"
       # shellcheck disable=SC2140,SC2046
-      docker run \)",
+      docker run)",
                                      data);
 
   if (string{data["RUN_AS"]} != "root") {
-    mMicroCI->Script() << inja::render(R"(
-        --user $(id -u):$(id -g) \)",
+    mMicroCI->Script() << inja::render(R"( \
+        --user $(id -u):$(id -g))",
                                        data);
   }
 
-  mMicroCI->Script() << inja::render(R"(
+  if (data.count("DOCKER_ENTRYPOINT")) {
+    mMicroCI->Script() << inja::render(R"( \
+        --entrypoint={{DOCKER_ENTRYPOINT}})",
+                                       data);
+  }
+
+  mMicroCI->Script() << inja::render(R"( \
         --interactive \
         --attach stdout \
         --attach stderr \

@@ -107,5 +107,5 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
       data);
 
   endFunction(data);
-}  // namespace microci
+}
 }  // namespace microci

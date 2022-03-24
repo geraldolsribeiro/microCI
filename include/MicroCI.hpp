@@ -110,10 +110,9 @@ class MicroCI {
   string mDefaultDockerImage;
   string mDefaultWorkspace;
   stringstream mScript;
+  bool mIsValid = true;
 
-  typedef void (MicroCI::*parseFunctionPtr)(const YAML::Node &step);
-  map<string, parseFunctionPtr> mPluginParserMap;
-  map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap2;
+  map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap;
 };
 
 }  // namespace microci

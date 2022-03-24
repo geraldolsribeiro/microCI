@@ -50,6 +50,7 @@ using namespace std;
 #include <FetchPluginStepParser.hpp>
 #include <GitDeployPluginStepParser.hpp>
 #include <GitPublishPluginStepParser.hpp>
+#include <MinioPluginStepParser.hpp>
 #include <MkdocsMaterialPluginStepParser.hpp>
 #include <PlantumlPluginStepParser.hpp>
 #include <PluginStepParser.hpp>
@@ -134,6 +135,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("clang-tidy", make_shared<ClangTidyPluginStepParser>(&uCI));
     uCI.RegisterPlugin("clang-format", make_shared<ClangFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
 
     // Carrega as variáveis de ambiente
     for (char **env = envp; *env != 0; env++) {
@@ -263,7 +265,9 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
         auto CI = YAML::LoadFile(yamlFileName);
 
         string pwd = filesystem::absolute(yamlFileName).parent_path().lexically_normal();
-        pwd.erase(pwd.size() - 1);  // remove a barra no final
+        if (pwd.at(pwd.size() - 1) == '/') {
+          pwd.erase(pwd.size() - 1);  // remove a barra no final
+        }
 
         auto gitRemoteOrigin = string{};
         auto gitConfigFilename = pwd + "/.git/config";

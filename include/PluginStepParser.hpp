@@ -46,7 +46,8 @@ class PluginStepParser {
  public:
   PluginStepParser(MicroCI *microCI) : mMicroCI(microCI) {}
   virtual ~PluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<string>() << endl; };
+  virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<string>() << endl; }
+  virtual bool IsValid() const;
 
  protected:
   void beginFunction(const json &data, const set<EnvironmentVariable> &envs);
@@ -68,6 +69,7 @@ class PluginStepParser {
   void prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs, const set<DockerVolume> &volumes);
 
   MicroCI *mMicroCI = nullptr;
+  bool mIsValid = true;
 };
 
 }  // namespace microci

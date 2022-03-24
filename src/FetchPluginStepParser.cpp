@@ -102,5 +102,5 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << "\"\n";
     endFunction(data);
   }
-}  // namespace microci
+}
 }  // namespace microci

@@ -56,19 +56,19 @@ MicroCI::MicroCI() {
 //
 // ----------------------------------------------------------------------
 MicroCI::~MicroCI() {
-  // verificar se precisa deletar mPluginParserMap2
+  // verificar se precisa deletar mPluginParserMap
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-bool MicroCI::IsValid() const { return true; }
+bool MicroCI::IsValid() const { return mIsValid; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pluginStepParser) {
-  mPluginParserMap2[name] = pluginStepParser;
+  mPluginParserMap[name] = pluginStepParser;
 }
 
 // ----------------------------------------------------------------------
@@ -110,6 +110,28 @@ bool MicroCI::ReadConfig(const string &filename) {
 
   try {
     CI = YAML::LoadFile(filename);
+
+    // Variáveis de ambiente globais
+    if (CI["envs"] and CI["envs"].IsMap()) {
+      for (auto it : CI["envs"]) {
+        EnvironmentVariable env;
+        env.name = it.first.as<string>();
+        env.value = it.second.as<string>();
+        mEnvs.insert(env);
+      }
+    }
+
+    // Sobrescreve com .env
+    if (filesystem::exists(".env")) {
+      auto dotEnv = YAML::LoadFile(".env");
+      for (auto it : dotEnv) {
+        EnvironmentVariable env;
+        env.name = it.first.as<string>();
+        env.value = it.second.as<string>();
+        mEnvs.insert(env);
+      }
+    }
+
   } catch (const YAML::BadFile &e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
     spdlog::error(e.what());
@@ -118,16 +140,6 @@ bool MicroCI::ReadConfig(const string &filename) {
     spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
     spdlog::error(e.what());
     return false;
-  }
-
-  // Variáveis de ambiente globais
-  if (CI["envs"] and CI["envs"].IsMap()) {
-    for (auto it : CI["envs"]) {
-      EnvironmentVariable env;
-      env.name = it.first.as<string>();
-      env.value = it.second.as<string>();
-      mEnvs.insert(env);
-    }
   }
 
   initBash();
@@ -217,28 +229,18 @@ main
 void MicroCI::parsePluginStep(const YAML::Node &step) {
   auto pluginName = step["plugin"]["name"].as<string>();
 
-  if (mPluginParserMap2.count(pluginName)) {
-    mPluginParserMap2.at(pluginName)->Parse(step);
+  if (mPluginParserMap.count(pluginName)) {
+    mPluginParserMap.at(pluginName)->Parse(step);
+    mIsValid = mIsValid && mPluginParserMap.at(pluginName)->IsValid();
     return;
   } else {
     auto stepName = step["name"].as<string>();
     spdlog::error("O plugin '{}' não foi encontrado no passo '{}'", pluginName, stepName);
-    for (const auto p : mPluginParserMap2) {
+    for (const auto p : mPluginParserMap) {
       spdlog::warn("Plugin '{}'", p.first);
     }
     return;
   }
-
-  // if (pluginName.empty() || (mPluginParserMap.count(pluginName) == 0)) {
-  //   auto stepName = step["name"].as<string>();
-  //   spdlog::error("Plugin '{}' não encontrado no passo '{}'", pluginName,
-  //                 stepName);
-  //   return;
-  // }
-  //
-  // // Executa o plugin
-  // parseFunctionPtr parser = mPluginParserMap[pluginName];
-  // (this->*parser)(step);
 }
 
 // ----------------------------------------------------------------------

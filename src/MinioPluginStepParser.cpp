@@ -29,7 +29,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include <ClangFormatPluginStepParser.hpp>
+#include <MinioPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -38,39 +38,47 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
+void MinioPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  list<string> sourceList;
 
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  // list<string> sourceList;
+  //
+  // data = parseRunAs(step, data, "user");
+  // data = parseNetwork(step, data);
+  //
+  // if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
+  //   for (const auto &src : step["plugin"]["source"]) {
+  //     sourceList.push_back(src.as<string>());
+  //   }
+  // }
 
-  if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+  for (const auto &envName : {"MICROCI_MINIO_URL", "MICROCI_MINIO_ACCESS_KEY", "MICROCI_MINIO_SECRET_KEY"}) {
+    auto it = envs.find(EnvironmentVariable{envName, ""});
+    if (it == envs.end()) {
+      spdlog::error("Variável de ambiente '{}' não definida", envName);
+      mIsValid = false;
+      return;
+    } else {
+      data[envName] = it->value;
     }
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "minio/mc");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Envia arquivos para gerenciador de artefatos");
+  data["DOCKER_ENTRYPOINT"] = "";  // remove o entrypoint padrão
+  data["DOCKER_NETWORK"] = "bridge";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
   mMicroCI->Script() << inja::render(R"( \
-        /bin/bash -c "cd {{ WORKSPACE }})",
+        /bin/bash -c "cd {{ WORKSPACE }} \
+        && mc alias set minio {{MICROCI_MINIO_URL}} {{MICROCI_MINIO_ACCESS_KEY}} {{MICROCI_MINIO_SECRET_KEY}} --api S3v4 \
+        && mc ls minio/rafael)",
                                      data);
-  for (const auto &src : sourceList) {
-    mMicroCI->Script() << fmt::format(R"( \
-        && cat <(compgen -G '{}') \
-          | )",
-                                      src);
-    mMicroCI->Script() << R"(xargs -I {} clang-format -i {} 2>&1 )";
-  }
-
   mMicroCI->Script() << R"("
 )";
   endFunction(data);
