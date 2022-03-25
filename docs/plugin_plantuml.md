@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin plantuml
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin plantuml
+
+```yaml
 steps:
   - name: "Gerar diagramas plantuml"
     plugin:
@@ -9,6 +11,5 @@ steps:
         - "docs/**.puml"
       type: svg                # svg, png ou pdf
       output: "/microci_workspace/docs/diagrams/" # Pasta onde serão salvos os arquivos
-#}}}
+```
 
-# vim: spell spelllang=pt,en

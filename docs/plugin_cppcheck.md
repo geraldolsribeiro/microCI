@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin cppcheck
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin cppcheck
+
+```yaml
 steps:
   - name: "Gerar relatório de verificação do código C++ - cppcheck"
     description: "Verifica o código C++ e gera relatório em formato HTML"
@@ -15,6 +17,5 @@ steps:
         - "src"
         - "test"
       platform: "unix64"
-#}}}
+```
 
-# vim: spell spelllang=pt,en

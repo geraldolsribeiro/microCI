@@ -1,6 +1,6 @@
 # Atenção, não inclua este arquivo no controle de versão!
 
-MICROCI_MINIO_URL: "http://1.2.3.4:9000"
+MICROCI_MINIO_URL: "http://11.22.33.44:9000"
 MICROCI_MINIO_ACCESS_KEY: "Micro00000000000000CI"
 MICROCI_MINIO_SECRET_KEY: "microcimicrocimicrocimicrocimicrocimicro"
 

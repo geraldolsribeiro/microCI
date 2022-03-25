@@ -213,8 +213,11 @@ function step_salvar_artefato() {
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "minio/mc" \
         /bin/bash -c "cd /microci_workspace \
-        && mc alias set minio http://1.2.3.4:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
-        && mc ls minio/rafael"
+        && mc alias set microci http://1.2.3.4:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
+           && mc ls microci/rafael 2>&1 \
+           && mc ls microci/str 2>&1 \
+           && mc cp Makefile microci/rafael/ 2>&1 \
+           && mc cp microci/rafael/repository-open-graph.png . 2>&1"
 
     )
 

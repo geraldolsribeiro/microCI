@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin git_publish
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin git_publish
+
+```yaml
 ---
 steps:
   - name: "Publicar em outro repositório git"
@@ -14,6 +16,5 @@ steps:
       copy_to: "/tmp/deploy" # Pasta padrão dentro do container
       copy_from: "site"  # Pasta padrão que contêm os arquivos
       clean_before: true # Remove todos os arquivos antes de copiar o novos
-#}}}
+```
 
-# vim: spell spelllang=pt,en

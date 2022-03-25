@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin bash
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin bash
+
+```yaml
 steps:
   - name: "Compilar versão estática do microCI"
     description: "Descrição deste passo"
@@ -18,5 +20,5 @@ steps:
         make -C test
         # Torna o usuário atual como dono do arquivo gerado
         chown $(id -u).$(id -g) -Rv src/microCI
-#}}}
-# vim: spell spelllang=pt,en
+```
+

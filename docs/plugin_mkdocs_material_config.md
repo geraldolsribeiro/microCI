@@ -1,5 +1,7 @@
-#   # Exemplo de configuração do plugin mkdocs_material
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de configuração do plugin mkdocs_material
+
+```yaml
 site_name: Nome do site
 repo_url: https://github.com/geraldolsribeiro/microCI
 repo_name: geraldolsribeiro/microCI
@@ -51,6 +53,5 @@ plugins:
           name: Português
           build: true
           site_name: Documentação do microCI
-#}}}
+```
 
-# vim: spell spelllang=pt,en

@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin git_deploy
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin git_deploy
+
+```yaml
 ---
 steps:
   - name: "Deploy de página de aplicação VueJS"
@@ -13,6 +15,5 @@ steps:
       # Local no servidor onde será feito o deploy dos arquivos
       work_tree: "/var/www/my-intranet/html/app"
       clean: true
-#}}}
+```
 
-# vim: spell spelllang=pt,en

@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin clang-tidy
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin clang-tidy
+
+```yaml
 steps:
   - name: "Gerar relatório de verificação do código C++ - clang-tidy"
     description: "Verifica o código C++ e gera relatório em formato HTML"
@@ -12,6 +14,5 @@ steps:
       source:
         - "src/*.cpp"
         - "test/*.cpp"
-#}}}
-# vim: spell spelllang=pt,en
+```
 

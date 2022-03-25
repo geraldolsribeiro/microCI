@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin fetch (2)
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin fetch (2)
+
+```yaml
 ---
 steps:
   - name: "Baixar arquivos externos ao projeto"
@@ -24,5 +26,5 @@ steps:
           target: /tmp/include # Local onde será colocado este arquivo
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
-#}}}
-# vim: spell spelllang=pt,en
+```
+

@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin mkdocs_material
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin mkdocs_material
+
+```yaml
 ---
 steps:
   - name: "Construir documentação em formato HTML"
@@ -27,6 +29,5 @@ steps:
       name: "mkdocs_material"
       action: "serve"
       port: 8000
-#}}}
+```
 
-# vim: spell spelllang=pt,en

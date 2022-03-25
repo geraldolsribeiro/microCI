@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin bash para projeto node
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin bash para projeto node
+
+```yaml
 docker: "node:16"
 steps:
   - name: "Instalar dependências"
@@ -12,6 +14,5 @@ steps:
   - name: "Construir"
     bash: |
       npm run build
-#}}}
+```
 
-# vim: spell spelllang=pt,en

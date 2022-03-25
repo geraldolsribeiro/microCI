@@ -1,6 +1,8 @@
-# Bem-vindo ao microCI
+# Welcome to microCI
 
-A documentação completa pode ser encontrada em [microci.dev](https://microci.dev).
+The full documentation can be found at [microci.dev](https://microci.dev).
+
+to be translated...
 
 O `microCI` é uma ferramenta para auxiliar a construção de pipelines de
 integração contínua.
@@ -49,7 +51,7 @@ que esteja no `PATH`. Para remover o `microCI` completamente do sistema basta
 apagar o arquivo copiado para o PATH.
 
 ```bash
-curl -L https://github.com/geraldolsribeiro/microCI/releases/download/v0.18.0/microCI \
+curl -L https://github.com/geraldolsribeiro/microCI/releases/download/v0.16.0/microCI \
   -o /usr/local/bin/microCI
 chmod 755 /usr/local/bin/microCI
 ```
@@ -81,9 +83,7 @@ releases.
 
 ## Versões
 
-* `0.18.0` Plugin minio
-* `0.17.0` Plugin skip; Status de execução
-* `0.16.1` Refatoração dos plugins; Execução default como não root
+* `0.16.0` Refatoração dos plugins
 * `0.15.2` Plugin fetch
 * `0.14.1` Plugin beamer
 * `0.13.0` Configuração de rede docker
@@ -134,3 +134,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  
+

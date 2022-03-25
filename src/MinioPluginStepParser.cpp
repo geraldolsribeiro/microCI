@@ -42,17 +42,22 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
+  auto cmdsStr = string{};
+  auto cmds = vector<string>{};
+  auto line = string{};
 
-  // list<string> sourceList;
-  //
-  // data = parseRunAs(step, data, "user");
-  // data = parseNetwork(step, data);
-  //
-  // if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-  //   for (const auto &src : step["plugin"]["source"]) {
-  //     sourceList.push_back(src.as<string>());
-  //   }
-  // }
+  if (step["plugin"]["bash"]) {
+    cmdsStr = step["plugin"]["bash"].as<string>();
+  } else if (step["plugin"]["sh"]) {
+    cmdsStr = step["plugin"]["sh"].as<string>();
+  }
+
+  auto ss = stringstream{cmdsStr};
+  while (getline(ss, line, '\n')) {
+    if (!line.empty() && line.at(0) != '#') {
+      cmds.push_back(line);
+    }
+  }
 
   for (const auto &envName : {"MICROCI_MINIO_URL", "MICROCI_MINIO_ACCESS_KEY", "MICROCI_MINIO_SECRET_KEY"}) {
     auto it = envs.find(EnvironmentVariable{envName, ""});
@@ -76,9 +81,11 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   prepareRunDocker(data, envs, volumes);
   mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }} \
-        && mc alias set minio {{MICROCI_MINIO_URL}} {{MICROCI_MINIO_ACCESS_KEY}} {{MICROCI_MINIO_SECRET_KEY}} --api S3v4 \
-        && mc ls minio/rafael)",
+        && mc alias set microci {{MICROCI_MINIO_URL}} {{MICROCI_MINIO_ACCESS_KEY}} {{MICROCI_MINIO_SECRET_KEY}} --api S3v4)",
                                      data);
+  for (auto cmd : cmds) {
+    mMicroCI->Script() << fmt::format(" \\\n           && {} 2>&1", cmd);
+  }
   mMicroCI->Script() << R"("
 )";
   endFunction(data);

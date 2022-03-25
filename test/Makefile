@@ -30,6 +30,7 @@ test:
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
 		&& pushd "new_$$i" && pwd && ../../bin/microCI -n "$$i" && popd; \
 	done
+	rm -f .env
 	../bin/microCI -i y.yml         || echo "OK"
 	../bin/microCI --input=x.yml    || echo "OK"
 	../bin/microCI -c tipo_invalido || echo "OK"
@@ -47,9 +48,9 @@ test:
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 	../bin/microCI -i ../new/skip.yml                            > skip.sh
-	cp dot_env .env
+	cp dot_env_minio .env
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
-	rm .env
+	rm -f .env
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@

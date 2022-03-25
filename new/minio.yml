@@ -1,0 +1,13 @@
+#   # Exemplo de uso do plugin minio
+#{{{
+steps:
+  - name: "Salvar artefato em bucket"
+    plugin:
+      name: minio
+      bash: |
+        mc ls microci/nome_do_bucket
+        mc cp Makefile microci/nome_do_bucket/
+        mc cp microci/nome_do_bucket/imagem.png .
+#}}}
+
+# vim: spell spelllang=pt,en

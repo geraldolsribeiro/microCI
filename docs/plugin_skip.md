@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin skip
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin skip
+
+```yaml
 steps:
   - name: "Passo ignorado"
     description: "Este passo está desativado"
@@ -19,6 +21,5 @@ steps:
         make -C test
         # Ajusta o dono do arquivo do root para o usuário atual
         chown $(id -u).$(id -g) -Rv src/microCI
-#}}}
+```
 
-# vim: spell spelllang=pt,en

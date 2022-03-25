@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin clang-format
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin clang-format
+
+```yaml
 steps:
   - name: "Formatar código C++ com clang-format"
     description: "Padroniza formato do código usando regras"
@@ -10,5 +12,5 @@ steps:
         - "src/*.cpp"
         - "test/*.cpp"
         - "include/*.hpp"
-#}}}
-# vim: spell spelllang=pt,en
+```
+

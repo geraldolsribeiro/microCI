@@ -75,7 +75,6 @@ tidy:
 single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
   ../include/3rd/beamercolorthemestr.sty.hpp \
   ../include/3rd/str-logo.png.hpp \
-  ../include/new/skip.hpp \
   ../include/new/bash.hpp \
   ../include/new/beamer.hpp \
   ../include/new/clang-format_config.hpp \
@@ -85,11 +84,13 @@ single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
   ../include/new/fetch.hpp \
   ../include/new/git_deploy.hpp \
   ../include/new/git_publish.hpp \
+  ../include/new/minio.hpp \
   ../include/new/mkdocs_material_config.hpp \
   ../include/new/mkdocs_material.hpp \
   ../include/new/mkdocs_material_index.hpp \
   ../include/new/npm.hpp \
   ../include/new/plantuml.hpp \
+  ../include/new/skip.hpp \
   ../include/sh/MicroCI.hpp \
   ../include/sh/NotifyDiscord.hpp
 	@echo "// ARQUIVO GERADO! NÃO EDITAR" > $@

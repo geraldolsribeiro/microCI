@@ -1,5 +1,7 @@
-#   # Exemplo de uso do plugin beamer
-#{{{
+[//]: <> (Documentação gerada com intmain_docmd)
+# Exemplo de uso do plugin beamer
+
+```yaml
 steps:
   - name: Criar apresentação PDF a partir de arquivos Markdown
     plugin:
@@ -28,5 +30,5 @@ steps:
       # theme: STR
       header-includes:
         - \usepackage{tikz}
-#}}}
-# vim: spell spelllang=pt,en
+```
+
