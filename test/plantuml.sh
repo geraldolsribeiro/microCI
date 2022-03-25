@@ -210,7 +210,7 @@ function step_gerar_diagramas_plantuml() {
           && java -jar /opt/plantuml/plantuml.jar \
             -r \
             -tsvg \
-            -o docs/diagrams/ \
+            -o /microci_workspace/docs/diagrams/ \
             src/**.cpp \
             docs/**.puml \
             2>&1"

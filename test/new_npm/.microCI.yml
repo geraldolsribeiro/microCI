@@ -1,4 +1,5 @@
-# Imagem utilizada em todos os passos
+#   # Exemplo de uso do plugin bash para projeto node
+#{{{
 docker: "node:16"
 steps:
   - name: "Instalar dependências"
@@ -11,5 +12,6 @@ steps:
   - name: "Construir"
     bash: |
       npm run build
+#}}}
 
 # vim: spell spelllang=pt,en

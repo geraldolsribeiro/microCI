@@ -1,3 +1,5 @@
+#   # Exemplo de configuração do plugin mkdocs_material
+#{{{
 site_name: Nome do site
 repo_url: https://github.com/geraldolsribeiro/microCI
 repo_name: geraldolsribeiro/microCI
@@ -49,3 +51,6 @@ plugins:
           name: Português
           build: true
           site_name: Documentação do microCI
+#}}}
+
+# vim: spell spelllang=pt,en

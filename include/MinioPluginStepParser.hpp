@@ -44,4 +44,3 @@ class MinioPluginStepParser : public PluginStepParser {
 }  // namespace microci
 
 #endif
-

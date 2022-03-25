@@ -173,9 +173,9 @@ reformatJson
 # ----------------------------------------------------------------------
 # Envia arquivos para gerenciador de artefatos
 # ----------------------------------------------------------------------
-function step_salvar_artefato() {
+function step_salvar_artefato_em_bucket() {
   SECONDS=0
-  MICROCI_STEP_NAME="Salvar artefato"
+  MICROCI_STEP_NAME="Salvar artefato em bucket"
   MICROCI_STEP_DESCRIPTION="Envia arquivos para gerenciador de artefatos"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
@@ -188,7 +188,7 @@ function step_salvar_artefato() {
   echo -ne "[0;36m${title}[0m: "
   MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
   MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
-  MICROCI_MINIO_URL="http://1.2.3.4:9000"
+  MICROCI_MINIO_URL="http://11.22.33.44:9000"
 
   {
     (
@@ -197,7 +197,7 @@ function step_salvar_artefato() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Salvar artefato"
+      echo "Passo: Salvar artefato em bucket"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --entrypoint= \
@@ -209,15 +209,14 @@ function step_salvar_artefato() {
         --workdir /microci_workspace \
         --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
         --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
-        --env MICROCI_MINIO_URL="http://1.2.3.4:9000" \
+        --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "minio/mc" \
         /bin/bash -c "cd /microci_workspace \
-        && mc alias set microci http://1.2.3.4:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
-           && mc ls microci/rafael 2>&1 \
-           && mc ls microci/str 2>&1 \
-           && mc cp Makefile microci/rafael/ 2>&1 \
-           && mc cp microci/rafael/repository-open-graph.png . 2>&1"
+        && mc alias set microci http://11.22.33.44:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
+           && mc ls microci/nome_do_bucket 2>&1 \
+           && mc cp Makefile microci/nome_do_bucket/ 2>&1 \
+           && mc cp microci/nome_do_bucket/imagem.png . 2>&1"
 
     )
 
@@ -249,7 +248,7 @@ function step_salvar_artefato() {
 function main() {
   date >> .microCI.log
 
-  step_salvar_artefato
+  step_salvar_artefato_em_bucket
 
   date >> .microCI.log
 }
