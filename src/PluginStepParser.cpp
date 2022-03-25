@@ -126,7 +126,7 @@ function step_{{ FUNCTION_NAME }}() {
   MICROCI_STEP_NAME="{{ STEP_NAME }}"
   MICROCI_STEP_DESCRIPTION="{{ STEP_DESCRIPTION }}"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
   MICROCI_STEP_SKIP="{{ MICROCI_STEP_SKIP }}"

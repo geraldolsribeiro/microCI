@@ -49,6 +49,9 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     cmdsStr = step["plugin"]["bash"].as<string>();
   } else if (step["plugin"]["sh"]) {
     cmdsStr = step["plugin"]["sh"].as<string>();
+  } else {
+    spdlog::error("Tratar erro aqui");
+    throw invalid_argument("Script não encontrado");
   }
 
   auto ss = stringstream{cmdsStr};
@@ -69,10 +72,11 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
+  mMicroCI->Script() << "# bash \n";
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
 
-  if (step["sh"]) {
+  if (step["plugin"]["sh"]) {
     mMicroCI->Script() << inja::render(R"( \
         /bin/sh -c "cd {{ WORKSPACE }})",
                                        data);
@@ -80,8 +84,6 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }})",
                                        data);
-  } else {
-    spdlog::error("Tratar erro aqui");
   }
 
   copySshIfAvailable(step, data);

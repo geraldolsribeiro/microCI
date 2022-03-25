@@ -10,7 +10,7 @@ function notify_discord() {
       --arg title         "$MICROCI_STEP_NAME" \
       --arg description   "$MICROCI_STEP_DESCRIPTION" \
       --arg repo          "$MICROCI_GIT_ORIGIN" \
-      --arg commit        "$MICROCI_GIT_COMMIT" \
+      --arg commit_sha    "$MICROCI_GIT_COMMIT_SHA" \
       --arg commit_msg    "$MICROCI_GIT_COMMIT_MSG" \
       --arg step_status   "$MICROCI_STEP_STATUS" \
       --arg status_color  $MICROCI_STEP_STATUS_COLOR \
@@ -24,7 +24,7 @@ function notify_discord() {
       .embeds[0].fields[0].value = $repo          |
       .embeds[0].fields[0].inline = false         |
       .embeds[0].fields[1].name = "Commit"        |
-      .embeds[0].fields[1].value = $commit        |
+      .embeds[0].fields[1].value = $commit_sha    |
       .embeds[0].fields[1].inline = true          |
       .embeds[0].fields[2].name = "Comentário"    |
       .embeds[0].fields[2].value = $commit_msg    |
