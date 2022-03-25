@@ -4,6 +4,7 @@
 ```yaml
 steps:
   - name: "Gerar diagramas plantuml"
+    description: "Descrição deste passo"
     plugin:
       name: "plantuml"
       source:
