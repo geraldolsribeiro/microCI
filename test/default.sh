@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.18.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.19.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -170,6 +170,7 @@ reformatJson
   docker pull node:16 2>&1
   docker pull ubuntu:18.04 2>&1
 } >> .microCI.log
+# bash 
 
 # ----------------------------------------------------------------------
 # Descrição do passo
@@ -179,7 +180,7 @@ function step_instalar_dependencias() {
   MICROCI_STEP_NAME="Instalar dependências"
   MICROCI_STEP_DESCRIPTION="Descrição do passo"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
   MICROCI_STEP_SKIP="no"
@@ -238,6 +239,7 @@ function step_instalar_dependencias() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# bash 
 
 # ----------------------------------------------------------------------
 # Executa comandos no bash
@@ -247,7 +249,7 @@ function step_construir() {
   MICROCI_STEP_NAME="Construir"
   MICROCI_STEP_DESCRIPTION="Executa comandos no bash"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
   MICROCI_STEP_SKIP="no"

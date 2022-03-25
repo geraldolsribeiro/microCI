@@ -1,0 +1,14 @@
+#   # Exemplo de uso do plugin plantuml
+#{{{
+steps:
+  - name: "Converter pdf em jpg"
+    description: "Descrição deste passo"
+    docker: intmain/microci_poppler:latest
+    plugin:
+      name: "bash"
+      sh: |
+        cd docs/assets
+        pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
+#}}}
+
+# vim: spell spelllang=pt,en

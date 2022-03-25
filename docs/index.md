@@ -81,24 +81,25 @@ releases.
 
 ## Versões
 
-* `0.18.0` Plugin minio
-* `0.17.0` Plugin skip; Status de execução
+* `0.19.0` Documentação com `intmain_docmd`
+* `0.18.0` Plugin `minio`
+* `0.17.0` Plugin `skip`; Status de execução
 * `0.16.1` Refatoração dos plugins; Execução default como não root
-* `0.15.2` Plugin fetch
-* `0.14.1` Plugin beamer
+* `0.15.2` Plugin `fetch`
+* `0.14.1` Plugin `beamer`
 * `0.13.0` Configuração de rede docker
-* `0.12.0` Plugin clang-format e junit2html
+* `0.12.0` Plugins `clang-format` e `junit2html`
 * `0.11.1` Notificação em canal do discord
 * `0.10.1` Múltiplos arquivos de modelo
-* `0.9.0` Plugin plantuml
-* `0.8.0` Plugin clang-tidy
-* `0.7.0` Plugin cppcheck
-* `0.6.1` Plugin git_publish
+* `0.9.0` Plugin `plantuml`
+* `0.8.0` Plugin `clang-tidy`
+* `0.7.0` Plugin `cppcheck`
+* `0.6.1` Plugin `git_publish`
 * `0.5.0` Montagem de volumes; Cópia de chave SSH
 * `0.4.0` Construção do microCI pelo microCI
 * `0.3.0` Cria arquivos de configuração
-* `0.2.0` Plugin mkdocs
-* `0.1.0` Passo em bash e plugin git_deploy
+* `0.2.0` Plugin `mkdocs`
+* `0.1.0` Passo em `bash` e plugin `git_deploy`
 * `0.0.1` Versão inicial para prova de conceito
 
 ## Licença

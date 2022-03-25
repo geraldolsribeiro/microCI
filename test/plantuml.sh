@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.18.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.19.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -171,14 +171,14 @@ reformatJson
 } >> .microCI.log
 
 # ----------------------------------------------------------------------
-# Constroi diagramas plantuml
+# Descrição deste passo
 # ----------------------------------------------------------------------
 function step_gerar_diagramas_plantuml() {
   SECONDS=0
   MICROCI_STEP_NAME="Gerar diagramas plantuml"
-  MICROCI_STEP_DESCRIPTION="Constroi diagramas plantuml"
+  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
+  MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
   MICROCI_STEP_STATUS=":ok:"
   MICROCI_STEP_SKIP="no"

@@ -26,13 +26,21 @@ steps:
 
   - name: "Converter pdf em jpg"
     description: "Descrição deste passo"
-    only: p
     docker: intmain/microci_poppler:latest
     plugin:
       name: "bash"
       sh: |
         cd docs/assets
         pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
+
+  - name: "Gerar diagramas plantuml"
+    description: "Descrição deste passo"
+    plugin:
+      name: "plantuml"
+      source:
+        - "docs/**.pu"
+      type: png
+      output: "/microci_workspace/docs/"
 
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"

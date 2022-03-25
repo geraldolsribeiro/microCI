@@ -1,0 +1,280 @@
+#!/usr/bin/env ruby
+# ----------------------------------------------------------------------
+# Copyright (C) 2022-2022 Geraldo Ribeiro <geraldo@intmain.io>
+# ----------------------------------------------------------------------
+#   # Introdução
+#   
+#   Ferramenta para geração de documentação em formato markdown.
+#   
+#   ## Uso
+#   
+#   ```bash
+#   intmain_docmd tipo arquivo_fonte arquivo_markdown
+#   ```
+#   
+#   onde `tipo` pode ser:
+#   
+#   * `bash`
+#   * `c++`
+#   * `coffee`
+#   * `conf`
+#   * `grdb`
+#   * `makefile`
+#   * `nginx`
+#   * `python`
+#   * `ruby`
+#   * `scss`
+#   * `systemd`
+#   * `vim`
+#   * `yaml`
+#   
+#   Se nenhum argumento for fornecido o programa imprime a ajuda e finaliza a execução.
+#   
+#{{{
+if ARGV.empty?
+  puts """
+Gerador de documentação em formato Markdown
+
+intmain_docmd tipo arquivo_fonte arquivo_markdown
+
+tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, systemd, yaml
+
+Para alterar o comportamento da ferramenta utilize as seguintes variáveis de ambiente:
+
+  INTMAIN_DOCMD_DETAILS=false     desabilita a tag details
+  INTMAIN_DOCMD_TOC=false         desabilita a geração de sumário
+  INTMAIN_DOCMD_SHOW_SOURCE=false desabilita a identificação do arquivo fonte
+  """
+  exit
+end
+#}}}
+#   
+#   ### Exemplo real
+#   
+#   A documentação deste projeto é mantida utilizando-se o `intmain_docmd`:
+#   
+#   ```bash
+#   intmain_docmd ruby     bin/intmain_docmd               doc/10_Gerador_de_documentação_intmain_docmd.md
+#   intmain_docmd bash     bin/intmain_resize_screenshots  doc/20_Redimensionador_de_screenshots.md
+#   intmain_docmd bash     scripts/Common/intmain.bash     doc/20_Biblioteca_de_scripts_intmain.md
+#   intmain_docmd bash     scripts/Common/taoker.bash      doc/21_Biblioteca_de_scripts_taoker.md
+#   intmain_docmd bash     scripts/Common/common.bash      doc/30_Biblioteca_de_funções_bash.md
+#   intmain_docmd makefile scripts/Common/Makefile.include doc/40_Biblioteca_de_alvos_make.md
+#   ```
+#   
+#   ## Variáveis de controle
+#   
+#   * `INTMAIN_DOCMD_DETAILS`: ativa/desativa o encapsulamento dos trecho de código
+#   * `INTMAIN_DOCMD_TOC`: ativa/desativa a geração do índice
+#   * `INTMAIN_DOCMD_SHOW_SOURCE`: exibe o nome do arquivo de origem
+#   
+#{{{
+use_detail  = ( ENV['INTMAIN_DOCMD_DETAILS']     || 'true' ).match( /(true|t|yes|y)/i )
+use_toc     = ( ENV['INTMAIN_DOCMD_TOC']         || 'true' ).match( /(true|t|yes|y)/i )
+show_source = ( ENV['INTMAIN_DOCMD_SHOW_SOURCE'] || 'true' ).match( /(true|t|yes|y)/i )
+#}}}
+
+script_language           = ARGV[0]
+source_filename           = ARGV[1]
+output_filename           = ARGV[2]
+output_plantuml_filename  = nil
+output_requisite_filename = nil
+output_plantuml           = nil
+start_plantuml_re         = /@start(uml|wbs) (\S+.png)/
+end_plantuml_re           = /@end(uml|wbs)/
+start_requisite_re        = /REQUISITO (\S+) -> (.*)/
+end_requisite_re          = /REQUISITO/
+in_code_section           = false
+in_plantuml_section       = false
+in_requisite_section      = false
+
+line_match_re = case script_language
+                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#   (.*)/
+                when "yaml" then /\#   (.*)/
+                when "vim" then /^"   (.*)/
+                when "c++", "scss" then /^\s*\/\/-- (.*)/
+                end
+
+open_code_re = case script_language
+               when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#{{{/
+               when "yaml" then /\#{{{/
+               when "vim" then /^"{{{/
+               when "c++", "scss" then /^\s*\/\/{{{/
+               end
+
+close_code_re = case script_language
+                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#}}}/
+                when "yaml" then /\#}}}/
+                when "vim" then /^"}}}/
+                when "c++", "scss" then /^\s*\/\/}}}/
+                end
+
+def make_link(title)
+  anchor = title
+  anchor = anchor.gsub( /[()\.`]/, "" ) # remove caracteres ignorados pelo gogs
+  anchor = anchor.gsub( " ", "-" ).downcase
+
+  "[#{title}](\##{anchor})"
+end
+#   
+#   ## Callout numbers
+#   
+#   Para referenciar comandos use itens numerados, p. e. ((1)), para indicar
+#   uma linha no meio do código.
+#   
+#{{{
+def expand_shortcuts(text)
+  callout_numbers = { "((1))" => "❶", "((2))" => "❷", "((3))" => "❸",
+                      "((4))" => "❹", "((5))" => "❺", "((6))" => "❻",
+                      "((7))" => "❼", "((8))" => "❽", "((9))" => "❾",
+                      "((10))" => "❿", "((11))" => "⓫", "((12))" => "⓬",
+                      "((13))" => "⓭", "((14))" => "⓮", "((15))" => "⓯",
+                      "((16))" => "⓰", "((17))" => "⓱", "((18))" => "⓲",
+                      "((19))" => "⓳", "((20))" => "⓴" }
+  callout_numbers.each{ |k,v| text = text.gsub( k, v ) }
+  text
+end
+#}}}
+
+# Lê o arquivo inteiro uma vez para gerar o sumário
+toc = ""
+File.readlines(source_filename).each do |line|
+  if m = line.match( line_match_re )
+    mdline = m[1]
+    if m = mdline.match( /^# (.*)/ )
+      toc += "* #{make_link(m[1])}\n"
+    elsif m = mdline.match( /^## (.*)/ )
+      toc += "  * #{make_link(m[1])}\n"
+    elsif m = mdline.match( /^### (.*)/ )
+      toc += "      * #{make_link(m[1])}\n"
+    end
+
+    # Verificar se utiliza plantuml
+    if mdline.match( start_plantuml_re )
+      output_plantuml_filename = output_filename.gsub( ".md", ".pu" )
+    end
+
+    if mdline.match( start_requisite_re )
+      output_requisite_filename = output_filename.gsub( ".md", "_req.md" );
+    end
+  end
+end
+
+#   
+#   ## Inclusão de diagramas com plantuml
+#   
+#   Os trechos em `plantuml` a seguir serão substituídos pela imagem do diagrama.
+#   
+#   @startuml images/nome-do-arquivo.png
+#   (First usecase)
+#   (Another usecase) as (UC2)
+#   usecase UC3
+#   usecase (Last\nusecase) as UC4
+#   @enduml
+#   
+#   @startuml images/outro-nome-do-arquivo.png
+#   (First usecase 2)
+#   (Another usecase 2) as (UC2)
+#   usecase UC3
+#   usecase (Last\nusecase 2) as UC4
+#   @enduml
+#   
+#   @startwbs images/exemplo-wbs-plantuml.png
+#   * Business Process Modelling WBS
+#   ** Launch the project
+#   *** Complete Stakeholder Research
+#   *** Initial Implementation Plan
+#   ** Design phase
+#   *** Model of AsIs Processes Completed
+#   **** Model of AsIs Processes Completed1
+#   **** Model of AsIs Processes Completed2
+#   *** Measure AsIs performance metrics
+#   *** Identify Quick Wins
+#   ** Complete innovate phase
+#   @endwbs
+#   
+
+output_plantuml  = File.open(output_plantuml_filename, "w")  unless output_plantuml_filename.nil?
+output_requisite = File.open(output_requisite_filename, "w") unless output_requisite_filename.nil?
+
+# Gera o arquivo markdown principal
+File.open(output_filename, "w") do |output|
+
+  output << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+
+  if output_requisite
+    output_requisite << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+    output_requisite << "# Lista de Requisitos\n\n"
+  end
+
+  if output_plantuml
+    output_plantuml << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+  end
+
+  if show_source
+    output << "Fonte: `#{source_filename}`\n\n"
+  end
+
+  File.readlines(source_filename).each do |line|
+    if m = line.match( line_match_re )
+      mdline = m[1]
+
+      mdline = expand_shortcuts( mdline )
+
+      if m2 = mdline.match( start_plantuml_re )
+        pngFilename = m2[2]
+        output << "![UML](#{pngFilename})\n";
+        output_plantuml << mdline << "\n"
+        in_plantuml_section = true
+        next
+      elsif in_plantuml_section && mdline.match( end_plantuml_re )
+        in_plantuml_section = false
+        output_plantuml << mdline << "\n"
+        output_plantuml << "\n"
+        next
+      elsif m2 = mdline.match( start_requisite_re )
+        reqId = m2[1]
+        reqClass = m2[2]
+        output_requisite << "## Requisito " << reqId << " (" << reqClass << ")\n\n"
+        in_requisite_section = true
+        next
+      elsif in_requisite_section && mdline.match( end_requisite_re )
+        output_requisite << "\n"
+        in_requisite_section = false
+        next
+      elsif mdline.match( /^\[TOC\]/ )
+        if use_toc
+          output << "## Sumário\n\n"
+          output << toc << "\n"
+        end
+      #else
+      #  output << mdline << "\n" unless in_plantuml_section || in_requisite_section
+      end
+
+      if in_plantuml_section
+        output_plantuml << mdline << "\n"
+      elsif in_requisite_section
+        output_requisite << mdline << "\n"
+      else
+        output << mdline << "\n"
+      end
+
+
+    elsif m = line.match( open_code_re )
+      in_code_section = true
+      output << "<details>\n<summary>Detalhes</summary>\n<p>\n" if use_detail
+      output << "\n```#{script_language}\n"
+      next
+    elsif m = line.match( close_code_re )
+      in_code_section = false
+      output << "```\n\n"
+      output << "</p>\n</details>\n" if use_detail
+    end
+    # É necessário ter uma linha em branco após o fechamento de summary e details
+
+    if in_code_section
+      output << expand_shortcuts( line )
+    end
+  end
+end
+

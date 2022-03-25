@@ -65,6 +65,7 @@ using namespace std;
 #include <new/fetch.hpp>
 #include <new/git_deploy.hpp>
 #include <new/git_publish.hpp>
+#include <new/minio.hpp>
 #include <new/mkdocs_material.hpp>
 #include <new/mkdocs_material_config.hpp>
 #include <new/mkdocs_material_index.hpp>
@@ -99,6 +100,7 @@ Opções:
   -n,--new clang-format    Cria passo para formatação de código
   -n,--new beamer          Cria passo para criação de apresentação PDF
   -n,--new fetch           Cria passo para download de arquivos
+  -n,--new minio           Cria passo para upload de artefatos
 )";
 }
 
@@ -186,6 +188,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(false, "clang-format", ".clang-format", yml, clang_format_config);
       MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
       MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
+      MICROCI_TPL(true, "minio", ".microCI.yml", yml, minio);
 #undef MICROCI_TPL
 
       bool isTypeFound = false;

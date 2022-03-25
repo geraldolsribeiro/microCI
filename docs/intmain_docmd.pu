@@ -1,0 +1,29 @@
+[//]: <> (Documentação gerada com intmain_docmd)
+@startuml images/nome-do-arquivo.png
+(First usecase)
+(Another usecase) as (UC2)
+usecase UC3
+usecase (Last\nusecase) as UC4
+@enduml
+
+@startuml images/outro-nome-do-arquivo.png
+(First usecase 2)
+(Another usecase 2) as (UC2)
+usecase UC3
+usecase (Last\nusecase 2) as UC4
+@enduml
+
+@startwbs images/exemplo-wbs-plantuml.png
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
+
