@@ -45,7 +45,7 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
   list<string> sourceList;
 
   data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  data = parseNetwork(step, data, "none");
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {

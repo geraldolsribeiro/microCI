@@ -49,7 +49,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
   data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  data = parseNetwork(step, data, "none");
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {

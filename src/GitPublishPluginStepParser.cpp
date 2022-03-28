@@ -46,9 +46,8 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
 
-  data["DOCKER_NETWORK"] = "bridge";
   data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  data = parseNetwork(step, data, "bridge");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   const auto name = step["plugin"]["name"].as<string>();

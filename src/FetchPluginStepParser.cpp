@@ -40,9 +40,8 @@ using namespace std;
 // ----------------------------------------------------------------------
 void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
-  data["DOCKER_NETWORK"] = "bridge";
   data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  data = parseNetwork(step, data, "bridge");
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Baixa arquivos externos ao projeto");

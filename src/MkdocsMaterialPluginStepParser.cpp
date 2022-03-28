@@ -53,6 +53,8 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
+  data = parseNetwork(step, data, "host");
+
   data["ACTION"] = action;
   data["PORT"] = port;
   data["STEP_NAME"] = stepName(step);
@@ -81,6 +83,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
         --rm \
         --workdir {{ WORKSPACE }} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
+        --network {{ DOCKER_NETWORK }} \
         --publish {{PORT}}:8000 \
         {{ DOCKER_IMAGE }} \
         mkdocs {{ ACTION }} 2>&1

@@ -54,8 +54,9 @@ json PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, cons
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-json PluginStepParser::parseNetwork(const YAML::Node &step, const json &data) const {
+json PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, const string &defaultValue) const {
   auto data_ = data;
+  data_["DOCKER_NETWORK"] = defaultValue;
   if (step["network"]) {
     data_["DOCKER_NETWORK"] = step["network"].as<string>();
   }

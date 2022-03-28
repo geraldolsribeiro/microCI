@@ -48,7 +48,7 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
   list<string> opts = {"-r"};
 
   data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data);
+  data = parseNetwork(step, data, "none");
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
