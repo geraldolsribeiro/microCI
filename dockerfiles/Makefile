@@ -1,4 +1,5 @@
 all: \
+	microci_clang_push_dockerhub \
 	microci_cppcheck_push_dockerhub \
 	microci_mkdocs_material_push_dockerhub \
 	microci_plantuml_push_dockerhub \
@@ -30,6 +31,15 @@ microci_mkdocs_material_push_dockerhub: microci_mkdocs_material
 	docker login
 	docker push intmain/microci_mkdocs_material:0.2
 	docker push intmain/microci_mkdocs_material:latest
+
+microci_clang:
+	docker build -t intmain/microci_clang:0.1 -f clang.Dockerfile .
+	docker tag intmain/microci_clang:0.1 intmain/microci_clang:latest
+
+microci_clang_push_dockerhub: microci_clang
+	docker login
+	docker push intmain/microci_clang:0.1
+	docker push intmain/microci_clang:latest
 
 microci_cppcheck:
 	docker build -t intmain/microci_cppcheck:0.3 -f cppcheck.Dockerfile .
