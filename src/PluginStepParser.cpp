@@ -103,7 +103,7 @@ string PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const strin
 set<EnvironmentVariable> PluginStepParser::parseEnvs(const YAML::Node &step) const {
   auto ret = mMicroCI->DefaultEnvs();
   if (step["envs"] and step["envs"].IsMap()) {
-    for (const auto & it : step["envs"]) {
+    for (const auto &it : step["envs"]) {
       EnvironmentVariable env;
       env.name = it.first.as<string>();
       env.value = it.second.as<string>();

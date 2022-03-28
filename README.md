@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.20.0` Imagem `intmain/microci_clang`
 * `0.19.0` Documentação com `intmain_docmd`
 * `0.18.0` Plugin `minio`
 * `0.17.0` Plugin `skip`; Status de execução
