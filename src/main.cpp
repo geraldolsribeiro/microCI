@@ -48,6 +48,7 @@ using namespace std;
 #include <ClangTidyPluginStepParser.hpp>
 #include <CppCheckPluginStepParser.hpp>
 #include <FetchPluginStepParser.hpp>
+#include <FlawfinderPluginStepParser.hpp>
 #include <GitDeployPluginStepParser.hpp>
 #include <GitPublishPluginStepParser.hpp>
 #include <MinioPluginStepParser.hpp>
@@ -63,6 +64,7 @@ using namespace std;
 #include <new/clang-tidy.hpp>
 #include <new/cppcheck.hpp>
 #include <new/fetch.hpp>
+#include <new/flawfinder.hpp>
 #include <new/git_deploy.hpp>
 #include <new/git_publish.hpp>
 #include <new/minio.hpp>
@@ -94,13 +96,14 @@ Opções:
   -n,--new mkdocs_material Cria passo para documentação
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção
-  -n,--new cppcheck        Cria passo para verificação de código C++
-  -n,--new clang-tidy      Cria passo para verificação de código C++
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
   -n,--new beamer          Cria passo para criação de apresentação PDF
   -n,--new fetch           Cria passo para download de arquivos
   -n,--new minio           Cria passo para upload de artefatos
+  -n,--new cppcheck        SAST Cria passo para verificação de código C++
+  -n,--new clang-tidy      SAST Cria passo para verificação de código C++
+  -n,--new flawfinder      SAST Cria passo para upload de artefatos
 )";
 }
 
@@ -138,6 +141,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("clang-format", make_shared<ClangFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
 
     // Carrega as variáveis de ambiente
     for (char **env = envp; *env != 0; env++) {
@@ -189,6 +193,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
       MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
       MICROCI_TPL(true, "minio", ".microCI.yml", yml, minio);
+      MICROCI_TPL(true, "flawfinder", ".microCI.yml", yml, flawfinder);
 #undef MICROCI_TPL
 
       bool isTypeFound = false;

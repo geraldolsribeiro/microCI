@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.20.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.21.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -166,9 +166,8 @@ reformatJson
 
 # Notificação via Discord não será possível
 # Atualiza as imagens docker utilizadas no passos
-{
-  docker pull debian:stable-slim 2>&1
-} >> .microCI.log
+  echo 'Atualizando imagem docker debian:stable-slim...'
+  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Verifica o código C++ e gera relatório em formato HTML
@@ -215,7 +214,6 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
           --inconclusive \
           --xml \
           --xml-version=2 \
-          -j 2 \
           --include=include \
           src \
           test \
@@ -224,8 +222,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
           --title='MicroCI::CppCheck' \
           --report-dir='auditing/cppcheck/' \
           --source-dir='.' \
-          --file='auditing/cppcheck.xml' 2>&1 \
-        && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+          --file='auditing/cppcheck.xml' 2>&1"
 
     )
 

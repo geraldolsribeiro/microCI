@@ -84,3 +84,12 @@ microci_docmd_push_dockerhub: microci_docmd
 	docker push intmain/microci_docmd:0.1
 	docker push intmain/microci_docmd:latest
 
+microci_flawfinder:
+	docker build -t intmain/microci_flawfinder:0.1 -f flawfinder.Dockerfile .
+	docker tag intmain/microci_flawfinder:0.1 intmain/microci_flawfinder:latest
+	docker run -it intmain/microci_flawfinder:latest --listrules
+
+microci_flawfinder_push_dockerhub: microci_flawfinder
+	docker login
+	docker push intmain/microci_flawfinder:0.1
+	docker push intmain/microci_flawfinder:latest

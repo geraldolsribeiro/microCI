@@ -51,6 +51,7 @@ test:
 	../bin/microCI -i ../new/bash.yml                            > bash.sh
 	cp dot_env_minio .env
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
+	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	rm -f .env
 
 doctest.h:

@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.20.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.21.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -166,10 +166,10 @@ reformatJson
 
 # Notificação via Discord não será possível
 # Atualiza as imagens docker utilizadas no passos
-{
-  docker pull node:16 2>&1
-  docker pull ubuntu:18.04 2>&1
-} >> .microCI.log
+  echo 'Atualizando imagem docker node:16...'
+  docker pull node:16 2>&1 > .microCI.log
+  echo 'Atualizando imagem docker ubuntu:18.04...'
+  docker pull ubuntu:18.04 2>&1 > .microCI.log
 # bash 
 
 # ----------------------------------------------------------------------

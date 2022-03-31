@@ -29,7 +29,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include <CppCheckPluginStepParser.hpp>
+#include <FlawfinderPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -38,30 +38,14 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
-  auto platform = string{"unix64"};
-  auto standard = string{"c++11"};
-  list<string> includeList;
-  list<string> sourceList;
-  list<string> opts{"--enable=all", "--inconclusive", "--xml", "--xml-version=2"};
-
+void FlawfinderPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
+  list<string> sourceList;
+
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
-
-  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<string>());
-    }
-  }
-
-  if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
-    for (const auto &inc : step["plugin"]["include"]) {
-      includeList.push_back(inc.as<string>());
-    }
-  }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
@@ -69,56 +53,29 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  if (step["plugin"]["platform"]) {
-    platform = step["plugin"]["platform"].as<string>();
-  }
-
-  if (step["plugin"]["std"]) {
-    standard = step["plugin"]["std"].as<string>();
-  }
-
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_flawfinder:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
-  data["PLATFORM"] = platform;
-  data["STD"] = standard;
-  data["REPORT_TITLE"] = "MicroCI::CppCheck";
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Analisa o código fonte com flawfinder");
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
-
   mMicroCI->Script() << inja::render(R"( \
-        /bin/bash -c "cd {{ WORKSPACE }} \
-        && mkdir -p auditing/cppcheck \
-        && cppcheck \
-          --platform={{ PLATFORM }} \
-          --std={{ STD }} \
-)",
+        --minlevel 1 \
+        --context \
+        --omittime \
+        --quiet \
+        --html \
+        -- )",
                                      data);
-
-  for (const auto &opt : opts) {
-    mMicroCI->Script() << "          " << opt << " \\\n";
-  }
-
-  for (const auto &inc : includeList) {
-    mMicroCI->Script() << "          --include=" << inc << " \\\n";
-  }
-
   for (const auto &src : sourceList) {
-    mMicroCI->Script() << "          " << src << " \\\n";
+    mMicroCI->Script() << " " << src;
   }
 
-  // xml é escrito na saída de erro
-  mMicroCI->Script() << inja::render(R"(          2> auditing/cppcheck.xml \
-        && cppcheck-htmlreport \
-          --title='{{ REPORT_TITLE }}' \
-          --report-dir='auditing/cppcheck/' \
-          --source-dir='.' \
-          --file='auditing/cppcheck.xml' 2>&1"
-)",
-                                     data);
-
+  mMicroCI->Script() << R"( \
+        > auditing/flawfinder.html
+)";
   endFunction(data);
 }
 }  // namespace microci
+

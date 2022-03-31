@@ -1,0 +1,16 @@
+#   # Exemplo de uso do plugin flawfinder
+#{{{
+steps:
+  - name: "SAST com flawfinder"
+    description: "Analisa estaticamente o código fonte com a ferramenta flawfinder"
+    run_as: user
+    plugin:
+      name: "flawfinder"
+      source:
+        # - "."
+        - "src/*.cpp"
+        - "test/*.cpp"
+        - "include/*.hpp"
+#}}}
+# vim: spell spelllang=pt,en
+

@@ -24,6 +24,15 @@ steps:
       platform: "unix64"
       std: "c++17"
 
+  - name: "SAST com flawfinder"
+    description: "Analisa estaticamente o código fonte com a ferramenta flawfinder"
+    plugin:
+      name: "flawfinder"
+      source:
+        - "src/*.cpp"
+        - "include/*Parser.hpp"
+        - "include/MicroCI*.hpp"
+
   - name: "Converter pdf em jpg"
     description: "Descrição deste passo"
     docker: intmain/microci_poppler:latest
@@ -109,3 +118,21 @@ steps:
         chown $(id -u).$(id -g) -Rv test/
 
 # vim: spell spelllang=pt,en
+
+# ---------- MESCLE MANUALMENTE CONTEÚDO ABAIXO ---------
+#   # Exemplo de uso do plugin flawfinder
+#{{{
+steps:
+  - name: "SAST com flawfinder"
+    description: "Analisa estaticamente o código fonte com a ferramenta flawfinder"
+    run_as: user
+    plugin:
+      name: "flawfinder"
+      source:
+        # - "."
+        - "src/*.cpp"
+        - "test/*.cpp"
+        - "include/*.hpp"
+#}}}
+# vim: spell spelllang=pt,en
+

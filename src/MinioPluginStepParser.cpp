@@ -71,7 +71,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "minio/mc");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "minio/mc:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Envia arquivos para gerenciador de artefatos");
   data["DOCKER_ENTRYPOINT"] = "";  // remove o entrypoint padrão

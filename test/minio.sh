@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.20.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.21.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -166,9 +166,8 @@ reformatJson
 
 # Notificação via Discord não será possível
 # Atualiza as imagens docker utilizadas no passos
-{
-  docker pull debian:stable-slim 2>&1
-} >> .microCI.log
+  echo 'Atualizando imagem docker debian:stable-slim...'
+  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Descrição deste passo
@@ -211,7 +210,7 @@ function step_salvar_artefato_em_bucket() {
         --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
         --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "minio/mc" \
+        "minio/mc:latest" \
         /bin/bash -c "cd /microci_workspace \
         && mc alias set microci http://11.22.33.44:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
            && mc ls microci/nome_do_bucket 2>&1 \

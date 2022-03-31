@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.21.0` Plugin `flawfinder`
 * `0.20.0` Imagem `intmain/microci_clang`
 * `0.19.0` Documentação com `intmain_docmd`
 * `0.18.0` Plugin `minio`

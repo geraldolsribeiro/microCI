@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.20.0
+                             microCI 0.21.0
                             Geraldo Ribeiro
 
 
@@ -23,11 +23,12 @@ Opções:
   -n,--new mkdocs_material Cria passo para documentação
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção
-  -n,--new cppcheck        Cria passo para verificação de código C++
-  -n,--new clang-tidy      Cria passo para verificação de código C++
   -n,--new plantuml        Cria passo para geração de diagramas
   -n,--new clang-format    Cria passo para formatação de código
   -n,--new beamer          Cria passo para criação de apresentação PDF
   -n,--new fetch           Cria passo para download de arquivos
   -n,--new minio           Cria passo para upload de artefatos
+  -n,--new cppcheck        SAST Cria passo para verificação de código C++
+  -n,--new clang-tidy      SAST Cria passo para verificação de código C++
+  -n,--new flawfinder      SAST Cria passo para upload de artefatos
 

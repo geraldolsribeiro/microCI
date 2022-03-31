@@ -161,11 +161,11 @@ bool MicroCI::ReadConfig(const string &filename) {
   }
 
   if (dockerImages.size()) {
-    mScript << "# Atualiza as imagens docker utilizadas no passos\n{\n";
+    mScript << "# Atualiza as imagens docker utilizadas no passos\n";
     for (const auto &dockerImage : dockerImages) {
-      mScript << fmt::format("  docker pull {} 2>&1\n", dockerImage);
+      mScript << fmt::format("  echo 'Atualizando imagem docker {}...'\n", dockerImage);
+      mScript << fmt::format("  docker pull {} 2>&1 > .microCI.log\n", dockerImage);
     }
-    mScript << "} >> .microCI.log\n";
   }
 
   if (!mOnlyStep.empty()) {

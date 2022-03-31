@@ -170,12 +170,12 @@ reformatJson
   docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
-# Descrição deste passo
+# Analisa estaticamente o código fonte com a ferramenta flawfinder
 # ----------------------------------------------------------------------
-function step_gerar_diagramas_plantuml() {
+function step_sast_com_flawfinder() {
   SECONDS=0
-  MICROCI_STEP_NAME="Gerar diagramas plantuml"
-  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
+  MICROCI_STEP_NAME="SAST com flawfinder"
+  MICROCI_STEP_DESCRIPTION="Analisa estaticamente o código fonte com a ferramenta flawfinder"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -185,6 +185,9 @@ function step_gerar_diagramas_plantuml() {
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
+  MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
+  MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
+  MICROCI_MINIO_URL="http://11.22.33.44:9000"
 
   {
     (
@@ -193,7 +196,7 @@ function step_gerar_diagramas_plantuml() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Gerar diagramas plantuml"
+      echo "Passo: SAST com flawfinder"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -203,16 +206,18 @@ function step_gerar_diagramas_plantuml() {
         --rm \
         --network none \
         --workdir /microci_workspace \
+        --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
+        --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
+        --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_plantuml:latest" \
-          /bin/bash -c "cd /microci_workspace \
-          && java -jar /opt/plantuml/plantuml.jar \
-            -r \
-            -tsvg \
-            -o /microci_workspace/docs/diagrams/ \
-            src/**.cpp \
-            docs/**.puml \
-            2>&1"
+        "intmain/microci_flawfinder:latest" \
+        --minlevel 1 \
+        --context \
+        --omittime \
+        --quiet \
+        --html \
+        --  src/*.cpp test/*.cpp include/*.hpp \
+        > auditing/flawfinder.html
 
     )
 
@@ -244,7 +249,7 @@ function step_gerar_diagramas_plantuml() {
 function main() {
   date >> .microCI.log
 
-  step_gerar_diagramas_plantuml
+  step_sast_com_flawfinder
 
   date >> .microCI.log
 }
