@@ -12,6 +12,6 @@ RUN set -eux; \
   apt-get update \
   && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev
 
-CMD [ "/bin/echo", "microCI clang" ]
+CMD [ "/bin/echo", "microCI clang image" ]
 
 # vim: ft=dockerfile
