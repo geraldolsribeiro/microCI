@@ -77,6 +77,7 @@ string PluginStepParser::stepDockerImage(const YAML::Node &step, const string &i
     dockerImage = step["docker"].as<string>();
   }
 
+  mMicroCI->AddDockerImage(dockerImage);
   return dockerImage;
 }
 
@@ -205,6 +206,7 @@ void PluginStepParser::endFunction(const json &data) {
 // ----------------------------------------------------------------------
 void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs,
                                         const set<DockerVolume> &volumes) {
+
   mMicroCI->Script() << inja::render(R"(
       echo ""
       echo ""

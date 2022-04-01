@@ -104,9 +104,13 @@ string MicroCI::ToString() const { return mScript.str(); }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::AddDockerImage(const string &image) { mDockerImages.insert(image); }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 bool MicroCI::ReadConfig(const string &filename) {
   YAML::Node CI;
-  set<string> dockerImages;
 
   try {
     CI = YAML::LoadFile(filename);
@@ -144,28 +148,9 @@ bool MicroCI::ReadConfig(const string &filename) {
 
   initBash();
 
-  // Localiza imagens docker necessárias
-  for (auto step : CI["steps"]) {
-    if (step["docker"]) {
-      dockerImages.insert(step["docker"].as<string>());
-    }
-  }
-
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
     mDefaultDockerImage = CI["docker"].as<string>();
-  }
-
-  if (!mDefaultDockerImage.empty()) {
-    dockerImages.insert(mDefaultDockerImage);
-  }
-
-  if (dockerImages.size()) {
-    mScript << "# Atualiza as imagens docker utilizadas no passos\n";
-    for (const auto &dockerImage : dockerImages) {
-      mScript << fmt::format("  echo 'Atualizando imagem docker {}...'\n", dockerImage);
-      mScript << fmt::format("  docker pull {} 2>&1 > .microCI.log\n", dockerImage);
-    }
   }
 
   if (!mOnlyStep.empty()) {
@@ -194,6 +179,19 @@ bool MicroCI::ReadConfig(const string &filename) {
           parsePluginStep(step);
         }
       }
+
+      if (!mDefaultDockerImage.empty()) {
+        mDockerImages.insert(mDefaultDockerImage);
+      }
+
+      if (mDockerImages.size()) {
+        mScript << "# Atualiza as imagens docker utilizadas no passos\n";
+        for (const auto &dockerImage : mDockerImages) {
+          mScript << fmt::format("echo 'Atualizando imagem docker {}...'\n", dockerImage);
+          mScript << fmt::format("docker pull {} 2>&1 > .microCI.log\n", dockerImage);
+        }
+      }
+
       mScript << R"(
 
 # Executa todos os passos do pipeline

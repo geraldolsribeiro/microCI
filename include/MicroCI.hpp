@@ -93,6 +93,7 @@ class MicroCI {
   bool ReadConfig(const string &yaml);
   stringstream &Script();
   void SetOnlyStep(const string &onlyStep);
+  void AddDockerImage( const string & image );
 
   [[nodiscard]] json DefaultDataTemplate() const;
   string DefaultDockerImage() const;
@@ -106,6 +107,7 @@ class MicroCI {
   void parsePluginStep(const YAML::Node &step);
 
   set<EnvironmentVariable> mEnvs;
+  set<string> mDockerImages;
   string mOnlyStep;
   string mDefaultDockerImage;
   string mDefaultWorkspace;
