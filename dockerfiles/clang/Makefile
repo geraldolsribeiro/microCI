@@ -3,7 +3,7 @@ VERSION=0.1
 all: publish
 
 build:
-	docker build -t intmain/microci_clang:$(VERSION) -f clang.Dockerfile .
+	docker build -t intmain/microci_clang:$(VERSION) -f Dockerfile .
 	docker tag intmain/microci_clang:$(VERSION) intmain/microci_clang:latest
 
 test:

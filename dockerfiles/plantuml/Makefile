@@ -3,7 +3,7 @@ VERSION=0.2
 all: publish
 
 build:
-	docker build -t intmain/microci_plantuml:0.2 -f plantuml.Dockerfile .
+	docker build -t intmain/microci_plantuml:0.2 -f Dockerfile .
 	docker tag intmain/microci_plantuml:0.2 intmain/microci_plantuml:latest
 
 test: build

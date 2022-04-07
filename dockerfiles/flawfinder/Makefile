@@ -3,7 +3,7 @@ VERSION=0.2
 all: publish
 
 build:
-	docker build -t intmain/microci_flawfinder:$(VERSION) -f flawfinder.Dockerfile .
+	docker build -t intmain/microci_flawfinder:$(VERSION) -f Dockerfile .
 	docker tag intmain/microci_flawfinder:$(VERSION) intmain/microci_flawfinder:latest
 
 test: build

@@ -3,7 +3,7 @@ VERSION=0.1
 all: publish
 
 build:
-	docker build -t intmain/microci_poppler:$(VERSION) -f poppler.Dockerfile .
+	docker build -t intmain/microci_poppler:$(VERSION) -f Dockerfile .
 	docker tag intmain/microci_poppler:$(VERSION) intmain/microci_poppler:latest
 
 test: build

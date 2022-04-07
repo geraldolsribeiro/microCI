@@ -4,7 +4,7 @@ all:
 #all: publish
 
 build:
-	docker build -t intmain/microci_ipp:0.1 -f ipp.Dockerfile .
+	docker build -t intmain/microci_ipp:0.1 -f Dockerfile .
 
 test: build
 	echo "Fixme"

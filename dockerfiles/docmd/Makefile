@@ -3,7 +3,7 @@ VERSION=0.1
 all: publish
 
 build:
-	docker build -t intmain/microci_docmd:$(VERSION) -f docmd.Dockerfile .
+	docker build -t intmain/microci_docmd:$(VERSION) -f Dockerfile .
 	docker tag intmain/microci_docmd:$(VERSION) intmain/microci_docmd:latest
 
 test:

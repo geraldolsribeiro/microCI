@@ -3,7 +3,7 @@ VERSION=0.3
 all: publish
 
 build:
-	docker build -t intmain/microci_cppcheck:$(VERSION) -f cppcheck.Dockerfile .
+	docker build -t intmain/microci_cppcheck:$(VERSION) -f Dockerfile .
 
 test: build
 	docker run -it intmain/microci_cppcheck:$(VERSION) clang-tidy-html || echo OK
