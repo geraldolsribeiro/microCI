@@ -165,9 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Descrição deste passo
@@ -238,6 +235,11 @@ function step_gerar_diagramas_plantuml() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker debian:stable-slim...'
+docker pull debian:stable-slim 2>&1 > .microCI.log
+echo 'Atualizando imagem docker intmain/microci_plantuml:latest...'
+docker pull intmain/microci_plantuml:latest 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

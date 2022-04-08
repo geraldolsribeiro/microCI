@@ -165,11 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker node:16...'
-  docker pull node:16 2>&1 > .microCI.log
-  echo 'Atualizando imagem docker ubuntu:18.04...'
-  docker pull ubuntu:18.04 2>&1 > .microCI.log
 # bash 
 
 # ----------------------------------------------------------------------
@@ -309,6 +304,11 @@ function step_construir() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker node:16...'
+docker pull node:16 2>&1 > .microCI.log
+echo 'Atualizando imagem docker ubuntu:18.04...'
+docker pull ubuntu:18.04 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

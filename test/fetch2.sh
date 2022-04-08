@@ -165,9 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Download de dependências utilizadas na compilação
@@ -254,6 +251,11 @@ function step_baixar_arquivos_externos_ao_projeto() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker bitnami/git:latest...'
+docker pull bitnami/git:latest 2>&1 > .microCI.log
+echo 'Atualizando imagem docker debian:stable-slim...'
+docker pull debian:stable-slim 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

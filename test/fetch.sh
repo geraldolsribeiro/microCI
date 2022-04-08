@@ -165,9 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Download de dependências utilizadas na compilação
@@ -209,6 +206,12 @@ function step_baixar_arquivos_externos_ao_projeto() {
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "bitnami/git:latest" \
         /bin/bash -c "cd /microci_workspace \
+           && mkdir -p /tmp/ \
+           && curl -s -fSL -R -J https://github.com/geraldolsribeiro/microCI/archive/master.tar.gz \
+             | tar -C /tmp/ --strip-components=2 -vzxf - 'microCI-master/test/help.txt'  2>&1 \
+           && mkdir -p /tmp/ \
+           && curl -s -fSL -R -J https://personal_token@github.com/User/repo/archive/master.tar.gz \
+             | tar -C /tmp/ --strip-components=1 -vzxf - 'repo-master/README.md'  2>&1 \
            && mkdir -p /tmp/include/ \
            && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'README.md' 'include/*.h'  \
              | tar -C /tmp/include/ -vxf - 2>&1 \
@@ -255,6 +258,11 @@ function step_baixar_arquivos_externos_ao_projeto() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker bitnami/git:latest...'
+docker pull bitnami/git:latest 2>&1 > .microCI.log
+echo 'Atualizando imagem docker debian:stable-slim...'
+docker pull debian:stable-slim 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

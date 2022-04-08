@@ -78,4 +78,3 @@ void FlawfinderPluginStepParser::Parse(const YAML::Node &step) {
   endFunction(data);
 }
 }  // namespace microci
-

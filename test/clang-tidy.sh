@@ -165,9 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Verifica o código C++ e gera relatório em formato HTML
@@ -245,6 +242,11 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker debian:stable-slim...'
+docker pull debian:stable-slim 2>&1 > .microCI.log
+echo 'Atualizando imagem docker intmain/microci_cppcheck:latest...'
+docker pull intmain/microci_cppcheck:latest 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

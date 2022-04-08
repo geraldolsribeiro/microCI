@@ -63,29 +63,85 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
     for (const auto &item : step["plugin"]["items"]) {
       if (item["git_archive"]) {
+        string gitRemote;
+        data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
+        auto tag = item["tag"].as<string>("master");
+        bool isGithub = gitRemote.find("github.com") != string::npos;
+        bool isDotGitEnded = gitRemote.substr(gitRemote.size() - 4) == ".git";
+
         auto files = string{};
-        for (const auto &f : item["files"]) {
-          files += fmt::format("'{}' ", f.as<string>());  // aspas simples para não expandir
+        if (isGithub) {
+          auto repoName = string{};
+          if (isDotGitEnded) {
+            // https://github.com/User/repo.git
+            repoName = gitRemote.substr(gitRemote.find_last_of("/") + 1);
+            repoName.erase(repoName.find(".git"));
+          } else {
+            // https://github.com/User/repo/archive/master.tar.gz
+            repoName = gitRemote.substr(0, gitRemote.find("/archive/"));
+            repoName = repoName.substr(repoName.find_last_of("/") + 1);
+          }
+
+          for (const auto &f : item["files"]) {
+            // aspas simples para não expandir
+            files += fmt::format("'{}-{}/{}' ", repoName, tag, f.as<string>());
+          }
+        } else {
+          for (const auto &f : item["files"]) {
+            // aspas simples para não expandir
+            files += fmt::format("'{}' ", f.as<string>());
+          }
         }
+
         if (files.empty()) {
           throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
         }
+
         data["FILES"] = files;
-        data["GIT_REMOTE"] = item["git_archive"].as<string>();
         data["TARGET"] = item["target"].as<string>(defaultTarget);
 
-        if (item["strip-components"]) {
-          data["STRIP_COMPONENTS"] = " --strip-components=" + item["strip-components"].as<string>();
+        if (isGithub) {
+          if (item["strip-components"]) {
+            data["STRIP_COMPONENTS"] = " --strip-components=" + to_string(item["strip-components"].as<int>() + 1);
+          } else {
+            data["STRIP_COMPONENTS"] = " --strip-components=1";
+          }
         } else {
-          data["STRIP_COMPONENTS"] = "";
+          if (item["strip-components"]) {
+            data["STRIP_COMPONENTS"] = " --strip-components=" + item["strip-components"].as<string>();
+          } else {
+            data["STRIP_COMPONENTS"] = "";
+          }
         }
 
-        mMicroCI->Script() << inja::render(
-            R"( \
+        if (isGithub and item["token"]) {
+          // https://<personal_token>:@github.com/<your_repo>/archive/main.tar.gz
+          gitRemote.insert(gitRemote.find("github.com"), item["token"].as<string>() + "@");
+          data["GIT_REMOTE"] = gitRemote;
+        }
+
+        if (isGithub and isDotGitEnded) {
+          // From: https://github.com/User/repo.git
+          // To: https://github.com/User/repo/archive/master.tar.gz
+          data["GIT_REMOTE"] = gitRemote.substr(0, gitRemote.size() - 4) + "/archive/" + tag + ".tar.gz";
+        }
+
+        if (isGithub) {
+          mMicroCI->Script() << inja::render(
+              R"( \
+           && mkdir -p {{ TARGET }} \
+           && curl -s -fSL -R -J {{ GIT_REMOTE }} \
+             | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }} 2>&1)",
+              data);
+        } else {
+          mMicroCI->Script() << inja::render(
+              R"( \
            && mkdir -p {{ TARGET }} \
            && git archive --format=tar --remote={{ GIT_REMOTE }} HEAD {{ FILES }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf - 2>&1)",
-            data);
+              data);
+        }
+
       } else if (item["url"]) {
         data["TARGET"] = item["target"].as<string>(defaultTarget);
         data["URL"] = item["url"].as<string>();

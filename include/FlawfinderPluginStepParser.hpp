@@ -44,4 +44,3 @@ class FlawfinderPluginStepParser : public PluginStepParser {
 }  // namespace microci
 
 #endif
-

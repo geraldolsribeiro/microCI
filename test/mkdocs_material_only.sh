@@ -165,6 +165,3 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log

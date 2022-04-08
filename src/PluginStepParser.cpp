@@ -206,7 +206,6 @@ void PluginStepParser::endFunction(const json &data) {
 // ----------------------------------------------------------------------
 void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs,
                                         const set<DockerVolume> &volumes) {
-
   mMicroCI->Script() << inja::render(R"(
       echo ""
       echo ""

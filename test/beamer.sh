@@ -165,9 +165,6 @@ reformatJson
 
 
 # Notificação via Discord não será possível
-# Atualiza as imagens docker utilizadas no passos
-  echo 'Atualizando imagem docker debian:stable-slim...'
-  docker pull debian:stable-slim 2>&1 > .microCI.log
 
 # ----------------------------------------------------------------------
 # Apresentação PDF criada a partir do markdown
@@ -240,6 +237,11 @@ function step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+# Atualiza as imagens docker utilizadas no passos
+echo 'Atualizando imagem docker debian:stable-slim...'
+docker pull debian:stable-slim 2>&1 > .microCI.log
+echo 'Atualizando imagem docker pandoc/latex:latest...'
+docker pull pandoc/latex:latest 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

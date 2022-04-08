@@ -47,7 +47,7 @@ namespace microci {
 using nlohmann::json;
 
 const int MAJOR = 0;
-const int MINOR = 21;
+const int MINOR = 22;
 const int PATCH = 0;
 
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ class MicroCI {
   bool ReadConfig(const string &yaml);
   stringstream &Script();
   void SetOnlyStep(const string &onlyStep);
-  void AddDockerImage( const string & image );
+  void AddDockerImage(const string &image);
 
   [[nodiscard]] json DefaultDataTemplate() const;
   string DefaultDockerImage() const;

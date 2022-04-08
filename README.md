@@ -81,13 +81,14 @@ releases.
 
 ## Versões
 
+* `0.22.0` Plugin `fetch` download de pastas no github
 * `0.21.0` Plugin `flawfinder`
 * `0.20.0` Imagem `intmain/microci_clang`
 * `0.19.0` Documentação com `intmain_docmd`
 * `0.18.0` Plugin `minio`
 * `0.17.0` Plugin `skip`; Status de execução
 * `0.16.1` Refatoração dos plugins; Execução default como não root
-* `0.15.2` Plugin `fetch`
+* `0.15.2` Plugin `fetch` URL e pastas do gitlab
 * `0.14.1` Plugin `beamer`
 * `0.13.0` Configuração de rede docker
 * `0.12.0` Plugins `clang-format` e `junit2html`

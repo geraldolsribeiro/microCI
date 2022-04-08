@@ -330,6 +330,9 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
   } catch (invalid_argument &e) {
     spdlog::error(e.what());
     return 1;
+  } catch (runtime_error &e) {
+    spdlog::error(e.what());
+    return 1;
   } catch (...) {
     spdlog::error("Exceção desconhecida");
     return 1;
