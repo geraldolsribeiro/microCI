@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.23.0` Plugin `fetch` download github
 * `0.22.0` Plugin `fetch` download de pastas no github
 * `0.21.0` Plugin `flawfinder`
 * `0.20.0` Imagem `intmain/microci_clang`

@@ -62,7 +62,39 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     copySshIfAvailable(step, data);
 
     for (const auto &item : step["plugin"]["items"]) {
-      if (item["git_archive"]) {
+      if (item["github"]) {
+        auto gitRemote = string{};
+        auto gitTag = string{};
+        stringstream ss(item["github"].as<string>());
+        ss >> gitRemote >> gitTag;
+
+        // Possíveis URLs
+        // https://github.com/User/repo/tarball/master
+        // https://github.com/User/repo/archive/master.tar.gz
+        // https://github.com/User/repo/archive/refs/tags/v0.1.2.tar.gz
+        // https://github.com/User/repo/archive/refs/heads/master.zip
+        // https://github.com/User/repo/archive/refs/heads/release/v0.1.1.zip
+
+        if (gitTag == "master" or gitTag == "main") {
+          gitRemote = "https://github.com/" + gitRemote + "/archive/" + gitTag + ".tar.gz";
+        } else {
+          gitRemote = "https://github.com/" + gitRemote + "/archive/refs/tags/" + gitTag + ".tar.gz";
+        }
+
+        data["GIT_REMOTE"] = gitRemote;
+        data["FILES"] = "";  // Todos os arquivos
+        data["TARGET"] = item["target"].as<string>(defaultTarget);
+        data["STRIP_COMPONENTS"] = " --strip-components=1";
+        // data["STRIP_COMPONENTS"] = "";
+
+        mMicroCI->Script() << inja::render(
+            R"( \
+           && mkdir -p {{ TARGET }} \
+           && curl -s -fSL -R -J {{ GIT_REMOTE }} \
+             | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
+            data);
+
+      } else if (item["git_archive"]) {
         string gitRemote;
         data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
         auto tag = item["tag"].as<string>("master");
@@ -131,7 +163,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
               R"( \
            && mkdir -p {{ TARGET }} \
            && curl -s -fSL -R -J {{ GIT_REMOTE }} \
-             | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }} 2>&1)",
+             | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
               data);
         } else {
           mMicroCI->Script() << inja::render(

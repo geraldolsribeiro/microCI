@@ -39,6 +39,9 @@ steps:
           target: /tmp/include # Local onde será colocado este arquivo
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        - github:   adishavit/argh    master   
+        - github: adishavit/argh v1.3.2
+          target: /tmp/
 #}}}
 
 # vim: spell spelllang=pt,en
