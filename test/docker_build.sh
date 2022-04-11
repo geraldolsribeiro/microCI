@@ -167,12 +167,12 @@ reformatJson
 # Notificação via Discord não será possível
 
 # ----------------------------------------------------------------------
-# Download de dependências utilizadas na compilação
+# Descrição deste passo
 # ----------------------------------------------------------------------
-function step_baixar_arquivos_externos_ao_projeto() {
+function step_construir_imagem_docker() {
   SECONDS=0
-  MICROCI_STEP_NAME="Baixar arquivos externos ao projeto"
-  MICROCI_STEP_DESCRIPTION="Download de dependências utilizadas na compilação"
+  MICROCI_STEP_NAME="Construir imagem docker"
+  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -182,50 +182,17 @@ function step_baixar_arquivos_externos_ao_projeto() {
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
+  MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
+  MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
+  MICROCI_MINIO_URL="http://11.22.33.44:9000"
 
   {
     (
       set -e
-
-      echo ""
-      echo ""
-      echo ""
-      echo "Passo: Baixar arquivos externos ao projeto"
-      # shellcheck disable=SC2140,SC2046
-      docker run \
-        --user $(id -u):$(id -g) \
-        --interactive \
-        --attach stdout \
-        --attach stderr \
-        --rm \
-        --network bridge \
-        --workdir /microci_workspace \
-        --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
-        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "bitnami/git:latest" \
-        /bin/bash -c "cd /microci_workspace \
-           && cp -Rv /.microCI_ssh /home/bitnami/.ssh 2>&1 \
-           && chmod 700 /home/bitnami/.ssh/ 2>&1 \
-           && chmod 644 /home/bitnami/.ssh/id_rsa.pub 2>&1 \
-           && chmod 600 /home/bitnami/.ssh/id_rsa 2>&1 \
-           && mkdir -p /tmp/include/ \
-           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'README.md' 'include/*.h'  \
-             | tar -C /tmp/include/ -vxf - 2>&1 \
-           && mkdir -p /tmp/lib/ \
-           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'lib/*.so'  \
-             | tar -C /tmp/lib/ -vxf - 2>&1 \
-           && mkdir -p /tmp/include \
-           && pushd /tmp/include \
-           && curl -fSL -R -J -O https://raw.githubusercontent.com/adishavit/argh/master/argh.h 2>&1 \
-           && popd \
-           && mkdir -p include \
-           && pushd include \
-           && curl -fSL -R -J -O https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp 2>&1 \
-           && popd \
-           && mkdir -p include \
-           && pushd include \
-           && curl -fSL -R -J -O https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp 2>&1 \
-           && popd"
+ \
+        /bin/bash -c "pushd pasta_que_contem_o_dockerfile \
+          && docker build --target intmain/minha_imagem:0.1.0 -f alternative.Dockerfile . \
+          && docker tag intmain/minha_imagem:0.1.0 intmain/minha_imagem:latest"
 
     )
 
@@ -252,8 +219,6 @@ function step_baixar_arquivos_externos_ao_projeto() {
   ((++MICROCI_STEP_NUMBER))
 }
 # Atualiza as imagens docker utilizadas no passos
-echo 'Atualizando imagem docker bitnami/git:latest...'
-docker pull bitnami/git:latest 2>&1 > .microCI.log
 echo 'Atualizando imagem docker debian:stable-slim...'
 docker pull debian:stable-slim 2>&1 > .microCI.log
 
@@ -262,7 +227,7 @@ docker pull debian:stable-slim 2>&1 > .microCI.log
 function main() {
   date >> .microCI.log
 
-  step_baixar_arquivos_externos_ao_projeto
+  step_construir_imagem_docker
 
   date >> .microCI.log
 }

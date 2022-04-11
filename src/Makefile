@@ -81,6 +81,7 @@ single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
   ../include/new/clang-format.hpp \
   ../include/new/clang-tidy.hpp \
   ../include/new/cppcheck.hpp \
+  ../include/new/docker_build.hpp \
   ../include/new/fetch.hpp \
   ../include/new/flawfinder.hpp \
   ../include/new/git_deploy.hpp \

@@ -117,5 +117,16 @@ steps:
         chown $(id -u).$(id -g) -Rv bin/microCI
         chown $(id -u).$(id -g) -Rv test/
 
+  - name: "Construir imagem docker microci_cppcheck"
+    description: "Descrição deste passo"
+    plugin:
+      name: docker_build
+      folder: dockerfiles/cppcheck/
+      dockerfile: Dockerfile
+      target: intmain/microci_cppcheck
+      version: 0.3
+      is_latest: true
+      push: true
+
 # vim: spell spelllang=pt,en
 

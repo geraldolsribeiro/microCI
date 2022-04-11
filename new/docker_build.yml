@@ -1,0 +1,18 @@
+#   # Exemplo de uso do plugin docker_build
+#   
+#{{{
+steps:
+  - name: "Construir imagem docker"
+    description: "Descrição deste passo"
+    plugin:
+      name: docker_build
+      folder: pasta_que_contem_o_dockerfile
+      dockerfile: alternative.Dockerfile
+      target: intmain/minha_imagem
+      version: 0.1.0
+      is_latest: true
+      push: false
+#}}}
+
+# vim: spell spelllang=pt,en
+

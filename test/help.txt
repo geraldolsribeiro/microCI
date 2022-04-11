@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.22.0
+                             microCI 0.24.0
                             Geraldo Ribeiro
 
 
@@ -31,4 +31,5 @@ Opções:
   -n,--new cppcheck        SAST Cria passo para verificação de código C++
   -n,--new clang-tidy      SAST Cria passo para verificação de código C++
   -n,--new flawfinder      SAST Cria passo para upload de artefatos
+  -n,--new docker_build    Construção de imagem local
 

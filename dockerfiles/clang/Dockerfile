@@ -10,7 +10,7 @@ RUN set -eux; \
 
 RUN set -eux; \
   apt-get update \
-  && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev
+  && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev cmake ninja-build
 
 CMD [ "/bin/echo", "microCI clang image" ]
 

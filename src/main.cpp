@@ -63,6 +63,7 @@ using namespace std;
 #include <new/clang-format_config.hpp>
 #include <new/clang-tidy.hpp>
 #include <new/cppcheck.hpp>
+#include <new/docker_build.hpp>
 #include <new/fetch.hpp>
 #include <new/flawfinder.hpp>
 #include <new/git_deploy.hpp>
@@ -104,6 +105,7 @@ Opções:
   -n,--new cppcheck        SAST Cria passo para verificação de código C++
   -n,--new clang-tidy      SAST Cria passo para verificação de código C++
   -n,--new flawfinder      SAST Cria passo para upload de artefatos
+  -n,--new docker_build    Construção de imagem local
 )";
 }
 
@@ -142,6 +144,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("docker_build", make_shared<DockerBuildPluginStepParser>(&uCI));
 
     // Carrega as variáveis de ambiente
     for (char **env = envp; *env != 0; env++) {
@@ -194,6 +197,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
       MICROCI_TPL(true, "minio", ".microCI.yml", yml, minio);
       MICROCI_TPL(true, "flawfinder", ".microCI.yml", yml, flawfinder);
+      MICROCI_TPL(true, "docker_build", ".microCI.yml", yml, docker_build);
 #undef MICROCI_TPL
 
       bool isTypeFound = false;
