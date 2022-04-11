@@ -44,4 +44,3 @@ class DockerBuildPluginStepParser : public PluginStepParser {
 }  // namespace microci
 
 #endif
-

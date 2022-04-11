@@ -190,9 +190,10 @@ function step_construir_imagem_docker() {
     (
       set -e
  \
-        /bin/bash -c "pushd pasta_que_contem_o_dockerfile \
-          && docker build --target intmain/minha_imagem:0.1.0 -f alternative.Dockerfile . \
-          && docker tag intmain/minha_imagem:0.1.0 intmain/minha_imagem:latest"
+        pushd pasta_que_contem_o_dockerfile \
+          && docker build -t intmain/minha_imagem:0.1.0 -f alternative.Dockerfile . 2>&1 \
+          && docker tag intmain/minha_imagem:0.1.0 intmain/minha_imagem:latest 2>&1 \
+          && popd
 
     )
 
