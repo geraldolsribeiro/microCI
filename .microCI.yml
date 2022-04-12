@@ -80,6 +80,7 @@ steps:
     plugin:
       name: "git_publish"
       git_url: "git@github.com:geraldolsribeiro/microci.dev.git"
+      branch: master
 
   - name: "Formatar código C++ com clang-format"
     description: "Padroniza formato do código usando regras"

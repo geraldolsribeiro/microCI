@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.25.0` Plugin `git_publish` com escolha de branch (p.e. gh-pages)
 * `0.24.0` Plugin `docker_build`
 * `0.23.0` Plugin `fetch` download github
 * `0.22.0` Plugin `fetch` download de pastas no github

@@ -39,9 +39,6 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
-  auto pluginCopyTo = string{"/tmp/microci_deploy"};  // local onde user pode escrever
-  auto pluginCopyFrom = string{"site"};
-  auto cleanBefore = true;
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
@@ -53,21 +50,15 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   const auto name = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();
 
-  if (step["plugin"]["copy_from"]) {
-    pluginCopyFrom = step["plugin"]["copy_from"].as<string>();
-  }
-
-  if (step["plugin"]["copy_to"]) {
-    pluginCopyTo = step["plugin"]["copy_to"].as<string>();
-  }
-
-  if (step["plugin"]["clean_before"]) {
-    cleanBefore = step["plugin"]["clean_before"].as<bool>();
-  }
+  auto pluginCopyFrom = step["plugin"]["copy_from"].as<string>("site");
+  auto pluginCopyTo = step["plugin"]["copy_to"].as<string>("/tmp/microci_deploy");
+  auto cleanBefore = step["plugin"]["clean_before"].as<bool>(true);
+  auto gitBranch = step["plugin"]["branch"].as<string>("main");
 
   data["GIT_URL"] = gitURL;
   data["PLUGIN_COPY_TO"] = pluginCopyTo;
   data["PLUGIN_COPY_FROM"] = pluginCopyFrom;
+  data["GIT_BRANCH"] = gitBranch;
   data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
@@ -82,7 +73,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   copySshIfAvailable(step, data);
 
   mMicroCI->Script() << inja::render(R"( \
-           && git clone '{{ GIT_URL }}' --depth 1 '{{ PLUGIN_COPY_TO }}' 2>&1 \
+           && git clone --branch {{ GIT_BRANCH }} '{{ GIT_URL }}' --depth 1 '{{ PLUGIN_COPY_TO }}' 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} config user.name  '$(git config --get user.name)' 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} config user.email '$(git config --get user.email)' 2>&1 \)",
                                      data);
@@ -97,7 +88,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
            && cp -rv {{ PLUGIN_COPY_FROM }}/* {{ PLUGIN_COPY_TO }}/ 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
-           && git -C {{ PLUGIN_COPY_TO }} push origin master 2>&1 \
+           && git -C {{ PLUGIN_COPY_TO }} push origin {{ GIT_BRANCH }} 2>&1 \
            && chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1
   ")",
                                      data);

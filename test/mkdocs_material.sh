@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.24.0                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.25.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -268,14 +268,14 @@ function step_publicar_html_para_repositorio_git() {
            && chmod 700 /root/.ssh/ 2>&1 \
            && chmod 644 /root/.ssh/id_rsa.pub 2>&1 \
            && chmod 600 /root/.ssh/id_rsa 2>&1 \
-           && git clone 'ssh://git@someurl.com/site.git' --depth 1 '/deploy' 2>&1 \
+           && git clone --branch main 'ssh://git@someurl.com/site.git' --depth 1 '/deploy' 2>&1 \
            && git -C /deploy config user.name  '$(git config --get user.name)' 2>&1 \
            && git -C /deploy config user.email '$(git config --get user.email)' 2>&1 \
            && git -C /deploy rm '*' 2>&1 \
            && cp -rv site/* /deploy/ 2>&1 \
            && git -C /deploy add . 2>&1 \
            && git -C /deploy commit -am ':rocket:microCI git_publish' 2>&1 \
-           && git -C /deploy push origin master 2>&1 \
+           && git -C /deploy push origin main 2>&1 \
            && chown $(id -u):$(id -g) -Rv site 2>&1
   "
     )
