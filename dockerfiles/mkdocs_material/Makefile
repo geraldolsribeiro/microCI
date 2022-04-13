@@ -1,9 +1,9 @@
-VERSION=0.2
+VERSION=0.3
 
 all: publish
 
 build:
-	docker build -t intmain/microci_mkdocs_material:$(VERSION) -f mkdocs_material.Dockerfile .
+	docker build -t intmain/microci_mkdocs_material:$(VERSION) -f Dockerfile .
 	docker tag intmain/microci_mkdocs_material:$(VERSION) intmain/microci_mkdocs_material:latest
 
 test: build

@@ -85,11 +85,13 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   mMicroCI->Script() << inja::render(R"(
+           && chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1 \
            && cp -rv {{ PLUGIN_COPY_FROM }}/* {{ PLUGIN_COPY_TO }}/ 2>&1 \
-           && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
-           && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
-           && git -C {{ PLUGIN_COPY_TO }} push origin {{ GIT_BRANCH }} 2>&1 \
-           && chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1
+           && git -C {{ PLUGIN_COPY_TO }} add . 2>&1
+           if git diff --exit-code > /dev/null ; then
+             git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
+             && git -C {{ PLUGIN_COPY_TO }} push origin {{ GIT_BRANCH }} 2>&1 ; \
+           fi
   ")",
                                      data);
 

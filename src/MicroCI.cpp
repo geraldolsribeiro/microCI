@@ -136,6 +136,8 @@ bool MicroCI::ReadConfig(const string &filename) {
       }
     }
 
+    mYamlFilename = filename;
+
   } catch (const YAML::BadFile &e) {
     spdlog::error("Falha ao carregar o arquivo .microCI.yml");
     spdlog::error(e.what());
@@ -267,6 +269,7 @@ json MicroCI::DefaultDataTemplate() const {
   data["DOCKER_IMAGE"] = mDefaultDockerImage;
   data["RUN_AS"] = "root";
   data["MICROCI_STEP_SKIP"] = "no";
+  data["MICROCI_YAML"] = mYamlFilename;
 
   data["BLUE"] = "\033[0;34m";
   data["YELLOW"] = "\033[0;33m";

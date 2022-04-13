@@ -48,7 +48,7 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 25;
-const int PATCH = 0;
+const int PATCH = 1;
 
 // ----------------------------------------------------------------------
 //
@@ -106,6 +106,7 @@ class MicroCI {
   void initBash();
   void parsePluginStep(const YAML::Node &step);
 
+  string mYamlFilename = ".microCI.yml";
   set<EnvironmentVariable> mEnvs;
   set<string> mDockerImages;
   string mOnlyStep;

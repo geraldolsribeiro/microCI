@@ -74,20 +74,28 @@ function updateStepStatusJson {
     ts=$(date +%s)
     # id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
     # echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg name   "$name"   ".repos.$repoId.steps[$stepNum].name   = (\$name)"   ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --argjson ts "$ts"     ".repos.$repoId.steps[$stepNum].ts     = (\$ts)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg status "$status" ".repos.$repoId.steps[$stepNum].status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    jq --arg name   "$name"   ".repos.$repoId.steps[$stepNum].name   = (\$name)"   ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --argjson ts "$ts"     ".repos.$repoId.steps[$stepNum].ts     = (\$ts)"     ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg status "$status" ".repos.$repoId.steps[$stepNum].status = (\$status)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
   fi
 }
 
 function resetStepStatusesJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
     local stepNum=0
-    echo $( jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
-    echo $( jq --arg path "${MICROCI_PWD}" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg path "${MICROCI_PWD}" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
 
-    yq -r .steps[].name .microCI.yml \
+    rm -f /tmp/$$.json
+
+    yq -r .steps[].name "{{ MICROCI_YAML }}" \
       | while IFS= read -r stepName
         do
           updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
@@ -116,7 +124,9 @@ function setStepStatusSkipJson {
 
 function reformatJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
-    jq --sort-keys . ${MICROCI_DB_JSON} > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}; rm -f /tmp/$$.json
+    jq --sort-keys . ${MICROCI_DB_JSON} \
+      > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}
+    rm -f /tmp/$$.json
   fi
 }
 
