@@ -1,0 +1,36 @@
+@startuml class-diagram-03a.png
+
+class ClassName {
+  {field} + publicfield : String = ""
+  {field} - privatefield : int
+  {field} # protectedfield : double
+  {field} ~ protectedfieldInPackage : Object
+  {classifier} staticField : Object2
+
+  {method} + publicMethod(s : String, v : int) : type
+  {method} - privateMethod() : int
+  {method} # protectedMethod() : double
+  {method} ~ protectedMethodInPackage() : Object
+  {abstract} abstract() : void
+}
+
+@enduml
+
+@startuml class-diagram-03b.png
+
+skinparam classAttributeIconSize 10
+class ClassName {
+  {field} + publicfield : String = ""
+  {field} - privatefield : int
+  {field} # protectedfield : double
+  {field} ~ protectedfieldInPackage : Object
+  {classifier} staticField : Object2
+
+  {method} + publicMethod(s : String, v : int) : type
+  {method} - privateMethod() : int
+  {method} # protectedMethod() : double
+  {method} ~ protectedMethodInPackage() : Object
+  {abstract} abstract() : void
+}
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+
+[o->> Alice: Found Message
+Alice -> Bob: Synchronous Request
+activate Bob
+Bob->Bob: Internal call
+activate Bob
+Bob->>o]: Lost Message
+deactivate Bob
+Alice <<-- Bob: Synchronous Reply
+deactivate Bob
+Alice -[#Red]>> Bob: Asynchronous Request
+Alice <<-[#Blue]- Bob: Asynchronous Reply
+
+@enduml

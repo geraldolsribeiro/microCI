@@ -1,0 +1,47 @@
+@startuml class-diagram-02a.png
+
+show circle
+
+Class01 <|-- Class02 : Generalization
+Class03 *-- Class04 : Composition
+Class05 o-- Class06 : Aggregation
+Class07 <.. Class08 : Dependency
+Class09 <|.. Class10 : Realization
+Class11 "1" -- "1..n" Class12 : Association
+
+@enduml
+
+@startuml class-diagram-02b.png
+
+show circle
+
+Class01 <|- Class02 : Generalization
+
+Class03 *- Class04 : Composition
+
+Class05 o- Class06 : Aggregation
+
+@enduml
+
+@startuml class-diagram-02c.png
+
+show circle
+
+Class07 <. Class08 : Dependency
+
+Class09 <|. Class10 : Realization
+
+Class11 "1" - "1..n" Class12 : Association
+
+@enduml
+
+@startuml class-diagram-02d.png
+
+hide empty members
+
+ClassCenter <-left- ClassRight
+ClassCenter <-right- ClassLeft
+ClassCenter <-up- ClassDown
+ClassCenter <-down- ClassUp
+
+@enduml

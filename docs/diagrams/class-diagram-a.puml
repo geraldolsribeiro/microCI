@@ -1,0 +1,22 @@
+@startuml
+/'
+ ' Samples for Class Diagrams
+ '/
+
+abstract class friends {
+}
+class serval {
+  +Waai()
+}
+class raccoon {
+  +OmakaseNanoda()
+}
+class fennec {
+  +Haiyo()
+}
+
+friends <|-- serval
+friends <|-- raccoon
+friends <|-- fennec
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+
+participant "Object A" as A
+participant "Object B" as B
+participant "Object C" as C
+
+== Create Object ==
+
+A -> B : Create Object C
+activate B
+
+create C
+B->C : Create
+
+ref over B, C : Initialize
+
+A <<-- B : Success
+deactivate B
+
+|||
+== Destroy Object ==
+
+A -> B : Destroy Object C
+activate B
+
+B->C : Destroy
+activate C
+
+B<<--C : Done
+deactivate C
+
+A <<-- B : Success
+deactivate B
+destroy C
+
+@enduml

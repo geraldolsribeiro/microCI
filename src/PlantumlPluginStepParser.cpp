@@ -42,10 +42,8 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
-  auto type = string{"png"};
-  auto output = string{};
   list<string> sourceList;
-  list<string> opts = {"-r"};
+  list<string> opts = {"-nometadata", "-charset utf-8 ", "-r"};
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
@@ -62,18 +60,19 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  if (step["plugin"]["type"]) {
-    type = step["plugin"]["type"].as<string>();
-  }
-
-  if (step["plugin"]["output"]) {
-    output = step["plugin"]["output"].as<string>();
-  }
+  auto type = step["plugin"]["type"].as<string>("png");
+  auto output = step["plugin"]["output"].as<string>("");
+  auto config = step["plugin"]["config"].as<string>("");
 
   // para executar com GUI
   // -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/
 
   opts.push_back("-t" + type);
+
+  if (!config.empty()) {
+    opts.push_back("-config " + config);
+  }
+
   if (!output.empty()) {
     opts.push_back("-o " + output);
   }

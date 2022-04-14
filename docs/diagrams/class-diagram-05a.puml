@@ -1,0 +1,22 @@
+@startuml
+
+node "Node" <<stereotype 01>> {
+  class Class1
+}
+rectangle "Rectangle" <<stereotype 02>> {
+  class Class2
+}
+folder "Folder" <<stereotype 03>> {
+  class Class3
+}
+frame "Frame" <<stereotype 04>> {
+  class Class4
+}
+cloud "Cloud" <<stereotype 05>> {
+  class Class5
+}
+database "Database" <<stereotype 06>> {
+  class Class6
+}
+
+@enduml

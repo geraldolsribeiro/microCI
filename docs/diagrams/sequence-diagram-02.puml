@@ -1,0 +1,16 @@
+@startuml
+
+box "Sample for Sequence Diagram"
+Alice -> Bob: Hello
+
+alt successful case
+  Bob -->> Alice: Hello
+else failure case
+  Bob -->> Alice: Who?
+  loop 3 times
+    Alice -> Bob: Hello again
+  end
+end
+end box
+
+@enduml

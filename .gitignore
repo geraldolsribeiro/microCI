@@ -1,4 +1,5 @@
 auditing/
+docs/diagrams/*.png
 bin/microCI
 include/argh.h
 include/inicpp.h

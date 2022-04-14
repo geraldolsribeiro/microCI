@@ -43,13 +43,15 @@ steps:
         pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
 
   - name: "Gerar diagramas plantuml"
+    only: p
     description: "Descrição deste passo"
     plugin:
       name: "plantuml"
       source:
-        - "docs/**.pu"
+        - "docs/**.puml"
       type: png
-      output: "/microci_workspace/docs/"
+      config: "docs/diagrams/skinparams.iuml"
+      output: "/microci_workspace/docs/diagrams"
 
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"

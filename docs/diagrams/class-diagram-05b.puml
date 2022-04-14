@@ -1,0 +1,22 @@
+@startuml
+
+package "Node" <<node>> {
+  class Class1
+}
+package "Rectangle" <<rectangle>> {
+  class Class2
+}
+package "Folder" <<folder>> {
+  class Class3
+}
+package "Frame" <<frame>> {
+  class Class4
+}
+package "Cloud" <<cloud>> {
+  class Class5
+}
+package "Database" <<database>> {
+  class Class6
+}
+
+@enduml

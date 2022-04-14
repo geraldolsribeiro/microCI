@@ -1,0 +1,17 @@
+@startuml
+
+class Class1
+note left of Class1: comment on left
+note right of Class1: comment on right
+note top of Class1: comment on top
+note bottom of Class1: comment on bottom
+
+Class2 <|-- Class3
+
+note "Note between Class2 and Class3" as Note1
+Class2 "1" .. Note1
+Note1 .. "1..n" Class3
+
+note "This is a floating note" as Note2
+
+@enduml

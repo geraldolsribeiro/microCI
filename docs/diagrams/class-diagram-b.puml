@@ -1,0 +1,24 @@
+@startuml
+/'
+ ' Samples for Class Diagrams
+ '/
+ skinparam minClassWidth 130
+
+class Creator {
+  {abstract} # factoryMethod() : Product
+  + anOperation()
+}
+class ConcreteCreator {
+  + factoryMethod() : Product
+}
+abstract class Product {
+}
+class ConcreteProduct {
+}
+
+ConcreteCreator -up-|> Creator
+ConcreteProduct -up-|> Product
+Creator .right.> Product : "use"
+ConcreteCreator .right.> ConcreteProduct : "create"
+
+@enduml
