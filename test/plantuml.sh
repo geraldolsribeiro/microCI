@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.25.1                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.25.3                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -214,8 +214,11 @@ function step_gerar_diagramas_plantuml() {
         "intmain/microci_plantuml:latest" \
           /bin/bash -c "cd /microci_workspace \
           && java -jar /opt/plantuml/plantuml.jar \
+            -nometadata \
+            -charset utf-8  \
             -r \
             -tsvg \
+            -config docs/diagrams/skinparams.iuml \
             -o /microci_workspace/docs/diagrams/ \
             src/**.cpp \
             docs/**.puml \

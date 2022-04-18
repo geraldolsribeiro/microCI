@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.25.1                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.25.3                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -281,15 +281,14 @@ function step_publicar_html_para_repositorio_git() {
            && git clone --branch main 'ssh://git@someurl.com/site.git' --depth 1 '/deploy' 2>&1 \
            && git -C /deploy config user.name  '$(git config --get user.name)' 2>&1 \
            && git -C /deploy config user.email '$(git config --get user.email)' 2>&1 \
-           && git -C /deploy rm '*' 2>&1 \
+           && git -C /deploy rm '*' || echo 'Repositório vazio!' 2>&1 \
            && chown $(id -u):$(id -g) -Rv site 2>&1 \
            && cp -rv site/* /deploy/ 2>&1 \
            && git -C /deploy add . 2>&1
-           if git diff --exit-code > /dev/null ; then
-             git -C /deploy commit -am ':rocket:microCI git_publish' 2>&1 \
-             && git -C /deploy push origin main 2>&1 ; \
-           fi
-  "
+           git diff --exit-code > /dev/null || { \
+             git -C /deploy commit -am ':rocket:microCI git_publish' \
+             && git -C /deploy push origin main ; } 2>&1
+"
     )
 
     status=$?
