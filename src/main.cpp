@@ -86,11 +86,12 @@ using namespace microci;
 string help() {
   return R"(
 Opções:
-  -h --help                Ajuda
-  -V --version             Versão
-  -T --test-config         Testa a configuração
-  -O --only                Executa somente o passo especificado
-  -U --update-db           Atualiza dados de observabilidade
+  -h,--help                Ajuda
+  -V,--version             Versão
+  -T,--test-config         Testa a configuração
+  -O,--only                Executa somente o passo especificado
+  -U,--update-db           Atualiza dados de observabilidade
+  -u,--update              Atualiza para a última versão do microCI
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando
@@ -129,6 +130,14 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
   try {
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
+
+    if (cmdl[{"-u", "--update"}]) {
+      cout << "curl -fsSL "
+              "github.com/geraldolsribeiro/microci/releases/latest/download/microCI "
+              "-o /usr/local/bin/microCI"
+           << endl;
+      return 0;
+    }
 
     MicroCI uCI{};
     uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
