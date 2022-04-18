@@ -80,7 +80,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
 
   if (cleanBefore) {
     mMicroCI->Script() << inja::render(R"(
-           && git -C {{ PLUGIN_COPY_TO }} rm '*' 2>&1 \)",
+           && git -C {{ PLUGIN_COPY_TO }} rm '*' || echo 'Repositório vazio!' 2>&1 \)",
                                        data);
   }
 
