@@ -8,6 +8,9 @@ steps:
     docker: "gcc:11" # Imagem que será executada
     network: bridge  # bridge, host ou none
     run_as: root     # root, user
+    envs:
+      ENV1: "valor da variável de ambiente ENV1"
+      ENV2: "valor da variável de ambiente ENV2"
     plugin:
       name: bash
       bash: |

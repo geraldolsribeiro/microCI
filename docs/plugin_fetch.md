@@ -12,6 +12,17 @@ steps:
       name: "fetch"
       target: include # local padrão para os arquivos
       items:
+        - git_archive: https://github.com/geraldolsribeiro/microCI.git
+          target: /tmp/
+          tag: master
+          strip-components: 1 # remove 1 nível
+          files:
+            - test/help.txt # Arquivo final será /tmp/help.txt
+        - git_archive: https://github.com/User/repo/archive/master.tar.gz
+          target: /tmp/
+          token: personal_token
+          files:
+            - README.md
         - git_archive: git@gitlabcorp.xyz.com.br:group/repo.git
           target: /tmp/include/
           files:
@@ -23,12 +34,15 @@ steps:
             - lib/*.so
         - git_archive: git@gitlabcorp.xyz.com.br:group/repo.git
           target: /tmp/lib/
-          strip-components: 2 # remove 2 níveis 
+          strip-components: 2 # remove 2 níveis
           files:
             - path1/path2/lib/*.so
         - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
           target: /tmp/include # Local onde será colocado este arquivo
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        - github:   adishavit/argh    master   
+        - github: adishavit/argh v1.3.2
+          target: /tmp/
 ```
 

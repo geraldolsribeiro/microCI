@@ -8,7 +8,7 @@ steps:
     plugin:
       name: "cppcheck"
       options:
-        - "-j 2"               # executa 2 jobs simultâneamente
+        # - "-j 2"             # executa 2 jobs simultâneamente
         # - "--clang=clang-11" # utiliza o clang como analisador
         # - "--bug-hunting"    # útil para code review
       include:

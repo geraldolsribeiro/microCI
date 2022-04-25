@@ -8,9 +8,10 @@ steps:
     plugin:
       name: "plantuml"
       source:
-        - "src/**.cpp"         # Vasculha recursivamente os arquivos cpp
-        - "docs/**.puml"
-      type: svg                # svg, png ou pdf
+        - "src/**.cpp"                            # Vasculha recursivamente os arquivos cpp
+        - "docs/**.puml"                          # Vasculha recursivamente os arquivos puml
+      type: svg                                   # svg, png ou pdf
       output: "/microci_workspace/docs/diagrams/" # Pasta onde serão salvos os arquivos
+      config: "docs/diagrams/skinparams.iuml"     # Estilos comuns
 ```
 

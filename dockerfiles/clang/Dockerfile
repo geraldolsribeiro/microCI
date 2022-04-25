@@ -10,7 +10,17 @@ RUN set -eux; \
 
 RUN set -eux; \
   apt-get update \
-  && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev cmake ninja-build
+  && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev cmake ninja-build \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+RUN set -eux; \
+  apt-get update \
+  && apt-get install -y doxygen \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 CMD [ "/bin/echo", "microCI clang image" ]
 
