@@ -46,6 +46,8 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   auto cmds = vector<string>{};
   auto line = string{};
 
+  data = parseRunAs(step, data, "user");
+
   if (step["plugin"]["bash"]) {
     cmdsStr = step["plugin"]["bash"].as<string>();
   } else if (step["plugin"]["sh"]) {

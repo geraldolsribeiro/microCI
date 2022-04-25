@@ -7,7 +7,7 @@ edit_uri: edit/master/docs/
 theme:
   name: material
   language: pt
-  logo: image/logo.svg
+  logo: images/logo.svg
   favicon: images/favicon.png
   palette:
     primary: white

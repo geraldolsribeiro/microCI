@@ -7,16 +7,17 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.25.3
+                             microCI 0.25.4
                             Geraldo Ribeiro
 
 
 Opções:
-  -h --help                Ajuda
-  -V --version             Versão
-  -T --test-config         Testa a configuração
-  -O --only                Executa somente o passo especificado
-  -U --update-db           Atualiza dados de observabilidade
+  -h,--help                Ajuda
+  -V,--version             Versão
+  -T,--test-config         Testa a configuração
+  -O,--only                Executa somente o passo especificado
+  -U,--update-db           Atualiza dados de observabilidade
+  -u,--update              Atualiza para a última versão do microCI
   -i,--input arquivo.yml   Carrega arquivo de configuração
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando
