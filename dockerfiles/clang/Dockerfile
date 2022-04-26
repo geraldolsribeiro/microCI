@@ -22,6 +22,13 @@ RUN set -eux; \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+RUN set -eux; \
+  apt-get update \
+  && apt-get install -y libasio-dev libboost-all-dev \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
 CMD [ "/bin/echo", "microCI clang image" ]
 
 # vim: ft=dockerfile
