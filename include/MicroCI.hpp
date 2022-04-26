@@ -48,7 +48,7 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 25;
-const int PATCH = 4;
+const int PATCH = 5;
 
 // ----------------------------------------------------------------------
 //

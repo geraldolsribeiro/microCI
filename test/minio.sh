@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.25.4                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.25.5                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -192,6 +192,7 @@ function step_salvar_artefato_em_bucket() {
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
+  HOME="/tmp/"
   MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
   MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
   MICROCI_MINIO_URL="http://11.22.33.44:9000"
@@ -214,6 +215,7 @@ function step_salvar_artefato_em_bucket() {
         --rm \
         --network bridge \
         --workdir /microci_workspace \
+        --env HOME="/tmp/" \
         --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
         --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
         --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \

@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.25.4                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.25.5                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -285,7 +285,8 @@ function step_publicar_html_para_repositorio_git() {
            && chown $(id -u):$(id -g) -Rv site 2>&1 \
            && cp -rv site/* /deploy/ 2>&1 \
            && git -C /deploy add . 2>&1
-           git diff --exit-code > /dev/null || { \
+           echo "Publica apenas se existirem modificações"
+           git -C /deploy diff --exit-code > /dev/null || { \
              git -C /deploy commit -am ':rocket:microCI git_publish' \
              && git -C /deploy push origin main ; } 2>&1
 "
