@@ -81,6 +81,10 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           gitRemote = "https://github.com/" + gitRemote + "/archive/refs/tags/" + gitTag + ".tar.gz";
         }
 
+        if (item["offline"]) {
+          gitRemote = "file://" + item["offline"].as<string>();
+        }
+
         data["GIT_REMOTE"] = gitRemote;
         data["FILES"] = "";  // Todos os arquivos
         data["TARGET"] = item["target"].as<string>(defaultTarget);
@@ -96,7 +100,11 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
       } else if (item["git_archive"]) {
         string gitRemote;
-        data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
+        if (item["offline"]) {
+          data["GIT_REMOTE"] = gitRemote = item["offline"].as<string>();
+        } else {
+          data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
+        }
         auto tag = item["tag"].as<string>("master");
         bool isGithub = gitRemote.find("github.com") != string::npos;
         bool isDotGitEnded = gitRemote.substr(gitRemote.size() - 4) == ".git";
@@ -164,6 +172,12 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
            && mkdir -p {{ TARGET }} \
            && curl -s -fSL -R -J {{ GIT_REMOTE }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
+              data);
+        } else if (item["offline"]) {
+          mMicroCI->Script() << inja::render(
+              R"( \
+           && mkdir -p {{ TARGET }} \
+           && tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf {{ GIT_REMOTE }} {{ FILES }} 2>&1)",
               data);
         } else {
           mMicroCI->Script() << inja::render(

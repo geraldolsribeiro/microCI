@@ -222,6 +222,8 @@ function step_baixar_arquivos_externos_ao_projeto() {
            && mkdir -p /tmp/ \
            && curl -s -fSL -R -J https://personal_token@github.com/User/repo/archive/master.tar.gz \
              | tar -C /tmp/ --strip-components=1 -vzxf - 'repo-master/README.md' 2>&1 \
+           && mkdir -p /tmp/ \
+           && tar -C /tmp/ -vxf /tmp/repo.tar.gz 'README.md'  2>&1 \
            && mkdir -p /tmp/include/ \
            && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git HEAD 'README.md' 'include/*.h'  \
              | tar -C /tmp/include/ -vxf - 2>&1 \
@@ -248,7 +250,10 @@ function step_baixar_arquivos_externos_ao_projeto() {
              | tar -C include --strip-components=1 -vzxf - 2>&1 \
            && mkdir -p /tmp/ \
            && curl -s -fSL -R -J https://github.com/adishavit/argh/archive/refs/tags/v1.3.2.tar.gz \
-             | tar -C /tmp/ --strip-components=1 -vzxf - 2>&1"
+             | tar -C /tmp/ --strip-components=1 -vzxf - 2>&1 \
+           && mkdir -p include \
+           && curl -s -fSL -R -J file:///tmp/repo2.tar.gz \
+             | tar -C include --strip-components=1 -vzxf - 2>&1"
 
     )
 
