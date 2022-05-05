@@ -91,6 +91,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }} \
         && mkdir -p auditing/cppcheck \
+        && rm -f auditing/cppcheck/*.html \
         && cppcheck \
           --platform={{ PLATFORM }} \
           --std={{ STD }} \

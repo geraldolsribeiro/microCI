@@ -29,16 +29,16 @@ PS4='$LINENO: '
 
 # Verifica se as dependências estão presentes
 command -v jq &> /dev/null \
-  || { echo -e "{{RED}}Comando jq não foi encontrado{{CLEAR}}";  exit 1; }
+  || { echo -e "{{RED}}Comando jq não foi encontrado{{CLEAR}}"; exit 1; }
 
 command -v yq &> /dev/null \
-  || { echo -e "{{RED}}Comando yq não foi encontrado{{CLEAR}}";  exit 1; }
+  || { echo -e "{{RED}}Comando yq não foi encontrado{{CLEAR}}"; exit 1; }
 
 command -v curl &> /dev/null \
-  || { echo -e "{{RED}}Comando curl não foi encontrado{{CLEAR}}";  exit 1; }
+  || { echo -e "{{RED}}Comando curl não foi encontrado{{CLEAR}}"; exit 1; }
 
 command -v docker &> /dev/null \
-  || { echo -e "{{RED}}Comando docker não foi encontrado{{CLEAR}}";  exit 1; }
+  || { echo -e "{{RED}}Comando docker não foi encontrado{{CLEAR}}"; exit 1; }
 
 MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json

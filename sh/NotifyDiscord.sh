@@ -58,4 +58,4 @@ function notify_discord() {
   } >> .microCI.log
 }
 
-# vim: ft=bash
+# vim: ft=bash spelllang=pt,en
