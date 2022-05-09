@@ -54,7 +54,7 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cppcheck:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_clang:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Formata código C++");
 
