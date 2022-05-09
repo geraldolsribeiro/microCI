@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.25.6                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.26.1                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -29,16 +29,16 @@ PS4='$LINENO: '
 
 # Verifica se as dependências estão presentes
 command -v jq &> /dev/null \
-  || { echo -e "[0;31mComando jq não foi encontrado[0m";  exit 1; }
+  || { echo -e "[0;31mComando jq não foi encontrado[0m"; exit 1; }
 
 command -v yq &> /dev/null \
-  || { echo -e "[0;31mComando yq não foi encontrado[0m";  exit 1; }
+  || { echo -e "[0;31mComando yq não foi encontrado[0m"; exit 1; }
 
 command -v curl &> /dev/null \
-  || { echo -e "[0;31mComando curl não foi encontrado[0m";  exit 1; }
+  || { echo -e "[0;31mComando curl não foi encontrado[0m"; exit 1; }
 
 command -v docker &> /dev/null \
-  || { echo -e "[0;31mComando docker não foi encontrado[0m";  exit 1; }
+  || { echo -e "[0;31mComando docker não foi encontrado[0m"; exit 1; }
 
 MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
