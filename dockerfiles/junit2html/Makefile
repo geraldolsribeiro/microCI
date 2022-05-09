@@ -1,17 +1,18 @@
 VERSION=0.1
+IMAGE_NAME=microci_junit2html
 
 all: publish
 
 build:
-	docker build -t intmain/microci_junit2html:$(VERSION) -f Dockerfile .
-	docker tag intmain/microci_junit2html:$(VERSION) intmain/microci_junit2html:latest
+	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 test: build
-	docker run -it intmain/microci_junit2html:latest junit2html -h
+	docker run -it intmain/$(IMAGE_NAME):latest junit2html -h
 
 publish: build
 	docker login
-	docker push intmain/microci_junit2html:$(VERSION)
-	docker push intmain/microci_junit2html:latest
+	docker push intmain/$(IMAGE_NAME):$(VERSION)
+	docker push intmain/$(IMAGE_NAME):latest
 
 .PHONY: all build test publish

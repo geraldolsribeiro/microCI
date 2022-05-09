@@ -35,7 +35,7 @@ RUN set -eux; \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
-  PIP_NO_CACHE_DIR=1 pip3 install clang-html
+  && PIP_NO_CACHE_DIR=1 pip3 install clang-html
 
 CMD [ "/bin/echo", "microCI clang image" ]
 

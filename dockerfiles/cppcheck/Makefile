@@ -1,19 +1,19 @@
 VERSION=0.4.0
+IMAGE_NAME=microci_cppcheck
 
 all: publish
 
 build:
-	docker build -t intmain/microci_cppcheck:$(VERSION) -f Dockerfile .
-	docker tag intmain/microci_cppcheck:$(VERSION) intmain/microci_cppcheck:latest
+	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 test: build
-	docker run -it intmain/microci_cppcheck:$(VERSION) clang-tidy-html || echo OK
-	docker run -it intmain/microci_cppcheck:$(VERSION) cppcheck --help
-	docker run -it intmain/microci_cppcheck:$(VERSION)
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) cppcheck --help
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
 
 publish: build
 	docker login
-	docker push intmain/microci_cppcheck:$(VERSION)
-	docker push intmain/microci_cppcheck:latest
+	docker push intmain/$(IMAGE_NAME):$(VERSION)
+	docker push intmain/$(IMAGE_NAME):latest
 
 .PHONY: all build test publish

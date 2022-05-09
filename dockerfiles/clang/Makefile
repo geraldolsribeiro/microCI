@@ -1,17 +1,19 @@
 VERSION=0.4
+IMAGE_NAME=microci_clang
 
 all: publish
 
 build:
-	docker build -t intmain/microci_clang:$(VERSION) -f Dockerfile .
-	docker tag intmain/microci_clang:$(VERSION) intmain/microci_clang:latest
+	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 test:
-	docker run -it intmain/microci_clang:$(VERSION)
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 
 publish: build
 	docker login
-	docker push intmain/microci_clang:$(VERSION)
-	docker push intmain/microci_clang:latest
+	docker push intmain/$(IMAGE_NAME):$(VERSION)
+	docker push intmain/$(IMAGE_NAME):latest
 
 .PHONY: all build test publish
