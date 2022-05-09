@@ -29,6 +29,14 @@ RUN set -eux; \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+RUN set -eux; \
+  apt-get update \
+  && apt-get install -y python3-pip \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
+  PIP_NO_CACHE_DIR=1 pip3 install clang-html
+
 CMD [ "/bin/echo", "microCI clang image" ]
 
 # vim: ft=dockerfile
