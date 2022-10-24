@@ -3,35 +3,15 @@ MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 
 RUN set -eux; \
   apt-get update \
-  && apt-get install -y git build-essential libpcre3-dev clang clang-format clang-tools clang-tidy lcov \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-RUN set -eux; \
-  apt-get update \
-  && apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev cmake ninja-build \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-RUN set -eux; \
-  apt-get update \
-  && apt-get install -y doxygen \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-RUN set -eux; \
-  apt-get update \
-  && apt-get install -y libasio-dev libboost-all-dev \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-RUN set -eux; \
-  apt-get update \
-  && apt-get install -y python3-pip \
+  && apt-get install -y curl \
+  && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" > /etc/apt/sources.list.d/llvm.list \
+  && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
+  && apt-get update \
+  && apt-get install -y \
+    git build-essential libpcre3-dev clang clang-format clang-tools clang-tidy lcov \
+    xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev cmake ninja-build doxygen \
+    libasio-dev libboost-all-dev \
+    python3-pip \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ \

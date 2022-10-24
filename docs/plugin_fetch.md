@@ -23,6 +23,12 @@ steps:
           token: personal_token
           files:
             - README.md
+        - git_archive: https://github.com/User/repo/archive/master.tar.gz
+          offline: /tmp/repo.tar.gz
+          target: /tmp/
+          token: personal_token
+          files:
+            - README.md
         - git_archive: git@gitlabcorp.xyz.com.br:group/repo.git
           target: /tmp/include/
           files:
@@ -44,5 +50,7 @@ steps:
         - github:   adishavit/argh    master   
         - github: adishavit/argh v1.3.2
           target: /tmp/
+        - github: adishavit/argh v1.3.2
+          offline: /tmp/repo2.tar.gz
 ```
 

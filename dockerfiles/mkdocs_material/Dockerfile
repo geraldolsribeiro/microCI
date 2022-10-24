@@ -14,3 +14,6 @@ RUN PIP_NO_CACHE_DIR=1 pip3 install mkdocs-with-pdf mkdocs-build-plantuml-plugin
 RUN apt-get update && apt-get install -y chromium-driver && apt-get clean
 
 RUN PIP_NO_CACHE_DIR=1 pip3 install qrcode
+
+# Demora muito para gerar um pdf para cada página
+# RUN PIP_NO_CACHE_DIR=1 pip3 install mkdocs-pdf-export-plugin

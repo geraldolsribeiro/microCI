@@ -1,10 +1,10 @@
-VERSION=0.4
+VERSION=0.5
 IMAGE_NAME=microci_clang
 
 all: publish
 
 build:
-	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 test:

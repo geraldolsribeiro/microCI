@@ -1,6 +1,6 @@
 auditing/
-docs/diagrams/*.png
 bin/microCI
+docs/diagrams/*.png
 include/argh.h
 include/inicpp.h
 include/inja.hpp
@@ -9,6 +9,8 @@ include/sha1.h
 .microCI.dbg
 .microCI.log
 site
+src/.cache
+.ccls-cache
 src/NOTES.md
 src/single_compilation_unit.cpp
 xxx/

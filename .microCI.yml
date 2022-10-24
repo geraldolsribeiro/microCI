@@ -3,12 +3,14 @@ steps:
   - name: "Gerar relatório de verificação do código C++ clang-tidy"
     description: "Verifica o código C++ e gera relatório em formato HTML"
     network: bridge
+    only: clang-tidy
     plugin:
       name: "clang-tidy"
       options:
         - "-std=c++17"
       include:
         - "/usr/include/"
+        - "include/"
       source:
         - "src/*pp"
         - "include/*pp"
@@ -43,7 +45,6 @@ steps:
         pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
 
   - name: "Gerar diagramas plantuml"
-    only: p
     description: "Descrição deste passo"
     plugin:
       name: "plantuml"
@@ -71,6 +72,7 @@ steps:
     plugin:
       name: bash
       bash: |
+        mkdir -p site/
         cp github-pages/CNAME site/
         cat docs/index.md > README.md
         # Disponibiliza uma página de rosto para o github
@@ -108,7 +110,7 @@ steps:
   - name: "Compilar versão estática do microCI"
     docker: "gcc:11"
     run_as: root # necessário para instalar as dependências
-    network: bridge
+    network: host
     plugin:
       name: bash
       bash: |
@@ -131,5 +133,5 @@ steps:
       is_latest: true
       push: true
 
-# vim: spell spelllang=pt,en
+# vim: spell spelllang=pt,en nowrap
 

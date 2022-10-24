@@ -42,3 +42,6 @@ plugins:
           name: Português
           build: true
           site_name: Documentação do microCI
+  # - pdf-export:
+  #     verbose: true
+  #     media_type: pdf-export # 'print' or 'pdf-export'

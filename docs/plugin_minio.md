@@ -8,6 +8,9 @@ Veja documentação do **MinIO Client** em <https://github.com/minio/mc>.
 steps:
   - name: "Salvar artefato em bucket"
     description: "Descrição deste passo"
+    run_as: user
+    envs:
+      HOME: /tmp/
     plugin:
       name: minio
       bash: |

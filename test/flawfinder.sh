@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.26.2                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.26.3                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -40,6 +40,7 @@ command -v curl &> /dev/null \
 command -v docker &> /dev/null \
   || { echo -e "[0;31mComando docker não foi encontrado[0m"; exit 1; }
 
+# Caminho físico sem quebra de linha
 MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
 MICROCI_STEP_NUMBER=0
@@ -49,7 +50,7 @@ function gitOrigin {
 }
 
 function pwdRepoId {
-  # chave json não pode começar com número
+  # Como as chaves no json não podem começar com número foi prefixado com underline
   echo "_$(echo "${MICROCI_PWD}" | md5sum)" | cut -b 1-7
 }
 

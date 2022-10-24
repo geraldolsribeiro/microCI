@@ -72,29 +72,14 @@ tidy:
 	xxd -i $^ >> $@
 	touch main.cpp
 
-single_compilation_unit.cpp: *cpp ../include/*hpp Makefile \
+single_compilation_unit.cpp: \
+	$(filter-out single_compilation_unit.cpp, $(wildcard *cpp)) \
+	$(wildcard ../include/*hpp) \
+	$(wildcard ../include/new/*hpp) \
+	$(wildcard ../include/sh/*hpp) \
+	Makefile \
   ../include/3rd/beamercolorthemestr.sty.hpp \
-  ../include/3rd/str-logo.png.hpp \
-  ../include/new/bash.hpp \
-  ../include/new/beamer.hpp \
-  ../include/new/clang-format_config.hpp \
-  ../include/new/clang-format.hpp \
-  ../include/new/clang-tidy.hpp \
-  ../include/new/cppcheck.hpp \
-  ../include/new/docker_build.hpp \
-  ../include/new/fetch.hpp \
-  ../include/new/flawfinder.hpp \
-  ../include/new/git_deploy.hpp \
-  ../include/new/git_publish.hpp \
-  ../include/new/minio.hpp \
-  ../include/new/mkdocs_material_config.hpp \
-  ../include/new/mkdocs_material.hpp \
-  ../include/new/mkdocs_material_index.hpp \
-  ../include/new/npm.hpp \
-  ../include/new/plantuml.hpp \
-  ../include/new/skip.hpp \
-  ../include/sh/MicroCI.hpp \
-  ../include/sh/NotifyDiscord.hpp
+  ../include/3rd/str-logo.png.hpp
 	@echo "// ARQUIVO GERADO! NÃO EDITAR" > $@
 	@echo "// clang-format off" >> $@
 	@find . -name "*.cpp" \
