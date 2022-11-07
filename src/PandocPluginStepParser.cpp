@@ -42,7 +42,7 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   auto output = string{"output.pdf"};
   auto basePath = string{"."};
   list<string> inputList;
-  list<string> optionList = { "--pdf-engine=xelatex" };
+  list<string> optionList = {"--pdf-engine=xelatex"};
 
   if (step["plugin"]["output"]) {
     output = step["plugin"]["output"].as<string>();

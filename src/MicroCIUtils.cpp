@@ -62,7 +62,7 @@ string sanitizeName(const string &name) {
 
   // Troca os caracteres acentuados por versão sem acento
   map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
-  for (auto const [from, to] : tr) {
+  for (auto const &[from, to] : tr) {
     size_t pos = 0;
     while ((pos = ret.find(from, pos)) != string::npos) {
       ret.replace(pos, from.length(), to);
