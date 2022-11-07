@@ -40,15 +40,27 @@ using namespace std;
 // ----------------------------------------------------------------------
 void PandocPluginStepParser::Parse(const YAML::Node &step) {
   auto output = string{"output.pdf"};
+  auto basePath = string{"."};
   list<string> inputList;
+  list<string> optionList = { "--pdf-engine=xelatex" };
 
   if (step["plugin"]["output"]) {
     output = step["plugin"]["output"].as<string>();
   }
 
-  if (step["plugin"]["input"] && step["plugin"]["input"].IsSequence()) {
-    for (const auto &filename : step["plugin"]["input"]) {
+  if (step["plugin"]["base_path"]) {
+    basePath = step["plugin"]["base_path"].as<string>();
+  }
+
+  if (step["plugin"]["inputs"] && step["plugin"]["inputs"].IsSequence()) {
+    for (const auto &filename : step["plugin"]["inputs"]) {
       inputList.push_back(filename.as<string>());
+    }
+  }
+
+  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
+    for (const auto &opt : step["plugin"]["options"]) {
+      optionList.push_back(opt.as<string>());
     }
   }
 
@@ -59,6 +71,7 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando pandoc");
   data["DOCKER_IMAGE"] = "pandoc/latex:latest";
+  data["BASE_PATH"] = basePath;
 
   auto envs = parseEnvs(step);
   beginFunction(data, envs);
@@ -72,13 +85,15 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir {{ WORKSPACE }} \
+        --workdir {{ WORKSPACE }}/{{BASE_PATH}} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --network {{ DOCKER_NETWORK }} \
         {{ DOCKER_IMAGE }} \
-        --pdf-engine=xelatex \
 )",
                                      data);
+  for (const auto &option : optionList) {
+    mMicroCI->Script() << "        " << option << " \\\n";
+  }
   for (const auto &input : inputList) {
     mMicroCI->Script() << "        " << input << " \\\n";
   }

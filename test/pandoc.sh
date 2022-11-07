@@ -205,11 +205,14 @@ function step_gerar_pdf_a_partir_do_markdown() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --workdir /microci_workspace \
+        --workdir /microci_workspace/. \
         --volume "${MICROCI_PWD}":/microci_workspace \
         --network host \
         pandoc/latex:latest \
         --pdf-engine=xelatex \
+        --standalone \
+        --toc \
+        --number-sections \
         README.md \
         -o README.pdf 2>&1
     )
