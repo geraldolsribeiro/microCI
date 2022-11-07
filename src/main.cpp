@@ -53,6 +53,7 @@ using namespace std;
 #include <GitPublishPluginStepParser.hpp>
 #include <MinioPluginStepParser.hpp>
 #include <MkdocsMaterialPluginStepParser.hpp>
+#include <PandocPluginStepParser.hpp>
 #include <PlantumlPluginStepParser.hpp>
 #include <PluginStepParser.hpp>
 
@@ -73,6 +74,7 @@ using namespace std;
 #include <new/mkdocs_material_config.hpp>
 #include <new/mkdocs_material_index.hpp>
 #include <new/npm.hpp>
+#include <new/pandoc.hpp>
 #include <new/plantuml.hpp>
 #include <new/skip.hpp>
 
@@ -96,6 +98,7 @@ Opções:
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando
   -n,--new mkdocs_material Cria passo para documentação
+  -n,--new pandoc          Cria passo para conversão de documento
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção
   -n,--new plantuml        Cria passo para geração de diagramas
@@ -154,6 +157,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docker_build", make_shared<DockerBuildPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
 
     // Carrega as variáveis de ambiente
     for (char **env = envp; *env != 0; env++) {
@@ -207,6 +211,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true, "minio", ".microCI.yml", yml, minio);
       MICROCI_TPL(true, "flawfinder", ".microCI.yml", yml, flawfinder);
       MICROCI_TPL(true, "docker_build", ".microCI.yml", yml, docker_build);
+      MICROCI_TPL(true, "pandoc", ".microCI.yml", yml, pandoc);
 #undef MICROCI_TPL
 
       bool isTypeFound = false;

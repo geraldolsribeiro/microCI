@@ -21,5 +21,6 @@ doc_plugin: \
   docs/plugin_mkdocs_material_config.md \
   docs/plugin_mkdocs_material.md \
   docs/plugin_npm.md \
+  docs/plugin_pandoc.md \
   docs/plugin_plantuml.md \
   docs/plugin_skip.md \

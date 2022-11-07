@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.26.3
+                             microCI 0.27.0
                             Geraldo Ribeiro
 
 
@@ -22,6 +22,7 @@ Opções:
   -n,--new skip            Cria passo que não faz nada
   -n,--new bash            Cria passo para execução de linhas de comando
   -n,--new mkdocs_material Cria passo para documentação
+  -n,--new pandoc          Cria passo para conversão de documento
   -n,--new git_publish     Cria passo para publicar um diretório para repositório
   -n,--new git_deploy      Cria passo para colocar repositório em produção
   -n,--new plantuml        Cria passo para geração de diagramas

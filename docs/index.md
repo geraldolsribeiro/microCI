@@ -81,9 +81,10 @@ releases.
 
 ## Versões
 
-* `0.26.3` Update clang-tidy
+* `0.27.0` Plugin `pandoc`
+* `0.26.3` Update `clang-tidy`
 * `0.26.0` Offline mode
-* `0.25.6` Plugin `git_publish` com escolha de branch (p.e. gh-pages)
+* `0.25.6` Plugin `git_publish` com escolha de branch (p.e. `gh-pages`)
 * `0.24.0` Plugin `docker_build`
 * `0.23.0` Plugin `fetch` download github
 * `0.22.0` Plugin `fetch` download de pastas no github

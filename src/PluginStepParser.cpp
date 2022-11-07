@@ -174,6 +174,8 @@ void PluginStepParser::endFunction(const json &data) {
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
     setStepStatusFailJson
+    echo "Veja o log completo em .microCI.log"
+    tail -50 .microCI.log
   fi
 
   ((++MICROCI_STEP_NUMBER))

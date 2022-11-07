@@ -17,6 +17,12 @@ RUN set -eux; \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
   && PIP_NO_CACHE_DIR=1 pip3 install clang-html
 
+RUN set -eux; \
+  echo "2022-11-01" \
+  && apt-get update \
+  && apt-get upgrade -y \
+  && apt-get clean autoclean \
+
 CMD [ "/bin/echo", "microCI clang image" ]
 
 # vim: ft=dockerfile

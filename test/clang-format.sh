@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.26.3                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.27.0                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -241,6 +241,8 @@ function step_formatar_codigo_c___com_clang_format() {
   else
     echo -e "[0;31mFALHOU[0m"
     setStepStatusFailJson
+    echo "Veja o log completo em .microCI.log"
+    tail -50 .microCI.log
   fi
 
   ((++MICROCI_STEP_NUMBER))

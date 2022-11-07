@@ -49,6 +49,7 @@ test:
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 	../bin/microCI -i ../new/skip.yml                            > skip.sh
 	../bin/microCI -i ../new/bash.yml                            > bash.sh
+	../bin/microCI -i ../new/pandoc.yml                          > pandoc.sh
 	cp dot_env_minio .env
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
