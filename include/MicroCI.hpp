@@ -39,7 +39,6 @@ using namespace std;
 
 #include <yaml-cpp/yaml.h>
 
-#include <MicroCI.hpp>
 #include <nlohmann/json.hpp>
 
 namespace microci {
@@ -48,7 +47,7 @@ using nlohmann::json;
 
 const int MAJOR = 0;
 const int MINOR = 27;
-const int PATCH = 1;
+const int PATCH = 2;
 
 // ----------------------------------------------------------------------
 //

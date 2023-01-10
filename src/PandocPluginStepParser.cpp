@@ -71,6 +71,7 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando pandoc");
   data["DOCKER_IMAGE"] = "pandoc/latex:latest";
+  data["DOCKER_IMAGE"] = "intmain/microci_pandoc:latest";
   data["BASE_PATH"] = basePath;
 
   auto envs = parseEnvs(step);
