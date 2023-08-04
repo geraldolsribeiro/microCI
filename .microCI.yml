@@ -104,6 +104,7 @@ steps:
         - "include/*.hpp"
 
   - name: "Baixar arquivos externos ao projeto"
+    run_as: "root"
     description: "Download de dependências utilizadas na compilação"
     plugin:
       name: "fetch"

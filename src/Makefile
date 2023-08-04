@@ -91,6 +91,7 @@ single_compilation_unit.cpp: \
 	@echo "Single compilation unit was generated"
 
 ../bin/microCI: single_compilation_unit.cpp
+	mkdir -p ../bin/
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 	strip --strip-unneeded $@
 
