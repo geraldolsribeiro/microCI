@@ -1,8 +1,10 @@
 FROM pandoc/latex:latest
 MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 
-RUN echo "2023-01-10"; tlmgr update --self
-RUN tlmgr install \
+RUN tlmgr update --self \
+  && tlmgr install \
     pgf \
     tcolorbox \
-    environ
+    environ \
+    collection-fontsrecommended
+RUN updmap-sys

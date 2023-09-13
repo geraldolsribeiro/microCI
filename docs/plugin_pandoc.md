@@ -7,8 +7,13 @@ steps:
     description: "Descrição deste passo"
     plugin:
       name: pandoc
-      input:
+      base_path: .
+      inputs:
         - README.md
       output: README.pdf
+      options:
+        - --standalone
+        - --toc
+        - --number-sections
 ```
 

@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.27.1                          ┃[0m"
+  echo -e "[0;34m┃                            microCI 0.27.3                          ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -208,7 +208,7 @@ function step_gerar_pdf_a_partir_do_markdown() {
         --workdir /microci_workspace/. \
         --volume "${MICROCI_PWD}":/microci_workspace \
         --network host \
-        pandoc/latex:latest \
+        intmain/microci_pandoc:latest \
         --pdf-engine=xelatex \
         --standalone \
         --toc \

@@ -3,7 +3,8 @@ SHELL=bash
 all: doc_plugin
 
 docs/plugin_%.md: new/%.yml
-	INTMAIN_DOCMD_DETAILS=false INTMAIN_DOCMD_TOC=false INTMAIN_DOCMD_SHOW_SOURCE=false \
+	@echo "Writing $@..."
+	@INTMAIN_DOCMD_DETAILS=false INTMAIN_DOCMD_TOC=false INTMAIN_DOCMD_SHOW_SOURCE=false \
 		intmain_docmd yaml $^ $@
 
 doc_plugin: \
