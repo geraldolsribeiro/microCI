@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+// Copyright (C) 2022-2023 Geraldo Luis da Silva Ribeiro
 //
 // ░░░░░░░░░░░░░░░░░
 // ░░░░░░░█▀▀░▀█▀░░░
@@ -27,7 +27,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <openssl/md5.h>
+// https://stackoverflow.com/questions/69806220/advice-needed-for-migration-of-low-level-openssl-api-to-high-level-openssl-apis
+
+#include <openssl/evp.h>
 
 #include <filesystem>
 #include <fstream>
@@ -80,6 +82,7 @@ using namespace std;
 
 // Classe principal
 #include <MicroCI.hpp>
+
 using namespace microci;
 
 // ----------------------------------------------------------------------
@@ -308,11 +311,20 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
         spdlog::debug("Origin: {}", gitRemoteOrigin);
 
         auto pwdRepoId = string{"_"};  // para evitar que a chave comece com número
-        unsigned char hash[MD5_DIGEST_LENGTH];
-        MD5(reinterpret_cast<const unsigned char *>(pwd.c_str()), pwd.size(), hash);
+
+        EVP_MD_CTX *mdctx;
+        unsigned char *md5_digest;
+        unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
+        mdctx = EVP_MD_CTX_new();
+        EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+        EVP_DigestUpdate(mdctx, pwd.c_str(), pwd.size());
+        md5_digest = (unsigned char *)OPENSSL_malloc(md5_digest_len);
+        EVP_DigestFinal_ex(mdctx, md5_digest, &md5_digest_len);
+        EVP_MD_CTX_free(mdctx);
+
         static const char hexchars[] = "0123456789abcdef";
-        for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
-          unsigned char b = hash[i];
+        for (unsigned int i = 0; i < md5_digest_len; ++i) {
+          unsigned char b = md5_digest[i];
           char hex[3];
           hex[0] = hexchars[b >> 4];
           hex[1] = hexchars[b & 0xF];

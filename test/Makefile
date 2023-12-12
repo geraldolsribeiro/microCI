@@ -28,7 +28,10 @@ SHELL=bash
 test:
 	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
-		&& pushd "new_$$i" && pwd && ../../bin/microCI -n "$$i" && popd; \
+		&& pushd "new_$$i" \
+		&& pwd \
+		&& ../../bin/microCI --new "$$i" \
+		&& popd; \
 	done
 	rm -f .env
 	../bin/microCI -i y.yml         || echo "OK"

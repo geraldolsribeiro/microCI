@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+// Copyright (C) 2022-2023 Geraldo Luis da Silva Ribeiro
 //
 // ░░░░░░░░░░░░░░░░░
 // ░░░░░░░█▀▀░▀█▀░░░
@@ -236,7 +236,7 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
   } else {
     auto stepName = step["name"].as<string>();
     spdlog::error("O plugin '{}' não foi encontrado no passo '{}'", pluginName, stepName);
-    for (const auto p : mPluginParserMap) {
+    for (const auto &p : mPluginParserMap) {
       spdlog::warn("Plugin '{}'", p.first);
     }
     return;

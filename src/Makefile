@@ -33,10 +33,9 @@ CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
 CXXFLAGS+= -I../include/
 
 CXXFLAGS+= -Wall -Wextra
+CXXFLAGS+= -static
 CXXFLAGS+= -s
 CXXFLAGS+= -O3
-CXXFLAGS+= -static
-CXXFLAGS+= -fPIC
 CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
@@ -93,7 +92,7 @@ single_compilation_unit.cpp: \
 ../bin/microCI: single_compilation_unit.cpp
 	mkdir -p ../bin/
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	strip --strip-unneeded $@
+	strip --strip-all $@
 
 clean:
 	rm -f ../bin/microCI
