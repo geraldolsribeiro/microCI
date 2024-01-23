@@ -30,7 +30,7 @@
 #ifndef GIT_DEPLOY_PLUGIN_STEP_PARSER_HPP
 #define GIT_DEPLOY_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

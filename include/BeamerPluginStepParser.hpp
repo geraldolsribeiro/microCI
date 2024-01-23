@@ -30,7 +30,7 @@
 #ifndef BEAMER_PLUGIN_STEP_PARSER_HPP
 #define BEAMER_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

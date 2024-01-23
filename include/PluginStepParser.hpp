@@ -32,11 +32,12 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <MicroCI.hpp>
-#include <MicroCIUtils.hpp>
 #include <inja.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
+
+#include "MicroCI.hpp"
+#include "MicroCIUtils.hpp"
 
 namespace microci {
 using namespace std;

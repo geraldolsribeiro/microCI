@@ -30,7 +30,7 @@
 #ifndef FLAWFINDER_PLUGIN_STEP_PARSER_HPP
 #define FLAWFINDER_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

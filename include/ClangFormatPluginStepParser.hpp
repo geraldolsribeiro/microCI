@@ -30,7 +30,7 @@
 #ifndef CLANG_FORMAT_PLUGIN_STEP_PARSER_HPP
 #define CLANG_FORMAT_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

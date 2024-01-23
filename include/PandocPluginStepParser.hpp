@@ -30,7 +30,7 @@
 #ifndef PANDOC_PLUGIN_STEP_PARSER_HPP
 #define PANDOC_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

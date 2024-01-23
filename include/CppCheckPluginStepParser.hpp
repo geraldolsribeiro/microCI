@@ -30,7 +30,7 @@
 #ifndef CPPCHECK_PLUGIN_STEP_PARSER_HPP
 #define CPPCHECK_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 

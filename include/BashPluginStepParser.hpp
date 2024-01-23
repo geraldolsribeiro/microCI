@@ -30,7 +30,7 @@
 #ifndef BASH_PLUGIN_STEP_PARSER_HPP
 #define BASH_PLUGIN_STEP_PARSER_HPP
 
-#include <PluginStepParser.hpp>
+#include "PluginStepParser.hpp"
 
 namespace microci {
 
