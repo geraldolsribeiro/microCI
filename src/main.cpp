@@ -44,44 +44,44 @@ using namespace std;
 #include <spdlog/spdlog.h>
 
 // Plugins
-#include <BashPluginStepParser.hpp>
-#include <BeamerPluginStepParser.hpp>
-#include <ClangFormatPluginStepParser.hpp>
-#include <ClangTidyPluginStepParser.hpp>
-#include <CppCheckPluginStepParser.hpp>
-#include <FetchPluginStepParser.hpp>
-#include <FlawfinderPluginStepParser.hpp>
-#include <GitDeployPluginStepParser.hpp>
-#include <GitPublishPluginStepParser.hpp>
-#include <MinioPluginStepParser.hpp>
-#include <MkdocsMaterialPluginStepParser.hpp>
-#include <PandocPluginStepParser.hpp>
-#include <PlantumlPluginStepParser.hpp>
-#include <PluginStepParser.hpp>
+#include "BashPluginStepParser.hpp"
+#include "BeamerPluginStepParser.hpp"
+#include "ClangFormatPluginStepParser.hpp"
+#include "ClangTidyPluginStepParser.hpp"
+#include "CppCheckPluginStepParser.hpp"
+#include "FetchPluginStepParser.hpp"
+#include "FlawfinderPluginStepParser.hpp"
+#include "GitDeployPluginStepParser.hpp"
+#include "GitPublishPluginStepParser.hpp"
+#include "MinioPluginStepParser.hpp"
+#include "MkdocsMaterialPluginStepParser.hpp"
+#include "PandocPluginStepParser.hpp"
+#include "PlantumlPluginStepParser.hpp"
+#include "PluginStepParser.hpp"
 
 // Modelos de configuração
-#include <new/bash.hpp>
-#include <new/beamer.hpp>
-#include <new/clang-format.hpp>
-#include <new/clang-format_config.hpp>
-#include <new/clang-tidy.hpp>
-#include <new/cppcheck.hpp>
-#include <new/docker_build.hpp>
-#include <new/fetch.hpp>
-#include <new/flawfinder.hpp>
-#include <new/git_deploy.hpp>
-#include <new/git_publish.hpp>
-#include <new/minio.hpp>
-#include <new/mkdocs_material.hpp>
-#include <new/mkdocs_material_config.hpp>
-#include <new/mkdocs_material_index.hpp>
-#include <new/npm.hpp>
-#include <new/pandoc.hpp>
-#include <new/plantuml.hpp>
-#include <new/skip.hpp>
+#include "new/bash.hpp"
+#include "new/beamer.hpp"
+#include "new/clang-format.hpp"
+#include "new/clang-format_config.hpp"
+#include "new/clang-tidy.hpp"
+#include "new/cppcheck.hpp"
+#include "new/docker_build.hpp"
+#include "new/fetch.hpp"
+#include "new/flawfinder.hpp"
+#include "new/git_deploy.hpp"
+#include "new/git_publish.hpp"
+#include "new/minio.hpp"
+#include "new/mkdocs_material.hpp"
+#include "new/mkdocs_material_config.hpp"
+#include "new/mkdocs_material_index.hpp"
+#include "new/npm.hpp"
+#include "new/pandoc.hpp"
+#include "new/plantuml.hpp"
+#include "new/skip.hpp"
 
 // Classe principal
-#include <MicroCI.hpp>
+#include "MicroCI.hpp"
 
 using namespace microci;
 

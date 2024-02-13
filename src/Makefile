@@ -27,15 +27,39 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# Re: Removing unused functions/dead code
+# https://gcc.gnu.org/legacy-ml/gcc-help/2003-08/msg00128.html
+
 CXXFLAGS+= -DFMT_HEADER_ONLY
 CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
 
 CXXFLAGS+= -I../include/
 
 CXXFLAGS+= -Wall -Wextra
+
+# Link against static libraries.
+# Required for dead-code elimination.
 CXXFLAGS+= -static
+
+# C++ virtual method table instrumented with garbage collection information for the linker.
+CXXFLAGS+= -fvtable-gc
+
+# Keeps data in separate data sections, so they can be discarded if unused.
+CXXFLAGS+= -fdata-sections
+
+# Keeps funcitons in separate data sections, so they can be discarded if unused.
+CXXFLAGS+= -ffunction-sections
+
+# Tell the linker to garbage collect and discard unused sections.
+CXXFLAGS+= -Wl,--gc-sections
+
+# Strip the debug information, so as to make the code as small as possible.
+# (I presume that you'd want to do this in a dead-code removal build.)
 CXXFLAGS+= -s
-CXXFLAGS+= -O3
+
+# Optimize by size
+CXXFLAGS+= -Os
+
 CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
