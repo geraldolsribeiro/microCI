@@ -91,28 +91,28 @@ using namespace microci;
 string help() {
   return R"(
 Opções:
-  -h,--help                Ajuda
-  -V,--version             Versão
-  -T,--test-config         Testa a configuração
-  -O,--only                Executa somente o passo especificado
-  -U,--update-db           Atualiza dados de observabilidade
-  -u,--update              Atualiza para a última versão do microCI
-  -i,--input arquivo.yml   Carrega arquivo de configuração
-  -n,--new skip            Cria passo que não faz nada
-  -n,--new bash            Cria passo para execução de linhas de comando
-  -n,--new mkdocs_material Cria passo para documentação
-  -n,--new pandoc          Cria passo para conversão de documento
-  -n,--new git_publish     Cria passo para publicar um diretório para repositório
-  -n,--new git_deploy      Cria passo para colocar repositório em produção
-  -n,--new plantuml        Cria passo para geração de diagramas
-  -n,--new clang-format    Cria passo para formatação de código
-  -n,--new beamer          Cria passo para criação de apresentação PDF
-  -n,--new fetch           Cria passo para download de arquivos
-  -n,--new minio           Cria passo para upload de artefatos
-  -n,--new cppcheck        SAST Cria passo para verificação de código C++
-  -n,--new clang-tidy      SAST Cria passo para verificação de código C++
-  -n,--new flawfinder      SAST Cria passo para upload de artefatos
-  -n,--new docker_build    Construção de imagem local
+  -h,--help                Print this help
+  -V,--version             Print the microCI version
+  -T,--test-config         Configuration test
+  -O,--only                Execute only a single step
+  -U,--update-db           Update observability database
+  -u,--update              Update microCI
+  -i,--input file.yml      Load the configuration from file.yml
+  -n,--new skip            Create a placeholder step
+  -n,--new bash            Create a command line step
+  -n,--new mkdocs_material Create a documentation step
+  -n,--new pandoc          Create a document conversion step
+  -n,--new git_publish     Create a publish step
+  -n,--new git_deploy      Create a production deploy step
+  -n,--new plantuml        Create a diagram generation step
+  -n,--new clang-format    Create a code format step
+  -n,--new beamer          Create a PDF presentation step
+  -n,--new fetch           Create a download external artfact step
+  -n,--new minio           Create a upload/download internal artifact step
+  -n,--new cppcheck        Create a C++ SAST step
+  -n,--new clang-tidy      Create a C++ SAST step
+  -n,--new flawfinder      Create a C++ SAST step
+  -n,--new docker_build    Create a local docker build step
 )";
 }
 
@@ -233,22 +233,22 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            spdlog::debug("Criando diretório {}", folderName);
+            spdlog::debug("Creating folder '{}'", folderName);
             filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and filesystem::exists(fileName)) {
-            spdlog::debug("Ignorando criação, pois o arquivo {} já existe", fileName);
+            spdlog::debug("File '{}' already exists", fileName);
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             out.open(fileName, ios_base::app);
             out << "\n# ---------- "
-                   "MESCLE MANUALMENTE CONTEÚDO ABAIXO "
+                   "PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE"
                    "---------\n";
-            spdlog::debug("Arquivo {} foi editado a partir do modelo", fileName);
+            spdlog::debug("The file '{}' was edited from the template", fileName);
           } else {
             out.open(fileName);
-            spdlog::debug("Arquivo {} foi criado a partir do modelo", fileName);
+            spdlog::debug("The file '{}' was created from the template", fileName);
           }
 
           out.write((char *)tpl.fileContent, tpl.fileSize);
@@ -257,16 +257,16 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       if (isTypeFound) {
         return 0;
       }
-      spdlog::error("Impossível criar para tipo inválido: {}", newType);
+      spdlog::error("Invalid type: {}", newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        spdlog::debug("Exemplo: microCI --new {}", it->first);
+        spdlog::debug("Use: microCI --new {}", it->first);
       }
       return -1;
     }
 
     if (!filesystem::exists(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("Arquivo de entrada {} não encontrado.", yamlFileName);
+      spdlog::error("The input file '{}' was not found", yamlFileName);
       return 1;
     }
 
@@ -276,7 +276,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
     if (!uCI.ReadConfig(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("Falha na leitura do arquivo {}", yamlFileName);
+      spdlog::error("Failure reading the file '{}'", yamlFileName);
       return 1;
     }
 
@@ -364,7 +364,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     spdlog::error(e.what());
     return 1;
   } catch (...) {
-    spdlog::error("Exceção desconhecida");
+    spdlog::error("Unknown exception");
     return 1;
   }
   return 0;
