@@ -216,7 +216,7 @@ function step_compilar_versao_estatica_do_microci() {
         --env ENV1="valor da variável de ambiente ENV1" \
         --env ENV2="valor da variável de ambiente ENV2" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "gcc:11" \
+        "gcc:13" \
         /bin/bash -c "cd /microci_workspace \
            && apt update 2>&1 \
            && apt upgrade -y 2>&1 \

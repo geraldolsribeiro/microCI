@@ -5,7 +5,7 @@
 steps:
   - name: "Compilar versão estática do microCI"
     description: "Descrição deste passo"
-    docker: "gcc:11" # Imagem que será executada
+    docker: "gcc:13" # Imagem que será executada
     network: bridge  # bridge, host ou none
     run_as: root     # root, user
     envs:

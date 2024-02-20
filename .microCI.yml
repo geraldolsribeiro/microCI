@@ -134,15 +134,16 @@ steps:
   #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/version.hpp
 
   - name: "Compilar versão estática do microCI"
-    docker: "gcc:11"
+    docker: "gcc:13"
     run_as: root # necessário para instalar as dependências
     network: host
+    only: x
     plugin:
       name: bash
       bash: |
         apt update
         apt upgrade -y
-        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev
+        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
         make -C src clean all
         make -C test
         chown $(id -u).$(id -g) -Rv bin/microCI

@@ -277,8 +277,8 @@ function step_compilar_versao_estatica_do_microci() {
 # Atualiza as imagens docker utilizadas no passos
 echo 'Atualizando imagem docker debian:stable-slim...'
 docker pull debian:stable-slim 2>&1 > .microCI.log
-echo 'Atualizando imagem docker gcc:11...'
-docker pull gcc:11 2>&1 > .microCI.log
+echo 'Atualizando imagem docker gcc:13...'
+docker pull gcc:13 2>&1 > .microCI.log
 
 
 # Executa todos os passos do pipeline

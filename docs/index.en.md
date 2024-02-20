@@ -105,7 +105,7 @@ releases.
 
 MIT License
 
-Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+Copyright (c) 2022-2024 Geraldo Luis da Silva Ribeiro
 
 ```
 ░░░░░░░░░░░░░░░░░

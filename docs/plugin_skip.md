@@ -8,7 +8,7 @@ steps:
     plugin:
       name: skip
   - name: "Compilar versão estática do microCI"
-    docker: "gcc:11"
+    docker: "gcc:13"
     network: bridge
     run_as: root
     plugin:
