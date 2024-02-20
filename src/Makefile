@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+# Copyright (c) 2022-2024 Geraldo Luis da Silva Ribeiro
 #
 # ░░░░░░░░░░░░░░░░░
 # ░░░░░░░█▀▀░▀█▀░░░
@@ -42,7 +42,7 @@ CXXFLAGS+= -Wall -Wextra
 CXXFLAGS+= -static
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
-CXXFLAGS+= -fvtable-gc
+# CXXFLAGS+= -fvtable-gc
 
 # Keeps data in separate data sections, so they can be discarded if unused.
 CXXFLAGS+= -fdata-sections
