@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI v0.28.0                         ┃[0m"
+  echo -e "[0;34m┃                            microCI v0.29.0                         ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -193,6 +193,10 @@ function step_extract_documentation() {
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
+  INTMAIN_DOCMD_DETAILS="false"
+  INTMAIN_DOCMD_SHOW_BANNER="true"
+  INTMAIN_DOCMD_SHOW_SOURCE="false"
+  INTMAIN_DOCMD_TOC="false"
 
   {
     (
@@ -210,8 +214,12 @@ function step_extract_documentation() {
         --rm \
         --network none \
         --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_docmd:0.2" yaml input_filename.yml output_filename_yml.md
+        "intmain/microci_docmd:0.2" yaml new/bash.yml docs/plugin_bash.md
       echo ""
       echo ""
       echo ""
@@ -224,8 +232,282 @@ function step_extract_documentation() {
         --rm \
         --network none \
         --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_docmd:0.2" c++ input_filename.cpp output_filename_cpp.md
+        "intmain/microci_docmd:0.2" yaml new/beamer.yml docs/plugin_beamer.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/clang-format_config.yml docs/plugin_clang-format_config.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/clang-format.yml docs/plugin_clang-format.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/clang-tidy.yml docs/plugin_clang-tidy.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/cppcheck.yml docs/plugin_cppcheck.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/fetch2.yml docs/plugin_fetch2.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/fetch.yml docs/plugin_fetch.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/git_deploy.yml docs/plugin_git_deploy.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/git_publish.yml docs/plugin_git_publish.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/minio.yml docs/plugin_minio.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/mkdocs_material_config.yml docs/plugin_mkdocs_material_config.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/mkdocs_material.yml docs/plugin_mkdocs_material.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/npm.yml docs/plugin_npm.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/pandoc.yml docs/plugin_pandoc.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/plantuml.yml docs/plugin_plantuml.md
+      echo ""
+      echo ""
+      echo ""
+      echo "Passo: Extract documentation"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --network none \
+        --workdir /microci_workspace \
+        --env INTMAIN_DOCMD_DETAILS="false" \
+        --env INTMAIN_DOCMD_SHOW_BANNER="true" \
+        --env INTMAIN_DOCMD_SHOW_SOURCE="false" \
+        --env INTMAIN_DOCMD_TOC="false" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "intmain/microci_docmd:0.2" yaml new/skip.yml docs/plugin_skip.md
     )
 
     status=$?

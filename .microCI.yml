@@ -2,7 +2,6 @@
 steps:
   - name: "Extract documentation"
     description: "Extract documentation from source code to a markdown file"
-    only: o
     plugin:
       name: "docmd"
       items:
