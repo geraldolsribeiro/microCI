@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.27.3                          ┃[0m"
+  echo -e "[0;34m┃                            microCI v0.28.0                         ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -252,9 +252,15 @@ function step_criar_apresentacao_pdf_a_partir_de_arquivos_markdown() {
 }
 # Atualiza as imagens docker utilizadas no passos
 echo 'Atualizando imagem docker debian:stable-slim...'
-docker pull debian:stable-slim 2>&1 > .microCI.log
+if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then  echo 'Imagem docker debian:stable-slim está atualizada' >> .microCI.log
+else
+  docker pull debian:stable-slim 2>&1 >> .microCI.log
+fi
 echo 'Atualizando imagem docker pandoc/latex:latest...'
-docker pull pandoc/latex:latest 2>&1 > .microCI.log
+if docker image inspect pandoc/latex:latest > /dev/null 2>&1 ; then  echo 'Imagem docker pandoc/latex:latest está atualizada' >> .microCI.log
+else
+  docker pull pandoc/latex:latest 2>&1 >> .microCI.log
+fi
 
 
 # Executa todos os passos do pipeline

@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.27.3                          ┃[0m"
+  echo -e "[0;34m┃                            microCI v0.28.0                         ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -253,9 +253,15 @@ function step_compilar_versao_estatica_do_microci() {
 }
 # Atualiza as imagens docker utilizadas no passos
 echo 'Atualizando imagem docker debian:stable-slim...'
-docker pull debian:stable-slim 2>&1 > .microCI.log
-echo 'Atualizando imagem docker gcc:11...'
-docker pull gcc:11 2>&1 > .microCI.log
+if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then  echo 'Imagem docker debian:stable-slim está atualizada' >> .microCI.log
+else
+  docker pull debian:stable-slim 2>&1 >> .microCI.log
+fi
+echo 'Atualizando imagem docker gcc:13...'
+if docker image inspect gcc:13 > /dev/null 2>&1 ; then  echo 'Imagem docker gcc:13 está atualizada' >> .microCI.log
+else
+  docker pull gcc:13 2>&1 >> .microCI.log
+fi
 
 
 # Executa todos os passos do pipeline

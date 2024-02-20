@@ -137,7 +137,6 @@ steps:
     docker: "gcc:13"
     run_as: root # necessário para instalar as dependências
     network: host
-    only: x
     plugin:
       name: bash
       bash: |

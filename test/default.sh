@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.27.3                          ┃[0m"
+  echo -e "[0;34m┃                            microCI v0.28.0                         ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -321,9 +321,15 @@ function step_construir() {
 }
 # Atualiza as imagens docker utilizadas no passos
 echo 'Atualizando imagem docker node:16...'
-docker pull node:16 2>&1 > .microCI.log
+if docker image inspect node:16 > /dev/null 2>&1 ; then  echo 'Imagem docker node:16 está atualizada' >> .microCI.log
+else
+  docker pull node:16 2>&1 >> .microCI.log
+fi
 echo 'Atualizando imagem docker ubuntu:18.04...'
-docker pull ubuntu:18.04 2>&1 > .microCI.log
+if docker image inspect ubuntu:18.04 > /dev/null 2>&1 ; then  echo 'Imagem docker ubuntu:18.04 está atualizada' >> .microCI.log
+else
+  docker pull ubuntu:18.04 2>&1 >> .microCI.log
+fi
 
 
 # Executa todos os passos do pipeline

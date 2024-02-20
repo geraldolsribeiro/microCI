@@ -19,7 +19,7 @@ PS4='$LINENO: '
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI 0.27.3                          ┃[0m"
+  echo -e "[0;34m┃                            microCI v0.28.0                         ┃[0m"
   echo -e "[0;34m┃                           Geraldo Ribeiro                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
@@ -178,12 +178,12 @@ reformatJson
 # Notificação via Discord não será possível
 
 # ----------------------------------------------------------------------
-# Documentação do projeto
+# Build the project documentation in HTML format using mkdocs
 # ----------------------------------------------------------------------
-function step_construir_documentacao_em_formato_html() {
+function step_build_documentation() {
   SECONDS=0
-  MICROCI_STEP_NAME="Construir documentação em formato HTML"
-  MICROCI_STEP_DESCRIPTION="Documentação do projeto"
+  MICROCI_STEP_NAME="Build documentation"
+  MICROCI_STEP_DESCRIPTION="Build the project documentation in HTML format using mkdocs"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -240,12 +240,12 @@ function step_construir_documentacao_em_formato_html() {
 }
 
 # ----------------------------------------------------------------------
-# Publica arquivos em um repositório git
+# Publish documentation using git
 # ----------------------------------------------------------------------
-function step_publicar_html_para_repositorio_git() {
+function step_publish_documentation() {
   SECONDS=0
-  MICROCI_STEP_NAME="Publicar HTML para repositório git"
-  MICROCI_STEP_DESCRIPTION="Publica arquivos em um repositório git"
+  MICROCI_STEP_NAME="Publish documentation"
+  MICROCI_STEP_DESCRIPTION="Publish documentation using git"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -263,7 +263,7 @@ function step_publicar_html_para_repositorio_git() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Publicar HTML para repositório git"
+      echo "Passo: Publish documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -320,12 +320,12 @@ function step_publicar_html_para_repositorio_git() {
 }
 
 # ----------------------------------------------------------------------
-# Executa servidor local para preview da documentação
+# Display the documentation preview locally
 # ----------------------------------------------------------------------
-function step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_() {
+function step_launch_local_documentation_server_127_0_0_1_8000__ctrl_c_to_stop_() {
   SECONDS=0
-  MICROCI_STEP_NAME="Servidor local na porta 8000 (Ctrl+C para finalizar)"
-  MICROCI_STEP_DESCRIPTION="Executa servidor local para preview da documentação"
+  MICROCI_STEP_NAME="Launch local documentation server 127.0.0.1:8000 (Ctrl+C to stop)"
+  MICROCI_STEP_DESCRIPTION="Display the documentation preview locally"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -369,18 +369,24 @@ function step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_() {
 }
 # Atualiza as imagens docker utilizadas no passos
 echo 'Atualizando imagem docker bitnami/git:latest...'
-docker pull bitnami/git:latest 2>&1 > .microCI.log
+if docker image inspect bitnami/git:latest > /dev/null 2>&1 ; then  echo 'Imagem docker bitnami/git:latest está atualizada' >> .microCI.log
+else
+  docker pull bitnami/git:latest 2>&1 >> .microCI.log
+fi
 echo 'Atualizando imagem docker debian:stable-slim...'
-docker pull debian:stable-slim 2>&1 > .microCI.log
+if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then  echo 'Imagem docker debian:stable-slim está atualizada' >> .microCI.log
+else
+  docker pull debian:stable-slim 2>&1 >> .microCI.log
+fi
 
 
 # Executa todos os passos do pipeline
 function main() {
   date >> .microCI.log
 
-  step_construir_documentacao_em_formato_html
-  step_publicar_html_para_repositorio_git
-  step_servidor_local_na_porta_8000__ctrl_c_para_finalizar_
+  step_build_documentation
+  step_publish_documentation
+  step_launch_local_documentation_server_127_0_0_1_8000__ctrl_c_to_stop_
 
   date >> .microCI.log
 }
