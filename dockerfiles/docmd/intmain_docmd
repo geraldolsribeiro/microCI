@@ -2,6 +2,7 @@
 # ----------------------------------------------------------------------
 # Copyright (C) 2022-2024 Geraldo Ribeiro <geraldo@intmain.io>
 # ----------------------------------------------------------------------
+
 #   # Introdução
 #   
 #   Ferramenta para geração de documentação em formato markdown.
@@ -23,6 +24,7 @@
 #   * `nginx`
 #   * `python`
 #   * `ruby`
+#   * `rust`
 #   * `scss`
 #   * `systemd`
 #   * `vim`
@@ -35,15 +37,16 @@ if ARGV.empty?
   puts """
 Gerador de documentação em formato Markdown
 
-intmain_docmd tipo arquivo_fonte arquivo_markdown
+intmain_docmd tipo arquivo_fonte arquivo_markdown [stripped_filename]
 
-tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, systemd, yaml
+tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, systemd, yaml, rust
 
 Para alterar o comportamento da ferramenta utilize as seguintes variáveis de ambiente:
 
   INTMAIN_DOCMD_DETAILS=false     desabilita a tag details
   INTMAIN_DOCMD_TOC=false         desabilita a geração de sumário
   INTMAIN_DOCMD_SHOW_SOURCE=false desabilita a identificação do arquivo fonte
+  INTMAIN_DOCMD_SHOW_BANNER=false desabilita o banner
   """
   exit
 end
@@ -67,46 +70,61 @@ end
 #   * `INTMAIN_DOCMD_DETAILS`: ativa/desativa o encapsulamento dos trecho de código
 #   * `INTMAIN_DOCMD_TOC`: ativa/desativa a geração do índice
 #   * `INTMAIN_DOCMD_SHOW_SOURCE`: exibe o nome do arquivo de origem
+#   * `INTMAIN_DOCMD_SHOW_BANNER`: exibe o banner no início do arquivo
 #   
 #{{{
 use_detail  = ( ENV['INTMAIN_DOCMD_DETAILS']     || 'true' ).match( /(true|t|yes|y)/i )
 use_toc     = ( ENV['INTMAIN_DOCMD_TOC']         || 'true' ).match( /(true|t|yes|y)/i )
 show_source = ( ENV['INTMAIN_DOCMD_SHOW_SOURCE'] || 'true' ).match( /(true|t|yes|y)/i )
+show_banner = ( ENV['INTMAIN_DOCMD_SHOW_BANNER'] || 'true' ).match( /(true|t|yes|y)/i )
 #}}}
 
 script_language           = ARGV[0]
 source_filename           = ARGV[1]
 output_filename           = ARGV[2]
+stripped_filename         = ARGV[3]
+# All diagrams source will be writen on same pu file
 output_plantuml_filename  = nil
+# Each diagram has its own pikchr file
+output_pikchr_filename    = nil
 output_requisite_filename = nil
 output_plantuml           = nil
-start_plantuml_re         = /@start(uml|wbs) (\S+.png)/
+start_plantuml_re         = /@start(uml|wbs) (\S+.png) ?(.*)?/
 end_plantuml_re           = /@end(uml|wbs)/
+start_pikchr_re           = /@startpikchr (\S+\.pikchr) ([^ ]+) (.*)/
+end_pikchr_re             = /@endpikchr/
 start_requisite_re        = /REQUISITO (\S+) -> (.*)/
 end_requisite_re          = /REQUISITO/
 in_code_section           = false
 in_plantuml_section       = false
+in_pikchr_section         = false
 in_requisite_section      = false
 
 line_match_re = case script_language
                 when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#   (.*)/
                 when "yaml" then /\#   (.*)/
                 when "vim" then /^"   (.*)/
-                when "c++", "scss" then /^\s*\/\/-- (.*)/
+                when "c++", "scss", "rust" then /^\s*\/\/-- (.*)/
                 end
+# after code reformat the space at the end is suppressed
+blank_line_match_re = case script_language
+                      when "c++", "scss", "rust" then /^\s*\/\/--$/
+                      else
+                        /no-regular-expression-for-blank-line/
+                      end
 
 open_code_re = case script_language
-               when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#{{{/
-               when "yaml" then /\#{{{/
-               when "vim" then /^"{{{/
-               when "c++", "scss" then /^\s*\/\/{{{/
+               when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#{{{(.*)/
+               when "yaml" then /\#{{{(.*)/
+               when "vim" then /^"{{{(.*)/
+               when "c++", "scss", "rust" then /^\s*\/\/{{{(.*)/
                end
 
 close_code_re = case script_language
                 when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#}}}/
                 when "yaml" then /\#}}}/
                 when "vim" then /^"}}}/
-                when "c++", "scss" then /^\s*\/\/}}}/
+                when "c++", "scss", "rust" then /^\s*\/\/}}}/
                 end
 
 def make_link(title)
@@ -119,10 +137,10 @@ end
 #   
 #   ## Callout numbers
 #   
-#   Para referenciar comandos use itens numerados, p. e. ((1)), para indicar
+#   Para referenciar comandos use itens numerados, p. e. `((``1))`, para indicar
 #   uma linha no meio do código.
 #   
-#{{{
+#{{{ruby alternative syntax
 def expand_shortcuts(text)
   callout_numbers = { "((1))" => "❶", "((2))" => "❷", "((3))" => "❸",
                       "((4))" => "❹", "((5))" => "❺", "((6))" => "❻",
@@ -135,6 +153,15 @@ def expand_shortcuts(text)
   text
 end
 #}}}
+
+unless stripped_filename.nil?
+  stripped_file = File.open(stripped_filename, "w")
+  File.readlines(source_filename).each do |line|
+    unless line.match( line_match_re ) || line.match( open_code_re ) || line.match( close_code_re ) || line.match( blank_line_match_re )
+      stripped_file << line
+    end
+  end
+end
 
 # Lê o arquivo inteiro uma vez para gerar o sumário
 toc = ""
@@ -165,21 +192,30 @@ end
 #   
 #   Os trechos em `plantuml` a seguir serão substituídos pela imagem do diagrama.
 #   
-#   @startuml images/nome-do-arquivo.png
+#   * `@``startuml nome-do-arquivo-plantuml.png url-opcional`
+#   * `@``startwbs nome-do-arquivo-plantuml.png url-opcional`
+#   
+#   Imagem:
+#   
+#   @startuml images/nome-do-arquivo-plantuml.png
 #   (First usecase)
 #   (Another usecase) as (UC2)
 #   usecase UC3
 #   usecase (Last\nusecase) as UC4
 #   @enduml
 #   
-#   @startuml images/outro-nome-do-arquivo.png
+#   Imagem:
+#   
+#   @startuml images/outro-nome-do-arquivo-plantuml.png
 #   (First usecase 2)
 #   (Another usecase 2) as (UC2)
 #   usecase UC3
 #   usecase (Last\nusecase 2) as UC4
 #   @enduml
 #   
-#   @startwbs images/exemplo-wbs-plantuml.png
+#   Link para imagem:
+#    
+#   @startwbs images/exemplo-wbs-plantuml.png https://git.intmain.io/Intmain/docmd/raw/master/images/exemplo-wbs-plantuml.png
 #   * Business Process Modelling WBS
 #   ** Launch the project
 #   *** Complete Stakeholder Research
@@ -193,38 +229,136 @@ end
 #   ** Complete innovate phase
 #   @endwbs
 #   
+#   ## Inclusão de diagramas com pikchr
+#
+#   @startpikchr images/nome-do-arquivo-pikchr.pikchr /til/nome-do-arquivo-pikchr.svg The image title goes here
+#   arrow right 200% "Markdown" "Source"
+#   box rad 10px "Markdown" "Formatter" "(markdown.c)" fit
+#   arrow right 200% "HTML+SVG" "Output"
+#   arrow <-> down 70% from last box.s
+#   box same "Pikchr" "Formatter" "(pikchr.c)" fit
+#   @endpikchr
+#
+#   ## Inclusão de arquivo
+#   
+#   Um arquivo pode ser incluído como bloco de código na documentação.
+#   
+#   `[``IMDOC_INCLUDE_FILE cpp src/main.cpp]`
+#   
+#   [IMDOC_INCLUDE_FILE cpp src/main.cpp]
+#   
+#   Parágrafo após a inclusão do arquivo.
+#   
+#   `[``IMDOC_INCLUDE_PARTIAL_FILE 6 3 ruby bin/intmain_docmd]`
+#   
+#   [IMDOC_INCLUDE_PARTIAL_FILE 6 3 ruby bin/intmain_docmd]
+#   
+#   Parágrafo após a inclusão do arquivo.
+#   
+#   ## Inclusão de arquivo markdown
+#   
+#   `[``INCLUDE filename.md]`
+#   
+#   [INCLUDE filename.md]`
+#   
+#   ## Importação de arquivos fontes
+#   
+#   `[``IMPORT imported1.rb]`
+#   
+#   [IMPORT imported1.rb]
+#   
 
 output_plantuml  = File.open(output_plantuml_filename, "w")  unless output_plantuml_filename.nil?
 output_requisite = File.open(output_requisite_filename, "w") unless output_requisite_filename.nil?
+output_pikchr  = File.open(output_pikchr_filename, "w")  unless output_pikchr_filename.nil?
 
 # Gera o arquivo markdown principal
 File.open(output_filename, "w") do |output|
 
-  output << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+  if show_banner
+    output << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+  end
 
   if output_requisite
-    output_requisite << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+    if show_banner
+      output_requisite << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+    end
     output_requisite << "# Lista de Requisitos\n\n"
   end
 
   if output_plantuml
-    output_plantuml << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+    if show_banner
+      output_plantuml << "[//]: <> (Documentação gerada com intmain_docmd)\n"
+    end
   end
 
   if show_source
     output << "Fonte: `#{source_filename}`\n\n"
   end
 
-  File.readlines(source_filename).each do |line|
+  lines = []
+
+  File.readlines(source_filename).each do |line0|
+    if m0 = line0.match( /\[IMPORT ([^ ]+)\]/ )
+      imported_file_1 = m0[1]
+      if File.exists?(imported_file_1)
+        File.readlines(imported_file_1).each do |line1|
+          if m1 = line1.match( /\[IMPORT ([^ ]+)\]/ )
+            imported_file_2 = m2[1]
+            if File.exists?(imported_file_2)
+              File.readlines(imported_file_2).each do |line2|
+                lines.push(line2)
+              end
+            else
+              print "#{imported_file_2} nao encontrado!"
+            end
+          else
+            lines.push(line1)
+          end
+        end
+      else
+        print "#{imported_file_1} nao encontrado!"
+      end
+    else
+      lines.push(line0)
+    end
+  end
+
+  #File.readlines(source_filename).each do |line|
+  lines.each do |line|
     if m = line.match( line_match_re )
       mdline = m[1]
 
       mdline = expand_shortcuts( mdline )
 
-      if m2 = mdline.match( start_plantuml_re )
+      if m2 = mdline.match( start_pikchr_re )
+        output_pikchr_filename = m2[1]
+        svgFilename = output_pikchr_filename.gsub( ".pikchr", ".svg" )
+        url = m2[2]
+        title =m2[3]
+        if url.empty?
+          output << "![#{title}](#{svgFilename})\n"
+        else
+          output << "![#{title}](#{url})\n"
+        end
+        output_pikchr  = File.open(output_pikchr_filename, "w")
+        in_pikchr_section = true
+        next
+      elsif in_pikchr_section && mdline.match( end_pikchr_re )
+        in_pikchr_section = false
+        output_pikchr.close
+        next
+      elsif m2 = mdline.match( start_plantuml_re )
+        type = m2[1]
         pngFilename = m2[2]
-        output << "![UML](#{pngFilename})\n";
-        output_plantuml << mdline << "\n"
+        url = m2[3]
+        if url.empty?
+          output << "![UML](#{pngFilename})\n"
+        else
+          output << "![UML](#{url})\n"
+        end
+        #output_plantuml << mdline << "\n"
+        output_plantuml << "@start#{type} #{pngFilename}\n"
         in_plantuml_section = true
         next
       elsif in_plantuml_section && mdline.match( end_plantuml_re )
@@ -247,23 +381,70 @@ File.open(output_filename, "w") do |output|
           output << "## Sumário\n\n"
           output << toc << "\n"
         end
-      #else
-      #  output << mdline << "\n" unless in_plantuml_section || in_requisite_section
+      elsif m2 = mdline.match( /\[INCLUDE ([^ ]+.md)\]/ )
+        include_filename=m2[1]
+        File.readlines(include_filename).each do |include_line|
+          output << include_line
+        end
+        next
+      elsif m2 = mdline.match( /\[IMDOC_INCLUDE_FILE ([^ ]+) (.*)\]/ )
+        include_type=m2[1]
+        include_filename=m2[2]
+        output << "\n"
+        output << "```" << include_type << "\n"
+        if File.exists?(include_filename)
+          File.readlines(include_filename).each do |include_line|
+            output << include_line
+          end
+        else
+          output << "Arquivo " << include_filename << " nao encontrado!"
+        end
+        output << "\n```\n"
+        next
+      elsif m2 = mdline.match( /\[IMDOC_INCLUDE_PARTIAL_FILE ([0-9]+) ([0-9]+) ([^ ]+) (.*)\]/ )
+        initial_line     = m2[1].to_i
+        number_of_lines  = m2[2].to_i
+        include_type     = m2[3]
+        include_filename = m2[4]
+        output << "\n"
+        output << "```" << include_type << "\n"
+        File.readlines(include_filename).each do |include_line|
+          # Skip initial lines
+          if initial_line > 1
+            initial_line -= 1
+            next
+          end
+          if number_of_lines > 0
+            number_of_lines -= 1
+            output << include_line
+          end
+        end
+        output << "```\n"
+        next
       end
 
       if in_plantuml_section
         output_plantuml << mdline << "\n"
       elsif in_requisite_section
         output_requisite << mdline << "\n"
+      elsif in_pikchr_section
+        output_pikchr << mdline << "\n"
       else
         output << mdline << "\n"
       end
 
-
+    elsif blank_line_match_re && m = line.match( blank_line_match_re )
+      output << "\n"
+      next
     elsif m = line.match( open_code_re )
       in_code_section = true
+      code_config = m[1]
+      code_config = script_language if code_config.empty?
+      code_config = 'cpp' if code_config == 'c++'
+
       output << "<details>\n<summary>Detalhes</summary>\n<p>\n" if use_detail
-      output << "\n```#{script_language}\n"
+      output << "\n```#{code_config}\n"
+
       next
     elsif m = line.match( close_code_re )
       in_code_section = false
@@ -277,4 +458,3 @@ File.open(output_filename, "w") do |output|
     end
   end
 end
-
