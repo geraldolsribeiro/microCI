@@ -80,7 +80,7 @@ tidy:
 		--join-existing \
 		--copyright-holder="Geraldo Luis da Silva Ribeiro" \
 		--package-name="microci" \
-		--package-version="0.27.4" \
+		--package-version="$(shell sed -n "s/#define microCI_version \"\(.*\)\"/\1/p" ../include/MicroCI.hpp)" \
 		--msgid-bugs-address="geraldolsribeiro@gmail.com" \
 
 ../locales/pt_BR/microci.po: ../locales/microci.pot

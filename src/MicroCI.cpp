@@ -261,7 +261,7 @@ set<EnvironmentVariable> MicroCI::DefaultEnvs() const { return mEnvs; }
 // ----------------------------------------------------------------------
 json MicroCI::DefaultDataTemplate() const {
   json data;
-  data["VERSION"] = fmt::format("{}.{}.{}       ", MAJOR, MINOR, PATCH).substr(0, 10);
+  data["VERSION"] = fmt::format("v{}       ", microCI_version).substr(0, 10);
   data["WORKSPACE"] = mDefaultWorkspace;
 
   // Network docker: bridge (default), host, none

@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* 0.28.0 Support for translation
 * `0.27.0` Plugin `pandoc`
 * `0.26.3` Update `clang-tidy`
 * `0.26.0` Offline mode
@@ -115,7 +116,7 @@ releases.
 
 MIT License
 
-Copyright (c) 2022 Geraldo Luis da Silva Ribeiro
+Copyright (c) 2022-2024 Geraldo Luis da Silva Ribeiro
 
 ```
 ░░░░░░░░░░░░░░░░░

@@ -42,17 +42,17 @@ string banner() {
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI {}.{}.{}
+                             microCI {}
                             Geraldo Ribeiro
 
 )",
-                     MAJOR, MINOR, PATCH);
+                     microCI_version);
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string version() { return fmt::format("v{}.{}.{}", MAJOR, MINOR, PATCH); }
+string version() { return fmt::format("v{}", microCI_version); }
 
 // ----------------------------------------------------------------------
 //
