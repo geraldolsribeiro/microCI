@@ -52,6 +52,7 @@ using namespace std;
 #include "ClangFormatPluginStepParser.hpp"
 #include "ClangTidyPluginStepParser.hpp"
 #include "CppCheckPluginStepParser.hpp"
+#include "DocmdPluginStepParser.hpp"
 #include "FetchPluginStepParser.hpp"
 #include "FlawfinderPluginStepParser.hpp"
 #include "GitDeployPluginStepParser.hpp"
@@ -70,6 +71,7 @@ using namespace std;
 #include "new/clang-tidy.hpp"
 #include "new/cppcheck.hpp"
 #include "new/docker_build.hpp"
+#include "new/docmd.hpp"
 #include "new/fetch.hpp"
 #include "new/flawfinder.hpp"
 #include "new/git_deploy.hpp"
@@ -103,6 +105,7 @@ Opções:
   -i,--input file.yml      Load the configuration from file.yml
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
+  -n,--new docmd           Create a documentation step
   -n,--new mkdocs_material Create a documentation step
   -n,--new pandoc          Create a document conversion step
   -n,--new git_publish     Create a publish step
@@ -157,6 +160,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     MicroCI uCI{};
     uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
     uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("docmd", make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
     uCI.RegisterPlugin("git_deploy", make_shared<GitDeployPluginStepParser>(&uCI));
@@ -209,6 +213,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
       MICROCI_TPL(true, "skip", ".microCI.yml", yml, skip);
       MICROCI_TPL(true, "bash", ".microCI.yml", yml, bash);
+      MICROCI_TPL(true, "docmd", ".microCI.yml", yml, docmd);
       MICROCI_TPL(true, "clang-tidy", ".microCI.yml", yml, clang_tidy);
       MICROCI_TPL(true, "cppcheck", ".microCI.yml", yml, cppcheck);
       MICROCI_TPL(true, "git_deploy", ".microCI.yml", yml, git_deploy);

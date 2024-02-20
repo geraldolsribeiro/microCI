@@ -81,6 +81,7 @@ releases.
 
 ## Versões
 
+* `0.29.0` Plugin `docmd`
 * `0.28.0` Translation support added
 * `0.27.0` Plugin `pandoc`
 * `0.26.3` Update `clang-tidy`
