@@ -1,27 +1,29 @@
-#   # Exemplo de uso do plugin mkdocs_material
+#   # Example of the mkdocs_material plugin
 #{{{
 ---
 steps:
-  - name: "Construir documentação em formato HTML"
-    description: "Documentação do projeto"
+  - name: "Build documentation"
+    description: "Build the project documentation in HTML format using mkdocs"
     plugin:
       name: "mkdocs_material"
       action: "build"
-      # Para construir a documentação em outra pasta use
-      # action: "build --site-dir nome_da_pasta
-  - name: "Publicar HTML para repositório git"
+        # If you want to build the documentation into a different folder use:
+        # action: "build --site-dir nome_da_pasta
+  - name: "Publish documentation"
+    description: "Publish documentation using git"
     ssh:
+      # Use your SSH credential to update the documentation site
       copy_from: "${HOME}/.ssh"
       copy_to: "/root/.ssh"
     plugin:
       name: "git_publish"
       git_url: "ssh://git@someurl.com/site.git"
-      copy_to: "/deploy" # Parâmetro default
-      copy_from: "site"  # Parâmetro default
-      clean_before: true # Parâmetro default
-  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
-    description: "Executa servidor local para preview da documentação"
-    only: "serve" # passo executado localmente para auxiliar na edição/preview
+      copy_to: "/deploy" # Default parameter, can be omitted
+      copy_from: "site"  # Default parameter, can be omitted
+      clean_before: true # Default parameter, can be omitted
+  - name: "Launch local documentation server 127.0.0.1:8000 (Ctrl+C to stop)"
+    description: "Display the documentation preview locally"
+    only: "serve" # this step should executed locally
     network: host
     plugin:
       name: "mkdocs_material"
