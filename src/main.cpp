@@ -41,7 +41,10 @@ using namespace std;
 
 #include <argh.h>
 #include <inicpp.h>
+#include <libintl.h>
 #include <spdlog/spdlog.h>
+
+#define _(String) gettext(String)
 
 // Plugins
 #include "BashPluginStepParser.hpp"
@@ -80,7 +83,7 @@ using namespace std;
 #include "new/plantuml.hpp"
 #include "new/skip.hpp"
 
-// Classe principal
+// main class
 #include "MicroCI.hpp"
 
 using namespace microci;
@@ -135,6 +138,11 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
   auto newType = string{};
 
   try {
+    setlocale(LC_ALL, "");
+    bindtextdomain("microci", NULL);
+    bind_textdomain_codeset("microci", "UTF-8");
+    textdomain("microci");
+
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     if (cmdl[{"-u", "--update"}]) {
@@ -162,7 +170,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("docker_build", make_shared<DockerBuildPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
 
-    // Carrega as variáveis de ambiente
+    // Load environment variables
     for (char **env = envp; *env != 0; env++) {
       auto tmp = string{*env};
       if (tmp.size() > 7 and tmp.substr(0, 8) == "MICROCI_") {
@@ -174,20 +182,22 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       }
     }
 
+    // Print version and exist
     if (cmdl[{"-V", "--version"}]) {
       cout << microci::version() << endl;
       return 0;
     }
 
+    // Print help and exist
     if (cmdl[{"-h", "--help"}]) {
       cout << microci::banner() << help() << endl;
       return 0;
     }
 
-    // Aceita um arquivo de configuração num caminho alternativo
+    // Alternative path for the configuration file
     cmdl({"-i", "--input"}) >> yamlFileName;
 
-    // Cria arquivo de configuração
+    // Create or update the configuration file
     if ((cmdl({"-n", "--new"}) >> newType)) {
       multimap<TemplateType, TemplateFile> templates;
 
@@ -233,22 +243,22 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            spdlog::debug("Creating folder '{}'", folderName);
+            spdlog::debug(_("Creating folder '{}'"), folderName);
             filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and filesystem::exists(fileName)) {
-            spdlog::debug("File '{}' already exists", fileName);
+            spdlog::debug(_("File '{}' already exists"), fileName);
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             out.open(fileName, ios_base::app);
             out << "\n# ---------- "
                    "PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE"
                    "---------\n";
-            spdlog::debug("The file '{}' was edited from the template", fileName);
+            spdlog::debug(_("The file '{}' was edited from the template"), fileName);
           } else {
             out.open(fileName);
-            spdlog::debug("The file '{}' was created from the template", fileName);
+            spdlog::debug(_("The file '{}' was created from the template"), fileName);
           }
 
           out.write((char *)tpl.fileContent, tpl.fileSize);
@@ -257,16 +267,16 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       if (isTypeFound) {
         return 0;
       }
-      spdlog::error("Invalid type: {}", newType);
+      spdlog::error(_("Invalid type: {}"), newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        spdlog::debug("Use: microCI --new {}", it->first);
+        spdlog::debug(_("Use: microCI --new {}"), it->first);
       }
       return -1;
     }
 
     if (!filesystem::exists(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("The input file '{}' was not found", yamlFileName);
+      spdlog::error(_("The input file '{}' was not found"), yamlFileName);
       return 1;
     }
 
@@ -276,7 +286,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
     if (!uCI.ReadConfig(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error("Failure reading the file '{}'", yamlFileName);
+      spdlog::error(_("Failure reading the file '{}'"), yamlFileName);
       return 1;
     }
 
@@ -306,9 +316,9 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<string>();
         }
 
-        spdlog::debug("PWD: {}", pwd);
-        spdlog::debug("Git config: {}", gitConfigFilename);
-        spdlog::debug("Origin: {}", gitRemoteOrigin);
+        spdlog::debug(_("PWD: {}"), pwd);
+        spdlog::debug(_("Git config: {}"), gitConfigFilename);
+        spdlog::debug(_("Git origin: {}"), gitRemoteOrigin);
 
         auto pwdRepoId = string{"_"};  // para evitar que a chave comece com número
 
@@ -364,7 +374,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     spdlog::error(e.what());
     return 1;
   } catch (...) {
-    spdlog::error("Unknown exception");
+    spdlog::error(_("Unknown exception"));
     return 1;
   }
   return 0;

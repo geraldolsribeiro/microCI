@@ -65,10 +65,33 @@ LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 LDFLAGS+= -lcrypto
 
-all: ../bin/microCI
+all: ../locales/pt_BR/microci.mo ../bin/microCI 
 
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)
+
+../locales/microci.pot: ../src/*.cpp
+	xgettext $^ \
+		--keyword="_" \
+		--output="$@" \
+		--language=C++ \
+		--add-comments \
+		--sort-output \
+		--join-existing \
+		--copyright-holder="Geraldo Luis da Silva Ribeiro" \
+		--package-name="microci" \
+		--package-version="0.27.4" \
+		--msgid-bugs-address="geraldolsribeiro@gmail.com" \
+
+../locales/pt_BR/microci.po: ../locales/microci.pot
+	msgmerge $@ $^ --output-file=$@
+
+../locales/pt_BR/microci.mo: ../locales/pt_BR/microci.po
+	msgfmt $^ --output-file=$@
+
+test_ptBR:
+	sudo cp ../locales/pt_BR/microci.mo /usr/share/locale/pt_BR/LC_MESSAGES/
+	LC_ALL=pt_BR.UTF-8 ../bin/microCI
 
 ../include/new/%.hpp: ../new/%.yml
 	cat .header.cpp > $@
