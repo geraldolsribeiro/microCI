@@ -72,27 +72,37 @@ tidy:
 
 ../include/new/%.hpp: ../new/%.yml
 	cat .header.cpp > $@
-	xxd -i $^ >> $@
+	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	clang-format -i $@
 	touch main.cpp
 
 ../include/new/%.hpp: ../new/%.md
 	cat .header.cpp > $@
-	xxd -i $^ >> $@
+	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	clang-format -i $@
 	touch main.cpp
 
 ../include/new/%.hpp: ../new/%.txt
 	cat .header.cpp > $@
-	xxd -i $^ >> $@
+	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	clang-format -i $@
 	touch main.cpp
 
 ../include/sh/%.hpp: ../sh/%.sh
 	cat .header.cpp > $@
-	xxd -i $^ >> $@
+	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	clang-format -i $@
 	touch main.cpp
 
 ../include/3rd/%.hpp: ../3rd/%
 	cat .header.cpp > $@
-	xxd -i $^ >> $@
+	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	clang-format -i $@
 	touch main.cpp
 
 single_compilation_unit.cpp: \
