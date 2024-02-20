@@ -190,7 +190,7 @@ bool MicroCI::ReadConfig(const string &filename) {
         mScript << "# Atualiza as imagens docker utilizadas no passos\n";
         for (const auto &dockerImage : mDockerImages) {
           mScript << fmt::format("echo 'Atualizando imagem docker {}...'\n", dockerImage);
-          mScript << fmt::format("docker pull {} 2>&1 > .microCI.log\n", dockerImage);
+          mScript << fmt::format("docker pull {} 2>&1 >> .microCI.log\n", dockerImage);
         }
       }
 
