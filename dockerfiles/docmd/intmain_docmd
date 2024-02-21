@@ -301,11 +301,11 @@ File.open(output_filename, "w") do |output|
   File.readlines(source_filename).each do |line0|
     if m0 = line0.match( /\[IMPORT ([^ ]+)\]/ )
       imported_file_1 = m0[1]
-      if File.exists?(imported_file_1)
+      if File.exist?(imported_file_1)
         File.readlines(imported_file_1).each do |line1|
           if m1 = line1.match( /\[IMPORT ([^ ]+)\]/ )
             imported_file_2 = m2[1]
-            if File.exists?(imported_file_2)
+            if File.exist?(imported_file_2)
               File.readlines(imported_file_2).each do |line2|
                 lines.push(line2)
               end
@@ -392,7 +392,7 @@ File.open(output_filename, "w") do |output|
         include_filename=m2[2]
         output << "\n"
         output << "```" << include_type << "\n"
-        if File.exists?(include_filename)
+        if File.exist?(include_filename)
           File.readlines(include_filename).each do |include_line|
             output << include_line
           end
