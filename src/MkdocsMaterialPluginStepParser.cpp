@@ -60,7 +60,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
-  data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:latest";
+  data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:0.4";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
   // exec 5> >(logger -t $0)

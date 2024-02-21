@@ -210,27 +210,28 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
   templates.insert(                                                                         \
       make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
                                    ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
-
-      MICROCI_TPL(true, "skip", ".microCI.yml", yml, skip);
-      MICROCI_TPL(true, "bash", ".microCI.yml", yml, bash);
-      MICROCI_TPL(true, "docmd", ".microCI.yml", yml, docmd);
-      MICROCI_TPL(true, "clang-tidy", ".microCI.yml", yml, clang_tidy);
-      MICROCI_TPL(true, "cppcheck", ".microCI.yml", yml, cppcheck);
-      MICROCI_TPL(true, "git_deploy", ".microCI.yml", yml, git_deploy);
-      MICROCI_TPL(true, "git_publish", ".microCI.yml", yml, git_publish);
-      MICROCI_TPL(false, "mkdocs_material", "docs/index.md", md, mkdocs_material_index);
-      MICROCI_TPL(true, "mkdocs_material", ".microCI.yml", yml, mkdocs_material);
-      MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml", yml, mkdocs_material_config);
-      MICROCI_TPL(true, "npm", ".microCI.yml", yml, npm);
-      MICROCI_TPL(true, "plantuml", ".microCI.yml", yml, plantuml);
-      MICROCI_TPL(true, "clang-format", ".microCI.yml", yml, clang_format);
-      MICROCI_TPL(false, "clang-format", ".clang-format", yml, clang_format_config);
-      MICROCI_TPL(true, "beamer", ".microCI.yml", yml, beamer);
-      MICROCI_TPL(true, "fetch", ".microCI.yml", yml, fetch);
-      MICROCI_TPL(true, "minio", ".microCI.yml", yml, minio);
-      MICROCI_TPL(true, "flawfinder", ".microCI.yml", yml, flawfinder);
-      MICROCI_TPL(true, "docker_build", ".microCI.yml", yml, docker_build);
-      MICROCI_TPL(true, "pandoc", ".microCI.yml", yml, pandoc);
+      // clang-format off
+      MICROCI_TPL(true,  "skip",            ".microCI.yml",  yml, skip);
+      MICROCI_TPL(true,  "bash",            ".microCI.yml",  yml, bash);
+      MICROCI_TPL(true,  "docmd",           ".microCI.yml",  yml, docmd);
+      MICROCI_TPL(true,  "clang-tidy",      ".microCI.yml",  yml, clang_tidy);
+      MICROCI_TPL(true,  "cppcheck",        ".microCI.yml",  yml, cppcheck);
+      MICROCI_TPL(true,  "git_deploy",      ".microCI.yml",  yml, git_deploy);
+      MICROCI_TPL(true,  "git_publish",     ".microCI.yml",  yml, git_publish);
+      MICROCI_TPL(false, "mkdocs_material", "docs/index.md", md,  mkdocs_material_index);
+      MICROCI_TPL(true,  "mkdocs_material", ".microCI.yml",  yml, mkdocs_material);
+      MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml",    yml, mkdocs_material_config);
+      MICROCI_TPL(true,  "npm",             ".microCI.yml",  yml, npm);
+      MICROCI_TPL(true,  "plantuml",        ".microCI.yml",  yml, plantuml);
+      MICROCI_TPL(true,  "clang-format",    ".microCI.yml",  yml, clang_format);
+      MICROCI_TPL(false, "clang-format",    ".clang-format", yml, clang_format_config);
+      MICROCI_TPL(true,  "beamer",          ".microCI.yml",  yml, beamer);
+      MICROCI_TPL(true,  "fetch",           ".microCI.yml",  yml, fetch);
+      MICROCI_TPL(true,  "minio",           ".microCI.yml",  yml, minio);
+      MICROCI_TPL(true,  "flawfinder",      ".microCI.yml",  yml, flawfinder);
+      MICROCI_TPL(true,  "docker_build",    ".microCI.yml",  yml, docker_build);
+      MICROCI_TPL(true,  "pandoc",          ".microCI.yml",  yml, pandoc);
+      // clang-format on
 #undef MICROCI_TPL
 
       bool isTypeFound = false;

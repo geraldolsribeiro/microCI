@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: microCI\n"
 "Report-Msgid-Bugs-To: geraldolsribeiro@gmail.com\n"
-"POT-Creation-Date: 2024-02-20 13:23+0000\n"
+"POT-Creation-Date: 2024-02-21 16:41+0400\n"
 "PO-Revision-Date: 2024-02-20 12:51+0400\n"
 "Last-Translator: Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -19,51 +19,63 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 
 #: ../src/main.cpp:246 ../src/main.cpp:251 ../src/main.cpp:252
+#: ../src/main.cpp:253
 msgid "Creating folder '{}'"
 msgstr "Criando pasta '{}'"
 
 #: ../src/main.cpp:289 ../src/main.cpp:294 ../src/main.cpp:295
+#: ../src/main.cpp:296
 msgid "Failure reading the file '{}'"
 msgstr "Falha lendo o arquivo '{}'"
 
 #: ../src/main.cpp:251 ../src/main.cpp:256 ../src/main.cpp:257
+#: ../src/main.cpp:258
 msgid "File '{}' already exists"
 msgstr "O arquivo '{}' já existe"
 
 #: ../src/main.cpp:320 ../src/main.cpp:325 ../src/main.cpp:326
+#: ../src/main.cpp:327
 msgid "Git config: {}"
 msgstr "Git config: {}"
 
 #: ../src/main.cpp:321 ../src/main.cpp:326 ../src/main.cpp:327
+#: ../src/main.cpp:328
 #, fuzzy
 msgid "Git origin: {}"
 msgstr "Git config: {}"
 
 #: ../src/main.cpp:270 ../src/main.cpp:275 ../src/main.cpp:276
+#: ../src/main.cpp:277
 msgid "Invalid type: {}"
 msgstr "Tipo invalido: {}"
 
 #: ../src/main.cpp:319 ../src/main.cpp:324 ../src/main.cpp:325
+#: ../src/main.cpp:326
 msgid "PWD: {}"
 msgstr "PWD: {}"
 
 #: ../src/main.cpp:261 ../src/main.cpp:266 ../src/main.cpp:267
+#: ../src/main.cpp:268
 msgid "The file '{}' was created from the template"
 msgstr "O arquivo '{}' foi criado a partir do modelo"
 
 #: ../src/main.cpp:258 ../src/main.cpp:263 ../src/main.cpp:264
+#: ../src/main.cpp:265
 msgid "The file '{}' was edited from the template"
 msgstr "O arquivo '{}' foi editado a partir do modelo"
 
 #: ../src/main.cpp:279 ../src/main.cpp:284 ../src/main.cpp:285
+#: ../src/main.cpp:286
 msgid "The input file '{}' was not found"
 msgstr "O arquivo de entrada '{}' não foi encontrado."
 
 #: ../src/main.cpp:377 ../src/main.cpp:382 ../src/main.cpp:383
+#: ../src/main.cpp:384
 msgid "Unknown exception"
 msgstr "Exceção desconhecida"
 
 #: ../src/main.cpp:272 ../src/main.cpp:277 ../src/main.cpp:278
+#: ../src/main.cpp:279
 msgid "Use: microCI --new {}"
 msgstr "Use: microCI --new {}"
 
