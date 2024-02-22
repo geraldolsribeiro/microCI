@@ -69,7 +69,7 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_clang:latest");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_clang:0.6");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
 

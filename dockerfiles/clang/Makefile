@@ -1,4 +1,4 @@
-VERSION=0.5.1
+VERSION=0.6
 IMAGE_NAME=microci_clang
 
 all: publish
