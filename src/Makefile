@@ -136,7 +136,7 @@ single_compilation_unit.cpp: \
 	Makefile \
   ../include/3rd/beamercolorthemestr.sty.hpp \
   ../include/3rd/str-logo.png.hpp
-	@echo "// ARQUIVO GERADO! NÃO EDITAR" > $@
+	@echo "// DON'T EDIT THIS FILE" > $@
 	@echo "// clang-format off" >> $@
 	@find . -name "*.cpp" \
 		| grep -v $@ \
