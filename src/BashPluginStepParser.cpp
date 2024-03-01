@@ -84,6 +84,8 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }})",
                                        data);
+  } else {
+    throw invalid_argument("No valid shell defined");
   }
 
   copySshIfAvailable(step, data);
