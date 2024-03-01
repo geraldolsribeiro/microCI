@@ -43,10 +43,10 @@ tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, s
 
 Para alterar o comportamento da ferramenta utilize as seguintes variáveis de ambiente:
 
-  INTMAIN_DOCMD_DETAILS=false     desabilita a tag details
-  INTMAIN_DOCMD_TOC=false         desabilita a geração de sumário
-  INTMAIN_DOCMD_SHOW_SOURCE=false desabilita a identificação do arquivo fonte
-  INTMAIN_DOCMD_SHOW_BANNER=false desabilita o banner
+  DOCMD_DETAILS=false     desabilita a tag details
+  DOCMD_TOC=false         desabilita a geração de sumário
+  DOCMD_SHOW_SOURCE=false desabilita a identificação do arquivo fonte
+  DOCMD_SHOW_BANNER=false desabilita o banner
   """
   exit
 end
@@ -67,16 +67,16 @@ end
 #   
 #   ## Variáveis de controle
 #   
-#   * `INTMAIN_DOCMD_DETAILS`: ativa/desativa o encapsulamento dos trecho de código
-#   * `INTMAIN_DOCMD_TOC`: ativa/desativa a geração do índice
-#   * `INTMAIN_DOCMD_SHOW_SOURCE`: exibe o nome do arquivo de origem
-#   * `INTMAIN_DOCMD_SHOW_BANNER`: exibe o banner no início do arquivo
+#   * `DOCMD_DETAILS`: ativa/desativa o encapsulamento dos trecho de código
+#   * `DOCMD_TOC`: ativa/desativa a geração do índice
+#   * `DOCMD_SHOW_SOURCE`: exibe o nome do arquivo de origem
+#   * `DOCMD_SHOW_BANNER`: exibe o banner no início do arquivo
 #   
 #{{{
-use_detail  = ( ENV['INTMAIN_DOCMD_DETAILS']     || 'true' ).match( /(true|t|yes|y)/i )
-use_toc     = ( ENV['INTMAIN_DOCMD_TOC']         || 'true' ).match( /(true|t|yes|y)/i )
-show_source = ( ENV['INTMAIN_DOCMD_SHOW_SOURCE'] || 'true' ).match( /(true|t|yes|y)/i )
-show_banner = ( ENV['INTMAIN_DOCMD_SHOW_BANNER'] || 'true' ).match( /(true|t|yes|y)/i )
+use_detail  = ( ENV['DOCMD_DETAILS']     || ENV['INTMAIN_DOCMD_DETAILS']     || 'true' ).match( /(true|t|yes|y)/i )
+use_toc     = ( ENV['DOCMD_TOC']         || ENV['INTMAIN_DOCMD_TOC']         || 'true' ).match( /(true|t|yes|y)/i )
+show_source = ( ENV['DOCMD_SHOW_SOURCE'] || ENV['INTMAIN_DOCMD_SHOW_SOURCE'] || 'true' ).match( /(true|t|yes|y)/i )
+show_banner = ( ENV['DOCMD_SHOW_BANNER'] || ENV['INTMAIN_DOCMD_SHOW_BANNER'] || 'true' ).match( /(true|t|yes|y)/i )
 #}}}
 
 script_language           = ARGV[0]
@@ -243,15 +243,19 @@ end
 #   
 #   Um arquivo pode ser incluído como bloco de código na documentação.
 #   
-#   `[``IMDOC_INCLUDE_FILE cpp src/main.cpp]`
+#   `[``DOCMD_INCLUDE_FILE cpp src/main.cpp]`
 #   
-#   [IMDOC_INCLUDE_FILE cpp src/main.cpp]
+#   [DOCMD_INCLUDE_FILE cpp src/main.cpp]
 #   
 #   Parágrafo após a inclusão do arquivo.
+#
+#   `[``DOCMD_INCLUDE_PARTIAL_FILE 6 +3 ruby bin/intmain_docmd]`
 #   
-#   `[``IMDOC_INCLUDE_PARTIAL_FILE 6 3 ruby bin/intmain_docmd]`
+#   [DOCMD_INCLUDE_PARTIAL_FILE 6 +3 ruby bin/intmain_docmd]
 #   
-#   [IMDOC_INCLUDE_PARTIAL_FILE 6 3 ruby bin/intmain_docmd]
+#   `[``DOCMD_INCLUDE_PARTIAL_FILE 6 9 ruby bin/intmain_docmd]`
+#   
+#   [DOCMD_INCLUDE_PARTIAL_FILE 6 9 ruby bin/intmain_docmd]
 #   
 #   Parágrafo após a inclusão do arquivo.
 #   
@@ -401,9 +405,67 @@ File.open(output_filename, "w") do |output|
         end
         output << "\n```\n"
         next
+      elsif m2 = mdline.match( /\[DOCMD_INCLUDE_FILE ([^ ]+) (.*)\]/ )
+        include_type=m2[1]
+        include_filename=m2[2]
+        output << "\n"
+        output << "```" << include_type << "\n"
+        if File.exist?(include_filename)
+          File.readlines(include_filename).each do |include_line|
+            output << include_line
+          end
+        else
+          output << "Arquivo " << include_filename << " nao encontrado!"
+        end
+        output << "\n```\n"
+        next
       elsif m2 = mdline.match( /\[IMDOC_INCLUDE_PARTIAL_FILE ([0-9]+) ([0-9]+) ([^ ]+) (.*)\]/ )
         initial_line     = m2[1].to_i
         number_of_lines  = m2[2].to_i
+        include_type     = m2[3]
+        include_filename = m2[4]
+        output << "\n"
+        output << "```" << include_type << "\n"
+        File.readlines(include_filename).each do |include_line|
+          # Skip initial lines
+          if initial_line > 1
+            initial_line -= 1
+            next
+          end
+          if number_of_lines > 0
+            number_of_lines -= 1
+            output << include_line
+          end
+        end
+        output << "```\n"
+        next
+      elsif m2 = mdline.match( /\[DOCMD_INCLUDE_PARTIAL_FILE ([0-9]+) \+([0-9]+) ([^ ]+) (.*)\]/ )
+        initial_line     = m2[1].to_i
+        number_of_lines  = m2[2].to_i
+        include_type     = m2[3]
+        include_filename = m2[4]
+        output << "\n"
+        output << "```" << include_type << "\n"
+        File.readlines(include_filename).each do |include_line|
+          # Skip initial lines
+          if initial_line > 1
+            initial_line -= 1
+            next
+          end
+          if number_of_lines > 0
+            number_of_lines -= 1
+            output << include_line
+          end
+        end
+        output << "```\n"
+        next
+      elsif m2 = mdline.match( /\[DOCMD_INCLUDE_PARTIAL_FILE ([0-9]+) ([0-9]+) ([^ ]+) (.*)\]/ )
+        initial_line     = m2[1].to_i
+        final_line       = m2[2].to_i
+        if final_line < initial_line
+          final_line = initial_line + final_line
+        end
+        number_of_lines  = final_line - initial_line
         include_type     = m2[3]
         include_filename = m2[4]
         output << "\n"

@@ -52,33 +52,33 @@ void DocmdPluginStepParser::Parse(const YAML::Node &step) {
   if (step["plugin"]["toc"]) {
     toc = step["plugin"]["toc"].as<bool>();
   }
-  env.name = "INTMAIN_DOCMD_TOC";
+  env.name = "DOCMD_TOC";
   env.value = toc ? "true" : "false";
   envs.insert(env);
 
   if (step["plugin"]["details"]) {
     details = step["plugin"]["details"].as<bool>();
   }
-  env.name = "INTMAIN_DOCMD_DETAILS";
+  env.name = "DOCMD_DETAILS";
   env.value = details ? "true" : "false";
   envs.insert(env);
 
   if (step["plugin"]["show_source"]) {
     show_source = step["plugin"]["show_source"].as<bool>();
   }
-  env.name = "INTMAIN_DOCMD_SHOW_SOURCE";
+  env.name = "DOCMD_SHOW_SOURCE";
   env.value = show_source ? "true" : "false";
   envs.insert(env);
 
   if (step["plugin"]["show_banner"]) {
     show_banner = step["plugin"]["show_banner"].as<bool>();
   }
-  env.name = "INTMAIN_DOCMD_SHOW_BANNER";
+  env.name = "DOCMD_SHOW_BANNER";
   env.value = show_banner ? "true" : "false";
   envs.insert(env);
 
   data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_docmd:0.2");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_docmd:0.3");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Extract documentation");
 
