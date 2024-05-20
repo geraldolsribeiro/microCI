@@ -1,17 +1,17 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin plantuml
+# Example of use of the plantuml plugin
 
 ```yaml
 steps:
-  - name: "Gerar diagramas plantuml"
-    description: "Descrição deste passo"
+  - name: "Build diagrams"
+    description: "Build diagrams from textual description"
     plugin:
       name: "plantuml"
       source:
-        - "src/**.cpp"                            # Vasculha recursivamente os arquivos cpp
-        - "docs/**.puml"                          # Vasculha recursivamente os arquivos puml
-      type: svg                                   # svg, png ou pdf
-      output: "/microci_workspace/docs/diagrams/" # Pasta onde serão salvos os arquivos
-      config: "docs/diagrams/skinparams.iuml"     # Estilos comuns
+        - "src/**.cpp"                        # Search for inline plantuml recursively inside all C++ source code
+        - "docs/**.puml"                      # Search for all filename with puml extension
+      type: svg                               # Can be svg, png or pdf
+      output_folder: "docs/diagrams/"         # Folder for saving generated diagrams
+      config: "docs/diagrams/skinparams.iuml" # Common styles
 ```
 

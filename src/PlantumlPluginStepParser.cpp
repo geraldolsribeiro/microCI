@@ -61,7 +61,7 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto type = step["plugin"]["type"].as<string>("png");
-  auto output = step["plugin"]["output"].as<string>("");
+  auto outputFolder = step["plugin"]["output_folder"].as<string>("");
   auto config = step["plugin"]["config"].as<string>("");
 
   // para executar com GUI
@@ -73,15 +73,15 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
     opts.push_back("-config " + config);
   }
 
-  if (!output.empty()) {
-    opts.push_back("-o " + output);
+  if (!outputFolder.empty()) {
+    opts.push_back("-o /microci_workspace/" + outputFolder);
   }
 
   data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_plantuml:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Constroi diagramas plantuml");
-  data["OUTPUT"] = output;
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Build diagrams from textual description");
+  data["OUTPUT"] = outputFolder;
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
