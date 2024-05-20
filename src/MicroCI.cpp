@@ -115,7 +115,7 @@ bool MicroCI::ReadConfig(const string &filename) {
   try {
     CI = YAML::LoadFile(filename);
 
-    // Variáveis de ambiente globais
+    // Start with global environment variables
     if (CI["envs"] and CI["envs"].IsMap()) {
       for (auto it : CI["envs"]) {
         EnvironmentVariable env;
@@ -125,7 +125,7 @@ bool MicroCI::ReadConfig(const string &filename) {
       }
     }
 
-    // Sobrescreve com .env
+    // Override with the content of the `.env` file
     if (filesystem::exists(".env")) {
       auto dotEnv = YAML::LoadFile(".env");
       for (auto it : dotEnv) {
@@ -139,16 +139,16 @@ bool MicroCI::ReadConfig(const string &filename) {
     mYamlFilename = filename;
 
   } catch (const YAML::BadFile &e) {
-    spdlog::error("Falha ao carregar o arquivo .microCI.yml");
+    spdlog::error("Failure loading the file .microCI.yml");
     spdlog::error(e.what());
     return false;
   } catch (const YAML::ParserException &e) {
-    spdlog::error("Falha ao interpretar o arquivo .microCI.yml");
+    spdlog::error("Failure parsing the file .microCI.yml");
     spdlog::error(e.what());
     return false;
   }
 
-  initBash();
+  initBash(CI);
 
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
@@ -187,11 +187,11 @@ bool MicroCI::ReadConfig(const string &filename) {
       }
 
       if (mDockerImages.size()) {
-        mScript << "# Atualiza as imagens docker utilizadas no passos\n";
+        mScript << "# Update docker images used in the steps\n";
         for (const auto &dockerImage : mDockerImages) {
-          mScript << fmt::format("echo 'Atualizando imagem docker {}...'\n", dockerImage);
+          mScript << fmt::format("echo 'Updating {} docker image ...'\n", dockerImage);
           mScript << fmt::format("if docker image inspect {} > /dev/null 2>&1 ; then\n", dockerImage);
-          mScript << fmt::format("  echo 'Imagem docker {} está atualizada' >> .microCI.log\n", dockerImage);
+          mScript << fmt::format("  echo 'Docker image {} is already updated' >> .microCI.log\n", dockerImage);
           mScript << fmt::format("else\n");
           mScript << fmt::format("  docker pull {} 2>&1 >> .microCI.log\n", dockerImage);
           mScript << fmt::format("fi\n");
@@ -200,7 +200,7 @@ bool MicroCI::ReadConfig(const string &filename) {
 
       mScript << R"(
 
-# Executa todos os passos do pipeline
+# Execute all steps in the pipeline
 function main() {
   date >> .microCI.log
 
@@ -218,8 +218,11 @@ function main() {
 
 main
 
-# Para executar use
+# To execute this workflow inside a terminal use the following command:
 # microCI | bash
+#
+# To save the workflow as a bash scritp just redirect the output to a file:
+# microCI > build.sh
 
 )";
     }
@@ -289,8 +292,26 @@ json MicroCI::DefaultDataTemplate() const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::initBash() {
+void MicroCI::initBash(const YAML::Node &CI) {
   auto data = DefaultDataTemplate();
+
+  std::stringstream stepsComments;
+
+  if (CI["steps"] and CI["steps"].IsMap()) {
+    for (auto step : CI["steps"]) {
+      if (step["only"]) {
+        continue;
+      }
+      if (step["name"]) {
+        stepsComments << "# Step: " << step["name"].as<string>() << "\n";
+      }
+      if (step["description"]) {
+        stepsComments << "#       " << step["description"].as<string>() << "\n\n";
+      }
+    }
+  }
+  data["STEPS_COMMENTS"] = stepsComments.str();
+
   auto scriptMicroCI = string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
   mScript << inja::render(scriptMicroCI, data) << endl;
 

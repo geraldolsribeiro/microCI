@@ -100,7 +100,7 @@ class MicroCI {
   void RegisterPlugin(const string &name, shared_ptr<microci::PluginStepParser> pluginStepParser);
 
  private:
-  void initBash();
+  void initBash(const YAML::Node &CI);
   void parsePluginStep(const YAML::Node &step);
 
   string mYamlFilename = ".microCI.yml";
