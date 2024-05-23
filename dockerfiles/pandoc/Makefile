@@ -1,14 +1,17 @@
-VERSION=0.1
+VERSION=0.2
 IMAGE_NAME=microci_pandoc
 
 all: publish
 
-build:
-	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+update:
+	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
+
+build: update
+	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 test: build
-	docker run -it intmain/$(IMAGE_NAME):latest --listrules
+	docker run -it intmain/$(IMAGE_NAME):latest --help
 
 publish: build
 	docker login

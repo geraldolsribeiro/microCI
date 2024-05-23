@@ -3,8 +3,27 @@ MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 
 RUN tlmgr update --self \
   && tlmgr install \
-    pgf \
-    tcolorbox \
+    acronym \
+    bigfoot \
+    carlito \
+    cleveref \
+    collection-fontsrecommended \
+    dejavu \
+    enumitem \
     environ \
-    collection-fontsrecommended
-RUN updmap-sys
+    etoolbox \
+    everypage \
+    floatrow \
+    framed \
+    inconsolata \
+    pgf \
+    sectsty \
+    soul \
+    tcolorbox \
+    titling \
+    todonotes \
+    ulem \
+    xargs \
+    xstring
+RUN texhash && updmap-sys
+
