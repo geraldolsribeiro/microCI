@@ -1,8 +1,8 @@
-#   # Exemplo de uso do plugin pandoc
+#   # Example of using the pandoc plugin
 #{{{
 steps:
-  - name: "Gerar PDF a partir do Markdown"
-    description: "Descrição deste passo"
+  - name: "Generate PDF from Markdown"
+    description: "Description of this step"
     plugin:
       name: pandoc
       base_path: .
@@ -15,4 +15,3 @@ steps:
         - --number-sections
 #}}}
 # vim: spell spelllang=pt,en
-
