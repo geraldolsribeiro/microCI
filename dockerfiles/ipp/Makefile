@@ -4,7 +4,10 @@ IMAGE_NAME=microci_ipp
 all:
 #all: publish
 
-build:
+update:
+	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
+
+build: update
 	docker build -t intmain/$(IMAGE_NAME):0.1 -f Dockerfile .
 
 test: build
