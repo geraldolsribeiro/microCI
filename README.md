@@ -1,52 +1,50 @@
-# Bem-vindo ao microCI
+# Welcome to microCI
 
-A documentação completa pode ser encontrada em [microci.dev](https://microci.dev).
+The complete documentation can be found at [microci.dev](https://microci.dev).
 
-O `microCI` é uma ferramenta para auxiliar a construção de pipelines de
-integração contínua.
+`microCI` is a tool to assist in building continuous integration pipelines.
 
-O principal diferencial do `microCI` é a geração de **scripts portáveis** e
-totalmente **auditáveis** para execução de tarefas em **containers docker**.
+The main differentiator of `microCI` is the generation of **portable scripts**
+and fully **auditable** for executing tasks in **docker containers**.
 
-Como todos os passos são executados em um ou mais containers docker, todo
-o processo se torna reprodutível em: a) qualquer máquina do time de
-desenvolvimento, b) no servidor que realizará o build automático após os
-commits, c) no servidor que realizará o deploy para produção... Enfim a mesma
-ferramenta, sem dependência, pode ser usada tanto na máquina do dev quanto no
-servidor.
+Since all steps are executed in one or more docker containers, the entire
+process becomes reproducible on: a) any developer's machine, b) the server that
+will perform automatic builds after commits, c) the server that will perform
+deployment to production... In short, the same tool, without dependencies, can
+be used on both the developer's machine and the server.
 
-## No desktop
+## On the desktop
 
-A utilização do `microCI` no desktop do dev é muito simples:
+Using `microCI` on the developer's desktop is very simple:
 
 ```bash
 microCI | bash
 ```
 
-No comando acima o `microCI` leu um arquivo `.microCI.yml` contendo a descrição
-dos passos da pipeline e gerou um script para execução destes passos. Este
-script é escrito na saída padrão e pode ser encadeado com outras ferramentas ou
-passado para um interpretador `bash` para a execução.
+In the above command, `microCI` reads a `.microCI.yml` file containing the
+description of the pipeline steps and generates a script for executing these
+steps. This script is written to standard output and can be chained with other
+tools or passed to a `bash` interpreter for execution.
 
-Um arquivo chamado `.microCI.log` é gerado com todas as mensagens, warning,
-erros de todos os comandos executados e pode ser analisado para resolver algum
-problema que possa ocorrer.
+A file called `.microCI.log` is generated with all messages, warnings, errors
+from all executed commands and can be analyzed to resolve any problems that may
+occur.
 
-## No servidor
+## On the server
 
-Para execução no servidor basta expor **webhooks** que, ao serem acionados,
-executam `microCI` nas respectivas pastas do projeto.
+To run on the server, it is sufficient to expose **webhooks** that, when
+triggered, execute `microCI` in the respective project folders.
 
-## Requisitos mínimos
+## Minimum requirements
 
-* Um ambiente docker corretamente configurado
-* Bash
+* A properly configured Docker environment
+* Bash shell
 
-## Instalação
+## Installation
 
-A instalação é igualmente simples, bastando copiar o executável para uma pasta
-que esteja no `PATH`. Para remover o `microCI` completamente do sistema basta
-apagar o arquivo copiado para o PATH.
+The installation is equally simple, just copy the executable to a folder that
+is in the `PATH`. To completely remove `microCI` from the system, just delete
+the file copied to the PATH.
 
 ```bash
 curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
@@ -54,32 +52,29 @@ curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/
 chmod 755 /usr/local/bin/microCI
 ```
 
-## Container docker
+## Docker Container
 
-Você pode utilizar **qualquer container docker** para execução, tanto os
-públicos do [Docker HUB](https://hub.docker.com/) quanto os que você
-desenvolver internamente.
+You can use **any Docker container** for execution, both public ones from
+[Docker HUB](https://hub.docker.com/) and those you develop internally.
 
-## Integração com github, gitlab, ...
+## Integration with github, gitlab, ...
 
-O modo mais simples e seguro de utilizar o `microCI` para ler ou escrever nos
-repositórios é realizar o acesso através de chave SSH.
+The simplest and safest way to use `microCI` to read from or write to
+repositories is to access them through an SSH key.
 
-## Por fazer
+## To do
 
-Abaixo estão algumas funcionalidades que poderão estar presente nos próximos
-releases.
+Below are some features that may be present in the next releases.
 
-* criar pacote deb
-* criar pacote rpm
-* passar usuário atual para container para evitar geração de arquivos como
-  `root` na pasta de trabalho
-* exibir mensagem de erro do passo que falhou
-* substituição de variáveis nos steps
-* uso de variáveis de ambiente e segredos configurados no servidor
-* criar imagem docker a partir de repositório git
+* create deb package
+* create rpm package
+* pass current user to container to avoid generating files as `root` in the working directory
+* display error message from the failed step
+* variable substitution in steps
+* use of environment variables and secrets configured on the server
+* create a Docker image from a git repository
 
-## Versões
+## Versions
 
 * `0.29.0` Plugin `docmd`
 * `0.28.0` Translation support added
