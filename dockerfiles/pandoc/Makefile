@@ -10,7 +10,8 @@ build: update
 	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
-test: build
+test:
+	docker run -it intmain/$(IMAGE_NAME):latest --print-default-template=latex > default.latex
 	docker run -it intmain/$(IMAGE_NAME):latest --help
 
 publish: build

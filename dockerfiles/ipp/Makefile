@@ -10,7 +10,7 @@ update:
 build: update
 	docker build -t intmain/$(IMAGE_NAME):0.1 -f Dockerfile .
 
-test: build
+test:
 	echo "Fixme"
 
 publish: build

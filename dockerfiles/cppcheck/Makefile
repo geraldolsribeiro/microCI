@@ -10,7 +10,7 @@ build: update
 	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
-test: build
+test:
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) cppcheck --help
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
 
