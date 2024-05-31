@@ -193,15 +193,15 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Descrição deste passo
+# Description of this step
 # ----------------------------------------------------------------------
-function step_gerar_pdf_a_partir_do_markdown() {
+function step_generate_pdf_from_markdown() {
   SECONDS=0
-  MICROCI_STEP_NAME="Gerar PDF a partir do Markdown"
-  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
+  MICROCI_STEP_NAME="Generate PDF from Markdown"
+  MICROCI_STEP_DESCRIPTION="Description of this step"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -272,13 +272,17 @@ fi
 function main() {
   date >> .microCI.log
 
-  step_gerar_pdf_a_partir_do_markdown
+  step_generate_pdf_from_markdown
 
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

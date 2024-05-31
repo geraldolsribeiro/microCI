@@ -1,6 +1,6 @@
-#   # Exemplo de configuração do plugin mkdocs_material
+# Example of configuration for the mkdocs_material plugin
 #{{{
-site_name: Nome do site
+site_name: Site name
 repo_url: https://github.com/geraldolsribeiro/microCI
 repo_name: geraldolsribeiro/microCI
 edit_uri: edit/master/docs/

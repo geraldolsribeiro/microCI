@@ -193,16 +193,16 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 # bash 
 
 # ----------------------------------------------------------------------
-# Descrição deste passo
+# Description of this step
 # ----------------------------------------------------------------------
-function step_compilar_versao_estatica_do_microci() {
+function step_compile_static_version_of_microci() {
   SECONDS=0
-  MICROCI_STEP_NAME="Compilar versão estática do microCI"
-  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
+  MICROCI_STEP_NAME="Compile static version of microCI"
+  MICROCI_STEP_DESCRIPTION="Description of this step"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -212,8 +212,8 @@ function step_compilar_versao_estatica_do_microci() {
   title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
   title=${title:0:60}
   echo -ne "[0;36m${title}[0m: "
-  ENV1="valor da variável de ambiente ENV1"
-  ENV2="valor da variável de ambiente ENV2"
+  ENV1="value of the environment variable ENV1"
+  ENV2="value of the environment variable ENV2"
 
   {
     (
@@ -222,7 +222,7 @@ function step_compilar_versao_estatica_do_microci() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Compilar versão estática do microCI"
+      echo "Step: Compile static version of microCI"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -231,8 +231,8 @@ function step_compilar_versao_estatica_do_microci() {
         --rm \
         --network bridge \
         --workdir /microci_workspace \
-        --env ENV1="valor da variável de ambiente ENV1" \
-        --env ENV2="valor da variável de ambiente ENV2" \
+        --env ENV1="value of the environment variable ENV1" \
+        --env ENV2="value of the environment variable ENV2" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "gcc:13" \
         /bin/bash -c "cd /microci_workspace \
@@ -288,13 +288,17 @@ fi
 function main() {
   date >> .microCI.log
 
-  step_compilar_versao_estatica_do_microci
+  step_compile_static_version_of_microci
 
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

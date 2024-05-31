@@ -27,6 +27,7 @@ Opções:
   -n,--new git_publish     Create a publish step
   -n,--new git_deploy      Create a production deploy step
   -n,--new plantuml        Create a diagram generation step
+  -n,--new pikchr          Create a diagram generation step
   -n,--new clang-format    Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step

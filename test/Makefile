@@ -47,6 +47,7 @@ test:
 	../bin/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
 	../bin/microCI -i ../new/clang-format.yml                    > clang-format.sh
 	../bin/microCI -i ../new/plantuml.yml                        > plantuml.sh
+	../bin/microCI -i ../new/pikchr.yml                          > pikchr.sh
 	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh

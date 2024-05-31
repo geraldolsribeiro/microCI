@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Verifica o código C++ e gera relatório em formato HTML
@@ -219,7 +219,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Gerar relatório de verificação do código C++ - clang-tidy"
+      echo "Step: Gerar relatório de verificação do código C++ - clang-tidy"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -297,8 +297,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

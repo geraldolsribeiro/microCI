@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Extract documentation from source code to a markdown file
@@ -223,7 +223,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -241,7 +241,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -259,7 +259,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -277,7 +277,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -295,7 +295,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -313,7 +313,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -331,7 +331,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -349,7 +349,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -367,7 +367,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -385,7 +385,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -403,7 +403,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -421,7 +421,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -439,7 +439,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -457,7 +457,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -475,7 +475,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -493,7 +493,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -511,7 +511,7 @@ function step_extract_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Extract documentation"
+      echo "Step: Extract documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
@@ -576,8 +576,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

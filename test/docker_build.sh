@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Descrição deste passo
@@ -268,8 +268,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

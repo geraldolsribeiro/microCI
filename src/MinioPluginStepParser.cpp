@@ -64,7 +64,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   for (const auto &envName : {"MICROCI_MINIO_URL", "MICROCI_MINIO_ACCESS_KEY", "MICROCI_MINIO_SECRET_KEY"}) {
     auto it = envs.find(EnvironmentVariable{envName, ""});
     if (it == envs.end()) {
-      spdlog::error("Variável de ambiente '{}' não definida", envName);
+      spdlog::error("The environment variable called '{}' was not found", envName);
       mIsValid = false;
       return;
     } else {
@@ -75,7 +75,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_NAME"] = stepName(step);
   data["DOCKER_IMAGE"] = stepDockerImage(step, "minio/mc:latest");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Envia arquivos para gerenciador de artefatos");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Send files from/to the artifact manager");
   data["DOCKER_ENTRYPOINT"] = "";  // remove o entrypoint padrão
   data["DOCKER_NETWORK"] = "bridge";
 

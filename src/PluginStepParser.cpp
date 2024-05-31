@@ -212,7 +212,7 @@ void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentV
       echo ""
       echo ""
       echo ""
-      echo "Passo: {{ STEP_NAME }}"
+      echo "Step: {{ STEP_NAME }}"
       # shellcheck disable=SC2140,SC2046
       docker run)",
                                      data);

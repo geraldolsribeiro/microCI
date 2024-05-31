@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Download de dependências utilizadas na compilação
@@ -220,7 +220,7 @@ function step_baixar_arquivos_externos_ao_projeto() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Baixar arquivos externos ao projeto"
+      echo "Step: Baixar arquivos externos ao projeto"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -324,8 +324,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

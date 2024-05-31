@@ -51,7 +51,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     cmdsStr = step["plugin"]["sh"].as<string>();
   } else {
     spdlog::error("Tratar erro aqui");
-    throw invalid_argument("Script não encontrado");
+    throw invalid_argument("Script not found");
   }
 
   auto ss = stringstream{cmdsStr};
@@ -68,7 +68,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   data["STEP_NAME"] = stepName(step);
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Executa comandos no bash");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Execute commands at bash shell");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 

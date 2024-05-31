@@ -1,8 +1,7 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de configuração do plugin mkdocs_material
 
 ```yaml
-site_name: Nome do site
+site_name: Site name
 repo_url: https://github.com/geraldolsribeiro/microCI
 repo_name: geraldolsribeiro/microCI
 edit_uri: edit/master/docs/

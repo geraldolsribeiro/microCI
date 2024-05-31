@@ -67,8 +67,8 @@ steps:
         cd docs/assets
         pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
 
-  - name: "Gerar diagramas plantuml"
-    description: "Descrição deste passo"
+  - name: "Build diagrams - plantuml"
+    description: "Build diagrams from textual description"
     plugin:
       name: "plantuml"
       source:
@@ -76,6 +76,16 @@ steps:
       type: png
       config: "docs/diagrams/skinparams.iuml"
       output: "/microci_workspace/docs/diagrams"
+
+  - name: "Build diagrams - pikchr"
+    description: "Build diagrams from textual description"
+    only: O
+    plugin:
+      name: "pikchr"
+      source:
+        - "docs/diagrams/*.pikchr"
+      type: svg
+      output_folder: "docs/diagrams/"
 
   - name: "Construir documentação em formato HTML"
     description: "Documentação do projeto"

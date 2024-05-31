@@ -1,0 +1,93 @@
+<svg xmlns='http://www.w3.org/2000/svg' class="pikchr" viewBox="0 0 508.32 436.32">
+<path d="M2,110L506,110L506,2L2,2Z"  style="fill:rgb(172,201,227);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M2,218L506,218L506,110L2,110Z"  style="fill:rgb(197,216,239);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M2,326L506,326L506,218L2,218Z"  style="fill:rgb(172,201,227);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M2,434L506,434L506,326L2,326Z"  style="fill:rgb(197,216,239);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M30,110L30,2"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="30" y="44" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 30,56)" dominant-baseline="central">Alan</text>
+<path d="M30,218L30,110"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="30" y="152" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 30,164)" dominant-baseline="central">Betty</text>
+<path d="M30,326L30,218"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="30" y="260" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 30,272)" dominant-baseline="central">Charlie</text>
+<path d="M30,434L30,326"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="30" y="368" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 30,380)" dominant-baseline="central">Darlene</text>
+<circle cx="59" cy="30" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="59" y="30" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1</text>
+<polygon points="110,30 98,35 98,26" style="fill:rgb(0,0,0)"/>
+<path d="M74,30L104,30"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="124" cy="30" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="124" y="30" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2</text>
+<polygon points="412,30 401,35 401,26" style="fill:rgb(0,0,0)"/>
+<path d="M138,30L406,30"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<ellipse cx="448" cy="30" rx="36" ry="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="448" y="30" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">future</text>
+<circle cx="174" cy="74" r="14.4"  style="fill:rgb(192,192,192);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="174" y="74" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3</text>
+<polygon points="161,69 149,69 152,61" style="fill:rgb(0,0,0)"/>
+<path d="M73,36L156,67"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="117" y="64" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(20.55604522 117,52)" dominant-baseline="central">fork!</text>
+<circle cx="59" cy="138" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="59" y="138" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1</text>
+<polygon points="110,138 98,143 98,134" style="fill:rgb(0,0,0)"/>
+<path d="M74,138L104,138"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="124" cy="138" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="124" y="138" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2</text>
+<polygon points="412,138 401,143 401,134" style="fill:rgb(0,0,0)"/>
+<path d="M138,138L406,138"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<ellipse cx="448" cy="138" rx="36" ry="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="448" y="138" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">future</text>
+<circle cx="174" cy="182" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="174" y="182" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3</text>
+<polygon points="225,182 213,186 213,177" style="fill:rgb(0,0,0)"/>
+<path d="M189,182L219,182"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="239" cy="182" r="14.4"  style="fill:rgb(192,192,192);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="239" y="182" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">4</text>
+<polygon points="161,177 149,177 152,169" style="fill:rgb(0,0,0)"/>
+<path d="M73,144L156,175"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="59" cy="246" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="59" y="246" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1</text>
+<polygon points="110,246 98,251 98,242" style="fill:rgb(0,0,0)"/>
+<path d="M74,246L104,246"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="124" cy="246" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="124" y="246" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2</text>
+<polygon points="254,246 242,251 242,242" style="fill:rgb(0,0,0)"/>
+<path d="M138,246L248,246"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="196" y="235" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">goes</text>
+<text x="196" y="258" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">offline</text>
+<circle cx="268" cy="246" r="14.4"  style="fill:rgb(192,192,192);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="268" y="246" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">5</text>
+<polygon points="412,246 401,251 401,242" style="fill:rgb(0,0,0)"/>
+<path d="M282,246L406,246"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="347" y="235" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">back online</text>
+<text x="347" y="258" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pushes 5</text>
+<text x="347" y="278" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pulls 3 and 4</text>
+<ellipse cx="448" cy="246" rx="36" ry="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="448" y="246" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">future</text>
+<circle cx="59" cy="354" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="59" y="354" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1</text>
+<polygon points="110,354 98,359 98,350" style="fill:rgb(0,0,0)"/>
+<path d="M74,354L104,354"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="124" cy="354" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="124" y="354" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2</text>
+<polygon points="254,354 242,359 242,350" style="fill:rgb(0,0,0)"/>
+<path d="M138,354L248,354"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="268" cy="354" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="268" y="354" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">5</text>
+<polygon points="318,354 307,359 307,350" style="fill:rgb(0,0,0)"/>
+<path d="M282,354L313,354"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="333" cy="354" r="14.4"  style="fill:rgb(192,192,192);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="333" y="354" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">6</text>
+<polygon points="412,354 401,359 401,350" style="fill:rgb(0,0,0)"/>
+<path d="M347,354L406,354"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<ellipse cx="448" cy="354" rx="36" ry="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="448" y="354" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">future</text>
+<circle cx="174" cy="398" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="174" y="398" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3</text>
+<polygon points="225,398 213,402 213,393" style="fill:rgb(0,0,0)"/>
+<path d="M189,398L219,398"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="239" cy="398" r="14.4"  style="fill:rgb(255,255,255);stroke-width:2.25;stroke:rgb(0,0,0);" />
+<text x="239" y="398" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">4</text>
+<polygon points="161,393 149,393 152,385" style="fill:rgb(0,0,0)"/>
+<path d="M73,360L156,391"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+</svg>
+

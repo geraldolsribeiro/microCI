@@ -159,11 +159,11 @@ bool MicroCI::ReadConfig(const string &filename) {
     // FIXME: Verificar se existe
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
-        throw invalid_argument(fmt::format("Plugin não definido no passo '{}'", step["name"].as<string>()));
+        throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
       }
       if (step["only"] and step["only"].as<string>() == mOnlyStep) {
         parsePluginStep(step);
-        mScript << "# Executa somente este passo" << endl;
+        mScript << "# Execute only this step" << endl;
         mScript << "step_" << sanitizeName(step["name"].as<string>()) << endl;
         mScript << "exit 0;" << endl;
       }
@@ -172,7 +172,7 @@ bool MicroCI::ReadConfig(const string &filename) {
     if (CI["steps"].IsSequence()) {
       for (auto step : CI["steps"]) {
         if (!step["plugin"] or !step["plugin"]["name"]) {
-          throw invalid_argument(fmt::format("Plugin não definido no passo '{}'", step["name"].as<string>()));
+          throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
         }
         if (step["only"]) {
           SkipPluginStepParser skipPluginStepParser{this};
@@ -216,8 +216,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #
@@ -242,7 +246,7 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
     return;
   } else {
     auto stepName = step["name"].as<string>();
-    spdlog::error("O plugin '{}' não foi encontrado no passo '{}'", pluginName, stepName);
+    spdlog::error("The plugin '{}' was not found at the step '{}'", pluginName, stepName);
     for (const auto &p : mPluginParserMap) {
       spdlog::warn("Plugin '{}'", p.first);
     }
@@ -323,7 +327,7 @@ void MicroCI::initBash(const YAML::Node &CI) {
 
     mScript << inja::render(scriptNotifyDiscord, data) << endl;
   } else {
-    mScript << "# Notificação via Discord não será possível" << endl;
+    mScript << "# Notification by Discord is not possible" << endl;
   }
 }
 

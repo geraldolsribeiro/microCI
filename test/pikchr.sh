@@ -114,7 +114,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/plantuml.yml" \
+    yq -r .steps[].name "../new/pikchr.yml" \
       | while IFS= read -r stepName
         do
           updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
@@ -230,19 +230,17 @@ function step_build_diagrams() {
         --network none \
         --workdir /microci_workspace \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_plantuml:latest" \
-          /bin/bash -c "cd /microci_workspace \
-          && java -jar /opt/plantuml/plantuml.jar \
-            -nometadata \
-            -charset utf-8  \
-            -r \
-            -tsvg \
-            -config docs/diagrams/skinparams.iuml \
-            -o /microci_workspace/docs/diagrams/ \
-            src/**.cpp \
-            docs/**.puml \
-            2>&1"
+        "intmain/microci_pikchr:latest" \
+           /bin/bash -c "cd /microci_workspace \
+           && for pikchr_input in \
+             docs/diagrams/*.pikchr \
 
+           do
+             output_filename_svg=\${pikchr_input%.*}.svg
+             pikchr --svg-only \${pikchr_input} > \${output_filename_svg}
+           done
+              2>&1"
+  
     )
 
     status=$?
@@ -276,11 +274,11 @@ if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then
 else
   docker pull debian:stable-slim 2>&1 >> .microCI.log
 fi
-echo 'Updating intmain/microci_plantuml:latest docker image ...'
-if docker image inspect intmain/microci_plantuml:latest > /dev/null 2>&1 ; then
-  echo 'Docker image intmain/microci_plantuml:latest is already updated' >> .microCI.log
+echo 'Updating intmain/microci_pikchr:latest docker image ...'
+if docker image inspect intmain/microci_pikchr:latest > /dev/null 2>&1 ; then
+  echo 'Docker image intmain/microci_pikchr:latest is already updated' >> .microCI.log
 else
-  docker pull intmain/microci_plantuml:latest 2>&1 >> .microCI.log
+  docker pull intmain/microci_pikchr:latest 2>&1 >> .microCI.log
 fi
 
 

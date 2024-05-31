@@ -60,10 +60,11 @@ using namespace std;
 #include "MinioPluginStepParser.hpp"
 #include "MkdocsMaterialPluginStepParser.hpp"
 #include "PandocPluginStepParser.hpp"
+#include "PikchrPluginStepParser.hpp"
 #include "PlantumlPluginStepParser.hpp"
 #include "PluginStepParser.hpp"
 
-// Modelos de configuração
+// Configuration templates
 #include "new/bash.hpp"
 #include "new/beamer.hpp"
 #include "new/clang-format.hpp"
@@ -82,6 +83,7 @@ using namespace std;
 #include "new/mkdocs_material_index.hpp"
 #include "new/npm.hpp"
 #include "new/pandoc.hpp"
+#include "new/pikchr.hpp"
 #include "new/plantuml.hpp"
 #include "new/skip.hpp"
 
@@ -111,6 +113,7 @@ Opções:
   -n,--new git_publish     Create a publish step
   -n,--new git_deploy      Create a production deploy step
   -n,--new plantuml        Create a diagram generation step
+  -n,--new pikchr          Create a diagram generation step
   -n,--new clang-format    Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
@@ -163,6 +166,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("docmd", make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("pikchr", make_shared<PikchrPluginStepParser>(&uCI));
     uCI.RegisterPlugin("git_deploy", make_shared<GitDeployPluginStepParser>(&uCI));
     uCI.RegisterPlugin("git_publish", make_shared<GitPublishPluginStepParser>(&uCI));
     uCI.RegisterPlugin("mkdocs_material", make_shared<MkdocsMaterialPluginStepParser>(&uCI));
@@ -223,6 +227,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(false, "mkdocs_material", "mkdocs.yml",    yml, mkdocs_material_config);
       MICROCI_TPL(true,  "npm",             ".microCI.yml",  yml, npm);
       MICROCI_TPL(true,  "plantuml",        ".microCI.yml",  yml, plantuml);
+      MICROCI_TPL(true,  "pikchr",          ".microCI.yml",  yml, pikchr);
       MICROCI_TPL(true,  "clang-format",    ".microCI.yml",  yml, clang_format);
       MICROCI_TPL(false, "clang-format",    ".clang-format", yml, clang_format_config);
       MICROCI_TPL(true,  "beamer",          ".microCI.yml",  yml, beamer);

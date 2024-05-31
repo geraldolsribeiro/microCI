@@ -193,15 +193,15 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Descrição deste passo
+# Description of this step
 # ----------------------------------------------------------------------
-function step_salvar_artefato_em_bucket() {
+function step_save_artifact_in_bucket() {
   SECONDS=0
-  MICROCI_STEP_NAME="Salvar artefato em bucket"
-  MICROCI_STEP_DESCRIPTION="Descrição deste passo"
+  MICROCI_STEP_NAME="Save artifact in bucket"
+  MICROCI_STEP_DESCRIPTION="Description of this step"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -223,7 +223,7 @@ function step_salvar_artefato_em_bucket() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Salvar artefato em bucket"
+      echo "Step: Save artifact in bucket"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -242,9 +242,9 @@ function step_salvar_artefato_em_bucket() {
         "minio/mc:latest" \
         /bin/bash -c "cd /microci_workspace \
         && mc alias set microci http://11.22.33.44:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
-           && mc ls microci/nome_do_bucket 2>&1 \
-           && mc cp Makefile microci/nome_do_bucket/ 2>&1 \
-           && mc cp microci/nome_do_bucket/imagem.png . 2>&1"
+           && mc ls microci/bucket_name 2>&1 \
+           && mc cp Makefile microci/bucket_name/ 2>&1 \
+           && mc cp microci/bucket_name/image.png . 2>&1"
 
     )
 
@@ -291,13 +291,17 @@ fi
 function main() {
   date >> .microCI.log
 
-  step_salvar_artefato_em_bucket
+  step_save_artifact_in_bucket
 
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

@@ -1,5 +1,7 @@
 auditing/
 bin/microCI
+.ccls-cache
+dockerfiles/pikchr/pikchr
 docs/diagrams/*.png
 include/argh.h
 include/inicpp.h
@@ -10,7 +12,5 @@ include/sha1.h
 .microCI.log
 site
 src/.cache
-.ccls-cache
 src/NOTES.md
 src/single_compilation_unit.cpp
-xxx/

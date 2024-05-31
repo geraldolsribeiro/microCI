@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Padroniza formato do código usando regras
@@ -219,7 +219,7 @@ function step_formatar_codigo_c___com_clang_format() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Formatar código C++ com clang-format"
+      echo "Step: Formatar código C++ com clang-format"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -289,8 +289,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

@@ -1,10 +1,10 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin pandoc
+# Example of using the pandoc plugin
 
 ```yaml
 steps:
-  - name: "Gerar PDF a partir do Markdown"
-    description: "Descrição deste passo"
+  - name: "Generate PDF from Markdown"
+    description: "Description of this step"
     plugin:
       name: pandoc
       base_path: .

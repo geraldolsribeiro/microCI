@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Analisa estaticamente o código fonte com a ferramenta flawfinder
@@ -222,7 +222,7 @@ function step_sast_com_flawfinder() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: SAST com flawfinder"
+      echo "Step: SAST com flawfinder"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -295,8 +295,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

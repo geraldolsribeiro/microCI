@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
 # Build the project documentation in HTML format using mkdocs
@@ -281,7 +281,7 @@ function step_publish_documentation() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Publish documentation"
+      echo "Step: Publish documentation"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -411,8 +411,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #

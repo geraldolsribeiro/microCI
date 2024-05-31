@@ -193,7 +193,7 @@ resetStepStatusesJson
 reformatJson
 
 
-# Notificação via Discord não será possível
+# Notification by Discord is not possible
 # bash 
 
 # ----------------------------------------------------------------------
@@ -222,7 +222,7 @@ function step_instalar_dependencias() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Instalar dependências"
+      echo "Step: Instalar dependências"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -268,12 +268,12 @@ function step_instalar_dependencias() {
 # bash 
 
 # ----------------------------------------------------------------------
-# Executa comandos no bash
+# Execute commands at bash shell
 # ----------------------------------------------------------------------
 function step_construir() {
   SECONDS=0
   MICROCI_STEP_NAME="Construir"
-  MICROCI_STEP_DESCRIPTION="Executa comandos no bash"
+  MICROCI_STEP_DESCRIPTION="Execute commands at bash shell"
   MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
   MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
   MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -293,7 +293,7 @@ function step_construir() {
       echo ""
       echo ""
       echo ""
-      echo "Passo: Construir"
+      echo "Step: Construir"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -362,8 +362,12 @@ function main() {
   date >> .microCI.log
 }
 
+# Entry point
 main
 
+# Usage
+# -----
+#
 # To execute this workflow inside a terminal use the following command:
 # microCI | bash
 #
