@@ -179,7 +179,7 @@ void PluginStepParser::endFunction(const json &data) {
   else
     echo -e "{{RED}}FALHOU{{CLEAR}}"
     setStepStatusFailJson
-    echo "Veja o log completo em .microCI.log"
+    echo "See the complete log from .microCI.log"
     tail -50 .microCI.log
   fi
 
@@ -309,6 +309,7 @@ void PluginStepParser::copySshIfAvailable(const YAML::Node &step, const json &da
   }
 
   mMicroCI->Script() << inja::render(R"( \
+           && mkdir -p {{ SSH_COPY_TO }} 2>&1 \
            && cp -Rv {{ SSH_COPY_FROM }} {{ SSH_COPY_TO }} 2>&1 \
            && chmod 700 {{ SSH_COPY_TO }}/ 2>&1 \
            && chmod 644 {{ SSH_COPY_TO }}/id_rsa.pub 2>&1 \
