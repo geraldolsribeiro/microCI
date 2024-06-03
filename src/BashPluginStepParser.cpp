@@ -51,6 +51,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     cmdsStr = step["plugin"]["sh"].as<string>();
   } else {
     spdlog::error("Tratar erro aqui");
+    invalidConfigurationDetected();
     throw invalid_argument("Script not found");
   }
 

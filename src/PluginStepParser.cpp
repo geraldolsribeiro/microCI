@@ -42,6 +42,11 @@ bool PluginStepParser::IsValid() const { return mIsValid; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void PluginStepParser::invalidConfigurationDetected() { mIsValid = false; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 json PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const {
   auto data_ = data;
   data_["RUN_AS"] = defaultValue;

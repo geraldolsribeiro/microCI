@@ -51,6 +51,7 @@ class PluginStepParser {
   virtual bool IsValid() const;
 
  protected:
+  void invalidConfigurationDetected();
   void beginFunction(const json &data, const set<EnvironmentVariable> &envs);
   void endFunction(const json &data);
 

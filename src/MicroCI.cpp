@@ -67,6 +67,11 @@ bool MicroCI::IsValid() const { return mIsValid; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pluginStepParser) {
   mPluginParserMap[name] = pluginStepParser;
 }
@@ -74,7 +79,12 @@ void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pl
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-stringstream &MicroCI::Script() { return mScript; }
+stringstream &MicroCI::Script() {
+  if (IsValid()) {
+    return mScript;
+  }
+  throw runtime_error("Invalid configuration detected");
+}
 
 // ----------------------------------------------------------------------
 //
@@ -99,7 +109,12 @@ void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::ToString() const { return mScript.str(); }
+string MicroCI::ToString() const {
+  if (IsValid()) {
+    return mScript.str();
+  }
+  throw runtime_error("Invalid configuration detected");
+}
 
 // ----------------------------------------------------------------------
 //
@@ -128,6 +143,11 @@ bool MicroCI::ReadConfig(const string &filename) {
     // Override with the content of the `.env` file
     if (filesystem::exists(".env")) {
       auto dotEnv = YAML::LoadFile(".env");
+      if (dotEnv.size() == 0) {
+        spdlog::error("The file .env was found but it has no valid configuration");
+        invalidConfigurationDetected();
+        return false;
+      }
       for (auto it : dotEnv) {
         EnvironmentVariable env;
         env.name = it.first.as<string>();
@@ -141,10 +161,12 @@ bool MicroCI::ReadConfig(const string &filename) {
   } catch (const YAML::BadFile &e) {
     spdlog::error("Failure loading the file .microCI.yml");
     spdlog::error(e.what());
+    invalidConfigurationDetected();
     return false;
   } catch (const YAML::ParserException &e) {
     spdlog::error("Failure parsing the file .microCI.yml");
     spdlog::error(e.what());
+    invalidConfigurationDetected();
     return false;
   }
 
@@ -242,7 +264,9 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
 
   if (mPluginParserMap.count(pluginName)) {
     mPluginParserMap.at(pluginName)->Parse(step);
-    mIsValid = mIsValid && mPluginParserMap.at(pluginName)->IsValid();
+    if (!mPluginParserMap.at(pluginName)->IsValid()) {
+      invalidConfigurationDetected();
+    }
     return;
   } else {
     auto stepName = step["name"].as<string>();

@@ -65,7 +65,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
     auto it = envs.find(EnvironmentVariable{envName, ""});
     if (it == envs.end()) {
       spdlog::error("The environment variable called '{}' was not found", envName);
-      mIsValid = false;
+      invalidConfigurationDetected();
       return;
     } else {
       data[envName] = it->value;
