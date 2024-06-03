@@ -1,4 +1,5 @@
-#   # Example of using the pandoc plugin
+#   # Usage example for the pandoc plugin
+#   
 #{{{
 steps:
   - name: "Generate PDF from Markdown"

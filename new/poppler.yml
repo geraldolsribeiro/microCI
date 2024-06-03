@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin plantuml
+#   # Usage example for the poppler plugin
+#   
 #{{{
 steps:
   - name: "Converter pdf em jpg"

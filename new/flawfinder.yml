@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin flawfinder
+#   # Usage example for the flawfinder plugin
+#   
 #{{{
 steps:
   - name: "SAST com flawfinder"

@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin bash para projeto node
+#   # Usage example for the npm plugin
+#   
 #{{{
 docker: "node:16"
 steps:

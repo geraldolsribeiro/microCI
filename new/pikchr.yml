@@ -1,4 +1,5 @@
-#   # Example of use of the pikchr plugin
+#   # Usage example for the pikchr plugin
+#   
 #{{{
 steps:
   - name: "Build diagrams"

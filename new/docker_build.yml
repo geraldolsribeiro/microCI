@@ -1,4 +1,4 @@
-#   # Exemplo de uso do plugin docker_build
+#   # Usage example for the docker_build plugin
 #   
 #{{{
 steps:

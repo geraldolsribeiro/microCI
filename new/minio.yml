@@ -1,6 +1,6 @@
-# Example of using the minio plugin
-#
-# See **MinIO Client** documentation at <https://github.com/minio/mc>.
+#   # Usage example for the minio plugin
+#   
+#   See **MinIO Client** documentation at <https://github.com/minio/mc>.
 #
 # {{{
 steps:

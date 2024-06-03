@@ -1,4 +1,5 @@
-#   # Example of use of the plantuml plugin
+#   # Usage example for the plantuml plugin
+#   
 #{{{
 steps:
   - name: "Build diagrams"

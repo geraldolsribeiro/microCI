@@ -1,11 +1,13 @@
-#   # Exemplo de uso do plugin skip
+#   # Usage example for the skip plugin
+#   
 #{{{
 steps:
-  - name: "Passo ignorado"
-    description: "Este passo está desativado"
+  - name: "Ignored step"
+    description: "This step should be ignored"
     plugin:
       name: skip
-  - name: "Compilar versão estática do microCI"
+  - name: "Build static version of microCI"
+    description: "This step should be executed"
     docker: "gcc:13"
     network: bridge
     run_as: root

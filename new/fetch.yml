@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin fetch
+#   # Usage example for the fetch plugin
+#   
 #{{{
 ---
 steps:

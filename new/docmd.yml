@@ -1,4 +1,5 @@
-#   # Example of the docmd plugin
+#   # Usage example for the docmd plugin
+#   
 #{{{
 steps:
   - name: "Extract documentation"

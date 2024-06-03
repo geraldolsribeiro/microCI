@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin beamer
+#   # Usage example for the beamer plugin
+#   
 #{{{
 steps:
   - name: Criar apresentação PDF a partir de arquivos Markdown

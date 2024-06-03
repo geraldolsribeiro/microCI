@@ -1,4 +1,5 @@
-# Example of configuration for the mkdocs_material plugin
+#   # Usage example for the mkdocs_material_config plugin
+#   
 #{{{
 site_name: Site name
 repo_url: https://github.com/geraldolsribeiro/microCI

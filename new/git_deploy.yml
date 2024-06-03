@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin git_deploy
+#   # Usage example for the git_deploy plugin
+#   
 #{{{
 ---
 steps:

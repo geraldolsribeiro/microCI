@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin cppcheck
+#   # Usage example for the cppcheck plugin
+#   
 #{{{
 steps:
   - name: "Gerar relatório de verificação do código C++ - cppcheck"
