@@ -40,7 +40,8 @@ using namespace std;
 // ----------------------------------------------------------------------
 void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseRunAs(step, data, "user");
+  // data = parseRunAs(step, data, "user");
+  data = parseRunAs(step, data, "root");  // From new version of bitname/git
   data = parseNetwork(step, data, "bridge");
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
@@ -50,6 +51,12 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
+
+  // Suppress "Welcome to the Bitnami git container"
+  EnvironmentVariable bitnamiDisableWelcomeMessage;
+  bitnamiDisableWelcomeMessage.name = "DISABLE_WELCOME_MESSAGE";
+  bitnamiDisableWelcomeMessage.value = "true";
+  envs.insert(bitnamiDisableWelcomeMessage);
 
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     auto defaultTarget = step["plugin"]["target"].as<string>("include/");
@@ -68,7 +75,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         stringstream ss(item["github"].as<string>());
         ss >> gitRemote >> gitTag;
 
-        // Possíveis URLs
+        // URL examples
         // https://github.com/User/repo/tarball/master
         // https://github.com/User/repo/archive/master.tar.gz
         // https://github.com/User/repo/archive/refs/tags/v0.1.2.tar.gz
