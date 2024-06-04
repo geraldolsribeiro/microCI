@@ -42,6 +42,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   auto cmdsStr = string{};
   auto cmds = vector<string>{};
   auto line = string{};
+  list<string> opts{};
 
   auto data = mMicroCI->DefaultDataTemplate();
 
@@ -53,6 +54,12 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
     spdlog::error("Tratar erro aqui");
     invalidConfigurationDetected();
     throw invalid_argument("Script not found");
+  }
+
+  if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
+    for (const auto &opt : step["plugin"]["options"]) {
+      opts.push_back(opt.as<string>());
+    }
   }
 
   auto ss = stringstream{cmdsStr};
@@ -79,15 +86,21 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
 
   if (step["plugin"]["sh"]) {
     mMicroCI->Script() << inja::render(R"( \
-        /bin/sh -c "cd {{ WORKSPACE }})",
+        /bin/sh)",
                                        data);
   } else if (step["plugin"]["bash"]) {
     mMicroCI->Script() << inja::render(R"( \
-        /bin/bash -c "cd {{ WORKSPACE }})",
+        /bin/bash)",
                                        data);
   } else {
     throw invalid_argument("No valid shell defined");
   }
+
+  for (const auto &opt : opts) {
+    mMicroCI->Script() << " " << opt;
+  }
+
+  mMicroCI->Script() << inja::render(R"( -c "cd {{ WORKSPACE }})", data);
 
   copySshIfAvailable(step, data);
 
