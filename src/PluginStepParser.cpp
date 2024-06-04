@@ -128,22 +128,25 @@ void PluginStepParser::beginFunction(const json &data, const set<EnvironmentVari
 # {{ STEP_DESCRIPTION }}
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
-  SECONDS=0
-  MICROCI_STEP_NAME="{{ STEP_NAME }}"
-  MICROCI_STEP_DESCRIPTION="{{ STEP_DESCRIPTION }}"
-  MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "SEM GIT ORIGIN" )
-  MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "SEM GIT COMMIT")
-  MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
-  MICROCI_STEP_STATUS=":ok:"
-  MICROCI_STEP_SKIP="{{ MICROCI_STEP_SKIP }}"
-  MICROCI_STEP_DURATION=$SECONDS
-  title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
-  title=${title:0:60}
+  local SECONDS=0
+  local MICROCI_STEP_NAME="{{ STEP_NAME }}"
+  local MICROCI_STEP_DESCRIPTION="{{ STEP_DESCRIPTION }}"
+  local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
+  local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
+  local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  local MICROCI_STEP_STATUS=":ok:"
+  local MICROCI_STEP_SKIP="{{ MICROCI_STEP_SKIP }}"
+  local MICROCI_STEP_DURATION=$SECONDS
+
+  # Make step line with 60 characters
+  local title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
+  local title=${title:0:60}
+
   echo -ne "{{CYAN}}${title}{{CLEAR}}: "
 )",
                                      data);
   for (auto env : envs) {
-    mMicroCI->Script() << fmt::format("  {}=\"{}\"\n", env.name, env.value);
+    mMicroCI->Script() << fmt::format("  local {}=\"{}\"\n", env.name, env.value);
   }
 
   mMicroCI->Script() << inja::render(R"(
@@ -275,7 +278,7 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> PluginStepParser::parse
   data_["SSH_COPY_FROM"] = "/.microCI_ssh";
 
   if (step["ssh"]) {
-    // o copy_from será montado em /.microCI_ssh
+    // the folder specified by copy_from will be mounted at /.microCI_ssh
     if (step["ssh"]["copy_from"]) {
       sshMountForCopy = step["ssh"]["copy_from"].as<string>();
     }
