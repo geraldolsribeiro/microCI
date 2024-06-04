@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin beamer
+# Usage example for the beamer plugin
+
 
 ```yaml
 steps:

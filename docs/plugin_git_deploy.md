@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin git_deploy
+# Usage example for the git_deploy plugin
+
 
 ```yaml
 ---

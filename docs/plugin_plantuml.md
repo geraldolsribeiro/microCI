@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Example of use of the plantuml plugin
+# Usage example for the plantuml plugin
+
 
 ```yaml
 steps:

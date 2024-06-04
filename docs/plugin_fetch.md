@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin fetch
+# Usage example for the fetch plugin
+
 
 ```yaml
 ---

@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin clang-format
+# Usage example for the clang-format plugin
+
 
 ```yaml
 steps:

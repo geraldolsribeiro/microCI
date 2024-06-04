@@ -1,9 +1,10 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Example of using the bash plugin
+# Usage example for the bash plugin
+
 
 ```yaml
 steps:
-  - name: "Compile static version of microCI"
+  - name: "Build static version of microCI"
     description: "Description of this step"
     docker: "gcc:13" # Image that will be executed
     network: bridge  # bridge, host or none

@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Example of the mkdocs_material plugin
+# Usage example for the mkdocs_material plugin
+
 
 ```yaml
 ---

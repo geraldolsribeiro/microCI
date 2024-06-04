@@ -1,4 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
+# Usage example for the mkdocs_material_config plugin
+
 
 ```yaml
 site_name: Site name

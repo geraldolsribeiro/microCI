@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Example of use of the pikchr plugin
+# Usage example for the pikchr plugin
+
 
 ```yaml
 steps:

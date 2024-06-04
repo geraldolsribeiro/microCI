@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin git_publish
+# Usage example for the git_publish plugin
+
 
 ```yaml
 ---

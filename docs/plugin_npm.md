@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin bash para projeto node
+# Usage example for the npm plugin
+
 
 ```yaml
 docker: "node:16"

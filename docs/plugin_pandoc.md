@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Example of using the pandoc plugin
+# Usage example for the pandoc plugin
+
 
 ```yaml
 steps:

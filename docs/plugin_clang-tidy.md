@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin clang-tidy
+# Usage example for the clang-tidy plugin
+
 
 ```yaml
 steps:

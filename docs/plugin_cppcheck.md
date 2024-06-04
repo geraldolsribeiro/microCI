@@ -1,5 +1,6 @@
 [//]: <> (Documentação gerada com intmain_docmd)
-# Exemplo de uso do plugin cppcheck
+# Usage example for the cppcheck plugin
+
 
 ```yaml
 steps:
