@@ -242,6 +242,7 @@ void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentV
         --attach stdout \
         --attach stderr \
         --rm \
+        --name microci_{{ FUNCTION_NAME }} \
         --network {{ DOCKER_NETWORK }} \
         --workdir {{ WORKSPACE }})",
                                      data);

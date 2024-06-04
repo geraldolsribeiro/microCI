@@ -86,6 +86,7 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
         --attach stdout \
         --attach stderr \
         --rm \
+        --name microci_{{ FUNCTION_NAME }} \
         --workdir {{ WORKSPACE }}/{{BASE_PATH}} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --network {{ DOCKER_NETWORK }} \
