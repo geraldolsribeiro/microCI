@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin clang-tidy
+#   # Usage example for the clang-tidy plugin
+#   
 #{{{
 steps:
   - name: "Gerar relatório de verificação do código C++ - clang-tidy"

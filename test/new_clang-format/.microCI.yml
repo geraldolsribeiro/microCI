@@ -1,4 +1,5 @@
-#   # Exemplo de uso do plugin clang-format
+#   # Usage example for the clang-format plugin
+#   
 #{{{
 steps:
   - name: "Formatar código C++ com clang-format"
