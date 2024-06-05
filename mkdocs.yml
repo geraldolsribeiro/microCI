@@ -21,7 +21,6 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
@@ -31,17 +30,3 @@ plugins:
   - search:
       lang: pt
   - mermaid2
-  - i18n:
-      default_language: pt
-      languages:
-        en:
-          name: English
-          build: true
-          site_name: microCI documentation
-        pt:
-          name: Português
-          build: true
-          site_name: Documentação do microCI
-  # - pdf-export:
-  #     verbose: true
-  #     media_type: pdf-export # 'print' or 'pdf-export'

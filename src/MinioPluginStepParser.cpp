@@ -65,6 +65,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
     auto it = envs.find(EnvironmentVariable{envName, ""});
     if (it == envs.end()) {
       spdlog::error("The environment variable called '{}' was not found", envName);
+      // dumpEnvironmentVariables();
       invalidConfigurationDetected();
       return;
     } else {
@@ -81,6 +82,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
+  // FIXME: Allow custom names
   mMicroCI->Script() << inja::render(R"( \
         /bin/bash -c "cd {{ WORKSPACE }} \
         && mc alias set microci {{MICROCI_MINIO_URL}} {{MICROCI_MINIO_ACCESS_KEY}} {{MICROCI_MINIO_SECRET_KEY}} --api S3v4)",

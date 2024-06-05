@@ -76,6 +76,7 @@ Below are some features that may be present in the next releases.
 
 ## Versions
 
+* `0.30.0` Plugin `pikchr`
 * `0.29.0` Plugin `docmd`
 * `0.28.0` Translation support added
 * `0.27.0` Plugin `pandoc`

@@ -131,13 +131,11 @@ void PikchrPluginStepParser::Parse(const YAML::Node &step) {
                                        data);
   }
 
-
-             // pikchr --svg-only \${pikchr_input} \
-             //   | /usr/bin/inkscape --pipe \
-             //     --export-type={{ TYPE }} \
-             //     --export-overwrite \
-             //     --export-filename \${output_filename_{{ TYPE }}} \
-
+  // pikchr --svg-only \${pikchr_input}
+  //   | /usr/bin/inkscape --pipe
+  //     --export-type={{ TYPE }}
+  //     --export-overwrite
+  //     --export-filename \${output_filename_{{ TYPE }}}
 
   mMicroCI->Script() << inja::render(
       R"(            2>&1"
