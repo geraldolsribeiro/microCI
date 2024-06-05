@@ -45,12 +45,12 @@ void SkipPluginStepParser::Parse(const YAML::Node &step) {
 
   data["MICROCI_STEP_SKIP"] = "yes";
   data["STEP_NAME"] = stepName(step);
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Este passo será ignorado");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "This step will be ignored");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["DOCKER_IMAGE"] = stepDockerImage(step);
 
   beginFunction(data, envs);
-  mMicroCI->Script() << "      echo 'Este passo não faz nada'\n";
+  mMicroCI->Script() << "      echo 'This step do nothing!'\n";
   endFunction(data);
 }
 }  // namespace microci

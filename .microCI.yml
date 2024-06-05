@@ -14,6 +14,7 @@ steps:
         - [ 'yaml', 'new/cppcheck.yml', 'docs/plugin_cppcheck.md' ]
         - [ 'yaml', 'new/fetch2.yml', 'docs/plugin_fetch2.md' ]
         - [ 'yaml', 'new/fetch.yml', 'docs/plugin_fetch.md' ]
+        - [ 'yaml', 'new/pikchr.yml', 'docs/plugin_pikchr.md' ]
         - [ 'yaml', 'new/git_deploy.yml', 'docs/plugin_git_deploy.md' ]
         - [ 'yaml', 'new/git_publish.yml', 'docs/plugin_git_publish.md' ]
         - [ 'yaml', 'new/minio.yml', 'docs/plugin_minio.md' ]
@@ -23,8 +24,7 @@ steps:
         - [ 'yaml', 'new/pandoc.yml', 'docs/plugin_pandoc.md' ]
         - [ 'yaml', 'new/plantuml.yml', 'docs/plugin_plantuml.md' ]
         - [ 'yaml', 'new/skip.yml', 'docs/plugin_skip.md' ]
-  - name: "Gerar relatório de verificação do código C++ clang-tidy"
-    description: "Verifica o código C++ e gera relatório em formato HTML"
+  - name: "C++ check with clang-tidy"
     network: bridge
     only: clang-tidy
     plugin:
@@ -38,7 +38,7 @@ steps:
         - "src/*pp"
         - "include/*pp"
 
-  - name: "Gerar relatório de verificação do código C++ cppcheck"
+  - name: "C++ check with cppcheck"
     plugin:
       name: "cppcheck"
       include:
@@ -50,7 +50,7 @@ steps:
       std: "c++17"
 
   - name: "SAST com flawfinder"
-    description: "Analisa estaticamente o código fonte com a ferramenta flawfinder"
+    description: "C++ check with flawfinder"
     plugin:
       name: "flawfinder"
       source:
@@ -58,8 +58,7 @@ steps:
         - "include/*Parser.hpp"
         - "include/MicroCI*.hpp"
 
-  - name: "Converter pdf em jpg"
-    description: "Descrição deste passo"
+  - name: "Convert pdf to jpg"
     docker: intmain/microci_poppler:latest
     plugin:
       name: "bash"
@@ -67,7 +66,7 @@ steps:
         cd docs/assets
         pdftoppm repository-open-graph.pdf repository-open-graph -jpeg
 
-  - name: "Build diagrams - plantuml"
+  - name: "Build diagrams with plantuml"
     description: "Build diagrams from textual description"
     plugin:
       name: "plantuml"
@@ -87,39 +86,39 @@ steps:
       type: svg
       output_folder: "docs/diagrams/"
 
-  - name: "Construir documentação em formato HTML"
-    description: "Documentação do projeto"
+  - name: "Build HTML documentation"
+    description: "Build project documentation"
     plugin:
       name: "mkdocs_material"
       action: "build"
 
-  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
-    description: "Executa servidor local para preview da documentação"
+  - name: "Documentation preview at port 8000 (Ctrl+C to stop)"
+    description: "Serve documentation preview at port 8000"
     only: "serve"
     plugin:
       name: "mkdocs_material"
       action: "serve"
 
-  - name: "Configurar github pages"
-    description: "Configura domínio Apex para github pages, arquivo README e ajusta usuário"
+  - name: "Configure github pages"
+    description: "Configure Apex domain for github pages and README file"
     plugin:
       name: bash
       bash: |
         mkdir -p site/
         cp github-pages/CNAME site/
         cat docs/index.md > README.md
-        # Disponibiliza uma página de rosto para o github
+        # Cover page
         cp README.md site/
 
-  - name: "Gerar PDF a partir do Markdown"
-    description: "Descrição deste passo"
+  - name: "Build PDF documentation"
+    description: "Build PDF documentation"
     plugin:
-      name: pandoc
+      name: skip # pandoc
       input:
         - README.md
       output: README.pdf
 
-  - name: "Publicar documentação em microci.dev"
+  - name: "Publish documentation to microci.dev"
     network: bridge
     ssh:
     plugin:
@@ -127,18 +126,18 @@ steps:
       git_url: "git@github.com:geraldolsribeiro/microci.dev.git"
       branch: master
 
-  - name: "Formatar código C++ com clang-format"
-    description: "Padroniza formato do código usando regras"
+  - name: "C++ code format with clang-format"
+    description: "Apply coding standards"
     plugin:
       name: "clang-format"
-      source: # Lista arquivos a serem formatados
+      source:
         - "src/*.cpp"
         - "test/*.cpp"
         - "include/*.hpp"
 
-  - name: "Baixar arquivos externos ao projeto"
+  - name: "Downlod project dependencies"
     run_as: "root"
-    description: "Download de dependências utilizadas na compilação"
+    description: "Download project dependencies"
     plugin:
       name: "fetch"
       target: include
@@ -166,8 +165,8 @@ steps:
   #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/spirit_po.hpp
   #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/version.hpp
 
-  - name: "Compilar versão estática do microCI"
-    docker: "gcc:13"
+  - name: "Build microCI static version"
+    docker: "gcc:14"
     run_as: root # necessário para instalar as dependências
     network: host
     plugin:
@@ -181,14 +180,14 @@ steps:
         chown $(id -u).$(id -g) -Rv bin/microCI
         chown $(id -u).$(id -g) -Rv test/
 
-  - name: "Construir imagem docker microci_cppcheck"
-    description: "Descrição deste passo"
+  - name: "Build docker image for microci_cppcheck"
+    description: "Build docker image for microci_cppcheck"
     plugin:
       name: docker_build
       folder: dockerfiles/cppcheck/
       dockerfile: Dockerfile
       target: intmain/microci_cppcheck
-      version: 0.3
+      version: 0.4
       is_latest: true
       push: true
 
