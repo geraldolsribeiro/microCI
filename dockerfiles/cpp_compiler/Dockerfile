@@ -1,8 +1,8 @@
-FROM debian:bookworm-slim
+FROM gcc:latest
 MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 
 RUN set -eux; \
-  echo "2024-02-22" \
+  echo "2024-06-05" \
   && apt-get update \
   && apt-get install -y curl \
   && echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm main" > /etc/apt/sources.list.d/llvm.list \
@@ -15,8 +15,10 @@ RUN set -eux; \
     clang-tidy \
     clang-tools \
     cmake \
+    cppcheck \
     crossbuild-essential-arm64 \
     doxygen \
+    gettext \
     git \
     lcov \
     libasio-dev \
@@ -34,6 +36,6 @@ RUN set -eux; \
 RUN apt-get install -y python3-full
 # RUN PIP_NO_CACHE_DIR=1 pip3 --break-system-packages install clang-html
 
-CMD [ "/bin/echo", "microCI clang image" ]
+CMD [ "/bin/echo", "microCI C++ compiler image" ]
 
 # vim: ft=dockerfile

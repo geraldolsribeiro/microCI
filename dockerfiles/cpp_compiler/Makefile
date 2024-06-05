@@ -1,5 +1,5 @@
-VERSION=0.6
-IMAGE_NAME=microci_clang
+VERSION=0.7
+IMAGE_NAME=microci_cpp_compiler
 
 all: publish
 
