@@ -37,7 +37,6 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
@@ -48,26 +47,5 @@ plugins:
   - search:
       lang: pt
   - mermaid2
-# - i18n:
-  default_language: pt
-#     default_language: pt
-  languages:
-#     languages:
-    en:
-#       en:
-      name: English
-#         name: English
-      build: true
-#         build: true
-      site_name: microCI documentation
-#         site_name: microCI documentation
-    pt:
-#       pt:
-      name: Português
-#         name: Português
-      build: true
-#         build: true
-      site_name: Documentação do microCI
-#         site_name: Documentação do microCI
 ```
 
