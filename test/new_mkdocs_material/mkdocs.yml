@@ -7,11 +7,21 @@ repo_name: geraldolsribeiro/microCI
 edit_uri: edit/master/docs/
 theme:
   name: material
-  language: pt
-  logo: images/logo.svg
-  favicon: images/favicon.png
+  # language: pt
+  # logo: images/logo.svg
+  # favicon: images/favicon.png
   palette:
-    primary: white
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   icon:
     repo: fontawesome/brands/github
     # repo: fontawesome/brands/gitlab
@@ -35,7 +45,6 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
@@ -46,17 +55,6 @@ plugins:
   - search:
       lang: pt
   - mermaid2
-# - i18n:
-#     default_language: pt
-#     languages:
-#       en:
-#         name: English
-#         build: true
-#         site_name: microCI documentation
-#       pt:
-#         name: Português
-#         build: true
-#         site_name: Documentação do microCI
 #}}}
 
 # vim: spell spelllang=pt,en

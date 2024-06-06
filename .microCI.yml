@@ -128,6 +128,7 @@ steps:
 
   - name: "C++ code format with clang-format"
     description: "Apply coding standards"
+    # docker: "intmain/microci_cpp_compiler:latest"
     plugin:
       name: "clang-format"
       source:
@@ -180,14 +181,14 @@ steps:
         chown $(id -u).$(id -g) -Rv bin/microCI
         chown $(id -u).$(id -g) -Rv test/
 
-  - name: "Build docker image for microci_cppcheck"
-    description: "Build docker image for microci_cppcheck"
+  - name: "Build docker image for microci_cpp_compiler"
+    description: "Build docker image for microci_cpp_compiler"
     plugin:
       name: docker_build
-      folder: dockerfiles/cppcheck/
+      folder: dockerfiles/cpp_compiler/
       dockerfile: Dockerfile
-      target: intmain/microci_cppcheck
-      version: 0.4
+      target: intmain/microci_cpp_compiler
+      version: 0.7
       is_latest: true
       push: true
 

@@ -239,7 +239,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____cppcheck() {
         --network none \
         --workdir /microci_workspace \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_cppcheck:latest" \
+        "intmain/microci_cpp_compiler:latest" \
         /bin/bash -c "cd /microci_workspace \
         && mkdir -p auditing/cppcheck \
         && rm -f auditing/cppcheck/*.html \
@@ -293,11 +293,11 @@ if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then
 else
   docker pull debian:stable-slim 2>&1 >> .microCI.log
 fi
-echo 'Updating intmain/microci_cppcheck:latest docker image ...'
-if docker image inspect intmain/microci_cppcheck:latest > /dev/null 2>&1 ; then
-  echo 'Docker image intmain/microci_cppcheck:latest is already updated' >> .microCI.log
+echo 'Updating intmain/microci_cpp_compiler:latest docker image ...'
+if docker image inspect intmain/microci_cpp_compiler:latest > /dev/null 2>&1 ; then
+  echo 'Docker image intmain/microci_cpp_compiler:latest is already updated' >> .microCI.log
 else
-  docker pull intmain/microci_cppcheck:latest 2>&1 >> .microCI.log
+  docker pull intmain/microci_cpp_compiler:latest 2>&1 >> .microCI.log
 fi
 
 

@@ -239,7 +239,7 @@ function step_gerar_relatorio_de_verificacao_do_codigo_c_____clang_tidy() {
         --network none \
         --workdir /microci_workspace \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_clang:0.6" \
+        "intmain/microci_cpp_compiler:latest" \
         /bin/bash -c "cd /microci_workspace \
         && mkdir -p auditing/clang-tidy/ \
         && date > auditing/clang-tidy/clang-tidy.log \
@@ -289,11 +289,11 @@ if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then
 else
   docker pull debian:stable-slim 2>&1 >> .microCI.log
 fi
-echo 'Updating intmain/microci_clang:0.6 docker image ...'
-if docker image inspect intmain/microci_clang:0.6 > /dev/null 2>&1 ; then
-  echo 'Docker image intmain/microci_clang:0.6 is already updated' >> .microCI.log
+echo 'Updating intmain/microci_cpp_compiler:latest docker image ...'
+if docker image inspect intmain/microci_cpp_compiler:latest > /dev/null 2>&1 ; then
+  echo 'Docker image intmain/microci_cpp_compiler:latest is already updated' >> .microCI.log
 else
-  docker pull intmain/microci_clang:0.6 2>&1 >> .microCI.log
+  docker pull intmain/microci_cpp_compiler:latest 2>&1 >> .microCI.log
 fi
 
 

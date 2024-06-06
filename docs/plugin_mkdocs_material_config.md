@@ -9,11 +9,21 @@ repo_name: geraldolsribeiro/microCI
 edit_uri: edit/master/docs/
 theme:
   name: material
-  language: pt
-  logo: images/logo.svg
-  favicon: images/favicon.png
+  # language: pt
+  # logo: images/logo.svg
+  # favicon: images/favicon.png
   palette:
-    primary: white
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   icon:
     repo: fontawesome/brands/github
     # repo: fontawesome/brands/gitlab
