@@ -1,12 +1,24 @@
+### ----------------------------------------------------------------------
+### Copyright (C) 2022-2024 Geraldo Ribeiro <geraldo@intmain.io>
+### ----------------------------------------------------------------------
+
 FROM gcc:latest
 MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 
 RUN set -eux; \
-  echo "2024-06-05" \
+  echo "2024-06-06" > /dev/null \
   && apt-get update \
   && apt-get install -y curl \
   && echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm main" > /etc/apt/sources.list.d/llvm.list \
   && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
+  && apt-get update \
+  && apt-get upgrade --yes \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+RUN set -eux; \
+  echo "2024-06-06" > /dev/null \
   && apt-get update \
   && apt-get install -y \
     build-essential \
@@ -21,21 +33,68 @@ RUN set -eux; \
     gettext \
     git \
     lcov \
+    xxd \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+RUN set -eux; \
+  echo "2024-06-06" > /dev/null \
+  && apt-get update \
+  && apt-get install -y \
     libasio-dev \
-    libboost-all-dev \
     libcrypto++-dev \
     libpcre3-dev \
     libspdlog-dev \
     libyaml-cpp-dev \
     ninja-build \
+    python3-full \
     python3-pip \
-    xxd \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
-RUN apt-get install -y python3-full
-# RUN PIP_NO_CACHE_DIR=1 pip3 --break-system-packages install clang-html
+
+#  https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3
+RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old \
+  && PIP_NO_CACHE_DIR=1 pip install clang-html
 
 CMD [ "/bin/echo", "microCI C++ compiler image" ]
+
+# Note: libboost-all-dev was removed due some issue related to gfortran dependencies
+# Maybe more useful add libraries individually instead all one
+#   Depends: libboost-dev
+#   Depends: libboost-tools-dev
+#     libboost-tools-dev:i386
+#   Depends: libboost-atomic-dev
+#   Depends: libboost-chrono-dev
+#   Depends: libboost-container-dev
+#   Depends: libboost-context-dev
+#   Depends: libboost-coroutine-dev
+#   Depends: libboost-date-time-dev
+#   Depends: libboost-exception-dev
+#   Depends: libboost-fiber-dev
+#   Depends: libboost-filesystem-dev
+#   Depends: libboost-graph-dev
+#   Depends: libboost-graph-parallel-dev
+#   Depends: libboost-iostreams-dev
+#   Depends: libboost-locale-dev
+#   Depends: libboost-log-dev
+#   Depends: libboost-math-dev
+#   Depends: libboost-mpi-dev
+#   Depends: libboost-mpi-python-dev
+#   Depends: libboost-numpy-dev
+#   Depends: libboost-program-options-dev
+#   Depends: libboost-python-dev
+#   Depends: libboost-random-dev
+#   Depends: libboost-regex-dev
+#   Depends: libboost-serialization-dev
+#   Depends: libboost-stacktrace-dev
+#   Depends: libboost-system-dev
+#   Depends: libboost-test-dev
+#   Depends: libboost-thread-dev
+#   Depends: libboost-timer-dev
+#   Depends: libboost-type-erasure-dev
+#   Depends: libboost-wave-dev
+#   Depends: libboost-nowide-dev
 
 # vim: ft=dockerfile
