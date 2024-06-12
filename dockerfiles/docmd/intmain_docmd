@@ -27,8 +27,11 @@
 #   * `rust`
 #   * `scss`
 #   * `systemd`
+#   * `verilog`
+#   * `vhdl`
 #   * `vim`
 #   * `yaml`
+#   * `toml`
 #   
 #   Se nenhum argumento for fornecido o programa imprime a ajuda e finaliza a execução.
 #   
@@ -39,7 +42,7 @@ Gerador de documentação em formato Markdown
 
 intmain_docmd tipo arquivo_fonte arquivo_markdown [stripped_filename]
 
-tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, systemd, yaml, rust
+tipo: vim, bash, python, ruby, coffee, makefile, grdb, nginx, scss, conf, c++, systemd, verilog, vhdl, yaml, rust
 
 Para alterar o comportamento da ferramenta utilize as seguintes variáveis de ambiente:
 
@@ -101,30 +104,33 @@ in_pikchr_section         = false
 in_requisite_section      = false
 
 line_match_re = case script_language
-                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#   (.*)/
+                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd", "toml" then /^\#   (.*)/
                 when "yaml" then /\#   (.*)/
                 when "vim" then /^"   (.*)/
-                when "c++", "scss", "rust" then /^\s*\/\/-- (.*)/
+                when "vhdl" then /^--- (.*)/
+                when "c++", "scss", "rust", "verilog" then /^\s*\/\/-- (.*)/
                 end
 # after code reformat the space at the end is suppressed
 blank_line_match_re = case script_language
-                      when "c++", "scss", "rust" then /^\s*\/\/--$/
+                      when "c++", "scss", "rust", "verilog" then /^\s*\/\/--$/
                       else
                         /no-regular-expression-for-blank-line/
                       end
 
 open_code_re = case script_language
-               when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#{{{(.*)/
+               when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd", "toml" then /^\#{{{(.*)/
                when "yaml" then /\#{{{(.*)/
                when "vim" then /^"{{{(.*)/
-               when "c++", "scss", "rust" then /^\s*\/\/{{{(.*)/
+               when "vhdl" then /^--{{{(.*)/
+               when "c++", "scss", "rust", "verilog" then /^\s*\/\/{{{(.*)/
                end
 
 close_code_re = case script_language
-                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd" then /^\#}}}/
+                when "bash", "python", "ruby", "coffee", "makefile", "nginx", "grdb", "conf", "systemd", "toml" then /^\#}}}/
                 when "yaml" then /\#}}}/
                 when "vim" then /^"}}}/
-                when "c++", "scss", "rust" then /^\s*\/\/}}}/
+                when "vhdl" then /^--}}}/
+                when "c++", "scss", "rust", "verilog" then /^\s*\/\/}}}/
                 end
 
 def make_link(title)
