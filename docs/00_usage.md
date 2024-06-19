@@ -1,6 +1,9 @@
+# Usage
 
+The basic usage can be obtained by passing the `--help` option:
 
-
+```
+microCI --help
                            ░░░░░░░░░░░░░░░░░
                            ░░░░░░░█▀▀░▀█▀░░░
                            ░░░█░█░█░░░░█░░░░
@@ -11,11 +14,10 @@
                             Geraldo Ribeiro
 
 
-Opions:
+Opções:
   -h,--help                Print this help
   -V,--version             Print the microCI version
   -T,--test-config         Configuration test
-  -A,--activity-diagram    Generate activity diagram
   -O,--only                Execute only a single step
   -U,--update-db           Update observability database
   -u,--update              Update microCI
@@ -37,4 +39,24 @@ Opions:
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step
   -n,--new docker_build    Create a local docker build step
+```
 
+## Activity diagram
+
+To generate activity diagrams for the workflow use the option `--actvity-diagram` option
+
+There are two king of steps:
+
+* **main** step: list of sequential steps executed on the main pipeline
+* **only** step: alternative single step executed alone
+
+The diagrams below are generated automatically by **microCI** based on
+`.microCI.yml` file.
+
+![Main pipeline](diagrams/microCI_activity_diagram.png)
+
+![Alternative step](diagrams/microCI_activity_diagram_001.png)
+
+![Alternative step](diagrams/microCI_activity_diagram_002.png)
+
+![Alternative step](diagrams/microCI_activity_diagram_003.png)

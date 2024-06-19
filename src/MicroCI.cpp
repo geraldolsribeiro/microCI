@@ -72,6 +72,91 @@ void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+string MicroCI::ActivityDiagram(const string &filename) const {
+  string ret;
+
+  string beginDiagram{R"(
+
+' Generated Diagram! Do not edit
+@startuml
+start
+)"};
+
+  string endDiagram{R"(
+stop
+@enduml
+)"};
+
+  YAML::Node CI;
+
+  try {
+    CI = YAML::LoadFile(filename);
+
+    if (CI["steps"].IsSequence()) {
+      ret += beginDiagram;
+      ret += "partition \"Main pipeline\" {\n";
+      for (auto step : CI["steps"]) {
+        if (!step["only"]) {
+          string stereotype{"<<procedure>>"};
+          string plugin{"No plugin name available"};
+          if (step["plugin"] and step["plugin"]["name"]) {
+            plugin = step["plugin"]["name"].as<string>();
+            if (plugin == "fetch") {
+              stereotype = "<<input>>";
+            }
+          }
+          string description{"No description available"};
+          if (step["description"]) {
+            description = step["description"].as<string>();
+          }
+
+          ret += fmt::format(":{}; {}\n", step["name"].as<string>(), stereotype);
+          ret += fmt::format("floating note left: {}\n", plugin);
+          ret += fmt::format("floating note right: {}\n\n", description);
+        }
+      }
+      ret += "}\n";
+      ret += endDiagram;
+
+      for (auto step : CI["steps"]) {
+        if (step["only"]) {
+          string stereotype{"<<procedure>>"};
+          string plugin{"No plugin name available"};
+          if (step["plugin"] and step["plugin"]["name"]) {
+            plugin = step["plugin"]["name"].as<string>();
+            if (plugin == "fetch") {
+              stereotype = "<<input>>";
+            }
+          }
+          string description{"No description available"};
+          if (step["description"]) {
+            description = step["description"].as<string>();
+          }
+
+          ret += beginDiagram;
+          ret += "partition \"Alternative flow\" {\n";
+          ret += fmt::format(":{}; {}\n", step["name"].as<string>(), stereotype);
+          ret += fmt::format("floating note left: {}\n", plugin);
+          ret += fmt::format("floating note right: {}\n\n", description);
+          ret += "}\n";
+          ret += endDiagram;
+        }
+      }
+    }
+  } catch (const YAML::BadFile &e) {
+    spdlog::error("Failure loading the file .microCI.yml");
+    spdlog::error(e.what());
+  } catch (const YAML::ParserException &e) {
+    spdlog::error("Failure parsing the file .microCI.yml");
+    spdlog::error(e.what());
+  }
+
+  return ret;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pluginStepParser) {
   mPluginParserMap[name] = pluginStepParser;
 }

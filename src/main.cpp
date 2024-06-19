@@ -97,10 +97,11 @@ using namespace microci;
 // ----------------------------------------------------------------------
 string help() {
   return R"(
-Opções:
+Opions:
   -h,--help                Print this help
   -V,--version             Print the microCI version
   -T,--test-config         Configuration test
+  -A,--activity-diagram    Generate activity diagram
   -O,--only                Execute only a single step
   -U,--update-db           Update observability database
   -u,--update              Update microCI
@@ -300,6 +301,12 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       cout << microci::banner() << endl;
       spdlog::error(_("Failure reading the file '{}'"), yamlFileName);
       return 1;
+    }
+
+    // Generate activity diagram and exit
+    if (cmdl[{"-A", "--activity-diagram"}]) {
+      cout << uCI.ActivityDiagram(yamlFileName) << endl;
+      return 0;
     }
 
     if (cmdl[{"-T", "--test-config"}]) {

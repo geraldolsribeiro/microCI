@@ -78,7 +78,6 @@ steps:
 
   - name: "Build diagrams - pikchr"
     description: "Build diagrams from textual description"
-    only: O
     plugin:
       name: "pikchr"
       source:
@@ -92,7 +91,7 @@ steps:
       name: "mkdocs_material"
       action: "build"
 
-  - name: "Documentation preview at port 8000 (Ctrl+C to stop)"
+  - name: "Documentation preview"
     description: "Serve documentation preview at port 8000"
     only: "serve"
     plugin:

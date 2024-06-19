@@ -66,6 +66,7 @@ LDFLAGS+= -lyaml-cpp
 LDFLAGS+= -lcrypto
 
 all: ../locales/pt_BR/microci.mo ../bin/microCI 
+	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml
 
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)

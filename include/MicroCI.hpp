@@ -84,6 +84,7 @@ class MicroCI {
   virtual ~MicroCI();
   [[nodiscard]] string ToString() const;
   [[nodiscard]] bool IsValid() const;
+  [[nodiscard]] string ActivityDiagram(const string &filename) const;
 
   // Variável de ambiente global a todos os passos
   void SetEnvironmentVariable(const EnvironmentVariable &env);

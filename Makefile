@@ -4,6 +4,7 @@
 
 SHELL=bash
 
+.PHONY: all
 all: doc_plugin
 
 docs/plugin_%.md: new/%.yml
@@ -11,6 +12,7 @@ docs/plugin_%.md: new/%.yml
 	@INTMAIN_DOCMD_DETAILS=false INTMAIN_DOCMD_TOC=false INTMAIN_DOCMD_SHOW_SOURCE=false \
 		intmain_docmd yaml $^ $@
 
+.PHONY: doc_plugin
 doc_plugin: \
   docs/plugin_bash.md \
   docs/plugin_beamer.md \

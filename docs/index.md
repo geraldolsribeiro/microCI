@@ -109,7 +109,7 @@ Below are some features that may be present in the next releases.
 * `0.1.0` Passo em `bash` e plugin `git_deploy`
 * `0.0.1` Versão inicial para prova de conceito
 
-## Licença
+## License
 
 MIT License
 

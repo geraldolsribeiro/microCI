@@ -1,0 +1,95 @@
+
+
+' Generated Diagram! Do not edit
+@startuml
+start
+partition "Main pipeline" {
+:Extract documentation; <<procedure>>
+floating note left: docmd
+floating note right: Extract documentation from source code to a markdown file
+
+:C++ check with cppcheck; <<procedure>>
+floating note left: cppcheck
+floating note right: No description available
+
+:SAST com flawfinder; <<procedure>>
+floating note left: flawfinder
+floating note right: C++ check with flawfinder
+
+:Convert pdf to jpg; <<procedure>>
+floating note left: bash
+floating note right: No description available
+
+:Build diagrams with plantuml; <<procedure>>
+floating note left: plantuml
+floating note right: Build diagrams from textual description
+
+:Build diagrams - pikchr; <<procedure>>
+floating note left: pikchr
+floating note right: Build diagrams from textual description
+
+:Build HTML documentation; <<procedure>>
+floating note left: mkdocs_material
+floating note right: Build project documentation
+
+:Configure github pages; <<procedure>>
+floating note left: bash
+floating note right: Configure Apex domain for github pages and README file
+
+:Build PDF documentation; <<procedure>>
+floating note left: skip
+floating note right: Build PDF documentation
+
+:Publish documentation to microci.dev; <<procedure>>
+floating note left: git_publish
+floating note right: No description available
+
+:C++ code format with clang-format; <<procedure>>
+floating note left: clang-format
+floating note right: Apply coding standards
+
+:Downlod project dependencies; <<input>>
+floating note left: fetch
+floating note right: Download project dependencies
+
+:Build microCI static version; <<procedure>>
+floating note left: bash
+floating note right: No description available
+
+:Build docker image for microci_cpp_compiler; <<procedure>>
+floating note left: docker_build
+floating note right: Build docker image for microci_cpp_compiler
+
+}
+
+stop
+@enduml
+
+
+' Generated Diagram! Do not edit
+@startuml
+start
+partition "Alternative flow" {
+:C++ check with clang-tidy; <<procedure>>
+floating note left: clang-tidy
+floating note right: No description available
+
+}
+
+stop
+@enduml
+
+
+' Generated Diagram! Do not edit
+@startuml
+start
+partition "Alternative flow" {
+:Documentation preview; <<procedure>>
+floating note left: mkdocs_material
+floating note right: Serve documentation preview at port 8000
+
+}
+
+stop
+@enduml
+
