@@ -26,7 +26,7 @@
 SHELL=bash
 
 test:
-	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml; do \
+	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml template; do \
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
 		&& pushd "new_$$i" \
 		&& pwd \
@@ -34,12 +34,14 @@ test:
 		&& popd; \
 	done
 	rm -f .env
+	rm -f test_npm.yml
 	../bin/microCI -i y.yml         || echo "OK"
 	../bin/microCI --input=x.yml    || echo "OK"
-	../bin/microCI -c tipo_invalido || echo "OK"
+	../bin/microCI -n invalid_type  || echo "OK"
 	../bin/microCI                                               > default.sh
 	../bin/microCI -h                                            > help.txt
-	../bin/microCI -c npm -i test_npm.yml
+	../bin/microCI -n npm -i test_npm.yml
+	../bin/microCI -n npm -i test_npm.yml
 	../bin/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
 	../bin/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
 	../bin/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
@@ -55,11 +57,13 @@ test:
 	../bin/microCI -i ../new/bash.yml                            > bash.sh
 	../bin/microCI -i ../new/docmd.yml                           > docmd.sh
 	../bin/microCI -i ../new/pandoc.yml                          > pandoc.sh
+	../bin/microCI -i ../new/template.yml                        > template.sh
 	cp dot_env_minio .env
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
 	rm -f .env
+	cat template.sh | bash
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@

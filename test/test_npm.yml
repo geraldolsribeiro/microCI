@@ -1,20 +1,33 @@
-# Imagem utilizada em todos os passos
+#   # Usage example for the npm plugin
+#   
+#{{{
 docker: "node:16"
 steps:
   - name: "Instalar dependências"
     description: "Descrição do passo"
-    plugin:
-      name: bash
-      bash: |
-        npm install
+    bash: |
+      npm install
   - name: "Verificar o código"
-    plugin:
-      name: bash
-      bash: |
-        npm run lint --fix
+    bash: |
+      npm run lint --fix
   - name: "Construir"
-    plugin:
-      name: bash
-      bash: |
-        npm run build
+    bash: |
+      npm run build
+#}}}
 
+# vim: spell spelllang=pt,en
+
+# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---
+  - name: "Instalar dependências"
+    description: "Descrição do passo"
+    bash: |
+      npm install
+  - name: "Verificar o código"
+    bash: |
+      npm run lint --fix
+  - name: "Construir"
+    bash: |
+      npm run build
+#}}}
+
+# vim: spell spelllang=pt,en

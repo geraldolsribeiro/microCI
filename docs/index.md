@@ -76,38 +76,39 @@ Below are some features that may be present in the next releases.
 
 ## Versions
 
+* `0.31.0` Plugin `template`
 * `0.30.0` Plugin `pikchr`
 * `0.29.0` Plugin `docmd`
 * `0.28.0` Translation support added
 * `0.27.0` Plugin `pandoc`
 * `0.26.3` Update `clang-tidy`
 * `0.26.0` Offline mode
-* `0.25.6` Plugin `git_publish` com escolha de branch (p.e. `gh-pages`)
+* `0.25.6` Plugin `git_publish` with branch selection support (p.e. `gh-pages`)
 * `0.24.0` Plugin `docker_build`
-* `0.23.0` Plugin `fetch` download github
-* `0.22.0` Plugin `fetch` download de pastas no github
+* `0.23.0` Plugin `fetch` download from github (advanced)
+* `0.22.0` Plugin `fetch` download from github (folder)
 * `0.21.0` Plugin `flawfinder`
-* `0.20.0` Imagem `intmain/microci_clang`
-* `0.19.0` Documentação com `intmain_docmd`
+* `0.20.0` Docker image `intmain/microci_clang`
+* `0.19.0` Documentation with `intmain/docmd`
 * `0.18.0` Plugin `minio`
-* `0.17.0` Plugin `skip`; Status de execução
-* `0.16.1` Refatoração dos plugins; Execução default como não root
-* `0.15.2` Plugin `fetch` URL e pastas do gitlab
+* `0.17.0` Plugin `skip`; Execution status
+* `0.16.1` Plugin refactoring; Default execution as non-root
+* `0.15.2` Plugin `fetch` URL and gitlab folder
 * `0.14.1` Plugin `beamer`
-* `0.13.0` Configuração de rede docker
-* `0.12.0` Plugins `clang-format` e `junit2html`
-* `0.11.1` Notificação em canal do discord
-* `0.10.1` Múltiplos arquivos de modelo
+* `0.13.0` Docker network configuration
+* `0.12.0` Plugins `clang-format` and `junit2html`
+* `0.11.1` Discord channel notification
+* `0.10.1` Multiple template added
 * `0.9.0` Plugin `plantuml`
 * `0.8.0` Plugin `clang-tidy`
 * `0.7.0` Plugin `cppcheck`
 * `0.6.1` Plugin `git_publish`
-* `0.5.0` Montagem de volumes; Cópia de chave SSH
-* `0.4.0` Construção do microCI pelo microCI
-* `0.3.0` Cria arquivos de configuração
+* `0.5.0` Volume mounting; SSH key copy
+* `0.4.0` Building microCI by microCI
+* `0.3.0` Configuration files creation
 * `0.2.0` Plugin `mkdocs`
-* `0.1.0` Passo em `bash` e plugin `git_deploy`
-* `0.0.1` Versão inicial para prova de conceito
+* `0.1.0` Plugin `bash` and `git_deploy`
+* `0.0.1` Proof of concept/Initial version
 
 ## License
 

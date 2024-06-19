@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.30.0
+                             microCI 0.31.0
                             Geraldo Ribeiro
 
 
@@ -37,4 +37,5 @@ Opions:
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step
   -n,--new docker_build    Create a local docker build step
+  -n,--new template        Create a template step
 

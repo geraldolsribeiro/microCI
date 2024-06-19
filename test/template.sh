@@ -119,7 +119,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/mkdocs_material.yml" \
+    yq -r .steps[].name "../new/template.yml" \
       | while IFS= read -r stepName
         do
           updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
@@ -199,3 +199,145 @@ reformatJson
 
 
 # Notification by Discord is not possible
+
+# ----------------------------------------------------------------------
+# Generate output from template
+# ----------------------------------------------------------------------
+function step_generate_files() {
+  local SECONDS=0
+  local MICROCI_STEP_NAME="Generate files"
+  local MICROCI_STEP_DESCRIPTION="Generate output from template"
+  local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
+  local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
+  local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  local MICROCI_STEP_STATUS=":ok:"
+  local MICROCI_STEP_SKIP="no"
+  local MICROCI_STEP_DURATION=$SECONDS
+
+  # Make step line with 60 characters
+  local title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
+  local title=${title:0:60}
+
+  echo -ne "[0;36m${title}[0m: "
+  local RUST_BACKTRACE="full"
+
+  {
+    (
+      set -e
+
+      echo ""
+      echo ""
+      echo ""
+      echo "Step: Generate files"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_generate_files \
+        --network none \
+        --workdir /microci_workspace \
+        --env RUST_BACKTRACE="full" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "chevdor/tera:latest" --template /microci_workspace/templates/basic.tera \
+        /microci_workspace/data/basic.json \
+        > output/basic_01.html
+      echo ""
+      echo ""
+      echo ""
+      echo "Step: Generate files"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_generate_files \
+        --network none \
+        --workdir /microci_workspace \
+        --env RUST_BACKTRACE="full" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "chevdor/tera:latest" --template /microci_workspace/templates/basic.tera \
+        /microci_workspace/data/basic.toml \
+        > output/basic_02.html
+      echo ""
+      echo ""
+      echo ""
+      echo "Step: Generate files"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_generate_files \
+        --network none \
+        --workdir /microci_workspace \
+        --env RUST_BACKTRACE="full" \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "chevdor/tera:latest" --template /microci_workspace/templates/basic.tera \
+        /microci_workspace/data/basic.yaml \
+        > output/basic_03.html
+    )
+
+    status=$?
+    MICROCI_STEP_DURATION=$SECONDS
+    echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
+  } >> .microCI.log
+
+  # Notificação no terminal
+  if [ "${MICROCI_STEP_SKIP}" = "yes" ]
+  then
+    echo -e "[0;34mSKIP[0m"
+    setStepStatusSkipJson
+  elif [ "${status}" = "0" ]
+  then
+    echo -e "[0;32mOK[0m"
+    setStepStatusOkJson
+  else
+    echo -e "[0;31mFALHOU[0m"
+    setStepStatusFailJson
+    echo "See the complete log from .microCI.log"
+    tail -50 .microCI.log
+  fi
+
+  ((++MICROCI_STEP_NUMBER))
+}
+# Update docker images used in the steps
+echo 'Updating chevdor/tera:latest docker image ...'
+if docker image inspect chevdor/tera:latest > /dev/null 2>&1 ; then
+  echo 'Docker image chevdor/tera:latest is already updated' >> .microCI.log
+else
+  docker pull chevdor/tera:latest 2>&1 >> .microCI.log
+fi
+echo 'Updating debian:stable-slim docker image ...'
+if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then
+  echo 'Docker image debian:stable-slim is already updated' >> .microCI.log
+else
+  docker pull debian:stable-slim 2>&1 >> .microCI.log
+fi
+
+
+# Execute all steps in the pipeline
+function main() {
+  date >> .microCI.log
+
+  step_generate_files
+
+  date >> .microCI.log
+}
+
+# Entry point
+main
+
+# Usage
+# -----
+#
+# To execute this workflow inside a terminal use the following command:
+# microCI | bash
+#
+# To save the workflow as a bash scritp just redirect the output to a file:
+# microCI > build.sh
+

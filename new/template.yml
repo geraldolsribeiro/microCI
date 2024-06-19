@@ -1,0 +1,14 @@
+#   # Usage example for the template plugin
+#   
+#{{{
+steps:
+  - name: "Generate files"
+    description: "Generate output from template"
+    plugin:
+      name: "template"
+      items:
+        - [ 'data/basic.json', 'templates/basic.tera', 'output/basic_01.html' ]
+        - [ 'data/basic.toml', 'templates/basic.tera', 'output/basic_02.html' ]
+        - [ 'data/basic.yaml', 'templates/basic.tera', 'output/basic_03.html' ]
+#}}}
+# vim: spell spelllang=pt,en

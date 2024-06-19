@@ -63,6 +63,7 @@ using namespace std;
 #include "PikchrPluginStepParser.hpp"
 #include "PlantumlPluginStepParser.hpp"
 #include "PluginStepParser.hpp"
+#include "TemplatePluginStepParser.hpp"
 
 // Configuration templates
 #include "new/bash.hpp"
@@ -86,6 +87,7 @@ using namespace std;
 #include "new/pikchr.hpp"
 #include "new/plantuml.hpp"
 #include "new/skip.hpp"
+#include "new/template.hpp"
 
 // main class
 #include "MicroCI.hpp"
@@ -123,6 +125,7 @@ Opions:
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step
   -n,--new docker_build    Create a local docker build step
+  -n,--new template        Create a template step
 )";
 }
 
@@ -179,6 +182,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docker_build", make_shared<DockerBuildPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("template", make_shared<TemplatePluginStepParser>(&uCI));
 
     // Load environment variables
     for (char **env = envp; *env != 0; env++) {
@@ -237,6 +241,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true,  "flawfinder",      ".microCI.yml",  yml, flawfinder);
       MICROCI_TPL(true,  "docker_build",    ".microCI.yml",  yml, docker_build);
       MICROCI_TPL(true,  "pandoc",          ".microCI.yml",  yml, pandoc);
+      MICROCI_TPL(true,  "template",        ".microCI.yml",  yml, template);
       // clang-format on
 #undef MICROCI_TPL
 
@@ -264,17 +269,17 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
             spdlog::debug(_("File '{}' already exists"), fileName);
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
-            out.open(fileName, ios_base::app);
-            out << "\n# ---------- "
-                   "PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE"
-                   "---------\n";
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
+            string step{(char *)tpl.fileContent, tpl.fileSize};
+            step.erase(0, step.find("steps:") + 7);
+            out.open(fileName, ios_base::app);
+            out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
+            out << step;
           } else {
-            out.open(fileName);
             spdlog::debug(_("The file '{}' was created from the template"), fileName);
+            out.open(fileName);
+            out.write((char *)tpl.fileContent, tpl.fileSize);
           }
-
-          out.write((char *)tpl.fileContent, tpl.fileSize);
         }
       }
       if (isTypeFound) {
