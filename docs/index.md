@@ -74,6 +74,14 @@ Below are some features that may be present in the next releases.
 * use of environment variables and secrets configured on the server
 * create a Docker image from a git repository
 
+## Debian dependencies
+
+For building standalone the following dependencies should be installed:
+
+```bash
+sudo apt install gettext clang-format libspdlog-dev libfmt-dev libyaml-cpp-dev libssl-dev libcrypto++-dev
+```
+
 ## Versions
 
 * `0.31.0` Plugin `template`
