@@ -68,6 +68,8 @@ MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
 MICROCI_STEP_NUMBER=0
 
+export MICROCI_PWD
+
 function gitOrigin {
   git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND!"
 }

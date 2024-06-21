@@ -1,4 +1,4 @@
-VERSION=0.4
+VERSION=0.5
 IMAGE_NAME=microci_plantuml
 
 all: publish
