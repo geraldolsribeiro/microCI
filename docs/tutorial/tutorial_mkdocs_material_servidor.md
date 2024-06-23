@@ -33,12 +33,12 @@ Abaixo estão a declaração dois webhooks usados neste tutorial:
 ```yaml
 # Disparado no passo 2
 - id: "microCI_awesome"
-  execute-command: "/usr/local/bin/microCI.sh"
+  execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome/"
 
 # Disparado no passo 5
 - id: "microCI_awesome_deploy"
-  execute-command: "/usr/local/bin/microCI.sh"
+  execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome_deploy/"
 ```
 
@@ -103,7 +103,7 @@ executa um script vinculado ao webhook.
 ```yaml
 # Disparado no passo 5
 - id: "microCI_awesome_deploy"
-  execute-command: "/usr/local/bin/microCI.sh"
+  execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome_deploy/"
 ```
 

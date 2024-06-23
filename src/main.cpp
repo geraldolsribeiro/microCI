@@ -158,8 +158,8 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     if (cmdl[{"-u", "--update"}]) {
       cout << "sudo curl -fsSL "
               "github.com/geraldolsribeiro/microci/releases/latest/download/microCI "
-              "-o /usr/local/bin/microCI\n"
-              "sudo chmod 755 /usr/local/bin/microCI"
+              "-o /usr/bin/microCI\n"
+              "sudo chmod 755 /usr/bin/microCI"
            << endl;
       return 0;
     }

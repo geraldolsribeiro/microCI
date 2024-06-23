@@ -86,7 +86,7 @@ function microCI_latest_download_URL_with_version {
 }
 
 function microCI_download_latest_binary {
-  curl -fsSL github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/local/bin/microCI
+  curl -fsSL github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/bin/microCI
 }
 
 function updateStepStatusJson {

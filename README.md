@@ -48,8 +48,8 @@ the file copied to the PATH.
 
 ```bash
 curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
-  -o /usr/local/bin/microCI
-chmod 755 /usr/local/bin/microCI
+  -o /usr/bin/microCI
+chmod 755 /usr/bin/microCI
 ```
 
 ## Docker Container
