@@ -25,5 +25,6 @@ RUN tlmgr update --self \
     ulem \
     xargs \
     xstring
+RUN apk add --no-cache bash font-hack-nerd
 RUN texhash && updmap-sys
 
