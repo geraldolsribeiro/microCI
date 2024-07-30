@@ -25,6 +25,9 @@ RUN tlmgr update --self \
     ulem \
     xargs \
     xstring
-RUN apk add --no-cache bash font-hack-nerd
+RUN tlmgr update --self
+RUN apk add --no-cache bash font-hack-nerd font-opensans
 RUN texhash && updmap-sys
+RUN chmod -R o+w /opt/texlive/texdir/texmf-var \
+    && fc-cache --really-force --verbose
 
