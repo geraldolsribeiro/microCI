@@ -1,17 +1,19 @@
 # Welcome to microCI
 
+**microCI** is a powerful tool designed to streamline the creation of
+continuous integration pipelines by generating portable, auditable scripts for
+executing tasks in Docker containers. This ensures that every step of the
+process is fully reproducible across various environments:
+
+* Developer's machines
+* Servers for automatic builds after commits
+* Servers for deployment to production
+
+With microCI, the same tool, free of dependencies, can be used seamlessly on
+both development and production environments. For complete documentation, visit
+microci.dev.
+
 The complete documentation can be found at [microci.dev](https://microci.dev).
-
-`microCI` is a tool to assist in building continuous integration pipelines.
-
-The main differentiator of `microCI` is the generation of **portable scripts**
-and fully **auditable** for executing tasks in **docker containers**.
-
-Since all steps are executed in one or more docker containers, the entire
-process becomes reproducible on: a) any developer's machine, b) the server that
-will perform automatic builds after commits, c) the server that will perform
-deployment to production... In short, the same tool, without dependencies, can
-be used on both the developer's machine and the server.
 
 ## On the desktop
 
@@ -47,9 +49,9 @@ is in the `PATH`. To completely remove `microCI` from the system, just delete
 the file copied to the PATH.
 
 ```bash
-curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
+sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
   -o /usr/bin/microCI
-chmod 755 /usr/bin/microCI
+sudo chmod 755 /usr/bin/microCI
 ```
 
 ## Docker Container

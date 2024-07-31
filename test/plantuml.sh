@@ -52,10 +52,10 @@ PS4='Line $LINENO: '
 # Check if the dependencies are installed at the workstation
 # ----------------------------------------------------------------------
 command -v jq &> /dev/null \
-  || { echo -e "[0;31mThe utility jq was not found in the system[0m"; exit 1; }
+  || { echo -e "[0;31mThe utility jq was not found in the system[0m"; echo "[0;31mTry: [0;32msudo apt install jq"; exit 1; }
 
 command -v yq &> /dev/null \
-  || { echo -e "[0;31mThe utility yq was not found in the system[0m"; exit 1; }
+  || { echo -e "[0;31mThe utility yq was not found in the system[0m"; echo "[0;31mTry: [0;32msudo snap install yq"; exit 1; }
 
 command -v curl &> /dev/null \
   || { echo -e "[0;31mThe utility curl was not found in the system[0m"; exit 1; }
@@ -67,6 +67,8 @@ command -v docker &> /dev/null \
 MICROCI_PWD=$(pwd -P | tr -d '\n')
 MICROCI_DB_JSON=/opt/microCI/db.json
 MICROCI_STEP_NUMBER=0
+
+export MICROCI_PWD
 
 function gitOrigin {
   git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND!"
@@ -241,6 +243,7 @@ function step_build_diagrams() {
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "intmain/microci_plantuml:latest" \
           /bin/bash -c "cd /microci_workspace \
+          && export XDG_CACHE_HOME=$(mktemp -d) \
           && java -jar /opt/plantuml/plantuml.jar \
             -nometadata \
             -charset utf-8  \

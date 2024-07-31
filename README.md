@@ -1,17 +1,19 @@
 # Welcome to microCI
 
+**microCI** is a powerful tool designed to streamline the creation of
+continuous integration pipelines by generating portable, auditable scripts for
+executing tasks in Docker containers. This ensures that every step of the
+process is fully reproducible across various environments:
+
+* Developer's machines
+* Servers for automatic builds after commits
+* Servers for deployment to production
+
+With microCI, the same tool, free of dependencies, can be used seamlessly on
+both development and production environments. For complete documentation, visit
+microci.dev.
+
 The complete documentation can be found at [microci.dev](https://microci.dev).
-
-`microCI` is a tool to assist in building continuous integration pipelines.
-
-The main differentiator of `microCI` is the generation of **portable scripts**
-and fully **auditable** for executing tasks in **docker containers**.
-
-Since all steps are executed in one or more docker containers, the entire
-process becomes reproducible on: a) any developer's machine, b) the server that
-will perform automatic builds after commits, c) the server that will perform
-deployment to production... In short, the same tool, without dependencies, can
-be used on both the developer's machine and the server.
 
 ## On the desktop
 
@@ -47,9 +49,9 @@ is in the `PATH`. To completely remove `microCI` from the system, just delete
 the file copied to the PATH.
 
 ```bash
-curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
+sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
   -o /usr/bin/microCI
-chmod 755 /usr/bin/microCI
+sudo chmod 755 /usr/bin/microCI
 ```
 
 ## Docker Container
@@ -74,40 +76,49 @@ Below are some features that may be present in the next releases.
 * use of environment variables and secrets configured on the server
 * create a Docker image from a git repository
 
+## Debian dependencies
+
+For building standalone the following dependencies should be installed:
+
+```bash
+sudo apt install gettext clang-format libspdlog-dev libfmt-dev libyaml-cpp-dev libssl-dev libcrypto++-dev
+```
+
 ## Versions
 
+* `0.31.0` Plugin `template`
 * `0.30.0` Plugin `pikchr`
 * `0.29.0` Plugin `docmd`
 * `0.28.0` Translation support added
 * `0.27.0` Plugin `pandoc`
 * `0.26.3` Update `clang-tidy`
 * `0.26.0` Offline mode
-* `0.25.6` Plugin `git_publish` com escolha de branch (p.e. `gh-pages`)
+* `0.25.6` Plugin `git_publish` with branch selection support (p.e. `gh-pages`)
 * `0.24.0` Plugin `docker_build`
-* `0.23.0` Plugin `fetch` download github
-* `0.22.0` Plugin `fetch` download de pastas no github
+* `0.23.0` Plugin `fetch` download from github (advanced)
+* `0.22.0` Plugin `fetch` download from github (folder)
 * `0.21.0` Plugin `flawfinder`
-* `0.20.0` Imagem `intmain/microci_clang`
-* `0.19.0` Documentação com `intmain_docmd`
+* `0.20.0` Docker image `intmain/microci_clang`
+* `0.19.0` Documentation with `intmain/docmd`
 * `0.18.0` Plugin `minio`
-* `0.17.0` Plugin `skip`; Status de execução
-* `0.16.1` Refatoração dos plugins; Execução default como não root
-* `0.15.2` Plugin `fetch` URL e pastas do gitlab
+* `0.17.0` Plugin `skip`; Execution status
+* `0.16.1` Plugin refactoring; Default execution as non-root
+* `0.15.2` Plugin `fetch` URL and gitlab folder
 * `0.14.1` Plugin `beamer`
-* `0.13.0` Configuração de rede docker
-* `0.12.0` Plugins `clang-format` e `junit2html`
-* `0.11.1` Notificação em canal do discord
-* `0.10.1` Múltiplos arquivos de modelo
+* `0.13.0` Docker network configuration
+* `0.12.0` Plugins `clang-format` and `junit2html`
+* `0.11.1` Discord channel notification
+* `0.10.1` Multiple template added
 * `0.9.0` Plugin `plantuml`
 * `0.8.0` Plugin `clang-tidy`
 * `0.7.0` Plugin `cppcheck`
 * `0.6.1` Plugin `git_publish`
-* `0.5.0` Montagem de volumes; Cópia de chave SSH
-* `0.4.0` Construção do microCI pelo microCI
-* `0.3.0` Cria arquivos de configuração
+* `0.5.0` Volume mounting; SSH key copy
+* `0.4.0` Building microCI by microCI
+* `0.3.0` Configuration files creation
 * `0.2.0` Plugin `mkdocs`
-* `0.1.0` Passo em `bash` e plugin `git_deploy`
-* `0.0.1` Versão inicial para prova de conceito
+* `0.1.0` Plugin `bash` and `git_deploy`
+* `0.0.1` Proof of concept/Initial version
 
 ## License
 

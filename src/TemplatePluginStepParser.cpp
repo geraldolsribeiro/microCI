@@ -97,7 +97,8 @@ void TemplatePluginStepParser::Parse(const YAML::Node &step) {
         prepareRunDocker(data, envs, volumes);
         mMicroCI->Script() << inja::render(R"( --template /microci_workspace/{{ TEMPLATE_INPUT }} \
         /microci_workspace/{{ TEMPLATE_DATA }} \
-        > {{ TEMPLATE_OUTPUT }})", data);
+        > {{ TEMPLATE_OUTPUT }})",
+                                           data);
         // Option --out does not work here
       }
     }
