@@ -76,6 +76,7 @@ string PluginStepParser::stepDockerImage(const YAML::Node &step, const string &i
 
   if (!image.empty()) {
     dockerImage = image;
+    mMicroCI->AddDockerImage(image);
   }
 
   if (step["docker"]) {

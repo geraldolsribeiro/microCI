@@ -213,6 +213,7 @@ bool MicroCI::ReadConfig(const string &filename) {
   YAML::Node CI;
 
   try {
+
     CI = YAML::LoadFile(filename);
 
     // Start with global environment variables
@@ -296,10 +297,10 @@ bool MicroCI::ReadConfig(const string &filename) {
       if (mDockerImages.size()) {
         mScript << "# Update docker images used in the steps\n";
         for (const auto &dockerImage : mDockerImages) {
-          mScript << fmt::format("echo 'Updating {} docker image ...'\n", dockerImage);
           mScript << fmt::format("if docker image inspect {} > /dev/null 2>&1 ; then\n", dockerImage);
           mScript << fmt::format("  echo 'Docker image {} is already updated' >> .microCI.log\n", dockerImage);
           mScript << fmt::format("else\n");
+          mScript << fmt::format("  echo 'Updating {} docker image...'\n", dockerImage);
           mScript << fmt::format("  docker pull {} 2>&1 >> .microCI.log\n", dockerImage);
           mScript << fmt::format("fi\n");
         }

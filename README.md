@@ -78,10 +78,24 @@ Below are some features that may be present in the next releases.
 
 ## Debian dependencies
 
-For building standalone the following dependencies should be installed:
+For building standalone microCI binary the following dependencies should be installed:
 
 ```bash
 sudo apt install gettext clang-format libspdlog-dev libfmt-dev libyaml-cpp-dev libssl-dev libcrypto++-dev
+```
+
+## Docker private repository
+
+In some cases, running a private registry without SSL, is necessary to add the
+IP of registry server to the `insecure-registries` section of the
+`/etc/docker/daemon.json` file.
+
+Example:
+
+```bash
+{
+	"insecure-registries": ["192.168.1.128:5000", "192.168.1.11:5000"]
+}
 ```
 
 ## Versions
