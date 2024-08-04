@@ -1,0 +1,25 @@
+#   # gitlab-ci.yml config
+#   
+#{{{
+#  This is an example config, please adjust it for your need
+stages:
+  - build
+
+build-job:
+  tags:
+    - bash
+    - docker
+  stage: build
+  before_script:
+    - 'echo "MICROCI_MINIO_URL: $MICROCI_MINIO_URL" > .env'
+    - 'echo "MICROCI_MINIO_ACCESS_KEY: $MICROCI_MINIO_ACCESS_KEY" >> .env'
+    - 'echo "MICROCI_MINIO_SECRET_KEY: $MICROCI_MINIO_SECRET_KEY" >> .env'
+  script:
+    - microCI --test-config
+    - microCI | bash
+    - microCI --only publish | bash
+  artifacts:
+    paths:
+      - site
+    expire_in: 1 month
+#}}}

@@ -43,9 +43,15 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
 
-  data = parseRunAs(step, data, "user");
+  data = parseRunAs(step, data, "root");  // From new version of bitname/git
   data = parseNetwork(step, data, "bridge");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
+
+  // Suppress "Welcome to the Bitnami git container"
+  EnvironmentVariable bitnamiDisableWelcomeMessage;
+  bitnamiDisableWelcomeMessage.name = "DISABLE_WELCOME_MESSAGE";
+  bitnamiDisableWelcomeMessage.value = "true";
+  envs.insert(bitnamiDisableWelcomeMessage);
 
   const auto name = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();

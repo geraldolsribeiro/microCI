@@ -3,7 +3,7 @@
 # Se necessário edite o arquivo .microCI.yml
 author:
   - Geraldo Ribeiro
-  - Outro Nome de Autor
+  - Other Author Name
 header-includes:
   - \usepackage{tikz}
 ...

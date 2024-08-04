@@ -41,6 +41,7 @@ triggered, execute `microCI` in the respective project folders.
 
 * A properly configured Docker environment
 * Bash shell
+* `jq` and `yq` utilities
 
 ## Installation
 

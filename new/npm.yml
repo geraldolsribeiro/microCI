@@ -1,4 +1,4 @@
-#   # Usage example for the npm plugin
+#   # npm plugin
 #   
 #{{{
 docker: "node:16"

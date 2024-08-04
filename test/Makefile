@@ -63,7 +63,7 @@ test:
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
 	rm -f .env
-	cat template.sh | bash
+	#cat template.sh | bash
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@

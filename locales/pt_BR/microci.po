@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: microCI\n"
 "Report-Msgid-Bugs-To: geraldolsribeiro@gmail.com\n"
-"POT-Creation-Date: 2024-06-23 16:56+0000\n"
+"POT-Creation-Date: 2024-08-04 11:43+0000\n"
 "PO-Revision-Date: 2024-02-20 12:51+0400\n"
 "Last-Translator: Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
@@ -19,63 +19,98 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 
 #: ../src/main.cpp:246 ../src/main.cpp:251 ../src/main.cpp:252
-#: ../src/main.cpp:253 ../src/main.cpp:264
+#: ../src/main.cpp:253 ../src/main.cpp:264 ../src/main.cpp:265
+#: ../src/main.cpp:266 ../src/main.cpp:279 ../src/main.cpp:237
+#: ../src/main.cpp:320
 msgid "Creating folder '{}'"
 msgstr "Criando pasta '{}'"
 
 #: ../src/main.cpp:289 ../src/main.cpp:294 ../src/main.cpp:295
-#: ../src/main.cpp:296 ../src/main.cpp:307
+#: ../src/main.cpp:296 ../src/main.cpp:307 ../src/main.cpp:308
+#: ../src/main.cpp:309 ../src/main.cpp:323 ../src/main.cpp:366
 msgid "Failure reading the file '{}'"
 msgstr "Falha lendo o arquivo '{}'"
 
 #: ../src/main.cpp:251 ../src/main.cpp:256 ../src/main.cpp:257
-#: ../src/main.cpp:258 ../src/main.cpp:269
+#: ../src/main.cpp:258 ../src/main.cpp:269 ../src/main.cpp:270
+#: ../src/main.cpp:271 ../src/main.cpp:284 ../src/main.cpp:242
+#: ../src/main.cpp:325
 msgid "File '{}' already exists"
 msgstr "O arquivo '{}' já existe"
 
 #: ../src/main.cpp:320 ../src/main.cpp:325 ../src/main.cpp:326
-#: ../src/main.cpp:327 ../src/main.cpp:344
+#: ../src/main.cpp:327 ../src/main.cpp:344 ../src/main.cpp:345
+#: ../src/main.cpp:346 ../src/main.cpp:360 ../src/main.cpp:403
 msgid "Git config: {}"
 msgstr "Git config: {}"
 
 #: ../src/main.cpp:321 ../src/main.cpp:326 ../src/main.cpp:327
-#: ../src/main.cpp:328 ../src/main.cpp:345
+#: ../src/main.cpp:328 ../src/main.cpp:345 ../src/main.cpp:346
+#: ../src/main.cpp:347 ../src/main.cpp:361 ../src/main.cpp:404
 #, fuzzy
 msgid "Git origin: {}"
 msgstr "Git config: {}"
 
+#: ../src/main.cpp:261
+#, fuzzy
+msgid "Invalid config type: {}"
+msgstr "Tipo invalido: {}"
+
+#: ../src/main.cpp:346
+#, fuzzy
+msgid "Invalid plugin type: {}"
+msgstr "Tipo invalido: {}"
+
 #: ../src/main.cpp:270 ../src/main.cpp:275 ../src/main.cpp:276
-#: ../src/main.cpp:277 ../src/main.cpp:288
+#: ../src/main.cpp:277 ../src/main.cpp:288 ../src/main.cpp:289
+#: ../src/main.cpp:290 ../src/main.cpp:303
 msgid "Invalid type: {}"
 msgstr "Tipo invalido: {}"
 
 #: ../src/main.cpp:319 ../src/main.cpp:324 ../src/main.cpp:325
-#: ../src/main.cpp:326 ../src/main.cpp:343
+#: ../src/main.cpp:326 ../src/main.cpp:343 ../src/main.cpp:344
+#: ../src/main.cpp:345 ../src/main.cpp:359 ../src/main.cpp:402
 msgid "PWD: {}"
 msgstr "PWD: {}"
 
+#: ../src/main.cpp:252
+#, fuzzy
+msgid "The config file '{}' was created from the template"
+msgstr "O arquivo '{}' foi criado a partir do modelo"
+
 #: ../src/main.cpp:261 ../src/main.cpp:266 ../src/main.cpp:267
-#: ../src/main.cpp:268 ../src/main.cpp:279
+#: ../src/main.cpp:268 ../src/main.cpp:279 ../src/main.cpp:280
+#: ../src/main.cpp:281 ../src/main.cpp:294 ../src/main.cpp:335
 msgid "The file '{}' was created from the template"
 msgstr "O arquivo '{}' foi criado a partir do modelo"
 
 #: ../src/main.cpp:258 ../src/main.cpp:263 ../src/main.cpp:264
-#: ../src/main.cpp:265 ../src/main.cpp:272
+#: ../src/main.cpp:265 ../src/main.cpp:272 ../src/main.cpp:273
+#: ../src/main.cpp:274 ../src/main.cpp:287 ../src/main.cpp:245
+#: ../src/main.cpp:328
 msgid "The file '{}' was edited from the template"
 msgstr "O arquivo '{}' foi editado a partir do modelo"
 
 #: ../src/main.cpp:279 ../src/main.cpp:284 ../src/main.cpp:285
-#: ../src/main.cpp:286 ../src/main.cpp:297
+#: ../src/main.cpp:286 ../src/main.cpp:297 ../src/main.cpp:298
+#: ../src/main.cpp:299 ../src/main.cpp:312 ../src/main.cpp:355
 msgid "The input file '{}' was not found"
 msgstr "O arquivo de entrada '{}' não foi encontrado."
 
 #: ../src/main.cpp:377 ../src/main.cpp:382 ../src/main.cpp:383
-#: ../src/main.cpp:384 ../src/main.cpp:401
+#: ../src/main.cpp:384 ../src/main.cpp:401 ../src/main.cpp:402
+#: ../src/main.cpp:403 ../src/main.cpp:417 ../src/main.cpp:460
 msgid "Unknown exception"
 msgstr "Exceção desconhecida"
 
+#: ../src/main.cpp:263
+#, fuzzy
+msgid "Use: microCI --config {}"
+msgstr "Use: microCI --new {}"
+
 #: ../src/main.cpp:272 ../src/main.cpp:277 ../src/main.cpp:278
-#: ../src/main.cpp:279 ../src/main.cpp:290
+#: ../src/main.cpp:279 ../src/main.cpp:290 ../src/main.cpp:291
+#: ../src/main.cpp:292 ../src/main.cpp:305 ../src/main.cpp:348
 msgid "Use: microCI --new {}"
 msgstr "Use: microCI --new {}"
 

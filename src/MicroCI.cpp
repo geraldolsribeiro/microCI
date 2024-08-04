@@ -213,7 +213,6 @@ bool MicroCI::ReadConfig(const string &filename) {
   YAML::Node CI;
 
   try {
-
     CI = YAML::LoadFile(filename);
 
     // Start with global environment variables

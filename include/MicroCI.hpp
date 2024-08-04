@@ -45,7 +45,7 @@ namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.31.0"
+#define microCI_version "0.32.0"
 
 // ----------------------------------------------------------------------
 //
@@ -56,8 +56,7 @@ struct DockerVolume {
   string mode;
 };
 
-// Usando o destino como chave para permitir montar a mesma pasta em mais
-// de um local
+// Using the target as key allowing to mount the same folder at more than one place.
 inline bool operator<(const DockerVolume &lhs, const DockerVolume &rhs) { return lhs.destination < rhs.destination; }
 
 // ----------------------------------------------------------------------

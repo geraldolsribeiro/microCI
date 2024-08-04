@@ -1,8 +1,8 @@
-#   # Usage example for the minio plugin
+#   # minio plugin
 #   
 #   See **MinIO Client** documentation at <https://github.com/minio/mc>.
 #
-# {{{
+#{{{
 steps:
   - name: "Save artifact in bucket"
     description: "Description of this step"
@@ -18,6 +18,6 @@ steps:
         mc cp Makefile microci/bucket_name/
         # Copy files from the bucket to the workspace
         mc cp microci/bucket_name/image.png .
-# }}}
+#}}}
 
 # vim: spell spelllang=pt,en

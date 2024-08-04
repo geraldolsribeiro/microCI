@@ -78,6 +78,7 @@ using namespace std;
 #include "new/flawfinder.hpp"
 #include "new/git_deploy.hpp"
 #include "new/git_publish.hpp"
+#include "new/gitlab-ci.hpp"
 #include "new/minio.hpp"
 #include "new/mkdocs_material.hpp"
 #include "new/mkdocs_material_config.hpp"
@@ -108,6 +109,7 @@ Opions:
   -U,--update-db           Update observability database
   -u,--update              Update microCI
   -i,--input file.yml      Load the configuration from file.yml
+  -n,--config gitlab-ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
   -n,--new docmd           Create a documentation step
@@ -143,9 +145,6 @@ using TemplateType = string;
 // ----------------------------------------------------------------------
 int main([[maybe_unused]] int argc, char **argv, char **envp) {
   //{{{
-  auto yamlFileName = string{".microCI.yml"};
-  auto onlyStep = string{};
-  auto newType = string{};
 
   try {
     setlocale(LC_ALL, "");
@@ -209,9 +208,66 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     }
 
     // Alternative path for the configuration file
+    auto yamlFileName = string{".microCI.yml"};
     cmdl({"-i", "--input"}) >> yamlFileName;
 
+    auto newConfig = string{};
+    if ((cmdl({"-c", "--config"}) >> newConfig)) {
+      multimap<TemplateType, TemplateFile> templates;
+
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)    \
+  templates.insert(                                                                         \
+      make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
+                                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
+      // clang-format off
+      MICROCI_TPL(false, "gitlab_ci",       ".gitlab-ci.yml", yml, gitlab_ci);
+      // clang-format on
+
+      bool isNewConfigFound = false;
+      for (const auto &[config, tpl] : templates) {
+        if (newConfig == config) {
+          isNewConfigFound = true;
+
+          ofstream out;
+          auto fileName = tpl.fileName;
+
+          auto folderPos = fileName.find_last_of("/");
+          if (folderPos != string::npos) {
+            auto folderName = fileName.substr(0, folderPos);
+            spdlog::debug(_("Creating folder '{}'"), folderName);
+            filesystem::create_directories(folderName);
+          }
+
+          if (!tpl.appendIfExists and filesystem::exists(fileName)) {
+            spdlog::debug(_("File '{}' already exists"), fileName);
+            continue;
+          } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
+            spdlog::debug(_("The file '{}' was edited from the template"), fileName);
+            string step{(char *)tpl.fileContent, tpl.fileSize};
+            step.erase(0, step.find("steps:") + 7);
+            out.open(fileName, ios_base::app);
+            out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
+            out << step;
+          } else {
+            spdlog::debug(_("The config file '{}' was created from the template"), fileName);
+            out.open(fileName);
+            out.write((char *)tpl.fileContent, tpl.fileSize);
+          }
+        }
+      }
+      if (isNewConfigFound) {
+        return 0;
+      }
+      spdlog::error(_("Invalid config type: {}"), newConfig);
+      for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
+        spdlog::debug(_("Use: microCI --config {}"), it->first);
+      }
+      return -1;
+#undef MICROCI_TPL
+    }
+
     // Create or update the configuration file
+    auto newType = string{};
     if ((cmdl({"-n", "--new"}) >> newType)) {
       multimap<TemplateType, TemplateFile> templates;
 
@@ -245,10 +301,10 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       // clang-format on
 #undef MICROCI_TPL
 
-      bool isTypeFound = false;
+      bool isNewPluginFound = false;
       for (const auto &[type, tpl] : templates) {
         if (newType == type) {
-          isTypeFound = true;
+          isNewPluginFound = true;
 
           ofstream out;
           auto fileName = tpl.fileName;
@@ -282,10 +338,12 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
           }
         }
       }
-      if (isTypeFound) {
+
+      if (isNewPluginFound) {
+        // All done
         return 0;
       }
-      spdlog::error(_("Invalid type: {}"), newType);
+      spdlog::error(_("Invalid plugin type: {}"), newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         spdlog::debug(_("Use: microCI --new {}"), it->first);
       }
@@ -298,6 +356,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       return 1;
     }
 
+    auto onlyStep = string{};
     if ((cmdl({"-O", "--only"}) >> onlyStep)) {
       uCI.SetOnlyStep(onlyStep);
     }
