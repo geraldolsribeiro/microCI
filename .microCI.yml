@@ -166,7 +166,8 @@ steps:
   #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/version.hpp
 
   - name: "Build microCI static version"
-    docker: "gcc:14"
+    # docker: "gcc:14"
+    docker: "intmain/microci_cpp_compiler:latest"
     run_as: root # necessário para instalar as dependências
     network: host
     plugin:
