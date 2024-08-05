@@ -27,7 +27,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.7
+VERSION=0.8
 IMAGE_NAME=microci_cpp_compiler
 
 all: publish
@@ -41,6 +41,7 @@ build:
 
 test:
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) arm-linux-gnueabi-g++ --version
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 
 publish: build

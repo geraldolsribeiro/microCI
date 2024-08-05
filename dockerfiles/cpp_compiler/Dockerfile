@@ -83,6 +83,17 @@ RUN set -eux; \
 RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old \
   && PIP_NO_CACHE_DIR=1 pip install clang-html
 
+RUN set -eux; \
+  echo "2024-06-06" > /dev/null \
+  && apt-get update \
+  && apt-get upgrade -y \
+  && apt-get install -y \
+    apt-utils \
+    gcc-arm-linux-gnueabi \
+    g++-arm-linux-gnueabi \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+
 CMD [ "/bin/echo", "microCI C++ compiler image" ]
 
 # Note: libboost-all-dev was removed due some issue related to gfortran dependencies
