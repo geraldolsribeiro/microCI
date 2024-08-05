@@ -69,11 +69,14 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     copySshIfAvailable(step, data);
 
     for (const auto &item : step["plugin"]["items"]) {
+      auto gitTag = item["tag"].as<string>("master");
+      data["GIT_TAG"] = gitTag;
+
       if (item["github"]) {
         auto gitRemote = string{};
-        auto gitTag = string{};
         stringstream ss(item["github"].as<string>());
         ss >> gitRemote >> gitTag;
+        data["GIT_TAG"] = gitTag;
 
         // URL examples
         // https://github.com/User/repo/tarball/master
@@ -112,12 +115,11 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         } else {
           data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
         }
-        auto tag = item["tag"].as<string>("master");
-        bool isGithub = gitRemote.find("github.com") != string::npos;
+        bool isGithubURL = gitRemote.find("github.com") != string::npos;
         bool isDotGitEnded = gitRemote.substr(gitRemote.size() - 4) == ".git";
 
         auto files = string{};
-        if (isGithub) {
+        if (isGithubURL) {
           auto repoName = string{};
           if (isDotGitEnded) {
             // https://github.com/User/repo.git
@@ -131,7 +133,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
           for (const auto &f : item["files"]) {
             // aspas simples para não expandir
-            files += fmt::format("'{}-{}/{}' ", repoName, tag, f.as<string>());
+            files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<string>());
           }
         } else {
           for (const auto &f : item["files"]) {
@@ -147,7 +149,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         data["FILES"] = files;
         data["TARGET"] = item["target"].as<string>(defaultTarget);
 
-        if (isGithub) {
+        if (isGithubURL) {
           if (item["strip-components"]) {
             data["STRIP_COMPONENTS"] = " --strip-components=" + to_string(item["strip-components"].as<int>() + 1);
           } else {
@@ -161,19 +163,19 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           }
         }
 
-        if (isGithub and item["token"]) {
+        if (isGithubURL and item["token"]) {
           // https://<personal_token>:@github.com/<your_repo>/archive/main.tar.gz
           gitRemote.insert(gitRemote.find("github.com"), item["token"].as<string>() + "@");
           data["GIT_REMOTE"] = gitRemote;
         }
 
-        if (isGithub and isDotGitEnded) {
+        if (isGithubURL and isDotGitEnded) {
           // From: https://github.com/User/repo.git
           // To: https://github.com/User/repo/archive/master.tar.gz
-          data["GIT_REMOTE"] = gitRemote.substr(0, gitRemote.size() - 4) + "/archive/" + tag + ".tar.gz";
+          data["GIT_REMOTE"] = gitRemote.substr(0, gitRemote.size() - 4) + "/archive/" + gitTag + ".tar.gz";
         }
 
-        if (isGithub) {
+        if (isGithubURL) {
           mMicroCI->Script() << inja::render(
               R"( \
            && mkdir -p {{ TARGET }} \
@@ -190,7 +192,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           mMicroCI->Script() << inja::render(
               R"( \
            && mkdir -p {{ TARGET }} \
-           && git archive --format=tar --remote={{ GIT_REMOTE }} HEAD {{ FILES }} \
+           && git archive --format=tar --remote={{ GIT_REMOTE }} {{ GIT_TAG }} {{ FILES }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf - 2>&1)",
               data);
         }
