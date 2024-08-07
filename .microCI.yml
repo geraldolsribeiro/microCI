@@ -188,7 +188,7 @@ steps:
       folder: dockerfiles/cpp_compiler/
       dockerfile: Dockerfile
       target: intmain/microci_cpp_compiler
-      version: 0.7
+      version: 0.8
       is_latest: true
       push: true
 
