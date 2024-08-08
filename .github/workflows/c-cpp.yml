@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: install dependencies
@@ -24,3 +22,9 @@ jobs:
         wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
     - name: make
       run: make -C src clean all
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v4
+      with:
+        name: microCI
+        path: bin/microCI
+        retention-days: 5
