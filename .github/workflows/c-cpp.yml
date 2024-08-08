@@ -16,9 +16,11 @@ jobs:
     - name: install dependencies
       run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
     - name: download headers
-      run: wget -P include https://raw.githubusercontent.com/adishavit/argh/master/argh.h
-      run: wget -P include https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
-      run: wget -P include https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
-      run: wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+      run: |
+        mkdir -p include/nlohmann
+        wget -P include https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+        wget -P include https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        wget -P include https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
+        wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
     - name: make
       run: make -C src clean all
