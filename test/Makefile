@@ -26,6 +26,9 @@
 SHELL=bash
 
 test:
+	rm -f .env
+	rm -f .env.yml
+	rm -f test_npm.yml
 	for i in bash clang-tidy clang-format cppcheck git_deploy git_publish mkdocs_material npm plantuml template; do \
     echo "$$i" && rm -rf "new_$$i" && mkdir -p "new_$$i" \
 		&& pushd "new_$$i" \
@@ -33,8 +36,8 @@ test:
 		&& ../../bin/microCI --new "$$i" \
 		&& popd; \
 	done
-	rm -f .env
-	rm -f test_npm.yml
+	cp dot_env_default .env
+	cp dot_env_yml_default .env.yml
 	../bin/microCI -i y.yml         || echo "OK"
 	../bin/microCI --input=x.yml    || echo "OK"
 	../bin/microCI -n invalid_type  || echo "OK"
@@ -58,11 +61,12 @@ test:
 	../bin/microCI -i ../new/docmd.yml                           > docmd.sh
 	../bin/microCI -i ../new/pandoc.yml                          > pandoc.sh
 	../bin/microCI -i ../new/template.yml                        > template.sh
-	cp dot_env_minio .env
+	cp dot_env_minio .env.yml
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
 	rm -f .env
+	rm -f .env.yml
 	#cat template.sh | bash
 
 doctest.h:

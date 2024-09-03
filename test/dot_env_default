@@ -1,0 +1,4 @@
+# Environment variables for test
+  # Environment variables for test
+ENV_1=1
+ENV_2=String with spaces

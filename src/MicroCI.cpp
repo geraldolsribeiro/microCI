@@ -225,9 +225,11 @@ bool MicroCI::ReadConfig(const string &filename) {
       }
     }
 
-    // Override with the content of the `.env` file
-    if (filesystem::exists(".env")) {
-      auto dotEnv = YAML::LoadFile(".env");
+    mYamlFilename = filename;
+
+    // Override with the content of the `.env.yml` file
+    if (filesystem::exists(".env.yml")) {
+      auto dotEnv = YAML::LoadFile(".env.yml");
       if (dotEnv.size() == 0) {
         spdlog::error("The file .env was found but it has no valid configuration");
         invalidConfigurationDetected();
@@ -240,8 +242,32 @@ bool MicroCI::ReadConfig(const string &filename) {
         mEnvs.insert(env);
       }
     }
-
-    mYamlFilename = filename;
+    // // Override with the content of the `.env` file
+    if (filesystem::exists(".env")) {
+      ifstream env(".env");
+      string line;
+      while (getline(env, line)) {
+        // Skip comments
+        if (line[0] == '#') {
+          continue;
+        }
+        auto i = 0;
+        while (line.at(i) == ' ' or line.at(i) == '\t') {
+          ++i;
+          if (line[i] == '#') {
+            line = "";
+            break;
+          }
+        }
+        auto eqPos = line.find_first_of("=");
+        if (eqPos != string::npos) {
+          EnvironmentVariable env;
+          env.name = line.substr(0, eqPos);
+          env.value = line.substr(eqPos + 1);
+          mEnvs.insert(env);
+        }
+      }
+    }
 
   } catch (const YAML::BadFile &e) {
     spdlog::error("Failure loading the file .microCI.yml");
