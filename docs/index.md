@@ -101,6 +101,8 @@ Example:
 
 ## Versions
 
+* `0.33.0` Enviroment file parsing with different formats
+* `0.32.0` Integration config file generation
 * `0.31.0` Plugin `template`
 * `0.30.0` Plugin `pikchr`
 * `0.29.0` Plugin `docmd`

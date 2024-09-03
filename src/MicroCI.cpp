@@ -247,8 +247,8 @@ bool MicroCI::ReadConfig(const string &filename) {
       ifstream env(".env");
       string line;
       while (getline(env, line)) {
-        // Skip comments
-        if (line[0] == '#') {
+        // Skip comments and short lines
+        if (line.size() < 3 or line[0] == '#') {
           continue;
         }
         auto i = 0;
