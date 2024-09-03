@@ -171,7 +171,7 @@ void PluginStepParser::endFunction(const json &data) {
     echo "Duration: ${MICROCI_STEP_DURATION}"
   } >> .microCI.log
 
-  # Notificação no terminal
+  # Notification at the terminal
   if [ "${MICROCI_STEP_SKIP}" = "yes" ]
   then
     echo -e "{{BLUE}}SKIP{{CLEAR}}"
@@ -181,9 +181,9 @@ void PluginStepParser::endFunction(const json &data) {
     echo -e "{{GREEN}}OK{{CLEAR}}"
     setStepStatusOkJson
   else
-    echo -e "{{RED}}FALHOU{{CLEAR}}"
+    echo -e "{{RED}}FAILED{{CLEAR}}"
     setStepStatusFailJson
-    echo "See the complete log from .microCI.log"
+    echo "See the complete log at .microCI.log"
     tail -50 .microCI.log
   fi
 
@@ -195,8 +195,8 @@ void PluginStepParser::endFunction(const json &data) {
   auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     mMicroCI->Script() << inja::render(R"(
-  # Notificação via Discord
-  # Usar spycolor.com para obter a cor em decimal
+  # Notification via Discord
+  # Use spycolor.com to get the color in decimal
   if [ "${status}" = "0" ]; then
     MICROCI_STEP_STATUS=":ok:"
     MICROCI_STEP_STATUS_COLOR=4382765
@@ -295,7 +295,7 @@ tuple<json, set<DockerVolume>, set<EnvironmentVariable>> PluginStepParser::parse
       envs_.insert(gitSshCommandEnv);
     }
 
-    // Montagem temporária para copia
+    // Temporary mounting for copy
     DockerVolume vol;
     vol.destination = "/.microCI_ssh";
     vol.source = sshMountForCopy;
