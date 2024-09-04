@@ -71,6 +71,11 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     for (const auto &item : step["plugin"]["items"]) {
       auto gitTag = item["tag"].as<string>("master");
       data["GIT_TAG"] = gitTag;
+      data["TARGET"] = item["target"].as<string>(defaultTarget);
+      mMicroCI->Script() << inja::render(
+          R"( \
+           && mkdir -p {{ TARGET }})",
+          data);
 
       if (item["github"]) {
         auto gitRemote = string{};
@@ -97,13 +102,11 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
         data["GIT_REMOTE"] = gitRemote;
         data["FILES"] = "";  // Todos os arquivos
-        data["TARGET"] = item["target"].as<string>(defaultTarget);
         data["STRIP_COMPONENTS"] = " --strip-components=1";
         // data["STRIP_COMPONENTS"] = "";
 
         mMicroCI->Script() << inja::render(
             R"( \
-           && mkdir -p {{ TARGET }} \
            && curl -s -fSL -R -J {{ GIT_REMOTE }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
             data);
@@ -147,7 +150,6 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         }
 
         data["FILES"] = files;
-        data["TARGET"] = item["target"].as<string>(defaultTarget);
 
         if (isGithubURL) {
           if (item["strip-components"]) {
@@ -178,20 +180,17 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         if (isGithubURL) {
           mMicroCI->Script() << inja::render(
               R"( \
-           && mkdir -p {{ TARGET }} \
            && curl -s -fSL -R -J {{ GIT_REMOTE }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
               data);
         } else if (item["offline"]) {
           mMicroCI->Script() << inja::render(
               R"( \
-           && mkdir -p {{ TARGET }} \
            && tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf {{ GIT_REMOTE }} {{ FILES }} 2>&1)",
               data);
         } else {
           mMicroCI->Script() << inja::render(
               R"( \
-           && mkdir -p {{ TARGET }} \
            && git archive --format=tar --remote={{ GIT_REMOTE }} {{ GIT_TAG }} {{ FILES }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vxf - 2>&1)",
               data);
@@ -202,12 +201,16 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         data["URL"] = item["url"].as<string>();
         mMicroCI->Script() << inja::render(
             R"( \
-           && mkdir -p {{ TARGET }} \
            && pushd {{ TARGET }} \
            && curl -fSL -R -J -O {{ URL }} 2>&1 \
            && popd)",
             data);
       }
+
+      mMicroCI->Script() << inja::render(
+          R"( \
+           && chown $(id -u):$(id -g) -Rv {{ TARGET }})",
+          data);
     }
     mMicroCI->Script() << "\"\n";
     endFunction(data);
