@@ -52,16 +52,22 @@ PS4='Line $LINENO: '
 # Check if the dependencies are installed at the workstation
 # ----------------------------------------------------------------------
 command -v jq &> /dev/null \
-  || { echo -e "{{RED}}The utility jq was not found in the system{{CLEAR}}"; echo "{{RED}}Try: {{GREEN}}sudo apt install jq"; exit 1; }
+  || { echo -e "{{RED}}The utility jq was not found in the system{{CLEAR}}";
+       echo "{{RED}}Try: {{GREEN}}sudo apt install jq";
+       exit 1; }
 
 command -v yq &> /dev/null \
-  || { echo -e "{{RED}}The utility yq was not found in the system{{CLEAR}}"; echo "{{RED}}Try: {{GREEN}}sudo snap install yq"; exit 1; }
+  || { echo -e "{{RED}}The utility yq was not found in the system{{CLEAR}}";
+       echo "{{RED}}Try: {{GREEN}}sudo snap install yq";
+       exit 1; }
 
 command -v curl &> /dev/null \
-  || { echo -e "{{RED}}The utility curl was not found in the system{{CLEAR}}"; exit 1; }
+  || { echo -e "{{RED}}The utility curl was not found in the system{{CLEAR}}";
+       exit 1; }
 
 command -v docker &> /dev/null \
-  || { echo -e "{{RED}}The utility docker was not found in the system{{CLEAR}}"; exit 1; }
+  || { echo -e "{{RED}}The utility docker was not found in the system{{CLEAR}}";
+       exit 1; }
 
 # Path without linefeed
 MICROCI_PWD=$(pwd -P | tr -d '\n')

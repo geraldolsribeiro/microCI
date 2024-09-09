@@ -153,6 +153,8 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     bind_textdomain_codeset("microci", "UTF-8");
     textdomain("microci");
 
+    spdlog::set_pattern("# MicroCI [%H:%M:%S %z] [%^%l%$] %v");
+
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     if (cmdl[{"-u", "--update"}]) {
@@ -351,12 +353,13 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         spdlog::debug(_("Use: microCI --new {}"), it->first);
       }
-      return -1;
+      return 1;
     }
 
     if (!filesystem::exists(yamlFileName)) {
-      cout << microci::banner() << endl;
-      spdlog::error(_("The input file '{}' was not found"), yamlFileName);
+      auto msg = fmt::format(_("The input file '{}' was not found"), yamlFileName);
+      spdlog::error(msg);
+      cout << fmt::format( "echo '{}'\n", msg  );
       return 1;
     }
 
@@ -367,7 +370,9 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
 
     if (!uCI.ReadConfig(yamlFileName)) {
       cout << microci::banner() << endl;
-      spdlog::error(_("Failure reading the file '{}'"), yamlFileName);
+      auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
+      spdlog::error(msg);
+      cout << fmt::format( "echo '{}'\n", msg  );
       return 1;
     }
 
