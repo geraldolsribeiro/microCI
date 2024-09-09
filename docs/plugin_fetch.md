@@ -32,6 +32,7 @@ steps:
             - README.md
         - git_archive: git@gitlabcorp.xyz.com.br:group/repo.git
           target: /tmp/include/
+          tag: HEAD
           files:
             - README.md
             - include/*.h
