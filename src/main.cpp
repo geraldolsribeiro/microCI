@@ -359,7 +359,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     if (!filesystem::exists(yamlFileName)) {
       auto msg = fmt::format(_("The input file '{}' was not found"), yamlFileName);
       spdlog::error(msg);
-      cout << fmt::format( "echo '{}'\n", msg  );
+      cout << fmt::format("echo '{}'\n", msg);
       return 1;
     }
 
@@ -372,7 +372,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       cout << microci::banner() << endl;
       auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
       spdlog::error(msg);
-      cout << fmt::format( "echo '{}'\n", msg  );
+      cout << fmt::format("echo '{}'\n", msg);
       return 1;
     }
 
