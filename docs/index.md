@@ -1,5 +1,7 @@
 # Welcome to microCI
 
+[![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
+
 **microCI** is a powerful tool designed to streamline the creation of
 continuous integration pipelines by generating portable, auditable scripts for
 executing tasks in Docker containers. This ensures that every step of the
@@ -101,7 +103,7 @@ Example:
 
 ## Versions
 
-* `0.33.0` Enviroment file parsing 
+* `0.33.0` Environment file parsing 
 * `0.32.0` Integration config file generation
 * `0.31.0` Plugin `template`
 * `0.30.0` Plugin `pikchr`
