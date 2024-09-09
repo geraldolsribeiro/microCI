@@ -105,6 +105,7 @@ Opions:
   -V,--version             Print the microCI version
   -T,--test-config         Configuration test
   -A,--activity-diagram    Generate activity diagram
+  -a,--append-log          Append log
   -O,--only                Execute only a single step
   -U,--update-db           Update observability database
   -u,--update              Update microCI
@@ -164,6 +165,9 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     }
 
     MicroCI uCI{};
+
+    uCI.SetAppendLog(cmdl[{"-a", "--append-log"}]);
+
     uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
     uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docmd", make_shared<DocmdPluginStepParser>(&uCI));

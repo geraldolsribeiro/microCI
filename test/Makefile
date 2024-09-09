@@ -57,6 +57,10 @@ test:
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 	../bin/microCI -i ../new/skip.yml                            > skip.sh
+	source skip.sh
+	../bin/microCI -i ../new/skip.yml  --append-log              > skip_append_log.sh
+	source skip_append_log.sh
+	cat .microCI.log > skip_append_log.log
 	../bin/microCI -i ../new/bash.yml                            > bash.sh
 	../bin/microCI -i ../new/docmd.yml                           > docmd.sh
 	../bin/microCI -i ../new/pandoc.yml                          > pandoc.sh

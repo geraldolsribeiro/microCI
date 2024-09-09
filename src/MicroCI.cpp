@@ -194,6 +194,11 @@ void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetAppendLog(const bool appendLog) { mAppendLog = appendLog; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 string MicroCI::ToString() const {
   if (IsValid()) {
     return mScript.str();
@@ -424,6 +429,8 @@ json MicroCI::DefaultDataTemplate() const {
   data["GREEN"] = "\033[0;32m";
   data["CYAN"] = "\033[0;36m";
   data["CLEAR"] = "\033[0m";
+
+  data["APPEND_LOG_TEE_FLAG"] = mAppendLog ? " -a" : "";
 
   return data;
 }

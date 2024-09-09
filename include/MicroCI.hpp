@@ -90,6 +90,7 @@ class MicroCI {
   bool ReadConfig(const string &yaml);
   stringstream &Script();
   void SetOnlyStep(const string &onlyStep);
+  void SetAppendLog(const bool appendLog);
   void AddDockerImage(const string &image);
 
   [[nodiscard]] json DefaultDataTemplate() const;
@@ -112,6 +113,7 @@ class MicroCI {
   string mDefaultWorkspace;
   stringstream mScript;
   bool mIsValid = true;
+  bool mAppendLog = false;
 
   map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap;
 };
