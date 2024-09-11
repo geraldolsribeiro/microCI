@@ -107,7 +107,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
         mMicroCI->Script() << inja::render(
             R"( \
-           && curl -s -fSL -R -J {{ GIT_REMOTE }} \
+           && curl -s -fSL -R -J --clobber {{ GIT_REMOTE }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
             data);
 
@@ -180,7 +180,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         if (isGithubURL) {
           mMicroCI->Script() << inja::render(
               R"( \
-           && curl -s -fSL -R -J {{ GIT_REMOTE }} \
+           && curl -s -fSL -R -J --clobber {{ GIT_REMOTE }} \
              | tar -C {{ TARGET }}{{ STRIP_COMPONENTS }} -vzxf - {{ FILES }}2>&1)",
               data);
         } else if (item["offline"]) {
@@ -202,7 +202,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         mMicroCI->Script() << inja::render(
             R"( \
            && pushd {{ TARGET }} \
-           && curl -fSL -R -J -O {{ URL }} 2>&1 \
+           && curl -fSL -R -J --clobber -O {{ URL }} 2>&1 \
            && popd)",
             data);
       }
