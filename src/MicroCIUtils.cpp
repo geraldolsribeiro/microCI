@@ -43,7 +43,6 @@ string banner() {
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
                              microCI {}
-                            Geraldo Ribeiro
 
 )",
                      microCI_version);
