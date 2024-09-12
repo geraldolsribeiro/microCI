@@ -4,14 +4,15 @@
 
 ```yaml
 steps:
-  - name: "Gerar relatório de verificação do código C++ - cppcheck"
-    description: "Verifica o código C++ e gera relatório em formato HTML"
+  - name: "Create C++ code verification report - cppcheck"
+    description: "Check C++ code and generate HTML report"
     plugin:
       name: "cppcheck"
       options:
-        # - "-j 2"             # executa 2 jobs simultâneamente
-        # - "--clang=clang-11" # utiliza o clang como analisador
-        # - "--bug-hunting"    # útil para code review
+        # - "-j 2"             # two jobs simultaneously
+        # - "--clang=clang-11" # uses clang as analyser
+        # - "--bug-hunting"    # useful for code review
+        # - "--std=c++11"
       include:
         - "include"
       source:
