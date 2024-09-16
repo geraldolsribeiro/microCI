@@ -4,7 +4,7 @@
 steps:
   - name: "Build documentation with doxygen"
     description: "Description of this step"
-    docker: "intmain/doxygen"
+    docker: "intmain/microci_doxygen"
     network: none # bridge, host or none
     run_as: user  # root, user
     envs:

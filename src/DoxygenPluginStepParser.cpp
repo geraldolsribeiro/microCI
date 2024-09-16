@@ -82,7 +82,7 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
   mMicroCI->Script() << inja::render(R"( bash -c "cd {{ WORKSPACE }} \
           && if [ ! -f {{ DOXYFILE }} ]; then doxygen -g {{ DOXYFILE }}; fi \
           && doxygen -u {{ DOXYFILE }} \
-          && sed -i 's#OUTPUT_DIRECTORY.*#OUTPUT_DIRECTORY = {{ OUTPUT_DIRECTORY }}#' {{ DOXYFILE }} \
+          && sed -i 's#^OUTPUT_DIRECTORY.*#OUTPUT_DIRECTORY = {{ OUTPUT_DIRECTORY }}#' {{ DOXYFILE }} \
           && doxygen {{ DOXYFILE }}")", data);
 
   endFunction(data);
