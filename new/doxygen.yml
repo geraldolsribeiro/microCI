@@ -3,20 +3,15 @@
 #{{{
 steps:
   - name: "Build documentation with doxygen"
-    description: "Description of this step"
+    description: "Build documentation with doxygen"
     docker: "intmain/microci_doxygen"
-    network: none # bridge, host or none
-    run_as: user  # root, user
-    envs:
-      ENV1: "value of the environment variable ENV1"
-      ENV2: "value of the environment variable ENV2"
     plugin:
       name: doxygen
       doxyfile: ./Doxyfile
       output_dir: doxygen
-      html:
-        header: header.html    # Optional
-        footer: footer.html    # Optional
-        stylesheet: style.css  # Optional
+#      html:
+#        header: header.html    # Optional
+#        footer: footer.html    # Optional
+#        stylesheet: style.css  # Optional
 #}}}
 # vim: spell spelllang=en

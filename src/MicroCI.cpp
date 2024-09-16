@@ -27,6 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 #include <iostream>
 
 using namespace std;
@@ -214,11 +218,69 @@ void MicroCI::AddDockerImage(const string &image) { mDockerImages.insert(image);
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
+  if (filesystem::exists(filename)) {
+    auto dotEnv = YAML::LoadFile(filename);
+    if (dotEnv.size() == 0) {
+      spdlog::error("The file {} was found but it has no valid configuration", filename);
+      invalidConfigurationDetected();
+      // return false;
+    }
+    for (auto it : dotEnv) {
+      EnvironmentVariable env;
+      env.name = it.first.as<string>();
+      env.value = it.second.as<string>();
+      mEnvs.insert(env);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
+  if( filesystem::exists( filename ) ) {
+    ifstream env(filename);
+    string line;
+    while (getline(env, line)) {
+      // Skip comments and short lines
+      if (line.size() < 3 or line[0] == '#') {
+        continue;
+      }
+      auto i = 0;
+      while (line.at(i) == ' ' or line.at(i) == '\t') {
+        ++i;
+        if (line[i] == '#') {
+          line = "";
+          break;
+        }
+      }
+      auto eqPos = line.find_first_of("=");
+      if (eqPos != string::npos) {
+        EnvironmentVariable env;
+        env.name = line.substr(0, eqPos);
+        env.value = line.substr(eqPos + 1);
+        mEnvs.insert(env);
+      }
+    }
+  }
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 bool MicroCI::ReadConfig(const string &filename) {
   YAML::Node CI;
 
   try {
     CI = YAML::LoadFile(filename);
+
+    // Global configuration
+    {
+      struct passwd *pw = getpwuid(getuid());
+      auto globalEnv = fmt::format( "{}/.microCI.env", pw->pw_dir );
+      LoadEnvironmentFromEnvFile( globalEnv );
+    }
 
     // Start with global environment variables
     if (CI["envs"] and CI["envs"].IsMap()) {
@@ -232,47 +294,8 @@ bool MicroCI::ReadConfig(const string &filename) {
 
     mYamlFilename = filename;
 
-    // Override with the content of the `.env.yml` file
-    if (filesystem::exists(".env.yml")) {
-      auto dotEnv = YAML::LoadFile(".env.yml");
-      if (dotEnv.size() == 0) {
-        spdlog::error("The file .env was found but it has no valid configuration");
-        invalidConfigurationDetected();
-        return false;
-      }
-      for (auto it : dotEnv) {
-        EnvironmentVariable env;
-        env.name = it.first.as<string>();
-        env.value = it.second.as<string>();
-        mEnvs.insert(env);
-      }
-    }
-    // // Override with the content of the `.env` file
-    if (filesystem::exists(".env")) {
-      ifstream env(".env");
-      string line;
-      while (getline(env, line)) {
-        // Skip comments and short lines
-        if (line.size() < 3 or line[0] == '#') {
-          continue;
-        }
-        auto i = 0;
-        while (line.at(i) == ' ' or line.at(i) == '\t') {
-          ++i;
-          if (line[i] == '#') {
-            line = "";
-            break;
-          }
-        }
-        auto eqPos = line.find_first_of("=");
-        if (eqPos != string::npos) {
-          EnvironmentVariable env;
-          env.name = line.substr(0, eqPos);
-          env.value = line.substr(eqPos + 1);
-          mEnvs.insert(env);
-        }
-      }
-    }
+    LoadEnvironmentFromYamlFile(".env.yml");
+    LoadEnvironmentFromEnvFile(".env");
 
   } catch (const YAML::BadFile &e) {
     spdlog::error("Failure loading the file .microCI.yml");

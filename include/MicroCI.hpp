@@ -104,6 +104,8 @@ class MicroCI {
   void initBash(const YAML::Node &CI);
   void parsePluginStep(const YAML::Node &step);
   void invalidConfigurationDetected();
+  void LoadEnvironmentFromYamlFile(const string &filename);
+  void LoadEnvironmentFromEnvFile(const string &filename);
 
   string mYamlFilename = ".microCI.yml";
   set<EnvironmentVariable> mEnvs;
