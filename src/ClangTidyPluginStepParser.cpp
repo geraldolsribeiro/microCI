@@ -97,11 +97,8 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   mMicroCI->Script() << inja::render(
-      R"(        2>&1 | tee auditing/clang-tidy/clang-tidy.log 2>&1 \
-       && clang-tidy-html auditing/clang-tidy/clang-tidy.log 2>&1 \
-       && mv -v clang-tidy-checks.py auditing/clang-tidy/ 2>&1 \
-       && mv -v clang.html auditing/clang-tidy/index.html 2>&1 \
-       && chown $(id -u):$(id -g) -Rv auditing 2>&1"
+      R"(        2>&1 | tee auditing/clang-tidy/clang-tidy.log 2>&1 ; \
+        clang-tidy-html auditing/clang-tidy/clang-tidy.log --out auditing/clang-tidy/index.html 2>&1"
 )",
       data);
 
