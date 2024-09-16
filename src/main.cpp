@@ -53,6 +53,7 @@ using namespace std;
 #include "ClangTidyPluginStepParser.hpp"
 #include "CppCheckPluginStepParser.hpp"
 #include "DocmdPluginStepParser.hpp"
+#include "DoxygenPluginStepParser.hpp"
 #include "FetchPluginStepParser.hpp"
 #include "FlawfinderPluginStepParser.hpp"
 #include "GitDeployPluginStepParser.hpp"
@@ -68,20 +69,21 @@ using namespace std;
 // Configuration templates
 #include "new/bash.hpp"
 #include "new/beamer.hpp"
-#include "new/clang-format.hpp"
 #include "new/clang-format_config.hpp"
+#include "new/clang-format.hpp"
 #include "new/clang-tidy.hpp"
 #include "new/cppcheck.hpp"
 #include "new/docker_build.hpp"
 #include "new/docmd.hpp"
+#include "new/doxygen.hpp"
 #include "new/fetch.hpp"
 #include "new/flawfinder.hpp"
 #include "new/git_deploy.hpp"
-#include "new/git_publish.hpp"
 #include "new/gitlab-ci.hpp"
+#include "new/git_publish.hpp"
 #include "new/minio.hpp"
-#include "new/mkdocs_material.hpp"
 #include "new/mkdocs_material_config.hpp"
+#include "new/mkdocs_material.hpp"
 #include "new/mkdocs_material_index.hpp"
 #include "new/npm.hpp"
 #include "new/pandoc.hpp"
@@ -115,6 +117,7 @@ Opions:
   -n,--new bash            Create a command line step
   -n,--new docmd           Create a documentation step
   -n,--new mkdocs_material Create a documentation step
+  -n,--new doxygen         Create a documentation step
   -n,--new pandoc          Create a document conversion step
   -n,--new git_publish     Create a publish step
   -n,--new git_deploy      Create a production deploy step
@@ -173,6 +176,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
     uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docmd", make_shared<DocmdPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("doxygen", make_shared<DoxygenPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pikchr", make_shared<PikchrPluginStepParser>(&uCI));
@@ -285,6 +289,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
       MICROCI_TPL(true,  "skip",            ".microCI.yml",  yml, skip);
       MICROCI_TPL(true,  "bash",            ".microCI.yml",  yml, bash);
       MICROCI_TPL(true,  "docmd",           ".microCI.yml",  yml, docmd);
+      MICROCI_TPL(true,  "doxygen",         ".microCI.yml",  yml, doxygen);
       MICROCI_TPL(true,  "clang-tidy",      ".microCI.yml",  yml, clang_tidy);
       MICROCI_TPL(true,  "cppcheck",        ".microCI.yml",  yml, cppcheck);
       MICROCI_TPL(true,  "git_deploy",      ".microCI.yml",  yml, git_deploy);
