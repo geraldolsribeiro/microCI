@@ -83,6 +83,9 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
           && if [ ! -f {{ DOXYFILE }} ]; then doxygen -g {{ DOXYFILE }}; fi \
           && doxygen -u {{ DOXYFILE }} \
           && sed -i 's#^OUTPUT_DIRECTORY.*#OUTPUT_DIRECTORY = {{ OUTPUT_DIRECTORY }}#' {{ DOXYFILE }} \
+          && sed -i 's#HAVE_DOT.*#HAVE_DOT = YES#' {{ DOXYFILE }} \
+          && sed -i 's#CALL_GRAPH.*#CALL_GRAPH = YES#' {{ DOXYFILE }} \
+          && sed -i 's#CALLER_GRAPH.*#CALLER_GRAPH = YES#' {{ DOXYFILE }} \
           && doxygen {{ DOXYFILE }}")", data);
 
   endFunction(data);
