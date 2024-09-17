@@ -85,7 +85,11 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
           && sed -i 's#^HAVE_DOT.*#HAVE_DOT = YES#' {{ DOXYFILE }} \
           && sed -i 's#^CALL_GRAPH.*#CALL_GRAPH = YES#' {{ DOXYFILE }} \
           && sed -i 's#^CALLER_GRAPH.*#CALLER_GRAPH = YES#' {{ DOXYFILE }} \
-          && doxygen {{ DOXYFILE }} | tee doxygen.log"
+          && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = auditing/doxygen.log#' {{ DOXYFILE }} \
+          && mkdir -p auditing \
+          && doxygen {{ DOXYFILE }}; \
+          touch auditing/doxygen.log \
+          && sed -i 's#/microci_workspace/##g' auditing/doxygen.log"
 )", data);
 
   endFunction(data);
