@@ -31,4 +31,8 @@ doc_plugin: \
   docs/plugin_pandoc.md \
   docs/plugin_pikchr.md \
   docs/plugin_plantuml.md \
-  docs/plugin_skip.md \
+  docs/plugin_skip.md
+
+.PHONY: build
+build:
+	microCI | bash
