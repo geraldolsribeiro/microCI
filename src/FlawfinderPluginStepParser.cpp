@@ -59,21 +59,22 @@ void FlawfinderPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_DESCRIPTION"] = stepDescription(step, "Analisa o código fonte com flawfinder");
 
   beginFunction(data, envs);
+
+  mMicroCI->Script() << "      local FILELIST=()\n";
+  for (const auto &src : sourceList) {
+    mMicroCI->Script() << "      FILELIST+=(" << src << ")\n";
+  }
+
+  mMicroCI->Script() << "      echo ${FILELIST[@]}\n";
+
   prepareRunDocker(data, envs, volumes);
-  mMicroCI->Script() << inja::render(R"( \
+  mMicroCI->Script() << R"( \
         --minlevel 1 \
         --context \
         --omittime \
         --quiet \
         --html \
-        -- )",
-                                     data);
-  for (const auto &src : sourceList) {
-    mMicroCI->Script() << " " << src;
-  }
-
-  mMicroCI->Script() << R"( \
-        > auditing/flawfinder.html
+        -- ${FILELIST[@]} > auditing/flawfinder.html
 )";
   endFunction(data);
 }
