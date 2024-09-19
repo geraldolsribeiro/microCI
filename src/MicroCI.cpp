@@ -27,9 +27,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <unistd.h>
-#include <sys/types.h>
 #include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <iostream>
 
@@ -239,7 +239,7 @@ void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
 //
 // ----------------------------------------------------------------------
 void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
-  if( filesystem::exists( filename ) ) {
+  if (filesystem::exists(filename)) {
     ifstream env(filename);
     string line;
     while (getline(env, line)) {
@@ -278,8 +278,8 @@ bool MicroCI::ReadConfig(const string &filename) {
     // Global configuration
     {
       struct passwd *pw = getpwuid(getuid());
-      auto globalEnv = fmt::format( "{}/.microCI.env", pw->pw_dir );
-      LoadEnvironmentFromEnvFile( globalEnv );
+      auto globalEnv = fmt::format("{}/.microCI.env", pw->pw_dir);
+      LoadEnvironmentFromEnvFile(globalEnv);
     }
 
     // Start with global environment variables

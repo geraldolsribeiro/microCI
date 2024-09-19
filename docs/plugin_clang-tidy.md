@@ -4,12 +4,15 @@
 
 ```yaml
 steps:
-  - name: "Gerar relatório de verificação do código C++ - clang-tidy"
-    description: "Verifica o código C++ e gera relatório em formato HTML"
+  - name: "Create C++ code verification report - cppcheck"
+    description: "Check C++ code and generate HTML report"
+    network: bridge # http://clang.llvm.org/extra/clang-tidy/checks/list.html
     plugin:
       name: "clang-tidy"
       options:
         - "-std=c++11"
+        - "-checks='-*,modernize-use-override,modernize-use-nullptr'"
+        - "-fix"
       include:
         - "/usr/include/"
       source:

@@ -12,10 +12,6 @@ floating note right: Extract documentation from source code to a markdown file
 floating note left: cppcheck
 floating note right: No description available
 
-:SAST com flawfinder; <<procedure>>
-floating note left: flawfinder
-floating note right: C++ check with flawfinder
-
 :Convert pdf to jpg; <<procedure>>
 floating note left: bash
 floating note right: No description available
@@ -73,6 +69,20 @@ partition "Alternative flow" {
 :C++ check with clang-tidy; <<procedure>>
 floating note left: clang-tidy
 floating note right: No description available
+
+}
+
+stop
+@enduml
+
+
+' Generated Diagram! Do not edit
+@startuml
+start
+partition "Alternative flow" {
+:SAST com flawfinder; <<procedure>>
+floating note left: flawfinder
+floating note right: C++ check with flawfinder
 
 }
 

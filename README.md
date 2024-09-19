@@ -103,7 +103,8 @@ Example:
 
 ## Versions
 
-* `0.33.0` Environment file parsing 
+* `0.34.0` Plugin `doxygen` 
+* `0.33.0` Global environment file parsing 
 * `0.32.0` Integration config file generation
 * `0.31.0` Plugin `template`
 * `0.30.0` Plugin `pikchr`

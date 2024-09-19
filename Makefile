@@ -28,6 +28,7 @@ doc_plugin: \
   docs/plugin_mkdocs_material_config.md \
   docs/plugin_mkdocs_material.md \
   docs/plugin_npm.md \
+  docs/plugin_doxygen.md \
   docs/plugin_pandoc.md \
   docs/plugin_pikchr.md \
   docs/plugin_plantuml.md \
@@ -36,3 +37,7 @@ doc_plugin: \
 .PHONY: build
 build:
 	microCI | bash
+
+.PHONY: test
+test:
+	$(MAKE) -C test

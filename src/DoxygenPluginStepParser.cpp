@@ -45,14 +45,14 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
   auto doxyfile = string{"./Doxyfile"};
   auto output_dir = string{"doxygen/"};
 
-  if( step["html"] ) {
-    if( step["html"]["header"] ) {
+  if (step["html"]) {
+    if (step["html"]["header"]) {
       header = step["html"]["header"].as<string>();
     }
-    if( step["html"]["footer"] ) {
+    if (step["html"]["footer"]) {
       footer = step["html"]["footer"].as<string>();
     }
-    if( step["html"]["stylesheet"] ) {
+    if (step["html"]["stylesheet"]) {
       stylesheet = step["html"]["stylesheet"].as<string>();
     }
   }
@@ -68,7 +68,7 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_DESCRIPTION"] = stepDescription(step, "Execute commands at bash shell");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
   data["DOCKER_IMAGE"] = stepDockerImage(step);
-  data["DOXYFILE" ] = doxyfile;
+  data["DOXYFILE"] = doxyfile;
   data["HEADER"] = header;
   data["FOOTER"] = footer;
   data["STYLESHEET"] = stylesheet;
@@ -90,7 +90,8 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
           && doxygen {{ DOXYFILE }}; \
           touch auditing/doxygen.log \
           && sed -i 's#/microci_workspace/##g' auditing/doxygen.log"
-)", data);
+)",
+                                     data);
 
   endFunction(data);
 }
