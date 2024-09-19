@@ -166,9 +166,8 @@ steps:
   #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/version.hpp
 
   - name: "Build microCI static version"
-    # docker: "gcc:14"
     docker: "intmain/microci_cpp_compiler:latest"
-    run_as: root # necessário para instalar as dependências
+    run_as: root # required to install packages on docker image
     network: host
     plugin:
       name: bash
@@ -176,10 +175,7 @@ steps:
         apt update
         apt upgrade -y
         apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
-        make -C src clean all
-        make -C test
         chown $(id -u).$(id -g) -Rv bin/microCI
-        chown $(id -u).$(id -g) -Rv test/
 
   - name: "Build docker image for microci_cpp_compiler"
     description: "Build docker image for microci_cpp_compiler"

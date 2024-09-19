@@ -235,6 +235,11 @@ function step_sast_com_flawfinder() {
   {
     (
       set -e
+      local FILELIST=()
+      FILELIST+=(src/*.cpp)
+      FILELIST+=(test/*.cpp)
+      FILELIST+=(include/*.hpp)
+      echo ${FILELIST[@]}
 
       echo ""
       echo ""
@@ -262,8 +267,7 @@ function step_sast_com_flawfinder() {
         --omittime \
         --quiet \
         --html \
-        --  src/*.cpp test/*.cpp include/*.hpp \
-        > auditing/flawfinder.html
+        -- ${FILELIST[@]} > auditing/flawfinder.html
 
     )
 
