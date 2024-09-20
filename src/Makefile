@@ -154,3 +154,4 @@ single_compilation_unit.cpp: \
 
 clean:
 	rm -f ../bin/microCI
+	touch ../new/*.yml
