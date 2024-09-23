@@ -111,12 +111,12 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   // xml é escrito na saída de erro
-  mMicroCI->Script() << inja::render(R"(          2> auditing/cppcheck.xml \
+  mMicroCI->Script() << inja::render(R"(          2> auditing/cppcheck/cppcheck.xml \
         && cppcheck-htmlreport \
           --title='{{ REPORT_TITLE }}' \
           --report-dir='auditing/cppcheck/' \
           --source-dir='.' \
-          --file='auditing/cppcheck.xml' 2>&1"
+          --file='auditing/cppcheck/cppcheck.xml' 2>&1"
 )",
                                      data);
 
