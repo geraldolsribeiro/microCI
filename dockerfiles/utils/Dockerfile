@@ -40,7 +40,7 @@ RUN apk add --no-cache \
   jq \
   make \
   msttcorefonts-installer \
-  plantuml
+  plantuml \
+  xmlstarlet
 
 RUN update-ms-fonts
-
