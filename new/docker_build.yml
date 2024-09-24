@@ -2,17 +2,17 @@
 #   
 #{{{
 steps:
-  - name: "Construir imagem docker"
-    description: "Descrição deste passo"
+  - name: "Build docker image"
+    description: "Builds a docker image"
     plugin:
       name: docker_build
-      folder: pasta_que_contem_o_dockerfile
+      folder: folder_with_dockerfile
       dockerfile: alternative.Dockerfile
-      target: intmain/minha_imagem
+      target: intmain/my_image
       version: 0.1.0
       is_latest: true
       push: false
 #}}}
 
-# vim: spell spelllang=pt,en
+# vim: spell spelllang=en
 

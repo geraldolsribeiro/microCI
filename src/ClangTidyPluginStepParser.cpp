@@ -45,11 +45,14 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   auto runAs = string{};
   list<string> checkList;
   list<string> includeList;
+  list<string> systemIncludeList;
   list<string> sourceList;
   list<string> optionList;
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
+
+  bool fixSourceCode = step["plugin"]["fix"] and step["plugin"]["fix"].as<bool>(false);
 
   if (step["plugin"]["checks"] && step["plugin"]["checks"].IsSequence()) {
     for (const auto &inc : step["plugin"]["checks"]) {
@@ -66,6 +69,12 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
     for (const auto &inc : step["plugin"]["include"]) {
       includeList.push_back(inc.as<string>());
+    }
+  }
+
+  if (step["plugin"]["system_include"] && step["plugin"]["system_include"].IsSequence()) {
+    for (const auto &inc : step["plugin"]["system_include"]) {
+      systemIncludeList.push_back(inc.as<string>());
     }
   }
 
@@ -89,12 +98,17 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
         && clang-tidy \
 )",
                                      data);
-  for (const auto &src : sourceList) {
-    mMicroCI->Script() << "        " << src << " \\\n";
+  if (fixSourceCode) {
+    mMicroCI->Script() << "        --fix \\\n";
+    mMicroCI->Script() << "        --fix-errors \\\n";
+  }
+
+  for (const auto &inc : systemIncludeList) {
+    mMicroCI->Script() << "        -isystem" << inc << " \\\n";
   }
 
   if (checkList.empty()) {
-    mMicroCI->Script() << "        -checks='*' \\\n";
+    mMicroCI->Script() << "        -checks='-*,cppcoreguidelines-*' \\\n";
   } else {
     string concatenatedList;
     for (const auto &check : checkList) {
@@ -104,6 +118,10 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
       concatenatedList += check;
     }
     mMicroCI->Script() << "        -checks='" << concatenatedList << "' \\\n";
+  }
+
+  for (const auto &src : sourceList) {
+    mMicroCI->Script() << "        " << src << " \\\n";
   }
 
   if (!optionList.empty() or !includeList.empty()) {

@@ -66,7 +66,7 @@ MicroCI::~MicroCI() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-bool MicroCI::IsValid() const { return mIsValid; }
+auto MicroCI::IsValid() const -> bool { return mIsValid; }
 
 // ----------------------------------------------------------------------
 //
@@ -76,7 +76,7 @@ void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::ActivityDiagram(const string &filename) const {
+auto MicroCI::ActivityDiagram(const string &filename) const -> string {
   string ret;
 
   string beginDiagram{R"(
@@ -168,7 +168,7 @@ void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pl
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-stringstream &MicroCI::Script() {
+auto MicroCI::Script() -> stringstream & {
   if (IsValid()) {
     return mScript;
   }
@@ -178,12 +178,12 @@ stringstream &MicroCI::Script() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::DefaultDockerImage() const { return mDefaultDockerImage; }
+auto MicroCI::DefaultDockerImage() const -> string { return mDefaultDockerImage; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::DefaultWorkspace() const { return mDefaultWorkspace; }
+auto MicroCI::DefaultWorkspace() const -> string { return mDefaultWorkspace; }
 
 // ----------------------------------------------------------------------
 //
@@ -203,7 +203,7 @@ void MicroCI::SetAppendLog(const bool appendLog) { mAppendLog = appendLog; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string MicroCI::ToString() const {
+auto MicroCI::ToString() const -> string {
   if (IsValid()) {
     return mScript.str();
   }
@@ -269,7 +269,7 @@ void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-bool MicroCI::ReadConfig(const string &filename) {
+auto MicroCI::ReadConfig(const string &filename) -> bool {
   YAML::Node CI;
 
   try {
@@ -370,7 +370,7 @@ function main() {
         // if (step["only"]) {
         //   continue;
         // }
-        string stepName = step["name"].as<string>();
+        auto stepName = step["name"].as<string>();
         mScript << "  step_" << sanitizeName(stepName) << endl;
       }
       mScript << R"(
@@ -420,7 +420,7 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<DockerVolume> MicroCI::DefaultVolumes() const {
+auto MicroCI::DefaultVolumes() const -> set<DockerVolume> {
   set<DockerVolume> volumes{{"/microci_workspace", "${MICROCI_PWD}", "rw"}};
   return volumes;
 }
@@ -428,12 +428,12 @@ set<DockerVolume> MicroCI::DefaultVolumes() const {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-set<EnvironmentVariable> MicroCI::DefaultEnvs() const { return mEnvs; }
+auto MicroCI::DefaultEnvs() const -> set<EnvironmentVariable> { return mEnvs; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-json MicroCI::DefaultDataTemplate() const {
+auto MicroCI::DefaultDataTemplate() const -> json {
   json data;
   data["VERSION"] = fmt::format("v{}       ", microCI_version).substr(0, 10);
   data["WORKSPACE"] = mDefaultWorkspace;

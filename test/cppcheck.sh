@@ -268,12 +268,12 @@ function step_create_c___code_verification_report___cppcheck() {
           --include=include \
           src \
           test \
-          2> auditing/cppcheck.xml \
+          2> auditing/cppcheck/cppcheck.xml \
         && cppcheck-htmlreport \
           --title='MicroCI::CppCheck' \
           --report-dir='auditing/cppcheck/' \
           --source-dir='.' \
-          --file='auditing/cppcheck.xml' 2>&1"
+          --file='auditing/cppcheck/cppcheck.xml' 2>&1"
 
     )
 

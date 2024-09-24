@@ -43,14 +43,14 @@ void DockerBuildPluginStepParser::Parse(const YAML::Node &step) {
   auto envs = parseEnvs(step);
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Constroi imagem docker");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Builds a docker image");
 
   auto folder = step["plugin"]["folder"].as<string>("dockerfiles");
   auto dockerfile = step["plugin"]["dockerfile"].as<string>("Dockerfile");
-  auto targetName = step["plugin"]["target"].as<string>("minha_imagem");
+  auto targetName = step["plugin"]["target"].as<string>("my_image");
   auto targetVersion = step["plugin"]["version"].as<string>("0.1.0");
   auto isLatest = step["plugin"]["is_latest"].as<bool>(false);
-  auto isPush = step["plugin"]["push"].as<bool>(false);
+  auto doPush = step["plugin"]["push"].as<bool>(false);
 
   data["FOLDER"] = folder;
   data["TARGET_NAME"] = targetName;
@@ -69,7 +69,7 @@ void DockerBuildPluginStepParser::Parse(const YAML::Node &step) {
                                        data);
   }
 
-  if (isPush) {
+  if (doPush) {
     mMicroCI->Script() << inja::render(R"( \
           && docker login 2>&1 \
           && docker push {{ TARGET_NAME }}:{{ VERSION }} 2>&1)",

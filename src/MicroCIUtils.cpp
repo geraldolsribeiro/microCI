@@ -27,12 +27,16 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include <string>
+
 namespace microci {
+
+using std::string;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string banner() {
+auto banner() -> string {
   return fmt::format(R"(
 
 
@@ -51,12 +55,12 @@ string banner() {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string version() { return fmt::format("v{}", microCI_version); }
+auto version() -> string { return fmt::format("v{}", microCI_version); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string sanitizeName(const string &name) {
+auto sanitizeName(const string &name) -> string {
   auto ret = name;
 
   // Troca os caracteres acentuados por versão sem acento
@@ -85,7 +89,7 @@ string sanitizeName(const string &name) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepRequiredValue(const YAML::Node &step, const string &var) {
+auto stepRequiredValue(const YAML::Node &step, const string &var) -> string {
   if (!step[var]) {
     throw std::invalid_argument(fmt::format("Campo {} não encontrado no passo", var));
   }
@@ -95,7 +99,7 @@ string stepRequiredValue(const YAML::Node &step, const string &var) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepOptionalValue(const YAML::Node &step, const string &var, const string &defaultValue) {
+auto stepOptionalValue(const YAML::Node &step, const string &var, const string &defaultValue) -> string {
   if (step[var]) {
     return step[var].as<string>();
   } else {
@@ -106,12 +110,12 @@ string stepOptionalValue(const YAML::Node &step, const string &var, const string
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepName(const YAML::Node &step) { return stepRequiredValue(step, "name"); }
+auto stepName(const YAML::Node &step) -> string { return stepRequiredValue(step, "name"); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string stepDescription(const YAML::Node &step, const string &defaultValue) {
+auto stepDescription(const YAML::Node &step, const string &defaultValue) -> string {
   return stepOptionalValue(step, "description", defaultValue);
   return defaultValue;
 }

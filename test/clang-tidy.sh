@@ -210,9 +210,9 @@ reformatJson
 # ----------------------------------------------------------------------
 # Check C++ code and generate HTML report
 # ----------------------------------------------------------------------
-function step_create_c___code_verification_report___cppcheck() {
+function step_create_c___code_verification_report___clang_tidy() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Create C++ code verification report - cppcheck"
+  local MICROCI_STEP_NAME="Create C++ code verification report - clang-tidy"
   local MICROCI_STEP_DESCRIPTION="Check C++ code and generate HTML report"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
@@ -238,7 +238,7 @@ function step_create_c___code_verification_report___cppcheck() {
       echo ""
       echo ""
       echo ""
-      echo "Step: Create C++ code verification report - cppcheck"
+      echo "Step: Create C++ code verification report - clang-tidy"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -246,7 +246,7 @@ function step_create_c___code_verification_report___cppcheck() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_create_c___code_verification_report___cppcheck \
+        --name microci_create_c___code_verification_report___clang_tidy \
         --network bridge \
         --workdir /microci_workspace \
         --env ENV_1="1" \
@@ -259,14 +259,16 @@ function step_create_c___code_verification_report___cppcheck() {
         && mkdir -p auditing/clang-tidy/ \
         && date > auditing/clang-tidy/clang-tidy.log \
         && clang-tidy \
+        --fix \
+        --fix-errors \
+        -isystem/usr/local/include \
+        -isystem/usr/include/ \
+        -checks='-*,cppcoreguidelines-*' \
         src/*.cpp \
         test/*.cpp \
-        -checks='*' \
         -- \
         -std=c++11 \
-        -checks='-*,modernize-use-override,modernize-use-nullptr' \
-        -fix \
-        -I/usr/include/ \
+        -Iinclude/ \
         2>&1 | tee auditing/clang-tidy/clang-tidy.log 2>&1 ; \
         clang-tidy-html auditing/clang-tidy/clang-tidy.log --out auditing/clang-tidy/index.html 2>&1"
 
@@ -315,7 +317,7 @@ fi
 function main() {
   date >> .microCI.log
 
-  step_create_c___code_verification_report___cppcheck
+  step_create_c___code_verification_report___clang_tidy
 
   date >> .microCI.log
 }

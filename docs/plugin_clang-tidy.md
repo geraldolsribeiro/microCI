@@ -4,16 +4,26 @@
 
 ```yaml
 steps:
-  - name: "Create C++ code verification report - cppcheck"
+  - name: "Create C++ code verification report - clang-tidy"
     description: "Check C++ code and generate HTML report"
     network: bridge # http://clang.llvm.org/extra/clang-tidy/checks/list.html
     plugin:
       name: "clang-tidy"
+      checks:
+        - "-*"
+        - "cppcoreguidelines-*"
+        # - "modernize-*"
+        # - "hicpp-*"
+        # - "performance-"
+        # - "portability-"
+        # - "readability-"
+      fix: true
       options:
         - "-std=c++11"
-        - "-checks='-*,modernize-use-override,modernize-use-nullptr'"
-        - "-fix"
       include:
+        - "include/"
+      system_include:
+        - "/usr/local/include"
         - "/usr/include/"
       source:
         - "src/*.cpp"

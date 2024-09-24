@@ -100,7 +100,7 @@ using namespace microci;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-string help() {
+auto help() -> string {
   return R"(
 Opions:
   -h,--help                Print this help
@@ -149,7 +149,7 @@ using TemplateType = string;
 // ----------------------------------------------------------------------
 void loadMicroCIEnviromentVariables(MicroCI &uCI, char **envp) {
   // Load environment variables
-  for (char **env = envp; *env != 0; env++) {
+  for (char **env = envp; *env != nullptr; env++) {
     auto envStr = string{*env};
     if (envStr.size() > 7 and envStr.substr(0, 8) == "MICROCI_") {
       auto pos = envStr.find_first_of("=");
@@ -388,7 +388,7 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
       "TRIGGER_PAYLOAD",  // Pipeline	The webhook payload. Only available when a pipeline is triggered with a webhook.
   };
 
-  for (char **env = envp; *env != 0; env++) {
+  for (char **env = envp; *env != nullptr; env++) {
     auto envStr = string{*env};
     auto pos = envStr.find_first_of("=");
     if (pos != string::npos) {
@@ -405,12 +405,12 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-int main([[maybe_unused]] int argc, char **argv, char **envp) {
+auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
   //{{{
 
   try {
     setlocale(LC_ALL, "");
-    bindtextdomain("microci", NULL);
+    bindtextdomain("microci", nullptr);
     bind_textdomain_codeset("microci", "UTF-8");
     textdomain("microci");
 
@@ -447,7 +447,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("docker_build", make_shared<DockerBuildPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("docker_build", make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
     uCI.RegisterPlugin("template", make_shared<TemplatePluginStepParser>(&uCI));
 
@@ -672,7 +672,7 @@ int main([[maybe_unused]] int argc, char **argv, char **envp) {
         unsigned char *md5_digest;
         unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
         mdctx = EVP_MD_CTX_new();
-        EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+        EVP_DigestInit_ex(mdctx, EVP_md5(), nullptr);
         EVP_DigestUpdate(mdctx, pwd.c_str(), pwd.size());
         md5_digest = (unsigned char *)OPENSSL_malloc(md5_digest_len);
         EVP_DigestFinal_ex(mdctx, md5_digest, &md5_digest_len);

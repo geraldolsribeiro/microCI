@@ -26,18 +26,25 @@ steps:
         - [ 'yaml', 'new/skip.yml', 'docs/plugin_skip.md' ]
   - name: "C++ check with clang-tidy"
     network: bridge
-    only: clang-tidy
     plugin:
       name: "clang-tidy"
+      checks:
+        - "-*"
+        - "modernize-*"
+        # - "cppcoreguidelines-*"
+        # - "hicpp-*"
+        # - "performance-"
+        # - "portability-"
+        # - "readability-"
+      fix: true
       options:
         - "-std=c++17"
+        - "-DFMT_HEADER_ONLY -DSPDLOG_FMT_EXTERNAL=1"
       include:
-        - "/usr/include/"
         - "include/"
+        - "src/"
       source:
-        - "src/*pp"
-        - "include/*pp"
-
+        - "src/*.cpp"
   - name: "C++ check with cppcheck"
     plugin:
       name: "cppcheck"
