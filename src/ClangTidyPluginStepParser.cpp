@@ -43,16 +43,23 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   auto volumes = parseVolumes(step);
   auto envs = parseEnvs(step);
   auto runAs = string{};
+  list<string> checkList;
   list<string> includeList;
   list<string> sourceList;
-  list<string> opts{"--"};
+  list<string> optionList;
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
 
+  if (step["plugin"]["checks"] && step["plugin"]["checks"].IsSequence()) {
+    for (const auto &inc : step["plugin"]["checks"]) {
+      checkList.push_back(inc.as<string>());
+    }
+  }
+
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<string>());
+      optionList.push_back(opt.as<string>());
     }
   }
 
@@ -86,9 +93,24 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << "        " << src << " \\\n";
   }
 
-  mMicroCI->Script() << "        -checks='*' \\\n";
+  if (checkList.empty()) {
+    mMicroCI->Script() << "        -checks='*' \\\n";
+  } else {
+    string concatenatedList;
+    for (const auto &check : checkList) {
+      if (!concatenatedList.empty()) {
+        concatenatedList += ",";
+      }
+      concatenatedList += check;
+    }
+    mMicroCI->Script() << "        -checks='" << concatenatedList << "' \\\n";
+  }
 
-  for (const auto &opt : opts) {
+  if (!optionList.empty() or !includeList.empty()) {
+    mMicroCI->Script() << "        -- \\\n";
+  }
+
+  for (const auto &opt : optionList) {
     mMicroCI->Script() << "        " << opt << " \\\n";
   }
 
