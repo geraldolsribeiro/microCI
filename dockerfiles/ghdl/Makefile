@@ -27,7 +27,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.1
+VERSION=0.2
 IMAGE_NAME=microci_ghdl
 
 all: publish
@@ -71,4 +71,3 @@ all08.vhdl:
 
 ams08.vhdl:
 	wget https://raw.githubusercontent.com/ghdl/ghdl/refs/heads/master/testsuite/sanity/004all08/ams08.vhdl
-

@@ -33,8 +33,10 @@ LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@i
 RUN set -eux; \
   apt-get update \
   && apt-get install -y \
+    emacs \
     ghdl \
     gtkwave \
+    vim \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
