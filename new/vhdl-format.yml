@@ -1,0 +1,13 @@
+#   # vhdl-format plugin
+#   
+#{{{
+steps:
+  - name: "VHDL source code formatter and beautifier"
+    description: "Process source code to make readable or match to a project code style"
+    run_as: user
+    plugin:
+      name: "vhdl-format"
+      source:
+        - "src/*.vhd"
+#}}}
+# vim: spell spelllang=en

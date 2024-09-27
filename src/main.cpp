@@ -65,6 +65,7 @@ using namespace std;
 #include "PlantumlPluginStepParser.hpp"
 #include "PluginStepParser.hpp"
 #include "TemplatePluginStepParser.hpp"
+#include "VHDLFormatPluginStepParser.hpp"
 
 // Configuration templates
 #include "new/bash.hpp"
@@ -91,6 +92,7 @@ using namespace std;
 #include "new/plantuml.hpp"
 #include "new/skip.hpp"
 #include "new/template.hpp"
+#include "new/vhdl-format.hpp"
 
 // main class
 #include "MicroCI.hpp"
@@ -124,6 +126,7 @@ Opions:
   -n,--new plantuml        Create a diagram generation step
   -n,--new pikchr          Create a diagram generation step
   -n,--new clang-format    Create a code format step
+  -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
   -n,--new minio           Create a upload/download internal artifact step
@@ -329,15 +332,15 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
                                     // same as the environment of the executor.
       "CI_RUNNER_ID",               // Job-only	The unique ID of the runner being used.
       "CI_RUNNER_REVISION",         // Job-only	The revision of the runner running the job.
-      "CI_RUNNER_SHORT_TOKEN",      // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
-                                    // contains a prefix, and the first 17 characters are used.
-      "CI_RUNNER_TAGS",             // Job-only	A comma-separated list of the runner tags.
-      "CI_RUNNER_VERSION",          // Job-only	The version of the GitLab Runner running the job.
-      "CI_SERVER_FQDN",             // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
-                                    // gitlab.example.com:8080. Introduced in GitLab 16.10.
-      "CI_SERVER_HOST",  // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
-                         // gitlab.example.com.
-      "CI_SERVER_NAME",  // Pipeline	The name of CI/CD server that coordinates jobs.
+      "CI_RUNNER_SHORT_TOKEN",  // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
+                                // contains a prefix, and the first 17 characters are used.
+      "CI_RUNNER_TAGS",         // Job-only	A comma-separated list of the runner tags.
+      "CI_RUNNER_VERSION",      // Job-only	The version of the GitLab Runner running the job.
+      "CI_SERVER_FQDN",         // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
+                                // gitlab.example.com:8080. Introduced in GitLab 16.10.
+      "CI_SERVER_HOST",         // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
+                                // gitlab.example.com.
+      "CI_SERVER_NAME",         // Pipeline	The name of CI/CD server that coordinates jobs.
       "CI_SERVER_PORT",  // Pipeline	The port of the GitLab instance URL, without host or protocol. For example 8080.
       "CI_SERVER_PROTOCOL",  // Pipeline	The protocol of the GitLab instance URL, without host or port. For example
                              // https.
@@ -444,6 +447,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     uCI.RegisterPlugin("cppcheck", make_shared<CppCheckPluginStepParser>(&uCI));
     uCI.RegisterPlugin("clang-tidy", make_shared<ClangTidyPluginStepParser>(&uCI));
     uCI.RegisterPlugin("clang-format", make_shared<ClangFormatPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("vhdl-format", make_shared<VHDLFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
@@ -549,6 +553,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
       MICROCI_TPL(true,  "npm",             ".microCI.yml",  yml, npm);
       MICROCI_TPL(true,  "plantuml",        ".microCI.yml",  yml, plantuml);
       MICROCI_TPL(true,  "pikchr",          ".microCI.yml",  yml, pikchr);
+      MICROCI_TPL(true,  "vhdl-format",     ".microCI.yml",  yml, vhdl_format);
       MICROCI_TPL(true,  "clang-format",    ".microCI.yml",  yml, clang_format);
       MICROCI_TPL(false, "clang-format",    ".clang-format", yml, clang_format_config);
       MICROCI_TPL(true,  "beamer",          ".microCI.yml",  yml, beamer);

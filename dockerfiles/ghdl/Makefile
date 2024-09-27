@@ -71,3 +71,4 @@ all08.vhdl:
 
 ams08.vhdl:
 	wget https://raw.githubusercontent.com/ghdl/ghdl/refs/heads/master/testsuite/sanity/004all08/ams08.vhdl
+
