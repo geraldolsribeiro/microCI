@@ -7,8 +7,8 @@ steps:
     docker: "intmain/microci_doxygen"
     plugin:
       name: doxygen
-      doxyfile: ./Doxyfile
-      output_dir: doxygen
+#      doxyfile: ./Doxyfile
+#      output_dir: doxygen
 #      html:
 #        header: header.html    # Optional
 #        footer: footer.html    # Optional

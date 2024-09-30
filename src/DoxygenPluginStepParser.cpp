@@ -43,18 +43,26 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
   auto footer = string{};
   auto stylesheet = string{};
   auto doxyfile = string{"./Doxyfile"};
-  auto output_dir = string{"doxygen/"};
+  auto output_dir = string{"doxygen"};
 
-  if (step["html"]) {
-    if (step["html"]["header"]) {
-      header = step["html"]["header"].as<string>();
+  if (step["plugin"]["html"]) {
+    if (step["plugin"]["html"]["header"]) {
+      header = step["plugin"]["html"]["header"].as<string>();
     }
-    if (step["html"]["footer"]) {
-      footer = step["html"]["footer"].as<string>();
+    if (step["plugin"]["html"]["footer"]) {
+      footer = step["plugin"]["html"]["footer"].as<string>();
     }
-    if (step["html"]["stylesheet"]) {
+    if (step["plugin"]["html"]["stylesheet"]) {
       stylesheet = step["html"]["stylesheet"].as<string>();
     }
+  }
+
+  if (step["plugin"]["doxyfile"]) {
+    doxyfile = step["plugin"]["doxyfile"].as<string>();
+  }
+
+  if (step["plugin"]["output_dir"]) {
+    output_dir = step["plugin"]["output_dir"].as<string>();
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
@@ -85,11 +93,11 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
           && sed -i 's#^HAVE_DOT.*#HAVE_DOT = YES#' {{ DOXYFILE }} \
           && sed -i 's#^CALL_GRAPH.*#CALL_GRAPH = YES#' {{ DOXYFILE }} \
           && sed -i 's#^CALLER_GRAPH.*#CALLER_GRAPH = YES#' {{ DOXYFILE }} \
-          && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = auditing/doxygen.log#' {{ DOXYFILE }} \
+          && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = {{ OUTPUT_DIRECTORY }}/doxygen.log#' {{ DOXYFILE }} \
           && mkdir -p auditing \
           && doxygen {{ DOXYFILE }}; \
-          touch auditing/doxygen.log \
-          && sed -i 's#/microci_workspace/##g' auditing/doxygen.log"
+          touch {{ OUTPUT_DIRECTORY }}/doxygen.log \
+          && sed -i 's#/microci_workspace/##g' {{ OUTPUT_DIRECTORY }}/doxygen.log"
 )",
                                      data);
 
