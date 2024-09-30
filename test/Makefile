@@ -49,6 +49,7 @@ test:
 	../bin/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
 	../bin/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
 	../bin/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
+	../bin/microCI -i ../new/vhdl-format.yml                     > vhdl-format.sh
 	../bin/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
 	../bin/microCI -i ../new/clang-format.yml                    > clang-format.sh
 	../bin/microCI -i ../new/plantuml.yml                        > plantuml.sh

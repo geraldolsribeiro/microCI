@@ -27,75 +27,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <spdlog/spdlog.h>
+#ifndef VHDL_FORMAT_PLUGIN_STEP_PARSER_HPP
+#define VHDL_FORMAT_PLUGIN_STEP_PARSER_HPP
 
-#include <VHDLFormatPluginStepParser.hpp>
-#include <fstream>
+#include "PluginStepParser.hpp"
 
 namespace microci {
-using namespace std;
 
-// ----------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------
-void VHDLFormatPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+class VHDLFormatPluginStepParser : public PluginStepParser {
+ public:
+  VHDLFormatPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  virtual ~VHDLFormatPluginStepParser() {}
+  virtual void Parse(const YAML::Node &step) override;
+};
 
-  auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data, "none");
-  tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
-
-  data["STEP_NAME"] = stepName(step);
-  data["STEP_DESCRIPTION"] =
-      stepDescription(step, "Process source code to make readable or match to a project code style");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_ghdl:latest");
-
-  auto emacsConfigFilename = inja::render( "{{ WORKSPACE }}/emacs_vhdl_formatter.lisp", data);
-  ofstream emacsConfig(emacsConfigFilename);
-  emacsConfig << inja::render(R"(
-(custom-set-variables
- '(vhdl-align-group-separate "^\\s---*$")
- '(vhdl-align-groups t)
- '(vhdl-align-same-indent t)
- '(vhdl-auto-align t)
- '(vhdl-basic-offset 2)
- '(vhdl-beautify-options '(t      ;; whitespace cleanup
-                           t      ;; single statement per line
-                           t      ;; indentation
-                           t      ;; aligment
-                           t))    ;; case fixing
- ;; '(vhdl-standard '(8 nil))
- '(vhdl-standard '(8 (ams math))) ;; VHDL-08
- '(vhdl-array-index-record-field-in-sensitivity-list t)
- '(vhdl-upper-case-attributes t)
- '(vhdl-upper-case-constants t)
- '(vhdl-upper-case-enum-values t)
- '(vhdl-upper-case-keywords t)
- '(vhdl-upper-case-types t)
- '(vhdl-use-direct-instantiation 'always)
-)
- )",
-                              data);
-  emacsConfig.close();
-
-  beginFunction(data, envs);
-  prepareRunDocker(data, envs, volumes);
-
-  mMicroCI->Script() << inja::render(R"( \
-        bash -c "cd {{ WORKSPACE }})", data);
-
-  copySshIfAvailable(step, data);
-
-  mMicroCI->Script() << inja::render(R"( \
-        && emacs -batch -l {{ WORKSPACE }}/emacs_vhdl_formatter.lisp \
-          ../hdl/**/*.vhd \
-          -f vhdl-beautify-buffer)", data );
-
-  mMicroCI->Script() << "\"\n";
-  endFunction(data);
-}
 }  // namespace microci
 
+#endif
