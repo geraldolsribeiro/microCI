@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.34.0
+                             microCI 0.35.0
 
 
 Opions:
@@ -32,6 +32,7 @@ Opions:
   -n,--new plantuml        Create a diagram generation step
   -n,--new pikchr          Create a diagram generation step
   -n,--new clang-format    Create a code format step
+  -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
   -n,--new minio           Create a upload/download internal artifact step
