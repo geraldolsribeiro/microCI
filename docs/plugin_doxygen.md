@@ -9,15 +9,11 @@ steps:
     docker: "intmain/microci_doxygen"
     plugin:
       name: doxygen
-      doxyfile: ./Doxyfile
-      output_dir: doxygen
-   html:
-#      html:
-     header: header.html    # Optional
-#        header: header.html    # Optional
-     footer: footer.html    # Optional
-#        footer: footer.html    # Optional
-     stylesheet: style.css  # Optional
-#        stylesheet: style.css  # Optional
+      #doxyfile: ./Doxyfile     # Default
+      #output_dir: doxygen      # Default
+      #html:
+        #header: header.html    # Optional
+        #footer: footer.html    # Optional
+        #stylesheet: style.css  # Optional
 ```
 

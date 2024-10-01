@@ -332,15 +332,15 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
                                     // same as the environment of the executor.
       "CI_RUNNER_ID",               // Job-only	The unique ID of the runner being used.
       "CI_RUNNER_REVISION",         // Job-only	The revision of the runner running the job.
-      "CI_RUNNER_SHORT_TOKEN",  // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
-                                // contains a prefix, and the first 17 characters are used.
-      "CI_RUNNER_TAGS",         // Job-only	A comma-separated list of the runner tags.
-      "CI_RUNNER_VERSION",      // Job-only	The version of the GitLab Runner running the job.
-      "CI_SERVER_FQDN",         // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
-                                // gitlab.example.com:8080. Introduced in GitLab 16.10.
-      "CI_SERVER_HOST",         // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
-                                // gitlab.example.com.
-      "CI_SERVER_NAME",         // Pipeline	The name of CI/CD server that coordinates jobs.
+      "CI_RUNNER_SHORT_TOKEN",      // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
+                                    // contains a prefix, and the first 17 characters are used.
+      "CI_RUNNER_TAGS",             // Job-only	A comma-separated list of the runner tags.
+      "CI_RUNNER_VERSION",          // Job-only	The version of the GitLab Runner running the job.
+      "CI_SERVER_FQDN",             // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
+                                    // gitlab.example.com:8080. Introduced in GitLab 16.10.
+      "CI_SERVER_HOST",  // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
+                         // gitlab.example.com.
+      "CI_SERVER_NAME",  // Pipeline	The name of CI/CD server that coordinates jobs.
       "CI_SERVER_PORT",  // Pipeline	The port of the GitLab instance URL, without host or protocol. For example 8080.
       "CI_SERVER_PROTOCOL",  // Pipeline	The protocol of the GitLab instance URL, without host or port. For example
                              // https.

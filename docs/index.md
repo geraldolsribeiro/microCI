@@ -103,6 +103,7 @@ Example:
 
 ## Versions
 
+* `0.35.0` Plugin `vhdl-format` 
 * `0.34.0` Plugin `doxygen` 
 * `0.33.0` Global environment file parsing 
 * `0.32.0` Integration config file generation

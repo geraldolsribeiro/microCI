@@ -8,6 +8,10 @@ partition "Main pipeline" {
 floating note left: docmd
 floating note right: Extract documentation from source code to a markdown file
 
+:C++ check with clang-tidy; <<procedure>>
+floating note left: clang-tidy
+floating note right: No description available
+
 :C++ check with cppcheck; <<procedure>>
 floating note left: cppcheck
 floating note right: No description available
@@ -59,20 +63,6 @@ floating note right: No description available
 :Build docker image for microci_cpp_compiler; <<procedure>>
 floating note left: docker_build
 floating note right: Build docker image for microci_cpp_compiler
-
-}
-
-stop
-@enduml
-
-
-' Generated Diagram! Do not edit
-@startuml
-start
-partition "Alternative flow" {
-:C++ check with clang-tidy; <<procedure>>
-floating note left: clang-tidy
-floating note right: No description available
 
 }
 
