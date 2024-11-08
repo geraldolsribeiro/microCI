@@ -27,7 +27,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.1
+VERSION=0.2
 IMAGE_NAME=microci_doxygen
 
 all: publish
@@ -38,6 +38,9 @@ update:
 build:
 	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
+
+bash:
+	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) bash
 
 test:
 	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION)
