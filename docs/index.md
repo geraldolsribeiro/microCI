@@ -3,15 +3,15 @@
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 
 **microCI** is a powerful tool designed to streamline the creation of
-continuous integration pipelines by generating portable, auditable scripts for
-executing tasks in Docker containers. This ensures that every step of the
-process is fully reproducible across various environments:
+continuous-integration pipelines by generating portable, auditable scripts for
+executing tasks in Docker containers. This ensures that every step in the process
+is fully reproducible across various environments:
 
 * Developer's machines
 * Servers for automatic builds after commits
 * Servers for deployment to production
 
-With microCI, the same tool, free of dependencies, can be used seamlessly on
+With microCI, the same tool, free of dependencies, can be used seamlessly in
 both development and production environments. For complete documentation, visit
 microci.dev.
 
@@ -47,9 +47,8 @@ triggered, execute `microCI` in the respective project folders.
 
 ## Installation
 
-The installation is equally simple, just copy the executable to a folder that
-is in the `PATH`. To completely remove `microCI` from the system, just delete
-the file copied to the PATH.
+The installation is equally simple, just copy the executable to a folder in the `PATH`.
+To remove the `microCI` from the system delete the file copied to the PATH.
 
 ```bash
 sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
@@ -65,7 +64,7 @@ You can use **any Docker container** for execution, both public ones from
 ## Integration with github, gitlab, ...
 
 The simplest and safest way to use `microCI` to read from or write to
-repositories is to access them through an SSH key.
+repositories are to access them through an SSH key.
 
 ## To do
 
@@ -89,15 +88,15 @@ sudo apt install gettext clang-format libspdlog-dev libfmt-dev libyaml-cpp-dev l
 
 ## Docker private repository
 
-In some cases, running a private registry without SSL, is necessary to add the
-IP of registry server to the `insecure-registries` section of the
+In some cases, running a private registry without SSL is necessary to add the
+IP of the registry server to the `insecure-registries` section of the
 `/etc/docker/daemon.json` file.
 
 Example:
 
 ```bash
 {
-	"insecure-registries": ["192.168.1.128:5000", "192.168.1.11:5000"]
+	"insecure-registries": ["11.22.33.44:5000", "192.168.1.1:5000"]
 }
 ```
 
@@ -105,7 +104,7 @@ Example:
 
 * `0.36.0` Allows to run devices inside the container without the --privileged flag
 * `0.35.0` Plugin `vhdl-format`
-* `0.34.0` Plugin `doxygen` 
+* `0.34.0` Plugin `Doxygen` 
 * `0.33.0` Global environment file parsing 
 * `0.32.0` Integration config file generation
 * `0.31.0` Plugin `template`
@@ -117,8 +116,8 @@ Example:
 * `0.26.0` Offline mode
 * `0.25.6` Plugin `git_publish` with branch selection support (p.e. `gh-pages`)
 * `0.24.0` Plugin `docker_build`
-* `0.23.0` Plugin `fetch` download from github (advanced)
-* `0.22.0` Plugin `fetch` download from github (folder)
+* `0.23.0` Plugin `fetch` download from GitHub (advanced)
+* `0.22.0` Plugin `fetch` download from GitHub (folder)
 * `0.21.0` Plugin `flawfinder`
 * `0.20.0` Docker image `intmain/microci_clang`
 * `0.19.0` Documentation with `intmain/docmd`
@@ -146,7 +145,7 @@ Example:
 
 MIT License
 
-Copyright (c) 2022-2024 Geraldo Luis da Silva Ribeiro
+Copyright (c) 2022-2025 Geraldo Luis da Silva Ribeiro
 
 ```
 ░░░░░░░░░░░░░░░░░
