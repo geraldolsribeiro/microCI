@@ -422,11 +422,13 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     if (cmdl[{"-u", "--update"}]) {
-      cout << "sudo curl -fsSL "
-              "github.com/geraldolsribeiro/microci/releases/latest/download/microCI "
-              "-o /usr/bin/microCI\n"
-              "sudo chmod 755 /usr/bin/microCI"
-           << endl;
+      cout << R"(
+sudo curl -fsSL \
+  github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
+  -o /usr/bin/microCI
+sudo chmod 755 /usr/bin/microCI
+microCI --version
+)";
       return 0;
     }
 
