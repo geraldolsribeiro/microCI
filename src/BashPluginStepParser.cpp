@@ -73,6 +73,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   auto envs = parseEnvs(step);
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
+  data = parseDevices(step, data);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   data["STEP_NAME"] = stepName(step);

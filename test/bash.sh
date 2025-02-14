@@ -244,6 +244,7 @@ function step_build_static_version_of_microci() {
       echo "Step: Build static version of microCI"
       # shellcheck disable=SC2140,SC2046
       docker run \
+        --device /dev/dri/ \
         --interactive \
         --attach stdout \
         --attach stderr \

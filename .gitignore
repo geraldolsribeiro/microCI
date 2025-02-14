@@ -16,3 +16,4 @@ src/NOTES.md
 src/single_compilation_unit.cpp
 test/.env
 test/.env.yml
+src/.vim-bookmarks

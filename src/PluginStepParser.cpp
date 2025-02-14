@@ -91,6 +91,21 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const string &ima
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) const -> json {
+  auto data_ = data;
+  data_["DOCKER_DEVICES"] = json::array();
+
+  if (step["devices"] and step["devices"].IsSequence()) {
+    for (const auto &dev : step["devices"]) {
+      data_["DOCKER_DEVICES"].push_back(dev.as<string>());
+    }
+  }
+  return data_;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 auto PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const string &workspace) const -> string {
   string dockerWorkspace = mMicroCI->DefaultWorkspace();
 
@@ -237,6 +252,16 @@ void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentV
     mMicroCI->Script() << inja::render(R"( \
         --entrypoint={{DOCKER_ENTRYPOINT}})",
                                        data);
+  }
+
+  if (data.count("DOCKER_DEVICES")) {
+    mMicroCI->Script() << inja::render(R"( \
+## for device in DOCKER_DEVICES
+        --device {{ device }} \
+## endfor)",
+                                       data);
+    // remove newline, backslash, and space from last entry
+    mMicroCI->Script().seekp(-3, mMicroCI->Script().cur);
   }
 
   mMicroCI->Script() << inja::render(R"( \

@@ -72,7 +72,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<string>("169");
   data["OUTPUT_PDF"] = step["plugin"]["output"].as<string>("output.pdf");
 
-  data["HEADER_INCLUDES"] = "";
+  // data["HEADER_INCLUDES"] = "";
   auto filename = string{"header-includes.yaml"};
   ofstream yaml(filename);
   YAML::Node strippedHeaderIncludes = Clone(step["plugin"]);

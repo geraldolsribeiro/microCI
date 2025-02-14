@@ -57,6 +57,7 @@ class PluginStepParser {
 
   [[nodiscard]] json parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const;
   [[nodiscard]] json parseNetwork(const YAML::Node &step, const json &data, const string &defaultValue) const;
+  [[nodiscard]] json parseDevices(const YAML::Node &step, const json &data) const;
   [[nodiscard]] set<EnvironmentVariable> parseEnvs(const YAML::Node &step) const;
   [[nodiscard]] set<DockerVolume> parseVolumes(const YAML::Node &step) const;
   [[nodiscard]] tuple<json, set<DockerVolume>, set<EnvironmentVariable>> parseSsh(

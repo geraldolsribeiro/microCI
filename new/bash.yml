@@ -4,8 +4,10 @@
 steps:
   - name: "Build static version of microCI"
     description: "Description of this step"
-    docker: "gcc:13" # Image that will be executed
-    network: bridge  # bridge, host or none
+    docker: "gcc:13"     # Image that will be executed
+    network: bridge      # bridge, host or none
+    devices:
+      - "/dev/dri/"
     run_as: root     # root, user
     envs:
       ENV1: "value of the environment variable ENV1"
