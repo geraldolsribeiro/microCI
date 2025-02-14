@@ -1,5 +1,5 @@
 ### ----------------------------------------------------------------------
-### Copyright (C) 2022-2024 Geraldo Ribeiro <geraldo@intmain.io>
+### Copyright (C) 2022-2025 Geraldo Ribeiro <geraldo@intmain.io>
 ### ----------------------------------------------------------------------
 
 SHELL=bash

@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (C) 2022-2024 Geraldo Luis da Silva Ribeiro
+// Copyright (C) 2022-2025 Geraldo Luis da Silva Ribeiro
 //
 // ░░░░░░░░░░░░░░░░░
 // ░░░░░░░█▀▀░▀█▀░░░
