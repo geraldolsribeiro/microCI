@@ -25,6 +25,6 @@ steps:
         make -C src clean all
         make -C test
         # Makes the current user the owner of the generated file
-        chown $(id -u).$(id -g) -Rv src/microCI
+        chown $(id -u):$(id -g) -Rv src/microCI
 ```
 

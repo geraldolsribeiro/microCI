@@ -1,6 +1,6 @@
 ---
 steps:
-  - name: "Extract documentation"
+  - name: "Extract plugin documentation"
     description: "Extract documentation from source code to a markdown file"
     plugin:
       name: "docmd"
@@ -25,6 +25,7 @@ steps:
         - [ 'yaml', 'new/plantuml.yml', 'docs/plugin_plantuml.md' ]
         - [ 'yaml', 'new/skip.yml', 'docs/plugin_skip.md' ]
   - name: "C++ check with clang-tidy"
+    only: clangtidy
     network: bridge
     plugin:
       name: "clang-tidy"
@@ -174,7 +175,7 @@ steps:
 
   - name: "Build microCI static version"
     docker: "intmain/microci_cpp_compiler:latest"
-    run_as: root # required to install packages on docker image
+    run_as: root       # required to install packages on docker image
     network: host
     plugin:
       name: bash
@@ -182,7 +183,7 @@ steps:
         apt update
         apt upgrade -y
         apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
-        chown $(id -u).$(id -g) -Rv bin/microCI
+        chown $(id -u):$(id -g) -Rv bin/microCI
 
   - name: "Build docker image for microci_cpp_compiler"
     description: "Build docker image for microci_cpp_compiler"

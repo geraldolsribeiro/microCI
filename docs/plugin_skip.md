@@ -22,6 +22,6 @@ steps:
         make -C src clean all
         make -C test
         # Ajusta o dono do arquivo do root para o usuário atual
-        chown $(id -u).$(id -g) -Rv src/microCI
+        chown $(id -u):$(id -g) -Rv src/microCI
 ```
 

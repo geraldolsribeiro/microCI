@@ -70,6 +70,7 @@ test:
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
+	$(MAKE) -C failure_test/ test
 	rm -f .env
 	rm -f .env.yml
 	#cat template.sh | bash

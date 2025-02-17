@@ -60,6 +60,7 @@ CXXFLAGS+= -s
 # Optimize by size
 CXXFLAGS+= -Os
 
+# CXXFLAGS+= -flto # Link Time Optimizations
 CXXFLAGS+= -std=c++17
 LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
