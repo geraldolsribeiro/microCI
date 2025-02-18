@@ -104,7 +104,7 @@ using namespace microci;
 // ----------------------------------------------------------------------
 auto help() -> string {
   return R"(
-Opions:
+Options:
   -h,--help                Print this help
   -V,--version             Print the microCI version
   -T,--test-config         Configuration test
