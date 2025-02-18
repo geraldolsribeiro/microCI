@@ -73,32 +73,41 @@ command -v docker &> /dev/null \
   || { echo -e "{{RED}}The utility docker was not found in the system{{CLEAR}}";
       echo "See page 'Install Docker Engine on Ubuntu' at";
       echo "https://docs.docker.com/engine/install/ubuntu/";
-       exit 1; }
+      exit 1; }
+
+groups | grep -q docker || {
+  echo -e "{{RED}}Please finish the docker installation adding your user to the docker group{{CLEAR}}"
+  exit 1; }
 
 if [ ! -d ~/.ssh ]; then
+  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
   echo "The ~/.ssh folder not found"
-  echo "Please setup the SSH before use microCI"
   exit 1
 fi
 
 if [ ! -f ~/.ssh/config ]; then
+  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
   echo "The ~/.ssh/config file not found"
-  echo "Please setup the SSH before use microCI"
   echo "Use the ~/.ssh/config file to pass options to hosts"
   exit 1
 fi
 
-if [ ! -f ~/.ssh/id_rsa.pub ]; then
+if [ ! -f ~/.ssh/id_rsa.pub -a ! -f ~/.ssh/id_ed25519.pub ]; then
+  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
   echo "The ~/.ssh/id_rsa.pub file not found"
-  echo "Please setup the SSH before use microCI"
+  echo "The ~/.ssh/id_ed25519.pub file not found"
   echo "Use the ssh-keygen command to setup your pair of keys"
+  echo "Consider to use ED25519 SSH keys"
+  echo "The book Practical Cryptography With Go suggests that ED25519 keys are more secure and performant than RSA keys."
+  echo "OpenSSH 6.5 introduced ED25519 SSH keys in 2014, and they should be available on most operating systems."
   exit 1
 fi
 
 if [ ! -f ~/.ssh/known_hosts ]; then
+  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
   echo "The ~/.ssh/known_hosts file not found"
-  echo "Please setup the SSH before use microCI"
-  echo "Clone one of your projects using the SSH"
+  echo "Add your SSH public key to your git server, and"
+  echo "clone one of your projects using the SSH protocol"
   echo "git clone git@your.git.server:/some/project.git /tmp"
   exit 1;
 fi
