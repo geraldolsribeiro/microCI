@@ -1,3 +1,4 @@
+---
 name: C/C++ CI
 
 on:
@@ -28,3 +29,13 @@ jobs:
         name: microCI
         path: bin/microCI
         retention-days: 5
+    - name: 'Pre-Release'
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
+          bin/microCI
+          LICENSE
