@@ -76,6 +76,34 @@ void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+auto MicroCI::List(const string &filename) const -> string {
+  string ret;
+
+  YAML::Node CI;
+
+  try {
+    CI = YAML::LoadFile(filename);
+    if (CI["steps"].IsSequence()) {
+      std::size_t number = 1;
+      for (auto step : CI["steps"]) {
+        auto name = step["name"].as<string>();
+        ret += fmt::format("{:>2} {}\n", number++, name);
+      }
+    }
+  } catch (const YAML::BadFile &e) {
+    spdlog::error("Failure loading the file .microCI.yml");
+    spdlog::error(e.what());
+  } catch (const YAML::ParserException &e) {
+    spdlog::error("Failure parsing the file .microCI.yml");
+    spdlog::error(e.what());
+  }
+
+  return ret;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 auto MicroCI::ActivityDiagram(const string &filename) const -> string {
   string ret;
 
@@ -198,6 +226,11 @@ void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetOnlyStepNumber(const std::size_t onlyStepNumber) { mOnlyStepNumber = onlyStepNumber; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::SetAppendLog(const bool appendLog) { mAppendLog = appendLog; }
 
 // ----------------------------------------------------------------------
@@ -240,9 +273,9 @@ void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
 // ----------------------------------------------------------------------
 void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
   if (filesystem::exists(filename)) {
-    ifstream env(filename);
+    ifstream envFile(filename);
     string line;
-    while (getline(env, line)) {
+    while (getline(envFile, line)) {
       // Skip comments and short lines
       if (line.size() < 3 or line[0] == '#') {
         continue;
@@ -316,7 +349,19 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
     mDefaultDockerImage = CI["docker"].as<string>();
   }
 
-  if (!mOnlyStep.empty()) {
+  if (mOnlyStepNumber) {
+    if (CI["steps"].size() < mOnlyStepNumber.value() or mOnlyStepNumber.value() < 1) {
+      throw invalid_argument(fmt::format("Invalid step number: {}", mOnlyStepNumber.value()));
+    }
+    auto step = CI["steps"][mOnlyStepNumber.value() - 1];
+    if (!step or !step["plugin"] or !step["plugin"]["name"]) {
+      throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
+    }
+    parsePluginStep(step);
+    mScript << "# Execute step #" << mOnlyStepNumber.value() << endl;
+    mScript << "step_" << sanitizeName(step["name"].as<string>()) << endl;
+    mScript << "exit 0;" << endl;
+  } else if (!mOnlyStep.empty()) {
     // FIXME: Verificar se existe
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
@@ -480,6 +525,12 @@ void MicroCI::initBash(const YAML::Node &CI) {
     }
   }
   data["STEPS_COMMENTS"] = stepsComments.str();
+
+  if (mOnlyStepNumber) {
+    data["MICROCI_STEP_NUMBER"] = mOnlyStepNumber.value() - 1;
+  } else {
+    data["MICROCI_STEP_NUMBER"] = 0;
+  }
 
   auto scriptMicroCI = string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
   mScript << inja::render(scriptMicroCI, data) << endl;

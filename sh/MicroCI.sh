@@ -244,3 +244,5 @@ function assert_function() {
 resetStepStatusesJson
 reformatJson
 
+MICROCI_STEP_NUMBER={{ MICROCI_STEP_NUMBER }}
+

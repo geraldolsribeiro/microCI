@@ -1,0 +1,17 @@
+ 1 Extract plugin documentation
+ 2 C++ check with clang-tidy
+ 3 C++ check with cppcheck
+ 4 SAST com flawfinder
+ 5 Convert pdf to jpg
+ 6 Build diagrams with plantuml
+ 7 Build diagrams - pikchr
+ 8 Build HTML documentation
+ 9 Documentation preview
+10 Configure github pages
+11 Build PDF documentation
+12 Publish documentation to microci.dev
+13 C++ code format with clang-format
+14 Downlod project dependencies
+15 Build microCI static version
+16 Build docker image for microci_cpp_compiler
+

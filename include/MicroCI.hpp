@@ -45,7 +45,7 @@ namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.36.1"
+#define microCI_version "0.37.0"
 
 // ----------------------------------------------------------------------
 //
@@ -84,12 +84,14 @@ class MicroCI {
   [[nodiscard]] string ToString() const;
   [[nodiscard]] bool IsValid() const;
   [[nodiscard]] string ActivityDiagram(const string &filename) const;
+  [[nodiscard]] string List(const string &filename) const;
 
   // Variável de ambiente global a todos os passos
   void SetEnvironmentVariable(const EnvironmentVariable &env);
   bool ReadConfig(const string &yaml);
   stringstream &Script();
   void SetOnlyStep(const string &onlyStep);
+  void SetOnlyStepNumber(const std::size_t number);
   void SetAppendLog(const bool appendLog);
   void AddDockerImage(const string &image);
 
@@ -111,6 +113,7 @@ class MicroCI {
   set<EnvironmentVariable> mEnvs;
   set<string> mDockerImages;
   string mOnlyStep;
+  std::optional<std::size_t> mOnlyStepNumber;
   string mDefaultDockerImage;
   string mDefaultWorkspace;
   stringstream mScript;

@@ -110,7 +110,9 @@ Options:
   -T,--test-config         Configuration test
   -A,--activity-diagram    Generate activity diagram
   -a,--append-log          Append log
-  -O,--only                Execute only a single step
+  -O,--only name           Execute only a single step
+  -l,--list                List steps
+  -N,--number N            Execute the Nth step
   -U,--update-db           Update observability database
   -u,--update              Update microCI
   -i,--input file.yml      Load the configuration from file.yml
@@ -332,15 +334,15 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
                                     // same as the environment of the executor.
       "CI_RUNNER_ID",               // Job-only	The unique ID of the runner being used.
       "CI_RUNNER_REVISION",         // Job-only	The revision of the runner running the job.
-      "CI_RUNNER_SHORT_TOKEN",  // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
-                                // contains a prefix, and the first 17 characters are used.
-      "CI_RUNNER_TAGS",         // Job-only	A comma-separated list of the runner tags.
-      "CI_RUNNER_VERSION",      // Job-only	The version of the GitLab Runner running the job.
-      "CI_SERVER_FQDN",         // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
-                                // gitlab.example.com:8080. Introduced in GitLab 16.10.
-      "CI_SERVER_HOST",         // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
-                                // gitlab.example.com.
-      "CI_SERVER_NAME",         // Pipeline	The name of CI/CD server that coordinates jobs.
+      "CI_RUNNER_SHORT_TOKEN",      // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
+                                    // contains a prefix, and the first 17 characters are used.
+      "CI_RUNNER_TAGS",             // Job-only	A comma-separated list of the runner tags.
+      "CI_RUNNER_VERSION",          // Job-only	The version of the GitLab Runner running the job.
+      "CI_SERVER_FQDN",             // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
+                                    // gitlab.example.com:8080. Introduced in GitLab 16.10.
+      "CI_SERVER_HOST",  // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
+                         // gitlab.example.com.
+      "CI_SERVER_NAME",  // Pipeline	The name of CI/CD server that coordinates jobs.
       "CI_SERVER_PORT",  // Pipeline	The port of the GitLab instance URL, without host or protocol. For example 8080.
       "CI_SERVER_PROTOCOL",  // Pipeline	The protocol of the GitLab instance URL, without host or port. For example
                              // https.
@@ -606,7 +608,7 @@ microCI --version
       }
 
       if (isNewPluginFound) {
-        return 0; // All done
+        return 0;  // All done
       }
       spdlog::error(_("Invalid plugin type: {}"), newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
@@ -627,12 +629,22 @@ microCI --version
       uCI.SetOnlyStep(onlyStep);
     }
 
+    std::size_t onlyStepNumber{0};
+    if ((cmdl({"-N", "--number"}) >> onlyStepNumber)) {
+      uCI.SetOnlyStepNumber(onlyStepNumber);
+    }
+
     if (!uCI.ReadConfig(yamlFileName)) {
       cout << microci::banner() << endl;
       auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
       spdlog::error(msg);
       cout << fmt::format("echo '{}'\n", msg);
       return 1;
+    }
+
+    if (cmdl[{"-l", "--list"}]) {
+      cout << uCI.List(yamlFileName) << endl;
+      return 0;
     }
 
     // Generate activity diagram and exit

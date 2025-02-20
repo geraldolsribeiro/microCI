@@ -102,7 +102,8 @@ Example:
 
 ## Versions
 
-* `0.36.0` Allows to run devices inside the container without the --privileged flag
+* `0.37.0` Execute Nth step; List steps; bugfixes
+* `0.36.0` Allows to run devices inside the container without the `--privileged` flag
 * `0.35.0` Plugin `vhdl-format`
 * `0.34.0` Plugin `Doxygen` 
 * `0.33.0` Global environment file parsing 

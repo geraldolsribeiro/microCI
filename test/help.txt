@@ -7,16 +7,18 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.36.1
+                             microCI 0.37.0
 
 
-Opions:
+Options:
   -h,--help                Print this help
   -V,--version             Print the microCI version
   -T,--test-config         Configuration test
   -A,--activity-diagram    Generate activity diagram
   -a,--append-log          Append log
-  -O,--only                Execute only a single step
+  -O,--only name           Execute only a single step
+  -l,--list                List steps
+  -N,--number N            Execute the Nth step
   -U,--update-db           Update observability database
   -u,--update              Update microCI
   -i,--input file.yml      Load the configuration from file.yml

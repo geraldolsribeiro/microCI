@@ -70,6 +70,8 @@ test:
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
+	../bin/microCI -i ../.microCI.yml --list                     > list.txt
+	../bin/microCI -i ../.microCI.yml --number 7                 > step_7_pikchr.sh
 	$(MAKE) -C failure_test/ test
 	rm -f .env
 	rm -f .env.yml

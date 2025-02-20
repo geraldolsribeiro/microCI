@@ -209,14 +209,14 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
       mMicroCI->Script() << inja::render(
           R"( \
-           && chown $(id -u):$(id -g) -Rv {{ TARGET }})",
+           ; chown $(id -u):$(id -g) -Rv {{ TARGET }})",
           data);
     }
     data["TARGET"] = defaultTarget;
     mMicroCI->Script() << inja::render(
-          R"( \
-          && chown $(id -u):$(id -g) -Rv {{ TARGET }})",
-      data);
+        R"( \
+          ; chown $(id -u):$(id -g) -Rv {{ TARGET }})",
+        data);
     mMicroCI->Script() << "\"\n";
     endFunction(data);
   }

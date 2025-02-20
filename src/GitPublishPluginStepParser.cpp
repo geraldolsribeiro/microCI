@@ -86,12 +86,12 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
 
   if (cleanBefore) {
     mMicroCI->Script() << inja::render(R"(
-           && git -C {{ PLUGIN_COPY_TO }} rm '*' || echo 'Repositório vazio!' 2>&1 \)",
+           && git -C {{ PLUGIN_COPY_TO }} rm '*' || echo 'Empty repository!' 2>&1 \)",
                                        data);
   }
 
   mMicroCI->Script() << inja::render(R"(
-           && chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1 \
+           ; chown $(id -u):$(id -g) -Rv {{ PLUGIN_COPY_FROM }} 2>&1 \
            && cp -rv {{ PLUGIN_COPY_FROM }}/* {{ PLUGIN_COPY_TO }}/ 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \

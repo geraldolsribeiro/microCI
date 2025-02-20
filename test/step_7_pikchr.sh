@@ -166,7 +166,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/minio.yml" \
+    yq -r .steps[].name "../.microCI.yml" \
       | while IFS= read -r stepName
         do
           updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
@@ -248,12 +248,12 @@ reformatJson
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Description of this step
+# Build diagrams from textual description
 # ----------------------------------------------------------------------
-function step_save_artifact_in_bucket() {
+function step_build_diagrams___pikchr() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Save artifact in bucket"
-  local MICROCI_STEP_DESCRIPTION="Description of this step"
+  local MICROCI_STEP_NAME="Build diagrams - pikchr"
+  local MICROCI_STEP_DESCRIPTION="Build diagrams from textual description"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -268,7 +268,6 @@ function step_save_artifact_in_bucket() {
   echo -ne "[0;36m${title}[0m: "
   local ENV_1="1"
   local ENV_2="String with spaces"
-  local HOME="/tmp/"
   local MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
   local MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
   local MICROCI_MINIO_URL="http://11.22.33.44:9000"
@@ -280,32 +279,34 @@ function step_save_artifact_in_bucket() {
       echo ""
       echo ""
       echo ""
-      echo "Step: Save artifact in bucket"
+      echo "Step: Build diagrams - pikchr"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
-        --entrypoint= \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_save_artifact_in_bucket_$(head -c 8 /proc/sys/kernel/random/uuid) \
-        --network bridge \
+        --name microci_build_diagrams___pikchr_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --network none \
         --workdir /microci_workspace \
         --env ENV_1="1" \
         --env ENV_2="String with spaces" \
-        --env HOME="/tmp/" \
         --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
         --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
         --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "minio/mc:latest" \
-        /bin/bash -c "cd /microci_workspace \
-        && mc alias set microci http://11.22.33.44:9000 Micro00000000000000CI microcimicrocimicrocimicrocimicrocimicro --api S3v4 \
-           && mc ls microci/bucket_name 2>&1 \
-           && mc cp Makefile microci/bucket_name/ 2>&1 \
-           && mc cp microci/bucket_name/image.png . 2>&1"
+        "intmain/microci_pikchr:latest" \
+           /bin/bash -c "cd /microci_workspace \
+           && for pikchr_input in \
+             docs/diagrams/*.pikchr \
 
+           do
+             output_filename_svg=\${pikchr_input%.*}.svg
+             pikchr --svg-only \${pikchr_input} > \${output_filename_svg}
+           done
+              2>&1"
+  
     )
 
     status=$?
@@ -333,39 +334,6 @@ function step_save_artifact_in_bucket() {
 
   ((++MICROCI_STEP_NUMBER))
 }
-# Update docker images used in the steps
-if docker image inspect debian:stable-slim > /dev/null 2>&1 ; then
-  echo 'Docker image debian:stable-slim is already updated' >> .microCI.log
-else
-  echo 'Updating debian:stable-slim docker image...'
-  docker pull debian:stable-slim 2>&1 >> .microCI.log
-fi
-if docker image inspect minio/mc:latest > /dev/null 2>&1 ; then
-  echo 'Docker image minio/mc:latest is already updated' >> .microCI.log
-else
-  echo 'Updating minio/mc:latest docker image...'
-  docker pull minio/mc:latest 2>&1 >> .microCI.log
-fi
-
-
-# Execute all steps in the pipeline
-function main() {
-  date >> .microCI.log
-
-  step_save_artifact_in_bucket
-
-  date >> .microCI.log
-}
-
-# Entry point
-main
-
-# Usage
-# -----
-#
-# To execute this workflow inside a terminal use the following command:
-# microCI | bash
-#
-# To save the workflow as a bash scritp just redirect the output to a file:
-# microCI > build.sh
-
+# Execute step #7
+step_build_diagrams___pikchr
+exit 0;
