@@ -332,15 +332,15 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
                                     // same as the environment of the executor.
       "CI_RUNNER_ID",               // Job-only	The unique ID of the runner being used.
       "CI_RUNNER_REVISION",         // Job-only	The revision of the runner running the job.
-      "CI_RUNNER_SHORT_TOKEN",      // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
-                                    // contains a prefix, and the first 17 characters are used.
-      "CI_RUNNER_TAGS",             // Job-only	A comma-separated list of the runner tags.
-      "CI_RUNNER_VERSION",          // Job-only	The version of the GitLab Runner running the job.
-      "CI_SERVER_FQDN",             // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
-                                    // gitlab.example.com:8080. Introduced in GitLab 16.10.
-      "CI_SERVER_HOST",  // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
-                         // gitlab.example.com.
-      "CI_SERVER_NAME",  // Pipeline	The name of CI/CD server that coordinates jobs.
+      "CI_RUNNER_SHORT_TOKEN",  // Job-only	The runner’s unique ID, used to authenticate new job requests. The token
+                                // contains a prefix, and the first 17 characters are used.
+      "CI_RUNNER_TAGS",         // Job-only	A comma-separated list of the runner tags.
+      "CI_RUNNER_VERSION",      // Job-only	The version of the GitLab Runner running the job.
+      "CI_SERVER_FQDN",         // Pipeline	The fully qualified domain name (FQDN) of the instance. For example
+                                // gitlab.example.com:8080. Introduced in GitLab 16.10.
+      "CI_SERVER_HOST",         // Pipeline	The host of the GitLab instance URL, without protocol or port. For example
+                                // gitlab.example.com.
+      "CI_SERVER_NAME",         // Pipeline	The name of CI/CD server that coordinates jobs.
       "CI_SERVER_PORT",  // Pipeline	The port of the GitLab instance URL, without host or protocol. For example 8080.
       "CI_SERVER_PROTOCOL",  // Pipeline	The protocol of the GitLab instance URL, without host or port. For example
                              // https.
@@ -573,7 +573,6 @@ microCI --version
         if (newType == type) {
           isNewPluginFound = true;
 
-          ofstream out;
           auto fileName = tpl.fileName;
 
           // Caso seja utilizado algum path diferente do default
@@ -595,20 +594,19 @@ microCI --version
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
             string step{(char *)tpl.fileContent, tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
-            out.open(fileName, ios_base::app);
+            ofstream out(fileName, ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
             out << step;
           } else {
             spdlog::debug(_("The file '{}' was created from the template"), fileName);
-            out.open(fileName);
+            ofstream out(fileName);
             out.write((char *)tpl.fileContent, tpl.fileSize);
           }
         }
       }
 
       if (isNewPluginFound) {
-        // All done
-        return 0;
+        return 0; // All done
       }
       spdlog::error(_("Invalid plugin type: {}"), newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
