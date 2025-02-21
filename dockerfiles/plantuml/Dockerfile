@@ -27,26 +27,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM openjdk:23-slim
+FROM alpine:latest
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
 
-# Evita a criação de uma pasta '?'
-ENV _JAVA_OPTIONS=-Duser.home=/tmp/
+# Very similar image to doxygen
+RUN echo "2025-02-21" \
+  && apk add --no-cache \
+    bash \
+    plantuml \
+    graphviz
 
-RUN apt-get update \
-  && apt-get install -y curl graphviz libxext6 libxrender1 libxext6 libxtst6 \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+# Make same path available on Debian and Alpine
+RUN mkdir -p /usr/share/plantuml/ && ln -sf /usr/share/java/plantuml.jar /usr/share/plantuml/plantuml.jar
 
-# MIT License
-ARG URL=https://github.com/plantuml/plantuml/releases/download/v1.2024.6/plantuml-mit-1.2024.6.jar
-# GPL stuffs are note availible: Ditaa, Jcckit, Sudoku, Xearth
+RUN wget https://github.com/plantuml/plantuml/releases/download/v1.2025.1/plantuml-mit-1.2025.1.jar -O /usr/share/java/plantuml.jar
 
-RUN mkdir -p /opt/plantuml \
-  && curl -L "${URL}" -o /opt/plantuml/plantuml.jar \
-  && echo '#!/bin/bash\n\
-java -jar /opt/plantuml/plantuml.jar "$*"\n\
-' > /usr/local/bin/plantuml \
-  && chmod 755 /usr/local/bin/plantuml
-
+CMD [ "/bin/echo", "microCI plantuml image" ]
