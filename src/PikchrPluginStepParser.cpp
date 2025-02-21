@@ -93,19 +93,11 @@ void PikchrPluginStepParser::Parse(const YAML::Node &step) {
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
 
-  // if( type == "svg" ) {
-
-  //         && java -jar /opt/plantuml/plantuml.jar
   mMicroCI->Script() << inja::render(R"( \
            /bin/bash -c "cd {{ WORKSPACE }} \
            && for pikchr_input in \
  )",
                                      data);
-
-  // for (const auto &opt : opts) {
-  //   mMicroCI->Script() << "            " << opt << " \\\n";
-  // }
-  //
 
   for (const auto &src : sourceList) {
     mMicroCI->Script() << "            " << src << " \\\n";
