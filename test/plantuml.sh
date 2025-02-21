@@ -297,7 +297,7 @@ function step_build_diagrams() {
         "intmain/microci_plantuml:latest" \
           /bin/bash -c "cd /microci_workspace \
           && export XDG_CACHE_HOME=$(mktemp -d) \
-          && java -jar /opt/plantuml/plantuml.jar \
+          && java -jar /usr/share/java/plantuml.jar \
             -nometadata \
             -charset utf-8  \
             -r \

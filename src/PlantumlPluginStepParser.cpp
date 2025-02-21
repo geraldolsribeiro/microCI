@@ -89,7 +89,7 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
   mMicroCI->Script() << inja::render(R"( \
           /bin/bash -c "cd {{ WORKSPACE }} \
           && export XDG_CACHE_HOME=$(mktemp -d) \
-          && java -jar /opt/plantuml/plantuml.jar \
+          && java -jar /usr/share/java/plantuml.jar \
 )",
                                      data);
 
