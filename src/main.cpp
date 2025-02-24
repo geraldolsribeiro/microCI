@@ -114,7 +114,8 @@ Options:
   -l,--list                List steps
   -N,--number N            Execute the Nth step
   -U,--update-db           Update observability database
-  -u,--update              Update microCI
+  -u,--update              Update microCI to stable stream
+  -D,--update-dev          Update microCI to development stream
   -i,--input file.yml      Load the configuration from file.yml
   -n,--config gitlab-ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
@@ -425,8 +426,20 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
 
     if (cmdl[{"-u", "--update"}]) {
       cout << R"(
+echo "🚀 Updating to the latest stable release..."
 sudo curl -fsSL \
   github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
+  -o /usr/bin/microCI
+sudo chmod 755 /usr/bin/microCI
+microCI --version
+)";
+      return 0;
+    }
+    if (cmdl[{"-D", "--update-dev"}]) {
+      cout << R"(
+echo "🚧 Updating to the development stream..."
+sudo curl -fsSL \
+  github.com/geraldolsribeiro/microci/releases/download/latest/microCI \
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 microCI --version
