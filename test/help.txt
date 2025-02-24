@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.37.0
+                             microCI 0.38.0
 
 
 Options:
@@ -20,7 +20,8 @@ Options:
   -l,--list                List steps
   -N,--number N            Execute the Nth step
   -U,--update-db           Update observability database
-  -u,--update              Update microCI
+  -u,--update              Update microCI to stable stream
+  -D,--update-dev          Update microCI to development stream
   -i,--input file.yml      Load the configuration from file.yml
   -n,--config gitlab-ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
