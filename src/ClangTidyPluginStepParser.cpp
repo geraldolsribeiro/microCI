@@ -104,7 +104,7 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   for (const auto &inc : systemIncludeList) {
-    mMicroCI->Script() << "        -isystem" << inc << " \\\n";
+    mMicroCI->Script() << "        --system-headers " << inc << " \\\n";
   }
 
   if (checkList.empty()) {
