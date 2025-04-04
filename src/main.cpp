@@ -117,7 +117,7 @@ Options:
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
   -i,--input file.yml      Load the configuration from file.yml
-  -n,--config gitlab-ci    Create a .gitlab-ci.yml example config
+  -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
   -n,--new docmd           Create a documentation step
