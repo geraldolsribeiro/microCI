@@ -47,6 +47,8 @@ triggered, execute `microCI` in the respective project folders.
 
 ## Installation
 
+### Linux
+
 The installation is equally simple, just copy the executable to a folder in the `PATH`.
 To remove the `microCI` from the system delete the file copied to the PATH.
 
@@ -55,6 +57,23 @@ sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/down
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 ```
+
+### MacOS
+
+**Warning::** The installation process is not validated yet.
+
+```bash
+sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI-macos-arm64.tar.gz \
+  -o /usr/bin/microCI
+sudo chmod 755 /usr/local/bin/microCI
+```
+
+## Windows
+
+Sorry :(
+
+I have no plan for a version running on MS Windows.
+Be free to compile and try by yourself.
 
 ## Docker Container
 

@@ -30,12 +30,25 @@
 # Re: Removing unused functions/dead code
 # https://gcc.gnu.org/legacy-ml/gcc-help/2003-08/msg00128.html
 
+# Detect system
+UNAME_S := $(shell uname -s)
+UNAME_P := $(shell uname -m)
+
+# Check if macOS (Darwin) and ARM (aarch64/arm64)
+ifeq ($(UNAME_S),Darwin)
+    ifeq ($(UNAME_P),arm64)
+        IS_MAC_ARM = 1
+    endif
+endif
+
 CXXFLAGS+= -DFMT_HEADER_ONLY
 CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
 
 CXXFLAGS+= -I../include/
 
 CXXFLAGS+= -Wall -Wextra
+
+ifndef IS_MAC_ARM
 
 # Link against static libraries.
 # Required for dead-code elimination.
@@ -57,14 +70,24 @@ CXXFLAGS+= -Wl,--gc-sections
 # (I presume that you'd want to do this in a dead-code removal build.)
 CXXFLAGS+= -s
 
+endif
+
 # Optimize by size
 CXXFLAGS+= -Os
 
 # CXXFLAGS+= -flto # Link Time Optimizations
 CXXFLAGS+= -std=c++17
-LDFLAGS+= -lstdc++fs
+# LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 LDFLAGS+= -lcrypto
+LDFLAGS+= -lintl
+
+# Mac ARM-specific settings
+ifdef IS_MAC_ARM
+    CXXFLAGS += -I/opt/homebrew/include  # Homebrew ARM paths
+    LDFLAGS += -L/opt/homebrew/lib
+    # LIBS += -lmyarmlib
+endif
 
 all: ../locales/pt_BR/microci.mo ../bin/microCI 
 	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml
@@ -151,8 +174,14 @@ single_compilation_unit.cpp: \
 ../bin/microCI: single_compilation_unit.cpp
 	mkdir -p ../bin/
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	strip --strip-all $@
+	echo strip --strip-all $@
 
 clean:
 	rm -f ../bin/microCI
 	touch ../new/*.yml
+
+mac_deps:
+	brew install spdlog yaml-cpp inja
+	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
+	wget https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -O ../include/inicpp.h
+
