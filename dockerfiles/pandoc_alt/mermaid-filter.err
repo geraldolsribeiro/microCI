@@ -1,0 +1,12 @@
+
+Error: Could not find Chromium (rev. 1108766). This can occur if either
+ 1. you did not perform an installation before running the script (e.g. `npm install`) or
+ 2. your cache path is incorrectly configured (which is: /home/ubuntu/.cache/puppeteer).
+For (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.
+    at ChromeLauncher.resolveExecutablePath (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/puppeteer-core/lib/esm/puppeteer/node/ProductLauncher.js:263:27)
+    at ChromeLauncher.executablePath (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/puppeteer-core/lib/esm/puppeteer/node/ChromeLauncher.js:176:25)
+    at ChromeLauncher.computeLaunchArguments (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/puppeteer-core/lib/esm/puppeteer/node/ChromeLauncher.js:93:37)
+    at async ChromeLauncher.launch (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/puppeteer-core/lib/esm/puppeteer/node/ProductLauncher.js:57:28)
+    at async run (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/@mermaid-js/mermaid-cli/src/index.js:416:19)
+    at async cli (file:///usr/local/lib/node_modules/mermaid-filter/node_modules/@mermaid-js/mermaid-cli/src/index.js:192:3)
+

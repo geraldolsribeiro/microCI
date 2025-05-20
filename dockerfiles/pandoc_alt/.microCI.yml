@@ -1,0 +1,17 @@
+steps:
+  - name: "Generate PDF from Markdown"
+    description: "Description of this step"
+    docker: intmain/microci_pandoc_alt:latest
+    plugin:
+      name: pandoc
+      base_path: .
+      inputs:
+        - README.md
+      output: README.pdf
+      options:
+        - --pdf-engine=pdflatex
+        - --filter mermaid-filter
+        - --standalone
+        - --toc
+        - --number-sections
+# vim: spell spelllang=pt,en
