@@ -30,7 +30,6 @@
 #include <spdlog/spdlog.h>
 
 #include <PandocPluginStepParser.hpp>
-#include <fstream>
 
 namespace microci {
 using namespace std;
@@ -69,9 +68,8 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
 
   data["STEP_NAME"] = stepName(step);
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando pandoc");
-  data["DOCKER_IMAGE"] = "pandoc/latex:latest";
-  data["DOCKER_IMAGE"] = "intmain/microci_pandoc:latest";
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Create documentation using pandoc");
+  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_pandoc:latest");
   data["BASE_PATH"] = basePath;
 
   auto envs = parseEnvs(step);

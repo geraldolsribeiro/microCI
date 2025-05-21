@@ -55,8 +55,8 @@ publish: build
 
 .PHONY: bash
 bash:
-	docker run --rm -it --entrypoint /bin/sh intmain/microci_pandoc:latest
+	docker run --rm -it --entrypoint /bin/sh intmain/$(IMAGE_NAME):$(VERSION)
 
 .PHONY: fc-list
 fc-list:
-	docker run --rm -it --entrypoint fc-list intmain/microci_pandoc:latest
+	docker run --rm -it --entrypoint fc-list intmain/$(IMAGE_NAME):$(VERSION)
