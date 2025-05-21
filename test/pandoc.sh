@@ -325,6 +325,8 @@ function step_generate_pdf_from_markdown() {
 echo 'Updating docker images...'
   echo 'Updating debian:stable-slim docker image...' >> .microCI.log
   docker pull debian:stable-slim --quiet 2>&1 >> .microCI.log
+  echo 'Updating intmain/microci_pandoc:latest docker image...' >> .microCI.log
+  docker pull intmain/microci_pandoc:latest --quiet 2>&1 >> .microCI.log
 
 
 # Execute all steps in the pipeline
