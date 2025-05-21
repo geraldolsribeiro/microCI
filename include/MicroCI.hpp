@@ -30,10 +30,8 @@
 #ifndef MICRO_CI_HPP
 #define MICRO_CI_HPP
 
-#include <map>
 #include <memory>
 #include <optional>
-#include <set>
 #include <string>
 
 using namespace std;
@@ -46,7 +44,7 @@ namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.38.0"
+#define microCI_version "0.39.0"
 
 // ----------------------------------------------------------------------
 //
