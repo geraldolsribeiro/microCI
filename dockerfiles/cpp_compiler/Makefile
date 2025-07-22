@@ -41,6 +41,9 @@ build:
 
 test:
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-format --version
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy --version
+	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang --version
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) arm-linux-gnueabi-g++ --version
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 

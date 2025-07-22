@@ -93,6 +93,11 @@ RUN set -eux; \
     g++-arm-linux-gnueabi \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+RUN set -eux; \
+  echo "2025-07-22" > /dev/null \
+  && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
+  && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
+  && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
 
 CMD [ "/bin/echo", "microCI C++ compiler image" ]
 
