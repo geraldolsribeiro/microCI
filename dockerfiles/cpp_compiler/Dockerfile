@@ -31,7 +31,7 @@ FROM gcc:latest
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
 
 RUN set -eux; \
-  echo "2024-06-06" > /dev/null \
+  echo "2025-07-22" > /dev/null \
   && apt-get update \
   && apt-get install -y curl \
   && echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm main" > /etc/apt/sources.list.d/llvm.list \
@@ -47,10 +47,10 @@ RUN set -eux; \
   && apt-get update \
   && apt-get install -y \
     build-essential \
-    clang \
-    clang-format \
-    clang-tidy \
-    clang-tools \
+    clang-22 \
+    clang-format-22 \
+    clang-tidy-22 \
+    clang-tools-22 \
     cmake \
     cppcheck \
     crossbuild-essential-arm64 \
@@ -93,6 +93,11 @@ RUN set -eux; \
     g++-arm-linux-gnueabi \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+RUN set -eux; \
+  echo "2025-07-22" > /dev/null \
+  && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
+  && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
+  && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
 
 CMD [ "/bin/echo", "microCI C++ compiler image" ]
 

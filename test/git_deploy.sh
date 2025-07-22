@@ -62,6 +62,7 @@ command -v jq &> /dev/null \
 
 command -v yq &> /dev/null \
   || { echo -e "[0;31mThe utility yq was not found in the system[0m";
+       echo "[0;31mTry: [0;32msudo apt install yq";
        echo "[0;31mTry: [0;32msudo snap install yq";
        exit 1; }
 

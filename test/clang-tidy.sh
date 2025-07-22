@@ -62,6 +62,7 @@ command -v jq &> /dev/null \
 
 command -v yq &> /dev/null \
   || { echo -e "[0;31mThe utility yq was not found in the system[0m";
+       echo "[0;31mTry: [0;32msudo apt install yq";
        echo "[0;31mTry: [0;32msudo snap install yq";
        exit 1; }
 
@@ -303,8 +304,8 @@ function step_create_c___code_verification_report___clang_tidy() {
         && clang-tidy \
         --fix \
         --fix-errors \
-        -isystem/usr/local/include \
-        -isystem/usr/include/ \
+        --system-headers /usr/local/include \
+        --system-headers /usr/include/ \
         -checks='-*,cppcoreguidelines-*' \
         src/*.cpp \
         test/*.cpp \
