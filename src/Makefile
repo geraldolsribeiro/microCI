@@ -84,9 +84,9 @@ LDFLAGS+= -lintl
 
 # Mac ARM-specific settings
 ifdef IS_MAC_ARM
-    CXXFLAGS += -I/opt/homebrew/include  # Homebrew ARM paths
-    LDFLAGS += -L/opt/homebrew/lib
-    # LIBS += -lmyarmlib
+CXXFLAGS += -I/opt/homebrew/include
+LDFLAGS += -L/opt/homebrew/lib
+# LIBS += -lmyarmlib
 endif
 
 all: ../locales/pt_BR/microci.mo ../bin/microCI 
@@ -184,4 +184,9 @@ mac_deps:
 	brew install spdlog yaml-cpp inja
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
 	wget https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -O ../include/inicpp.h
+
+.PHONY: install_usr_local_bin
+install_usr_local_bin: ../bin/microCI
+	sudo cp $< /usr/local/bin/
+	sudo chmod 755 /usr/local/bin/microCI
 

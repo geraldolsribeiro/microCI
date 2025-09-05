@@ -496,6 +496,14 @@ auto MicroCI::DefaultDataTemplate() const -> json {
 
   data["APPEND_LOG_TEE_FLAG"] = mAppendLog ? " -a" : "";
 
+#ifdef __APPLE__
+  data["RANDOM_8"] = "$(uuidgen | head -c 8)";
+#endif
+
+#ifdef __linux__
+  data["RANDOM_8"] = "$(head -c 8 /proc/sys/kernel/random/uuid)";
+#endif
+
   return data;
 }
 

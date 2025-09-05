@@ -23,7 +23,7 @@ steps:
         # Comments are allowed between commands
         apt update
         apt upgrade -y
-        # These packages are installed in the image
+        # Install dependencies inside docker image
         apt install -y xxd libspdlog-dev libyaml-cpp-dev
         make -C src clean all
         make -C test

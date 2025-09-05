@@ -120,7 +120,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_{{ FUNCTION_NAME }}_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_{{ FUNCTION_NAME }}_{{ RANDOM_8 }} \
         --workdir {{ WORKSPACE }} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --user $(id -u):$(id -g) \

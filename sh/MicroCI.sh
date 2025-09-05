@@ -20,6 +20,8 @@
 MICROCI_PWD=$(pwd -P | tr -d '\n')
 export MICROCI_PWD
 
+OS=$(uname -s)
+
 # ----------------------------------------------------------------------
 # Project banner
 # ----------------------------------------------------------------------
@@ -76,9 +78,19 @@ command -v docker &> /dev/null \
       echo "https://docs.docker.com/engine/install/ubuntu/";
       exit 1; }
 
-groups | grep -q docker || {
-  echo -e "{{RED}}Please finish the docker installation adding your user to the docker group{{CLEAR}}"
-  exit 1; }
+case "$OS" in
+  "Linux")
+    groups | grep -q docker || {
+      echo -e "{{RED}}Please finish the docker installation adding your user to the docker group{{CLEAR}}"
+      exit 1; }
+    ;;
+  "Darwin")
+    ;;
+  *)
+    echo "Running on an unknown operating system: $OS"
+    exit 1
+    ;;
+esac
 
 if [ ! -d ~/.ssh ]; then
   echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
