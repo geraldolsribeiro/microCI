@@ -116,6 +116,7 @@ Options:
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
+  -x,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
@@ -443,6 +444,13 @@ sudo curl -fsSL \
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 microCI --version
+)";
+      return 0;
+    }
+    if (cmdl[{"-x", "--uninstall"}]) {
+      cout << R"(
+echo "🔥 Removing microCI..."
+sudo rm -f /usr/bin/microCI
 )";
       return 0;
     }
