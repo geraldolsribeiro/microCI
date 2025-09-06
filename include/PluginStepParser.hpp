@@ -72,7 +72,7 @@ class PluginStepParser {
   void prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs, const set<DockerVolume> &volumes);
 
   MicroCI *mMicroCI = nullptr;
-  bool mIsValid = true;
+  bool mIsValid     = true;
 };
 
 }  // namespace microci

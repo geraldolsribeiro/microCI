@@ -38,7 +38,7 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void PandocPluginStepParser::Parse(const YAML::Node &step) {
-  auto output = string{"output.pdf"};
+  auto output   = string{"output.pdf"};
   auto basePath = string{"."};
   list<string> inputList;
   list<string> optionList = {"--pdf-engine=xelatex"};
@@ -64,13 +64,13 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseNetwork(step, data, "host");
+  data      = parseNetwork(step, data, "host");
 
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Create documentation using pandoc");
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_pandoc:latest");
-  data["BASE_PATH"] = basePath;
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_pandoc:latest");
+  data["BASE_PATH"]        = basePath;
 
   auto envs = parseEnvs(step);
   beginFunction(data, envs);

@@ -49,7 +49,7 @@ void PluginStepParser::invalidConfigurationDetected() { mIsValid = false; }
 //
 // ----------------------------------------------------------------------
 auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const -> json {
-  auto data_ = data;
+  auto data_      = data;
   data_["RUN_AS"] = defaultValue;
   if (step["run_as"]) {
     data_["RUN_AS"] = step["run_as"].as<string>();
@@ -62,7 +62,7 @@ auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, cons
 // ----------------------------------------------------------------------
 auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, const string &defaultValue) const
     -> json {
-  auto data_ = data;
+  auto data_              = data;
   data_["DOCKER_NETWORK"] = defaultValue;
   if (step["network"]) {
     data_["DOCKER_NETWORK"] = step["network"].as<string>();
@@ -93,7 +93,7 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const string &ima
 //
 // ----------------------------------------------------------------------
 auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) const -> json {
-  auto data_ = data;
+  auto data_              = data;
   data_["DOCKER_DEVICES"] = json::array();
 
   if (step["devices"] and step["devices"].IsSequence()) {
@@ -129,7 +129,7 @@ auto PluginStepParser::parseEnvs(const YAML::Node &step) const -> set<Environmen
   if (step["envs"] and step["envs"].IsMap()) {
     for (const auto &it : step["envs"]) {
       EnvironmentVariable env;
-      env.name = it.first.as<string>();
+      env.name  = it.first.as<string>();
       env.value = it.second.as<string>();
       ret.insert(env);
     }
@@ -209,7 +209,7 @@ void PluginStepParser::endFunction(const json &data) {
 )",
                                      data);
 
-  auto envs = mMicroCI->DefaultEnvs();
+  auto envs       = mMicroCI->DefaultEnvs();
   auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     mMicroCI->Script() << inja::render(R"(
@@ -300,11 +300,11 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
                                 const set<EnvironmentVariable> &envs) const
     -> tuple<json, set<DockerVolume>, set<EnvironmentVariable>> {
   auto sshMountForCopy = string{"${HOME}/.ssh"};
-  auto volumes_ = volumes;
-  auto data_ = data;
-  auto envs_ = envs;
+  auto volumes_        = volumes;
+  auto data_           = data;
+  auto envs_           = envs;
 
-  data_["SSH_COPY_TO"] = string{};
+  data_["SSH_COPY_TO"]   = string{};
   data_["SSH_COPY_FROM"] = "/.microCI_ssh";
 
   if (step["ssh"]) {
@@ -326,8 +326,8 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
     // Temporary mounting for copy
     DockerVolume vol;
     vol.destination = "/.microCI_ssh";
-    vol.source = sshMountForCopy;
-    vol.mode = "ro";
+    vol.source      = sshMountForCopy;
+    vol.mode        = "ro";
     volumes_.insert(vol);
   }
   return {data_, volumes_, envs_};
@@ -360,7 +360,7 @@ auto PluginStepParser::parseVolumes(const YAML::Node &step) const -> set<DockerV
     for (const auto &volume : step["volumes"]) {
       DockerVolume vol;
       vol.destination = volume["destination"].as<string>();
-      vol.source = volume["source"].as<string>();
+      vol.source      = volume["source"].as<string>();
       if (volume["mode"]) {
         vol.mode = volume["mode"].as<string>();
       } else {

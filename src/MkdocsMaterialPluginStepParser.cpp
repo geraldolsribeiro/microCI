@@ -41,7 +41,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   auto action = string{"build"};
-  auto port = string{"8000"};
+  auto port   = string{"8000"};
 
   if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
@@ -54,14 +54,14 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseNetwork(step, data, "host");
+  data      = parseNetwork(step, data, "host");
 
-  data["ACTION"] = action;
-  data["PORT"] = port;
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["ACTION"]           = action;
+  data["PORT"]             = port;
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
-  data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:0.4";
+  data["DOCKER_IMAGE"]     = "intmain/microci_mkdocs_material:0.4";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
   // exec 5> >(logger -t $0)

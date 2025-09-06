@@ -41,14 +41,14 @@ using namespace std;
 // ----------------------------------------------------------------------
 void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data, "none");
+  data      = parseRunAs(step, data, "user");
+  data      = parseNetwork(step, data, "none");
 
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Apresentação PDF criada a partir do markdown");
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "pandoc/latex:latest");
-  data["WORKSPACE"] = stepDockerWorkspace(step, "/data");
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "pandoc/latex:latest");
+  data["WORKSPACE"]        = stepDockerWorkspace(step, "/data");
 
   auto inputMD = string{};
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
@@ -63,15 +63,15 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
     throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
   }
 
-  data["LANG"] = step["plugin"]["lang"].as<string>("pt-BR");
-  data["DATE"] = step["plugin"]["date"].as<string>("01 de Abril de 2023");
-  data["INSTITUTE"] = step["plugin"]["institute"].as<string>("Nome da instituição");
-  data["TITLE"] = step["plugin"]["title"].as<string>("Título da apresentação");
-  data["SUBTITLE"] = step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
-  data["SUBJECT"] = step["plugin"]["subject"].as<string>("Informação da propriedade Assunto do PDF");
+  data["LANG"]        = step["plugin"]["lang"].as<string>("pt-BR");
+  data["DATE"]        = step["plugin"]["date"].as<string>("01 de Abril de 2023");
+  data["INSTITUTE"]   = step["plugin"]["institute"].as<string>("Nome da instituição");
+  data["TITLE"]       = step["plugin"]["title"].as<string>("Título da apresentação");
+  data["SUBTITLE"]    = step["plugin"]["subtitle"].as<string>("Subtítulo da apresentação");
+  data["SUBJECT"]     = step["plugin"]["subject"].as<string>("Informação da propriedade Assunto do PDF");
   data["SLIDE_LEVEL"] = step["plugin"]["slide-level"].as<string>("2");
   data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<string>("169");
-  data["OUTPUT_PDF"] = step["plugin"]["output"].as<string>("output.pdf");
+  data["OUTPUT_PDF"]  = step["plugin"]["output"].as<string>("output.pdf");
 
   // data["HEADER_INCLUDES"] = "";
   auto filename = string{"header-includes.yaml"};

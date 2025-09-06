@@ -46,11 +46,11 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   list<string> sourceList;
   list<string> opts{"--enable=all", "--inconclusive", "--xml", "--xml-version=2"};
 
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data, "none");
+  auto envs    = parseEnvs(step);
+  data         = parseRunAs(step, data, "user");
+  data         = parseNetwork(step, data, "none");
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
@@ -78,13 +78,13 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
     standard = step["plugin"]["std"].as<string>();
   }
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
-  data["PLATFORM"] = platform;
-  data["STD"] = standard;
-  data["REPORT_TITLE"] = "MicroCI::CppCheck";
+  data["PLATFORM"]         = platform;
+  data["STD"]              = standard;
+  data["REPORT_TITLE"]     = "MicroCI::CppCheck";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

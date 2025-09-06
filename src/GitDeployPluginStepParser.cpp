@@ -42,23 +42,23 @@ using namespace std;
 void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
   auto envs = parseEnvs(step);
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseRunAs(step, data, "user");
+  data      = parseRunAs(step, data, "user");
 
-  const auto name = step["plugin"]["name"].as<string>();
-  const auto repo = step["plugin"]["repo"].as<string>();
-  const auto gitDir = step["plugin"]["git_dir"].as<string>();
+  const auto name     = step["plugin"]["name"].as<string>();
+  const auto repo     = step["plugin"]["repo"].as<string>();
+  const auto gitDir   = step["plugin"]["git_dir"].as<string>();
   const auto workTree = step["plugin"]["work_tree"].as<string>();
-  auto clean = true;
+  auto clean          = true;
 
   if (step["plugin"]["clean"]) {
     clean = step["plugin"]["clean"].as<bool>();
   }
 
-  data["GIT_URL"] = repo;
-  data["GIT_DIR"] = gitDir;
-  data["GIT_WORK"] = workTree;
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["GIT_URL"]          = repo;
+  data["GIT_DIR"]          = gitDir;
+  data["GIT_WORK"]         = workTree;
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step);
 
   beginFunction(data, envs);

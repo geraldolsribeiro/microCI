@@ -40,9 +40,9 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void FlawfinderPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
   list<string> sourceList;
 
   data = parseRunAs(step, data, "user");
@@ -54,9 +54,9 @@ void FlawfinderPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_flawfinder:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_flawfinder:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Analisa o código fonte com flawfinder");
 
   beginFunction(data, envs);

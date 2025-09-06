@@ -40,35 +40,35 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
 
-  data = parseRunAs(step, data, "root");  // From new version of bitname/git
-  data = parseNetwork(step, data, "bridge");
+  data                     = parseRunAs(step, data, "root");  // From new version of bitname/git
+  data                     = parseNetwork(step, data, "bridge");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   // Suppress "Welcome to the Bitnami git container"
   EnvironmentVariable bitnamiDisableWelcomeMessage;
-  bitnamiDisableWelcomeMessage.name = "DISABLE_WELCOME_MESSAGE";
+  bitnamiDisableWelcomeMessage.name  = "DISABLE_WELCOME_MESSAGE";
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
-  const auto name = step["plugin"]["name"].as<string>();
+  const auto name   = step["plugin"]["name"].as<string>();
   const auto gitURL = step["plugin"]["git_url"].as<string>();
 
   auto pluginCopyFrom = step["plugin"]["copy_from"].as<string>("site");
-  auto pluginCopyTo = step["plugin"]["copy_to"].as<string>("/tmp/microci_deploy");
-  auto cleanBefore = step["plugin"]["clean_before"].as<bool>(true);
-  auto gitBranch = step["plugin"]["branch"].as<string>("main");
+  auto pluginCopyTo   = step["plugin"]["copy_to"].as<string>("/tmp/microci_deploy");
+  auto cleanBefore    = step["plugin"]["clean_before"].as<bool>(true);
+  auto gitBranch      = step["plugin"]["branch"].as<string>("main");
 
-  data["GIT_URL"] = gitURL;
-  data["PLUGIN_COPY_TO"] = pluginCopyTo;
+  data["GIT_URL"]          = gitURL;
+  data["PLUGIN_COPY_TO"]   = pluginCopyTo;
   data["PLUGIN_COPY_FROM"] = pluginCopyFrom;
-  data["GIT_BRANCH"] = gitBranch;
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["GIT_BRANCH"]       = gitBranch;
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnami/git:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Publica arquivos em um repositório git");
 
   beginFunction(data, envs);
