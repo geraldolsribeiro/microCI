@@ -78,10 +78,10 @@ auto sanitizeName(const string &name) -> string {
 
   // Caracteres não permitidos são trocados por _
   const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
-  size_t found = ret.find_first_not_of(allowedChars);
+  size_t found            = ret.find_first_not_of(allowedChars);
   while (found != string::npos) {
     ret[found] = '_';
-    found = ret.find_first_not_of(allowedChars, found + 1);
+    found      = ret.find_first_not_of(allowedChars, found + 1);
   }
   return ret;
 }

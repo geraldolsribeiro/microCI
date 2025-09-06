@@ -37,14 +37,14 @@ using namespace std;
 
 #include <spdlog/spdlog.h>
 
-#include <MicroCI.hpp>
-#include <inja.hpp>
-#include <sh/MicroCI.hpp>
-#include <sh/NotifyDiscord.hpp>
+#include "MicroCI.hpp"
+#include "inja.hpp"
+#include "sh/MicroCI.hpp"
+#include "sh/NotifyDiscord.hpp"
 
 // Resolve forward definition
-#include <PluginStepParser.hpp>
-#include <SkipPluginStepParser.hpp>
+#include "PluginStepParser.hpp"
+#include "SkipPluginStepParser.hpp"
 
 namespace microci {
 
@@ -53,7 +53,7 @@ namespace microci {
 // ----------------------------------------------------------------------
 MicroCI::MicroCI() {
   mDefaultDockerImage = "debian:stable-slim";
-  mDefaultWorkspace = "/microci_workspace";
+  mDefaultWorkspace   = "/microci_workspace";
 }
 
 // ----------------------------------------------------------------------
@@ -261,7 +261,7 @@ void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
     }
     for (auto it : dotEnv) {
       EnvironmentVariable env;
-      env.name = it.first.as<string>();
+      env.name  = it.first.as<string>();
       env.value = it.second.as<string>();
       mEnvs.insert(env);
     }
@@ -291,7 +291,7 @@ void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
       auto eqPos = line.find_first_of("=");
       if (eqPos != string::npos) {
         EnvironmentVariable env;
-        env.name = line.substr(0, eqPos);
+        env.name  = line.substr(0, eqPos);
         env.value = line.substr(eqPos + 1);
         mEnvs.insert(env);
       }
@@ -311,7 +311,7 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
     // Global configuration
     {
       struct passwd *pw = getpwuid(getuid());
-      auto globalEnv = fmt::format("{}/.microCI.env", pw->pw_dir);
+      auto globalEnv    = fmt::format("{}/.microCI.env", pw->pw_dir);
       LoadEnvironmentFromEnvFile(globalEnv);
     }
 
@@ -319,7 +319,7 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
     if (CI["envs"] and CI["envs"].IsMap()) {
       for (auto it : CI["envs"]) {
         EnvironmentVariable env;
-        env.name = it.first.as<string>();
+        env.name  = it.first.as<string>();
         env.value = it.second.as<string>();
         mEnvs.insert(env);
       }
@@ -476,25 +476,33 @@ auto MicroCI::DefaultEnvs() const -> set<EnvironmentVariable> { return mEnvs; }
 // ----------------------------------------------------------------------
 auto MicroCI::DefaultDataTemplate() const -> json {
   json data;
-  data["VERSION"] = fmt::format("v{}       ", microCI_version).substr(0, 10);
+  data["VERSION"]   = fmt::format("v{}       ", microCI_version).substr(0, 10);
   data["WORKSPACE"] = mDefaultWorkspace;
 
   // Network docker: bridge (default), host, none
-  data["DOCKER_NETWORK"] = "none";
-  data["DOCKER_IMAGE"] = mDefaultDockerImage;
-  data["RUN_AS"] = "root";
+  data["DOCKER_NETWORK"]    = "none";
+  data["DOCKER_IMAGE"]      = mDefaultDockerImage;
+  data["RUN_AS"]            = "root";
   data["MICROCI_STEP_SKIP"] = "no";
-  data["MICROCI_YAML"] = mYamlFilename;
+  data["MICROCI_YAML"]      = mYamlFilename;
 
-  data["BLUE"] = "\033[0;34m";
-  data["YELLOW"] = "\033[0;33m";
+  data["BLUE"]    = "\033[0;34m";
+  data["YELLOW"]  = "\033[0;33m";
   data["MAGENTA"] = "\033[0;35m";
-  data["RED"] = "\033[0;31m";
-  data["GREEN"] = "\033[0;32m";
-  data["CYAN"] = "\033[0;36m";
-  data["CLEAR"] = "\033[0m";
+  data["RED"]     = "\033[0;31m";
+  data["GREEN"]   = "\033[0;32m";
+  data["CYAN"]    = "\033[0;36m";
+  data["CLEAR"]   = "\033[0m";
 
   data["APPEND_LOG_TEE_FLAG"] = mAppendLog ? " -a" : "";
+
+#ifdef __APPLE__
+  data["RANDOM_8"] = "$(uuidgen | head -c 8)";
+#endif
+
+#ifdef __linux__
+  data["RANDOM_8"] = "$(head -c 8 /proc/sys/kernel/random/uuid)";
+#endif
 
   return data;
 }
@@ -531,7 +539,7 @@ void MicroCI::initBash(const YAML::Node &CI) {
   auto scriptMicroCI = string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
   mScript << inja::render(scriptMicroCI, data) << endl;
 
-  auto envs = DefaultEnvs();
+  auto envs       = DefaultEnvs();
   auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     auto scriptNotifyDiscord =

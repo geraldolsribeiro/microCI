@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "ClangFormatPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <ClangFormatPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,9 +40,9 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
   list<string> sourceList;
 
   data = parseRunAs(step, data, "user");
@@ -53,9 +54,9 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "C++ code formatting");
 
   beginFunction(data, envs);

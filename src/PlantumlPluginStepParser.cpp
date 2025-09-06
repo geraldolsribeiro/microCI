@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "PlantumlPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <PlantumlPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,9 +40,9 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
   list<string> sourceList;
   list<string> opts = {"-nometadata", "-charset utf-8 ", "-r"};
 
@@ -60,9 +61,9 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  auto type = step["plugin"]["type"].as<string>("png");
+  auto type         = step["plugin"]["type"].as<string>("png");
   auto outputFolder = step["plugin"]["output_folder"].as<string>("");
-  auto config = step["plugin"]["config"].as<string>("");
+  auto config       = step["plugin"]["config"].as<string>("");
 
   // para executar com GUI
   // -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/
@@ -77,11 +78,11 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
     opts.push_back("-o /microci_workspace/" + outputFolder);
   }
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_plantuml:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_plantuml:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Build diagrams from textual description");
-  data["OUTPUT"] = outputFolder;
+  data["OUTPUT"]           = outputFolder;
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

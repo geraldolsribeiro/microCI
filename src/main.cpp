@@ -39,10 +39,11 @@
 
 using namespace std;
 
-#include <argh.h>
-#include <inicpp.h>
 #include <libintl.h>
 #include <spdlog/spdlog.h>
+
+#include "argh.h"
+#include "inicpp.h"
 
 #define _(String) gettext(String)
 
@@ -116,6 +117,7 @@ Options:
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
+  -x,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
@@ -160,7 +162,7 @@ void loadMicroCIEnviromentVariables(MicroCI &uCI, char **envp) {
     if (envStr.size() > 7 and envStr.substr(0, 8) == "MICROCI_") {
       auto pos = envStr.find_first_of("=");
       EnvironmentVariable environmentVariable;
-      environmentVariable.name = envStr.substr(0, pos);
+      environmentVariable.name  = envStr.substr(0, pos);
       environmentVariable.value = envStr.substr(pos + 1);
       uCI.SetEnvironmentVariable(environmentVariable);
     }
@@ -396,10 +398,10 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
 
   for (char **env = envp; *env != nullptr; env++) {
     auto envStr = string{*env};
-    auto pos = envStr.find_first_of("=");
+    auto pos    = envStr.find_first_of("=");
     if (pos != string::npos) {
       EnvironmentVariable environmentVariable;
-      environmentVariable.name = envStr.substr(0, pos);
+      environmentVariable.name  = envStr.substr(0, pos);
       environmentVariable.value = envStr.substr(pos + 1);
       if (allowedEnvironmentVariables.count(environmentVariable.name) == 1) {
         uCI.SetEnvironmentVariable(environmentVariable);
@@ -443,6 +445,13 @@ sudo curl -fsSL \
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 microCI --version
+)";
+      return 0;
+    }
+    if (cmdl[{"-x", "--uninstall"}]) {
+      cout << R"(
+echo "🔥 Removing microCI..."
+sudo rm -f /usr/bin/microCI
 )";
       return 0;
     }
@@ -684,7 +693,7 @@ microCI --version
           pwd.erase(pwd.size() - 1);  // remove a barra no final
         }
 
-        auto gitRemoteOrigin = string{};
+        auto gitRemoteOrigin   = string{};
         auto gitConfigFilename = pwd + "/.git/config";
         if (filesystem::exists(gitConfigFilename)) {
           ini::IniFile gitConfigIni;
@@ -701,7 +710,7 @@ microCI --version
         EVP_MD_CTX *mdctx;
         unsigned char *md5_digest;
         unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
-        mdctx = EVP_MD_CTX_new();
+        mdctx                       = EVP_MD_CTX_new();
         EVP_DigestInit_ex(mdctx, EVP_md5(), nullptr);
         EVP_DigestUpdate(mdctx, pwd.c_str(), pwd.size());
         md5_digest = (unsigned char *)OPENSSL_malloc(md5_digest_len);
@@ -719,15 +728,15 @@ microCI --version
         }
         pwdRepoId = pwdRepoId.substr(0, 7);
 
-        dbJson["repos"][pwdRepoId]["path"] = pwd;
+        dbJson["repos"][pwdRepoId]["path"]   = pwd;
         dbJson["repos"][pwdRepoId]["origin"] = gitRemoteOrigin;
 
         size_t stepNo = 0;
         for (auto step : CI["steps"]) {
           spdlog::debug("{} {}", stepNo, step["name"].as<string>());
-          dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"] = step["name"].as<string>();
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"]   = step["name"].as<string>();
           dbJson["repos"][pwdRepoId]["steps"][stepNo]["plugin"] = step["plugin"]["name"].as<string>();
-          dbJson["repos"][pwdRepoId]["steps"][stepNo]["only"] = bool(step["only"]);
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["only"]   = bool(step["only"]);
           if (step["description"]) {
             dbJson["repos"][pwdRepoId]["steps"][stepNo]["description"] = step["description"].as<string>();
           }

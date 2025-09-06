@@ -116,7 +116,7 @@ class MicroCI {
   string mDefaultDockerImage;
   string mDefaultWorkspace;
   stringstream mScript;
-  bool mIsValid = true;
+  bool mIsValid   = true;
   bool mAppendLog = false;
 
   map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap;

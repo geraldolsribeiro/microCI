@@ -3,8 +3,8 @@ bin/microCI
 .ccls-cache
 dockerfiles/pikchr/pikchr
 docs/diagrams/*.png
-include/argh.h
-include/inicpp.h
+# include/argh.h
+# include/inicpp.h
 include/inja.hpp
 include/nlohmann/json.hpp
 include/sha1.h
@@ -18,3 +18,6 @@ test/.env
 test/.env.yml
 test/failure_test/a.c
 .vim-bookmarks
+macos/package/usr/local/bin
+macos/MicroCI-*.pkg
+.DS_Store

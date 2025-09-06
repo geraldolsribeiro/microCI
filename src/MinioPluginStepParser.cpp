@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "MinioPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <MinioPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,12 +40,12 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void MinioPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
   auto cmdsStr = string{};
-  auto cmds = vector<string>{};
-  auto line = string{};
+  auto cmds    = vector<string>{};
+  auto line    = string{};
 
   data = parseRunAs(step, data, "user");
 
@@ -73,12 +74,12 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "minio/mc:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Send files from/to the artifact manager");
+  data["STEP_NAME"]         = stepName(step);
+  data["DOCKER_IMAGE"]      = stepDockerImage(step, "minio/mc:latest");
+  data["FUNCTION_NAME"]     = sanitizeName(stepName(step));
+  data["STEP_DESCRIPTION"]  = stepDescription(step, "Send files from/to the artifact manager");
   data["DOCKER_ENTRYPOINT"] = "";  // remove o entrypoint padrão
-  data["DOCKER_NETWORK"] = "bridge";
+  data["DOCKER_NETWORK"]    = "bridge";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

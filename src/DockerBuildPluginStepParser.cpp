@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "DockerBuildPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <DockerBuildPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,23 +40,23 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void DockerBuildPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
-  auto envs = parseEnvs(step);
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  auto data                = mMicroCI->DefaultDataTemplate();
+  auto envs                = parseEnvs(step);
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Builds a docker image");
 
-  auto folder = step["plugin"]["folder"].as<string>("dockerfiles");
-  auto dockerfile = step["plugin"]["dockerfile"].as<string>("Dockerfile");
-  auto targetName = step["plugin"]["target"].as<string>("my_image");
+  auto folder        = step["plugin"]["folder"].as<string>("dockerfiles");
+  auto dockerfile    = step["plugin"]["dockerfile"].as<string>("Dockerfile");
+  auto targetName    = step["plugin"]["target"].as<string>("my_image");
   auto targetVersion = step["plugin"]["version"].as<string>("0.1.0");
-  auto isLatest = step["plugin"]["is_latest"].as<bool>(false);
-  auto doPush = step["plugin"]["push"].as<bool>(false);
+  auto isLatest      = step["plugin"]["is_latest"].as<bool>(false);
+  auto doPush        = step["plugin"]["push"].as<bool>(false);
 
-  data["FOLDER"] = folder;
+  data["FOLDER"]      = folder;
   data["TARGET_NAME"] = targetName;
-  data["VERSION"] = targetVersion;
-  data["DOCKERFILE"] = dockerfile;
+  data["VERSION"]     = targetVersion;
+  data["DOCKERFILE"]  = dockerfile;
 
   beginFunction(data, envs);
   mMicroCI->Script() << inja::render(R"( \

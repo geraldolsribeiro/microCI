@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "MkdocsMaterialPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <MkdocsMaterialPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -40,7 +41,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   auto action = string{"build"};
-  auto port = string{"8000"};
+  auto port   = string{"8000"};
 
   if (step["plugin"]["action"]) {
     action = step["plugin"]["action"].as<string>();
@@ -53,14 +54,14 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseNetwork(step, data, "host");
+  data      = parseNetwork(step, data, "host");
 
-  data["ACTION"] = action;
-  data["PORT"] = port;
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["ACTION"]           = action;
+  data["PORT"]             = port;
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Documentação usando mkdocs_material");
-  data["DOCKER_IMAGE"] = "intmain/microci_mkdocs_material:0.4";
+  data["DOCKER_IMAGE"]     = "intmain/microci_mkdocs_material:0.4";
 
   // https://unix.stackexchange.com/questions/155551/how-to-debug-a-bash-script
   // exec 5> >(logger -t $0)
@@ -81,7 +82,7 @@ void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_{{ FUNCTION_NAME }}_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_{{ FUNCTION_NAME }}_{{ RANDOM_8 }} \
         --workdir {{ WORKSPACE }} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --network {{ DOCKER_NETWORK }} \

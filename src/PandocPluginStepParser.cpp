@@ -27,9 +27,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <spdlog/spdlog.h>
+#include "PandocPluginStepParser.hpp"
 
-#include <PandocPluginStepParser.hpp>
+#include <spdlog/spdlog.h>
 
 namespace microci {
 using namespace std;
@@ -38,7 +38,7 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void PandocPluginStepParser::Parse(const YAML::Node &step) {
-  auto output = string{"output.pdf"};
+  auto output   = string{"output.pdf"};
   auto basePath = string{"."};
   list<string> inputList;
   list<string> optionList = {"--pdf-engine=xelatex"};
@@ -64,13 +64,13 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   auto data = mMicroCI->DefaultDataTemplate();
-  data = parseNetwork(step, data, "host");
+  data      = parseNetwork(step, data, "host");
 
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Create documentation using pandoc");
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_pandoc:latest");
-  data["BASE_PATH"] = basePath;
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_pandoc:latest");
+  data["BASE_PATH"]        = basePath;
 
   auto envs = parseEnvs(step);
   beginFunction(data, envs);
@@ -84,7 +84,7 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_{{ FUNCTION_NAME }}_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_{{ FUNCTION_NAME }}_{{ RANDOM_8 }} \
         --workdir {{ WORKSPACE }}/{{BASE_PATH}} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
         --network {{ DOCKER_NETWORK }} \

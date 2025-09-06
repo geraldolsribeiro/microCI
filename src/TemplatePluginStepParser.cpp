@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "TemplatePluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <TemplatePluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,16 +40,16 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void TemplatePluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
+  auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto envs    = parseEnvs(step);
   // bool toc = false;
   // bool details = false;
   // bool show_source = false;
   // bool show_banner = true;
 
   EnvironmentVariable env;
-  env.name = "RUST_BACKTRACE";
+  env.name  = "RUST_BACKTRACE";
   env.value = "full";
   envs.insert(env);
 
@@ -80,9 +81,9 @@ void TemplatePluginStepParser::Parse(const YAML::Node &step) {
   // env.value = show_banner ? "true" : "false";
   // envs.insert(env);
 
-  data["STEP_NAME"] = stepName(step);
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "chevdor/tera:latest");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data["STEP_NAME"]        = stepName(step);
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "chevdor/tera:latest");
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Generate output from template");
 
   beginFunction(data, envs);
@@ -90,8 +91,8 @@ void TemplatePluginStepParser::Parse(const YAML::Node &step) {
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     for (const auto &item : step["plugin"]["items"]) {
       if (item.IsSequence()) {
-        data["TEMPLATE_DATA"] = item[0].as<string>();
-        data["TEMPLATE_INPUT"] = item[1].as<string>();
+        data["TEMPLATE_DATA"]   = item[0].as<string>();
+        data["TEMPLATE_INPUT"]  = item[1].as<string>();
         data["TEMPLATE_OUTPUT"] = item[2].as<string>();
 
         prepareRunDocker(data, envs, volumes);

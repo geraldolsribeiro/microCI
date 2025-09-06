@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "DoxygenPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <DoxygenPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,10 +40,10 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
-  auto header = string{};
-  auto footer = string{};
+  auto header     = string{};
+  auto footer     = string{};
   auto stylesheet = string{};
-  auto doxyfile = string{"./Doxyfile"};
+  auto doxyfile   = string{"./Doxyfile"};
   auto output_dir = string{"doxygen"};
 
   if (step["plugin"]["html"]) {
@@ -65,21 +66,21 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
     output_dir = step["plugin"]["output_dir"].as<string>();
   }
 
-  auto data = mMicroCI->DefaultDataTemplate();
-  auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data, "none");
+  auto data                = mMicroCI->DefaultDataTemplate();
+  auto volumes             = parseVolumes(step);
+  auto envs                = parseEnvs(step);
+  data                     = parseRunAs(step, data, "user");
+  data                     = parseNetwork(step, data, "none");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
-  data["STEP_NAME"] = stepName(step);
+  data["STEP_NAME"]        = stepName(step);
   data["STEP_DESCRIPTION"] = stepDescription(step, "Execute commands at bash shell");
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["DOCKER_IMAGE"] = stepDockerImage(step);
-  data["DOXYFILE"] = doxyfile;
-  data["HEADER"] = header;
-  data["FOOTER"] = footer;
-  data["STYLESHEET"] = stylesheet;
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
+  data["DOCKER_IMAGE"]     = stepDockerImage(step);
+  data["DOXYFILE"]         = doxyfile;
+  data["HEADER"]           = header;
+  data["FOOTER"]           = footer;
+  data["STYLESHEET"]       = stylesheet;
   data["OUTPUT_DIRECTORY"] = output_dir;
 
   mMicroCI->Script() << "# bash \n";

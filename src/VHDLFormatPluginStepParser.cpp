@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "VHDLFormatPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <VHDLFormatPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -39,11 +40,11 @@ using namespace std;
 //
 // ----------------------------------------------------------------------
 void VHDLFormatPluginStepParser::Parse(const YAML::Node &step) {
-  auto data = mMicroCI->DefaultDataTemplate();
-  auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  data = parseRunAs(step, data, "user");
-  data = parseNetwork(step, data, "none");
+  auto data                = mMicroCI->DefaultDataTemplate();
+  auto volumes             = parseVolumes(step);
+  auto envs                = parseEnvs(step);
+  data                     = parseRunAs(step, data, "user");
+  data                     = parseNetwork(step, data, "none");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
   list<string> sourceList;
 
@@ -62,9 +63,9 @@ void VHDLFormatPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_DESCRIPTION"] =
       stepDescription(step, "Process source code to make readable or match to a project code style");
   data["FUNCTION_NAME"] = sanitizeName(stepName(step));
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "intmain/microci_ghdl:latest");
+  data["DOCKER_IMAGE"]  = stepDockerImage(step, "intmain/microci_ghdl:latest");
 
-  auto emacsConfigFilename = inja::render("{{ WORKSPACE }}/.emacs_vhdl_formatter.lisp", data);
+  auto emacsConfigFilename              = inja::render("{{ WORKSPACE }}/.emacs_vhdl_formatter.lisp", data);
   data["EMACS_VHDL_FORMATTER_FILENAME"] = emacsConfigFilename;
 
   ostringstream emacsConfig;

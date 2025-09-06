@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "FetchPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <FetchPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {
@@ -41,20 +42,20 @@ using namespace std;
 void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   // data = parseRunAs(step, data, "user");
-  data = parseRunAs(step, data, "root");  // From new version of bitname/git
-  data = parseNetwork(step, data, "bridge");
-  data["STEP_NAME"] = stepName(step);
-  data["FUNCTION_NAME"] = sanitizeName(stepName(step));
+  data                     = parseRunAs(step, data, "root");  // From new version of bitname/git
+  data                     = parseNetwork(step, data, "bridge");
+  data["STEP_NAME"]        = stepName(step);
+  data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Baixa arquivos externos ao projeto");
-  data["DOCKER_IMAGE"] = stepDockerImage(step, "bitnami/git:latest");
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnami/git:latest");
 
-  auto volumes = parseVolumes(step);
-  auto envs = parseEnvs(step);
+  auto volumes             = parseVolumes(step);
+  auto envs                = parseEnvs(step);
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   // Suppress "Welcome to the Bitnami git container"
   EnvironmentVariable bitnamiDisableWelcomeMessage;
-  bitnamiDisableWelcomeMessage.name = "DISABLE_WELCOME_MESSAGE";
+  bitnamiDisableWelcomeMessage.name  = "DISABLE_WELCOME_MESSAGE";
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
@@ -69,9 +70,9 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     copySshIfAvailable(step, data);
 
     for (const auto &item : step["plugin"]["items"]) {
-      auto gitTag = item["tag"].as<string>("master");
+      auto gitTag     = item["tag"].as<string>("master");
       data["GIT_TAG"] = gitTag;
-      data["TARGET"] = item["target"].as<string>(defaultTarget);
+      data["TARGET"]  = item["target"].as<string>(defaultTarget);
       mMicroCI->Script() << inja::render(
           R"( \
            && mkdir -p {{ TARGET }})",
@@ -100,8 +101,8 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           gitRemote = "file://" + item["offline"].as<string>();
         }
 
-        data["GIT_REMOTE"] = gitRemote;
-        data["FILES"] = "";  // Todos os arquivos
+        data["GIT_REMOTE"]       = gitRemote;
+        data["FILES"]            = "";  // Todos os arquivos
         data["STRIP_COMPONENTS"] = " --strip-components=1";
         // data["STRIP_COMPONENTS"] = "";
 
@@ -118,7 +119,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         } else {
           data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
         }
-        bool isGithubURL = gitRemote.find("github.com") != string::npos;
+        bool isGithubURL   = gitRemote.find("github.com") != string::npos;
         bool isDotGitEnded = gitRemote.substr(gitRemote.size() - 4) == ".git";
 
         auto files = string{};
@@ -198,7 +199,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
       } else if (item["url"]) {
         data["TARGET"] = item["target"].as<string>(defaultTarget);
-        data["URL"] = item["url"].as<string>();
+        data["URL"]    = item["url"].as<string>();
         mMicroCI->Script() << inja::render(
             R"( \
            && pushd {{ TARGET }} \
