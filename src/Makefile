@@ -80,11 +80,11 @@ CXXFLAGS+= -std=c++17
 # LDFLAGS+= -lstdc++fs
 LDFLAGS+= -lyaml-cpp
 LDFLAGS+= -lcrypto
-LDFLAGS+= -lintl
 
 # Mac ARM-specific settings
 ifdef IS_MAC_ARM
 CXXFLAGS += -I/opt/homebrew/include
+LDFLAGS+= -lintl
 LDFLAGS += -L/opt/homebrew/lib
 # LIBS += -lmyarmlib
 endif
