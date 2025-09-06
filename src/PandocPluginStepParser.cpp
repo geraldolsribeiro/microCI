@@ -27,9 +27,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <spdlog/spdlog.h>
+#include "PandocPluginStepParser.hpp"
 
-#include <PandocPluginStepParser.hpp>
+#include <spdlog/spdlog.h>
 
 namespace microci {
 using namespace std;

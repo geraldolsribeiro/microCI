@@ -39,10 +39,11 @@
 
 using namespace std;
 
-#include <argh.h>
-#include <inicpp.h>
 #include <libintl.h>
 #include <spdlog/spdlog.h>
+
+#include "argh.h"
+#include "inicpp.h"
 
 #define _(String) gettext(String)
 

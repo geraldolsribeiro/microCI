@@ -60,22 +60,28 @@ PS4='Line $LINENO: '
 command -v jq &> /dev/null \
   || { echo -e "{{RED}}The utility jq was not found in the system{{CLEAR}}";
        echo "{{RED}}Try: {{GREEN}}sudo apt install jq";
+       echo "{{RED}}Try: {{GREEN}}brew install jq";
        exit 1; }
 
 command -v yq &> /dev/null \
   || { echo -e "{{RED}}The utility yq was not found in the system{{CLEAR}}";
        echo "{{RED}}Try: {{GREEN}}sudo apt install yq";
        echo "{{RED}}Try: {{GREEN}}sudo snap install yq";
+       echo "{{RED}}Try: {{GREEN}}brew install yq";
        exit 1; }
 
 command -v curl &> /dev/null \
   || { echo -e "{{RED}}The utility curl was not found in the system{{CLEAR}}";
+       echo "{{RED}}Try: {{GREEN}}sudo apt install curl";
+       echo "{{RED}}Try: {{GREEN}}brew install curl";
        exit 1; }
 
 command -v docker &> /dev/null \
   || { echo -e "{{RED}}The utility docker was not found in the system{{CLEAR}}";
       echo "See page 'Install Docker Engine on Ubuntu' at";
       echo "https://docs.docker.com/engine/install/ubuntu/";
+      echo "See page 'Install Docker Desktop on Mac' at";
+      echo "https://docs.docker.com/desktop/setup/install/mac-install/";
       exit 1; }
 
 case "$OS" in

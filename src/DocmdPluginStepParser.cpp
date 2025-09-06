@@ -27,9 +27,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "DocmdPluginStepParser.hpp"
+
 #include <spdlog/spdlog.h>
 
-#include <DocmdPluginStepParser.hpp>
 #include <fstream>
 
 namespace microci {

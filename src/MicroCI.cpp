@@ -37,14 +37,14 @@ using namespace std;
 
 #include <spdlog/spdlog.h>
 
-#include <MicroCI.hpp>
-#include <inja.hpp>
-#include <sh/MicroCI.hpp>
-#include <sh/NotifyDiscord.hpp>
+#include "MicroCI.hpp"
+#include "inja.hpp"
+#include "sh/MicroCI.hpp"
+#include "sh/NotifyDiscord.hpp"
 
 // Resolve forward definition
-#include <PluginStepParser.hpp>
-#include <SkipPluginStepParser.hpp>
+#include "PluginStepParser.hpp"
+#include "SkipPluginStepParser.hpp"
 
 namespace microci {
 
