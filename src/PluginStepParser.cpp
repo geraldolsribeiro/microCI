@@ -313,13 +313,17 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
       sshMountForCopy = step["ssh"]["copy_from"].as<string>();
     }
 
+    if (step["ssh"]["format"]) {
+      sshKeyFormat = step["ssh"]["format"].as<string>();
+    }
+
     if (step["ssh"]["copy_to"]) {
       data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<string>();
     } else {
-      auto gitSshCommandEnv = EnvironmentVariable{"GIT_SSH_COMMAND",
-                                                  "ssh -i /.microCI_ssh/id_rsa"
-                                                  " -F /dev/null"
-                                                  " -o UserKnownHostsFile=/.microCI_ssh/known_hosts"};
+      auto gitSshCommandEnv = EnvironmentVariable{
+          "GIT_SSH_COMMAND",
+          fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
+                      sshKeyFormat)};
       envs_.insert(gitSshCommandEnv);
     }
 
