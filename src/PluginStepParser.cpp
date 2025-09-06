@@ -28,10 +28,9 @@
 // IN THE SOFTWARE.
 
 #include "PluginStepParser.hpp"
+#include "MicroCI.hpp"
 
 #include <spdlog/spdlog.h>
-
-#include "MicroCI.hpp"
 
 namespace microci {
 
@@ -300,6 +299,7 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
                                 const set<EnvironmentVariable> &envs) const
     -> tuple<json, set<DockerVolume>, set<EnvironmentVariable>> {
   auto sshMountForCopy = string{"${HOME}/.ssh"};
+  auto sshKeyFormat    = string{"id_rsa"};
   auto volumes_        = volumes;
   auto data_           = data;
   auto envs_           = envs;
