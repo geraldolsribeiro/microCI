@@ -89,9 +89,14 @@ LDFLAGS += -L/opt/homebrew/lib
 # LIBS += -lmyarmlib
 endif
 
+.PHONY: all
 all: ../locales/pt_BR/microci.mo ../bin/microCI 
+
+.PHONY: diagram
+diagram:
 	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml
 
+.PHONY: tidy
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)
 
@@ -171,15 +176,23 @@ single_compilation_unit.cpp: \
 	@echo "// clang-format on" >> $@
 	@echo "Single compilation unit was generated"
 
+ifdef IS_MAC_ARM
 ../bin/microCI: single_compilation_unit.cpp
 	mkdir -p ../bin/
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	echo strip --strip-all $@
+else
+../bin/microCI: single_compilation_unit.cpp
+	mkdir -p ../bin/
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	strip --strip-all $@
+endif
 
+.PHONY: clean
 clean:
 	rm -f ../bin/microCI
 	touch ../new/*.yml
 
+.PHONY: mac_deps
 mac_deps:
 	brew install spdlog yaml-cpp inja
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
