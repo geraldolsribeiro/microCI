@@ -195,8 +195,13 @@ clean:
 .PHONY: mac_deps
 mac_deps:
 	brew install spdlog yaml-cpp inja
+
+header_only:
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
 	wget https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -O ../include/inicpp.h
+	wget https://raw.githubusercontent.com/pantor/inja/refs/heads/main/single_include/inja/inja.hpp  -O ../include/inja/inja.hpp
+	wget https://raw.githubusercontent.com/nlohmann/json/refs/heads/develop/single_include/nlohmann/json.hpp -O ../include/nlohmann/json.hpp
+	wget https://raw.githubusercontent.com/nlohmann/json/refs/heads/develop/single_include/nlohmann/json_fwd.hpp -O ../include/nlohmann/json_fwd.hpp
 
 .PHONY: install_usr_local_bin
 install_usr_local_bin: ../bin/microCI

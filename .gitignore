@@ -3,11 +3,6 @@ bin/microCI
 .ccls-cache
 dockerfiles/pikchr/pikchr
 docs/diagrams/*.png
-# include/argh.h
-# include/inicpp.h
-include/inja.hpp
-include/nlohmann/json.hpp
-include/sha1.h
 .microCI.dbg
 .microCI.log
 site

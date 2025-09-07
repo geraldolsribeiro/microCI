@@ -38,7 +38,7 @@ using namespace std;
 #include <spdlog/spdlog.h>
 
 #include "MicroCI.hpp"
-#include "inja.hpp"
+#include "inja/inja.hpp"
 #include "sh/MicroCI.hpp"
 #include "sh/NotifyDiscord.hpp"
 
