@@ -99,7 +99,7 @@ steps:
       name: "mkdocs_material"
       action: "build"
 
-  - name: "Documentation preview"
+  - name: "Documentation preview at port 8000"
     description: "Serve documentation preview at port 8000"
     only: "serve"
     plugin:
