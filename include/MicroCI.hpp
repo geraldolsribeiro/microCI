@@ -44,7 +44,7 @@ namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.40.2"
+#define microCI_version "0.40.3"
 
 // ----------------------------------------------------------------------
 //
@@ -89,6 +89,7 @@ class MicroCI {
   void SetEnvironmentVariable(const EnvironmentVariable &env);
   bool ReadConfig(const string &yaml);
   stringstream &Script();
+  void SetAltHome(const string &altHome);
   void SetOnlyStep(const string &onlyStep);
   void SetOnlyStepNumber(const std::size_t number);
   void SetAppendLog(const bool appendLog);
@@ -108,6 +109,7 @@ class MicroCI {
   void LoadEnvironmentFromYamlFile(const string &filename);
   void LoadEnvironmentFromEnvFile(const string &filename);
 
+  string mAltHome;
   string mYamlFilename = ".microCI.yml";
   set<EnvironmentVariable> mEnvs;
   set<string> mDockerImages;

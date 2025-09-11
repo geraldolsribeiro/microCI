@@ -119,6 +119,7 @@ Options:
   -D,--update-dev          Update microCI to development stream
   -x,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
+  -H,--home alt_home_dir   Alternative home directory
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
@@ -654,6 +655,11 @@ sudo rm -f /usr/bin/microCI
     std::size_t onlyStepNumber{0};
     if ((cmdl({"-N", "--number"}) >> onlyStepNumber)) {
       uCI.SetOnlyStepNumber(onlyStepNumber);
+    }
+
+    auto altHome = string{};
+    if ((cmdl({"-H", "--home"}) >> altHome)) {
+      uCI.SetAltHome(altHome);
     }
 
     if (!uCI.ReadConfig(yamlFileName)) {

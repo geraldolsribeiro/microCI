@@ -221,6 +221,11 @@ void MicroCI::SetEnvironmentVariable(const EnvironmentVariable &env) { mEnvs.ins
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetAltHome(const string &altHome) { mAltHome = altHome; }
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
 
 // ----------------------------------------------------------------------
@@ -308,11 +313,14 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
   try {
     CI = YAML::LoadFile(filename);
 
-    // Global configuration
-    {
-      struct passwd *pw = getpwuid(getuid());
-      auto globalEnv    = fmt::format("{}/.microCI.env", pw->pw_dir);
-      LoadEnvironmentFromEnvFile(globalEnv);
+    // Global environment configuration
+    if (mAltHome.empty()) {
+      struct passwd *pw              = getpwuid(getuid());
+      auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", pw->pw_dir);
+      LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+    } else {
+      auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", mAltHome);
+      LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
     }
 
     // Start with global environment variables
