@@ -316,8 +316,10 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
     // Global environment configuration
     if (mAltHome.empty()) {
       struct passwd *pw              = getpwuid(getuid());
-      auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", pw->pw_dir);
-      LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+      if (pw) {
+        auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", pw->pw_dir);
+        LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+      }
     } else {
       auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", mAltHome);
       LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
