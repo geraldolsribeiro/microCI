@@ -48,6 +48,7 @@ test:
 	../bin/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
 	../bin/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
 	../bin/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+	../bin/microCI -i ../new/doxygen.yml                         > doxygen.sh
 	../bin/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
 	../bin/microCI -i ../new/vhdl-format.yml                     > vhdl-format.sh
 	../bin/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh

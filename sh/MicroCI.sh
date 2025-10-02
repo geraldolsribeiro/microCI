@@ -84,6 +84,12 @@ command -v docker &> /dev/null \
       echo "https://docs.docker.com/desktop/setup/install/mac-install/";
       exit 1; }
 
+command -v ssh-keygen &> /dev/null \
+  || { echo -e "{{RED}}The utility ssh-keygen was not found in the system{{CLEAR}}";
+       echo "{{RED}}Try: {{GREEN}}sudo apt install openssh-client";
+       echo "{{RED}}Try: {{GREEN}}brew install openssh";
+       exit 1; }
+
 case "$OS" in
   "Linux")
     groups | grep -q docker || {
@@ -128,6 +134,20 @@ if [ ! -f ~/.ssh/known_hosts ]; then
   echo "Add your SSH public key to your git server, and"
   echo "clone one of your projects using the SSH protocol"
   echo "git clone git@your.git.server:/some/project.git /tmp"
+  exit 1;
+fi
+
+# Check for password protected SSH key
+is_ssh_key_protected_by_password=YES
+for key in ~/.ssh/id_rsa ~/.ssh/id_ed25519 
+do
+  if [ -f $key ]; then
+    ssh-keygen -y -P "" -f $key > /dev/null 2>/dev/null && is_ssh_key_protected_by_password=NO
+  fi
+done
+if [ "$is_ssh_key_protected_by_password" = "YES" ]; then
+  echo -e "{{RED}}Please use a SSH key not protected by password{{CLEAR}}"
+  echo ""
   exit 1;
 fi
 
