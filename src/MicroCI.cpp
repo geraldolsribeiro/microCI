@@ -87,8 +87,8 @@ auto MicroCI::List(const string &filename) const -> string {
       std::size_t number = 1;
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<string>();
-        auto hhh  = std::hash<std::string>{}(name) & 0xff;
-        ret += fmt::format("{:>2} {:02x} {}\n", number++, hhh, name);
+        auto hhh  = std::hash<std::string>{}(name) & 0xffff;
+        ret += fmt::format("{:>2} {:04x} {}\n", number++, hhh, name);
       }
     }
   } catch (const YAML::BadFile &e) {
@@ -246,7 +246,7 @@ void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh
       mOnlyStepNumber    = std::nullopt;
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<string>();
-        auto hhi  = fmt::format("{:02x}", std::hash<std::string>{}(name) & 0xff);
+        auto hhi  = fmt::format("{:04x}", std::hash<std::string>{}(name) & 0xffff);
         if (hh == hhi) {
           mOnlyStepNumber = number;
           return;
