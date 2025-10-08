@@ -87,7 +87,8 @@ auto MicroCI::List(const string &filename) const -> string {
       std::size_t number = 1;
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<string>();
-        ret += fmt::format("{:>2} {}\n", number++, name);
+        auto hhh  = std::hash<std::string>{}(name) & 0xff;
+        ret += fmt::format("{:>2} {:02x} {}\n", number++, hhh, name);
       }
     }
   } catch (const YAML::BadFile &e) {
@@ -236,6 +237,36 @@ void MicroCI::SetOnlyStepNumber(const std::size_t onlyStepNumber) { mOnlyStepNum
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh) {
+  YAML::Node CI;
+  try {
+    CI = YAML::LoadFile(filename);
+    if (CI["steps"].IsSequence()) {
+      std::size_t number = 1;
+      mOnlyStepNumber    = std::nullopt;
+      for (auto step : CI["steps"]) {
+        auto name = step["name"].as<string>();
+        auto hhi  = fmt::format("{:02x}", std::hash<std::string>{}(name) & 0xff);
+        if (hh == hhi) {
+          mOnlyStepNumber = number;
+          return;
+        }
+        number++;
+      }
+      throw invalid_argument(fmt::format("Invalid step hash: {}", hh));
+    }
+  } catch (const YAML::BadFile &e) {
+    spdlog::error("Failure loading the file .microCI.yml");
+    spdlog::error(e.what());
+  } catch (const YAML::ParserException &e) {
+    spdlog::error("Failure parsing the file .microCI.yml");
+    spdlog::error(e.what());
+  }
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 void MicroCI::SetAppendLog(const bool appendLog) { mAppendLog = appendLog; }
 
 // ----------------------------------------------------------------------
@@ -315,7 +346,7 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
 
     // Global environment configuration
     if (mAltHome.empty()) {
-      struct passwd *pw              = getpwuid(getuid());
+      struct passwd *pw = getpwuid(getuid());
       if (pw) {
         auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", pw->pw_dir);
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);

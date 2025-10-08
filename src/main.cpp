@@ -114,6 +114,7 @@ Options:
   -O,--only name           Execute only a single step
   -l,--list                List steps
   -N,--number N            Execute the Nth step
+  -x,--hash hh             Execute the hh step
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
@@ -655,6 +656,11 @@ sudo rm -f /usr/bin/microCI
     std::size_t onlyStepNumber{0};
     if ((cmdl({"-N", "--number"}) >> onlyStepNumber)) {
       uCI.SetOnlyStepNumber(onlyStepNumber);
+    }
+
+    auto onlyStepHash = string{};
+    if ((cmdl({"-x", "--hash"}) >> onlyStepHash)) {
+      uCI.SetOnlyStepHash(yamlFileName, onlyStepHash);
     }
 
     auto altHome = string{};

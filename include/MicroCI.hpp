@@ -92,6 +92,7 @@ class MicroCI {
   void SetAltHome(const string &altHome);
   void SetOnlyStep(const string &onlyStep);
   void SetOnlyStepNumber(const std::size_t number);
+  void SetOnlyStepHash(const std::string &fileName, const std::string &hh);
   void SetAppendLog(const bool appendLog);
   void AddDockerImage(const string &image);
 
