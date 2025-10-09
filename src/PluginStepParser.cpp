@@ -304,6 +304,13 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
   auto data_           = data;
   auto envs_           = envs;
 
+  // Set default ssh key name if environment variable is defined
+  auto defSshKeyNameItem = std::find_if(
+      envs.begin(), envs.end(), [](const EnvironmentVariable &e) { return e.name == "MICROCI_DEFAULT_SSH_KEY_NAME"; });
+  if (defSshKeyNameItem != envs.end()) {
+    sshKeyFormat = defSshKeyNameItem->value;
+  }
+
   data_["SSH_COPY_TO"]   = string{};
   data_["SSH_COPY_FROM"] = "/.microCI_ssh";
 
