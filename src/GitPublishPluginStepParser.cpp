@@ -45,7 +45,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   auto envs    = parseEnvs(step);
 
   data                     = parseRunAs(step, data, "root");  // From new version of bitname/git
-  data                     = parseNetwork(step, data, "bridge");
+  data                     = parseNetwork(step, data, "host");
   tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
 
   // Suppress "Welcome to the Bitnami git container"

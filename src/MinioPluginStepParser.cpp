@@ -78,8 +78,8 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   data["DOCKER_IMAGE"]      = stepDockerImage(step, "minio/mc:latest");
   data["FUNCTION_NAME"]     = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"]  = stepDescription(step, "Send files from/to the artifact manager");
-  data["DOCKER_ENTRYPOINT"] = "";  // remove o entrypoint padrão
-  data["DOCKER_NETWORK"]    = "bridge";
+  data["DOCKER_ENTRYPOINT"] = "";  // removes default entrypoint
+  data["DOCKER_NETWORK"]    = "host";
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);

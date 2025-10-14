@@ -43,7 +43,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   // data = parseRunAs(step, data, "user");
   data                     = parseRunAs(step, data, "root");  // From new version of bitnami/git
-  data                     = parseNetwork(step, data, "bridge");
+  data                     = parseNetwork(step, data, "host");
   data["STEP_NAME"]        = stepName(step);
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Baixa arquivos externos ao projeto");
@@ -147,7 +147,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         }
 
         if (files.empty()) {
-          throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
+          throw std::runtime_error("Is mandatory to specify the list of file");
         }
 
         data["FILES"] = files;

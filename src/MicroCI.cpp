@@ -517,10 +517,8 @@ auto MicroCI::DefaultEnvs() const -> set<EnvironmentVariable> { return mEnvs; }
 // ----------------------------------------------------------------------
 auto MicroCI::DefaultDataTemplate() const -> json {
   json data;
-  data["VERSION"]   = fmt::format("v{}       ", microCI_version).substr(0, 10);
-  data["WORKSPACE"] = mDefaultWorkspace;
-
-  // Network docker: bridge (default), host, none
+  data["VERSION"]           = fmt::format("v{}       ", microCI_version).substr(0, 10);
+  data["WORKSPACE"]         = mDefaultWorkspace;
   data["DOCKER_NETWORK"]    = "none";
   data["DOCKER_IMAGE"]      = mDefaultDockerImage;
   data["RUN_AS"]            = "root";
