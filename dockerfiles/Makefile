@@ -35,3 +35,19 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 .PHONY: all $(SUBDIRS)
+
+.PHONY: install-docker
+install-docker:
+	sudo apt remove $(shell dpkg --get-selections docker.io docker-compose docker-doc podman-docker containerd runc | cut -f1)
+	sudo apt update
+	sudo apt install ca-certificates curl
+	sudo install -m 0755 -d /etc/apt/keyrings
+	sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+	sudo chmod a+r /etc/apt/keyrings/docker.asc
+	echo "Types: deb" | sudo tee /etc/apt/sources.list.d/docker.sources
+	echo "URIs: https://download.docker.com/linux/debian" | sudo tee -a /etc/apt/sources.list.d/docker.sources
+	echo "Suites: trixie" | sudo tee -a /etc/apt/sources.list.d/docker.sources
+	echo "Components: stable" | sudo tee -a /etc/apt/sources.list.d/docker.sources
+	echo "Signed-By: /etc/apt/keyrings/docker.asc" | sudo tee -a /etc/apt/sources.list.d/docker.sources
+	sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	sudo usermod -aG docker $(USER)
