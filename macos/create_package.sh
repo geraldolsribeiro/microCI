@@ -16,14 +16,14 @@ cp ../bin/microCI package${INSTALL_DIR}
 
 # Create component package
 pkgbuild \
-    --root package \
-    --identifier ${IDENTIFIER} \
-    --version ${VERSION} \
-    --install-location / \
-    ${APP_NAME}-${VERSION}-component.pkg
+  --root package \
+  --identifier ${IDENTIFIER} \
+  --version ${VERSION} \
+  --install-location / \
+  ${APP_NAME}-${VERSION}-component.pkg
 
 # Create distribution file
-cat <<EOF > Distribution.xml
+cat <<EOF >Distribution.xml
 <?xml version="1.0" encoding="utf-8"?>
 <installer-gui-script minSpecVersion="1">
     <title>${APP_NAME} ${VERSION}</title>
@@ -51,7 +51,7 @@ cat <<EOF > Distribution.xml
 EOF
 
 # Create welcome/license/conclusion files
-cat <<EOF > welcome.html
+cat <<EOF >welcome.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,7 +64,7 @@ cat <<EOF > welcome.html
 </html>
 EOF
 
-cat <<EOF > license.html
+cat <<EOF >license.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,7 +73,7 @@ cat <<EOF > license.html
 <body>
     <h1>MIT License</h1>
 
-<p>Copyright (c) 2022-2025 Geraldo Luis da Silva Ribeiro</p>
+<p>Copyright (c) 2022-2026 Geraldo Luis da Silva Ribeiro</p>
 
 <p>
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -102,7 +102,7 @@ SOFTWARE.
 </html>
 EOF
 
-cat <<EOF > conclusion.html
+cat <<EOF >conclusion.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,10 +118,10 @@ EOF
 
 # Create the product package
 productbuild \
-    --distribution Distribution.xml \
-    --resources . \
-    --package-path ${APP_NAME}-${VERSION}-component.pkg \
-    ${APP_NAME}-${VERSION}.pkg
+  --distribution Distribution.xml \
+  --resources . \
+  --package-path ${APP_NAME}-${VERSION}-component.pkg \
+  ${APP_NAME}-${VERSION}.pkg
 
 # Clean up
 rm -f ${APP_NAME}-${VERSION}-component.pkg
