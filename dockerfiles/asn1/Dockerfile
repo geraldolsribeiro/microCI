@@ -29,20 +29,18 @@
 
 # Based on https://raw.githubusercontent.com/maxime-esa/asn1scc/master/Dockerfile.runtime
 
-FROM  mcr.microsoft.com/dotnet/sdk:7.0 AS builder
+FROM  mcr.microsoft.com/dotnet/sdk:10.0 AS builder
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
 
 RUN set -eux; \
-  echo "2024-08-14" > /dev/null \
+  echo "2026-03-14" > /dev/null \
   && apt-get update \
   && apt-get upgrade --yes \
   && apt-get install --yes \
     curl \
     python3 \
-    python3-distutils \
     make \
-    openjdk-11-jre \
-    nuget \
+    openjdk-21-jre \
     libgit2-dev \
     libssl-dev \
     git \
@@ -52,7 +50,7 @@ RUN set -eux; \
 
 WORKDIR /src
 RUN set -eux; \
-  echo "2024-08-14" > /dev/null \
+  echo "2026-03-14" > /dev/null \
   && git clone https://github.com/maxime-esa/asn1scc.git \
   && cd asn1scc/ \
   && dotnet build Antlr/        --configuration Release \
@@ -60,10 +58,10 @@ RUN set -eux; \
   && dotnet build "asn1scc.sln" --configuration Release 
 
 
-FROM mcr.microsoft.com/dotnet/runtime:7.0
+FROM mcr.microsoft.com/dotnet/runtime:10.0
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
 
-COPY --from=builder /src/asn1scc/asn1scc/bin/Release/net7.0/ /opt/asn1scc
+COPY --from=builder /src/asn1scc/asn1scc/bin/Release/net9.0/ /opt/asn1scc
 #WORKDIR /tmp
 WORKDIR /microci_workspace 
 
