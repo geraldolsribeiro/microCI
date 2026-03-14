@@ -31,10 +31,11 @@ FROM gcc:latest
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
 
 RUN set -eux; \
-  echo "2025-07-22" > /dev/null \
+  echo "2026-03-14" > /dev/null \
   && apt-get update \
   && apt-get install -y curl \
-  && echo "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm main" > /etc/apt/sources.list.d/llvm.list \
+  && echo "deb http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" > /etc/apt/sources.list.d/llvm.list \
+  && echo "deb-src http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" >> /etc/apt/sources.list.d/llvm.list \
   && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
   && apt-get update \
   && apt-get upgrade --yes \
@@ -43,7 +44,7 @@ RUN set -eux; \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN set -eux; \
-  echo "2024-06-06" > /dev/null \
+  echo "2026-03-14" > /dev/null \
   && apt-get update \
   && apt-get install -y \
     build-essential \
@@ -63,13 +64,14 @@ RUN set -eux; \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+# The package libpcre3 will not exist on trixie and the code should be ported to libpcre2.
 RUN set -eux; \
   echo "2024-06-06" > /dev/null \
   && apt-get update \
   && apt-get install -y \
     libasio-dev \
     libcrypto++-dev \
-    libpcre3-dev \
+    libpcre2-dev \
     libspdlog-dev \
     libyaml-cpp-dev \
     ninja-build \
@@ -80,7 +82,7 @@ RUN set -eux; \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 #  https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3
-RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old \
+RUN mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MANAGED.old \
   && PIP_NO_CACHE_DIR=1 pip install clang-html
 
 RUN set -eux; \
