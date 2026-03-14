@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2022-2025 Geraldo Luis da Silva Ribeiro
+# Copyright (c) 2022-2026 Geraldo Luis da Silva Ribeiro
 #
 # ░░░░░░░░░░░░░░░░░
 # ░░░░░░░█▀▀░▀█▀░░░
@@ -26,6 +26,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+Q?=@
 
 # Re: Removing unused functions/dead code
 # https://gcc.gnu.org/legacy-ml/gcc-help/2003-08/msg00128.html
@@ -77,15 +79,17 @@ CXXFLAGS+= -Os
 
 # CXXFLAGS+= -flto # Link Time Optimizations
 CXXFLAGS+= -std=c++17
-# LDFLAGS+= -lstdc++fs
-LDFLAGS+= -lyaml-cpp
-LDFLAGS+= -lcrypto
+# LDLIBS+= -lstdc++fs
+LDLIBS+= -lyaml-cpp
+LDLIBS+= -lcrypto
+LDLIBS+= -lzstd
+LDLIBS+= -lz
 
 # Mac ARM-specific settings
 ifdef IS_MAC_ARM
 CXXFLAGS += -I/opt/homebrew/include
-LDFLAGS+= -lintl
-LDFLAGS += -L/opt/homebrew/lib
+LDLIBS+= -lintl
+LDLIBS += -L/opt/homebrew/lib
 # LIBS += -lmyarmlib
 endif
 
@@ -124,39 +128,44 @@ test_ptBR:
 	LC_ALL=pt_BR.UTF-8 ../bin/microCI
 
 ../include/new/%.hpp: ../new/%.yml
-	cat .header.cpp > $@
-	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
-	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
-	clang-format -i $@
-	touch main.cpp
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
 
 ../include/new/%.hpp: ../new/%.md
-	cat .header.cpp > $@
-	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
-	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
-	clang-format -i $@
-	touch main.cpp
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
 
 ../include/new/%.hpp: ../new/%.txt
-	cat .header.cpp > $@
-	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
-	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
-	clang-format -i $@
-	touch main.cpp
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
 
 ../include/sh/%.hpp: ../sh/%.sh
-	cat .header.cpp > $@
-	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
-	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
-	clang-format -i $@
-	touch main.cpp
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
 
 ../include/3rd/%.hpp: ../3rd/%
-	cat .header.cpp > $@
-	echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
-	xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
-	clang-format -i $@
-	touch main.cpp
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
 
 single_compilation_unit.cpp: \
 	$(filter-out single_compilation_unit.cpp, $(wildcard *cpp)) \
@@ -166,35 +175,39 @@ single_compilation_unit.cpp: \
 	Makefile \
   ../include/3rd/beamercolorthemestr.sty.hpp \
   ../include/3rd/str-logo.png.hpp
-	@echo "// DON'T EDIT THIS FILE" > $@
-	@echo "// clang-format off" >> $@
-	@find . -name "*.cpp" \
+	$(Q)echo "// DON'T EDIT THIS FILE" > $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)find . -name "*.cpp" \
 		| grep -v $@ \
 		| grep -v main.cpp \
 		| sed 's|\./\(.*\)|#include "\1" // NOLINT|' >> $@
-	@echo '#include "main.cpp" // NOLINT' >> $@
-	@echo "// clang-format on" >> $@
-	@echo "Single compilation unit was generated"
+	$(Q)echo '#include "main.cpp" // NOLINT' >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)echo "Single compilation unit was generated"
 
 ifdef IS_MAC_ARM
 ../bin/microCI: single_compilation_unit.cpp
-	mkdir -p ../bin/
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	$(Q)mkdir -p ../bin/
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 else
 ../bin/microCI: single_compilation_unit.cpp
-	mkdir -p ../bin/
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
-	strip --strip-all $@
+	$(Q)mkdir -p ../bin/
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+	$(Q)strip --strip-all $@
 endif
 
 .PHONY: clean
 clean:
-	rm -f ../bin/microCI
-	touch ../new/*.yml
+	$(Q)$(RM) ../bin/microCI
+	$(Q)touch ../new/*.yml
 
 .PHONY: mac_deps
 mac_deps:
 	brew install spdlog yaml-cpp inja
+
+.PHONY: debian_deps
+debian_deps:
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev
 
 header_only:
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
