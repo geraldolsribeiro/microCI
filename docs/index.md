@@ -81,7 +81,12 @@ Example:
 ## Versions
 
 * `0.42.0` Plugin mermaid
-* `0.41.0` Ported to MacOS
+* `0.41.0`
+    * Extend step listing with hash ids; Add options -x and --hash
+    * Add git docker image
+    * Rename git docker image from bitnami to bitnamilegacy
+    * Check for password-protected SSH key
+    * Add check for null passwd
 * `0.40.0` Ported to MacOS
 * `0.39.0` Bugfixes and minor code refactor
 * `0.38.0` Add option `--update-dev` to use development version
