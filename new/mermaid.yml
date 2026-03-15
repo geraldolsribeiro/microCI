@@ -1,0 +1,27 @@
+#   # mermaid plugin
+#   
+#{{{
+steps:
+  - name: "Generate diagrams via mermaid scripts"
+    description: "Description of this step"
+    plugin:
+      name: mermaid
+      output_folder: doc/images/
+      output_format: pdf               # png, svg, pdf
+      inputs:
+        - file1.mmd
+        - file2.mmd
+        - file3.mmd
+      options:
+        # - --theme default            # default, forest, dark, neutral
+        # - --width 800
+        # - --height 600
+        # - --backgroundColor white    # transparent, red, '#F0F0F0'
+        # - --configFile config.json   # configuration for Mermaid
+        # - --cssFile style.css        # CSS file for the page
+        # - --svgId id                 # The id attribute for the SVG element to be rendered
+        # - --scale 1                  # Puppeteer scale factor
+        # - --pdfFit                   # Scale PDF to fit chart
+        # - --puppeteerConfigFile file # JSON configuration file for puppeteer
+#}}}
+# vim: spell spelllang=en

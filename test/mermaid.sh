@@ -185,7 +185,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/clang-format.yml" \
+    yq -r .steps[].name "../new/mermaid.yml" \
       | while IFS= read -r stepName
         do
           updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
@@ -269,12 +269,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Padroniza formato do código usando regras
+# Description of this step
 # ----------------------------------------------------------------------
-function step_formatar_codigo_c___com_clang_format() {
+function step_generate_diagrams_via_mermaid_scripts() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Formatar código C++ com clang-format"
-  local MICROCI_STEP_DESCRIPTION="Padroniza formato do código usando regras"
+  local MICROCI_STEP_NAME="Generate diagrams via mermaid scripts"
+  local MICROCI_STEP_DESCRIPTION="Description of this step"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -296,33 +296,50 @@ function step_formatar_codigo_c___com_clang_format() {
     (
       set -e
 
-      echo ""
-      echo ""
-      echo ""
-      echo "Step: Formatar código C++ com clang-format"
-      # shellcheck disable=SC2140,SC2046
+      # shellcheck disable=SC2140
       docker run \
         --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_formatar_codigo_c___com_clang_format_$(head -c 8 /proc/sys/kernel/random/uuid) \
-        --network none \
+        --name microci_generate_diagrams_via_mermaid_scripts_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --workdir /microci_workspace \
-        --env ENV_1="1" \
-        --env ENV_2="String with spaces" \
-        --env ENV_YML_1="1" \
-        --env ENV_YML_2="String with spaces" \
-        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_cpp_compiler:latest" \
-        /bin/bash -c "cd /microci_workspace \
-        && cat <(compgen -G 'src/*.cpp') \
-          | xargs -I {} clang-format -i {} 2>&1  \
-        && cat <(compgen -G 'test/*.cpp') \
-          | xargs -I {} clang-format -i {} 2>&1  \
-        && cat <(compgen -G 'include/*.hpp') \
-          | xargs -I {} clang-format -i {} 2>&1 "
+        --volume "${MICROCI_PWD}":/microci_workspace \
+        --network host \
+        intmain/microci_mermaid:latest \
+        --input file1.mmd \
+        --output doc/images/file1.pdf 2>&1
+
+      # shellcheck disable=SC2140
+      docker run \
+        --user $(id -u):$(id -g) \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_generate_diagrams_via_mermaid_scripts_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --workdir /microci_workspace \
+        --volume "${MICROCI_PWD}":/microci_workspace \
+        --network host \
+        intmain/microci_mermaid:latest \
+        --input file2.mmd \
+        --output doc/images/file2.pdf 2>&1
+
+      # shellcheck disable=SC2140
+      docker run \
+        --user $(id -u):$(id -g) \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_generate_diagrams_via_mermaid_scripts_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --workdir /microci_workspace \
+        --volume "${MICROCI_PWD}":/microci_workspace \
+        --network host \
+        intmain/microci_mermaid:latest \
+        --input file3.mmd \
+        --output doc/images/file3.pdf 2>&1
 
     )
 
@@ -354,15 +371,15 @@ function step_formatar_codigo_c___com_clang_format() {
 echo 'Updating docker images...'
   echo 'Updating debian:stable-slim docker image...' >> .microCI.log
   docker pull debian:stable-slim --quiet 2>&1 >> .microCI.log
-  echo 'Updating intmain/microci_cpp_compiler:latest docker image...' >> .microCI.log
-  docker pull intmain/microci_cpp_compiler:latest --quiet 2>&1 >> .microCI.log
+  echo 'Updating intmain/microci_mermaid:latest docker image...' >> .microCI.log
+  docker pull intmain/microci_mermaid:latest --quiet 2>&1 >> .microCI.log
 
 
 # Execute all steps in the pipeline
 function main() {
   date >> .microCI.log
 
-  step_formatar_codigo_c___com_clang_format
+  step_generate_diagrams_via_mermaid_scripts
 
   date >> .microCI.log
 }

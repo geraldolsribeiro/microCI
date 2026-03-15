@@ -7,7 +7,7 @@
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.38.0
+                             microCI 0.42.0
 
 
 Options:
@@ -19,10 +19,13 @@ Options:
   -O,--only name           Execute only a single step
   -l,--list                List steps
   -N,--number N            Execute the Nth step
+  -x,--hash hh             Execute the hh step
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
+  -x,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
+  -H,--home alt_home_dir   Alternative home directory
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step

@@ -22,8 +22,11 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Para usar pushd no makefile
+# Enable use of pushd in Makefile
 SHELL=bash
+
+%.test: % %.ref
+	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
 test:
 	rm -f .env
@@ -56,6 +59,7 @@ test:
 	../bin/microCI -i ../new/plantuml.yml                        > plantuml.sh
 	../bin/microCI -i ../new/pikchr.yml                          > pikchr.sh
 	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
+	../bin/microCI -i ../new/mermaid.yml                         > mermaid.sh
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
 	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 	../bin/microCI -i ../new/skip.yml                            > skip.sh
@@ -77,6 +81,11 @@ test:
 	rm -f .env
 	rm -f .env.yml
 	#cat template.sh | bash
+
+clean:
+	rm -f .env
+	rm -f .env.yml
+	rm -f test_npm.yml
 
 doctest.h:
 	curl -L https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h -o $@

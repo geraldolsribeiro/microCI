@@ -102,6 +102,8 @@ Example:
 
 ## Versions
 
+* `0.42.0` Plugin mermaid
+* `0.41.0` Ported to MacOS
 * `0.40.0` Ported to MacOS
 * `0.39.0` Bugfixes and minor code refactor
 * `0.38.0` Add option `--update-dev` to use development version

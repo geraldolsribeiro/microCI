@@ -83,6 +83,7 @@ using namespace std;
 #include "new/git_deploy.hpp"
 #include "new/git_publish.hpp"
 #include "new/gitlab-ci.hpp"
+#include "new/mermaid.hpp"
 #include "new/minio.hpp"
 #include "new/mkdocs_material.hpp"
 #include "new/mkdocs_material_config.hpp"
@@ -94,6 +95,8 @@ using namespace std;
 #include "new/skip.hpp"
 #include "new/template.hpp"
 #include "new/vhdl-format.hpp"
+#include "new/fetch2.hpp"
+#include "new/poppler.hpp"
 
 // main class
 #include "MicroCI.hpp"
@@ -132,6 +135,7 @@ Options:
   -n,--new git_deploy      Create a production deploy step
   -n,--new plantuml        Create a diagram generation step
   -n,--new pikchr          Create a diagram generation step
+  -n,--new mermaid         Create a diagram generation step
   -n,--new clang-format    Create a code format step
   -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
@@ -469,6 +473,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
     uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pikchr", make_shared<PikchrPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("mermaid", make_shared<MermaidPluginStepParser>(&uCI));
     uCI.RegisterPlugin("git_deploy", make_shared<GitDeployPluginStepParser>(&uCI));
     uCI.RegisterPlugin("git_publish", make_shared<GitPublishPluginStepParser>(&uCI));
     uCI.RegisterPlugin("mkdocs_material", make_shared<MkdocsMaterialPluginStepParser>(&uCI));
@@ -581,6 +586,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true,  "npm",             ".microCI.yml",  yml, npm);
       MICROCI_TPL(true,  "plantuml",        ".microCI.yml",  yml, plantuml);
       MICROCI_TPL(true,  "pikchr",          ".microCI.yml",  yml, pikchr);
+      MICROCI_TPL(true,  "mermaid",         ".microCI.yml",  yml, mermaid);
       MICROCI_TPL(true,  "vhdl-format",     ".microCI.yml",  yml, vhdl_format);
       MICROCI_TPL(true,  "clang-format",    ".microCI.yml",  yml, clang_format);
       MICROCI_TPL(false, "clang-format",    ".clang-format", yml, clang_format_config);

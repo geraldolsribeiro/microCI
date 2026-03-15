@@ -1,17 +1,17 @@
- 1 Extract plugin documentation
- 2 C++ check with clang-tidy
- 3 C++ check with cppcheck
- 4 SAST com flawfinder
- 5 Convert pdf to jpg
- 6 Build diagrams with plantuml
- 7 Build diagrams - pikchr
- 8 Build HTML documentation
- 9 Documentation preview
-10 Configure github pages
-11 Build PDF documentation
-12 Publish documentation to microci.dev
-13 C++ code format with clang-format
-14 Downlod project dependencies
-15 Build microCI static version
-16 Build docker image for microci_cpp_compiler
+ 1 3c05 Extract plugin documentation
+ 2 05b1 C++ check with clang-tidy
+ 3 ec9f C++ check with cppcheck
+ 4 92ad SAST com flawfinder
+ 5 9eba Convert pdf to jpg
+ 6 d154 Build diagrams with plantuml
+ 7 7e4a Build diagrams - pikchr
+ 8 ee7b Build HTML documentation
+ 9 6c44 Documentation preview at port 8000
+10 e516 Configure github pages
+11 0d3e Build PDF documentation
+12 a99b Publish documentation to microci.dev
+13 4680 C++ code format with clang-format
+14 00fa Downlod project dependencies
+15 bf1d Build microCI static version
+16 f82a Build docker image for microci_cpp_compiler
 

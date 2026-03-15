@@ -128,6 +128,7 @@ test_ptBR:
 	LC_ALL=pt_BR.UTF-8 ../bin/microCI
 
 ../include/new/%.hpp: ../new/%.yml
+	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
 	$(Q)echo "// clang-format off" >> $@
@@ -136,6 +137,7 @@ test_ptBR:
 	$(Q)touch main.cpp
 
 ../include/new/%.hpp: ../new/%.md
+	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
 	$(Q)echo "// clang-format off" >> $@
@@ -144,6 +146,7 @@ test_ptBR:
 	$(Q)touch main.cpp
 
 ../include/new/%.hpp: ../new/%.txt
+	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
 	$(Q)echo "// clang-format off" >> $@
@@ -152,6 +155,7 @@ test_ptBR:
 	$(Q)touch main.cpp
 
 ../include/sh/%.hpp: ../sh/%.sh
+	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
 	$(Q)echo "// clang-format off" >> $@
@@ -160,6 +164,7 @@ test_ptBR:
 	$(Q)touch main.cpp
 
 ../include/3rd/%.hpp: ../3rd/%
+	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
 	$(Q)echo "// clang-format off" >> $@
@@ -167,7 +172,10 @@ test_ptBR:
 	$(Q)echo "// clang-format on" >> $@
 	$(Q)touch main.cpp
 
+NEW_HPP=$(subst ../new/,../include/new/,$(addsuffix .hpp,$(basename $(wildcard ../new/*.*))))
+
 single_compilation_unit.cpp: \
+	$(NEW_HPP) \
 	$(filter-out single_compilation_unit.cpp, $(wildcard *cpp)) \
 	$(wildcard ../include/*hpp) \
 	$(wildcard ../include/new/*hpp) \
