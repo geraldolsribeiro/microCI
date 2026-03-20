@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: install dependencies
-      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
+      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx
     - name: download headers
       run: |
         mkdir -p include/nlohmann

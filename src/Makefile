@@ -202,6 +202,7 @@ else
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	$(Q)strip --strip-all $@
+	$(Q)upx --best $@
 endif
 
 .PHONY: clean
