@@ -19,7 +19,7 @@ audit:
 	brew audit --new --formula geraldolsribeiro/tap/microci
 
 .PHONY: cpFormulaToSystem
-cpFormulaTo:
+cpFormulaToSystem:
 	cp microci.rb /opt/homebrew/Library/Taps/geraldolsribeiro/homebrew-tap/Formula/
 	# cp microci.rb /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/m/microci.rb
 
@@ -28,7 +28,7 @@ lazygit:
 	pushd /opt/homebrew/Library/Taps/geraldolsribeiro/homebrew-tap/Formula/ && lazygit
 
 .PHONY: cpFormulaFromSystem
-cpFormulaFrom:
+cpFormulaFromSystem:
 	cp /opt/homebrew/Library/Taps/geraldolsribeiro/homebrew-tap/Formula/microci.rb microci.rb
 	# cp /opt/homebrew/Library/Taps/homebrew/homebrew-core/Formula/m/microci.rb microci.rb
 
