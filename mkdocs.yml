@@ -12,6 +12,8 @@ theme:
     homepage: https://microci.dev
   palette:
     primary: black
+  features:
+    - content.code.copy
 markdown_extensions:
   - admonition
   - pymdownx.superfences:
