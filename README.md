@@ -2,20 +2,15 @@
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 
-**microCI** is a powerful tool designed to streamline the creation of
-continuous-integration pipelines by generating portable, auditable scripts for
-executing tasks in Docker containers. This ensures that every step in the process
-is fully reproducible across various environments:
+**microCI** ensures reliable, secure, and portable continuous-integration workflows by generating auditable scripts that execute tasks within Docker containers. Designed with a focus on high portability and minimal dependencies, microCI guarantees reproducible builds across diverse environments without introducing external overheads. Its security-auditable nature makes it ideal for both development and production pipelines:
 
-* Developer's machines
-* Servers for automatic builds after commits
-* Servers for deployment to production
+* Developer workstations (Linux & MacOS)
+* Automated build servers triggered by commits
+* Production deployment environments
 
-With microCI, the same tool, free of dependencies, can be used seamlessly in
-both development and production environments. For complete documentation, visit
-microci.dev.
+microCI provides a dependency-free solution that operates seamlessly from local development to enterprise-grade production, ensuring consistent behavior across Linux and macOS platforms.
 
-The complete documentation can be found at [microci.dev](https://microci.dev).
+For complete documentation, visit [microci.dev](https://microci.dev).
 
 ## On the desktop
 

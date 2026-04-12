@@ -1,7 +1,11 @@
 # Installation
 
-The microCI is a single executable.
+The **microCI** is a single executable.
 The installation process is basicaly copy the executable to a folder into `$PATH`.
+
+```bash
+curl -fsSL https://microci.dev/install.sh | bash
+```
 
 ## Linux
 
@@ -19,4 +23,13 @@ To install the latest stable version run on MacOS:
 
 ```bash
 brew install geraldolsribeiro/tap/microci
+```
+
+## Install using G-Tools
+
+**G-Tools** install **microCI** based on your OS.
+
+```bash
+cargo install g-tools
+G microci install
 ```
