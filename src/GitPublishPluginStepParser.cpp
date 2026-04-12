@@ -39,7 +39,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
+void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
@@ -67,7 +67,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   data["PLUGIN_COPY_FROM"] = pluginCopyFrom;
   data["GIT_BRANCH"]       = gitBranch;
   data["STEP_NAME"]        = stepName(step);
-  data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnami/git:latest");
+  data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnamilegacy/git:latest");
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Publica arquivos em um repositório git");
 
