@@ -1,0 +1,19 @@
+#   # jfrog plugin
+#   
+#   See **jfrog Client** documentation at <https://jfrog.com/help/r/jfrog-applications-and-cli-documentation/jfrog-cli>.
+#
+#{{{
+steps:
+  - name: "Save artifact to jfrog artifact"
+    description: "Description of this step"
+    run_as: user
+    envs:
+      HOME: /tmp/
+    plugin:
+      name: jfrog
+      bash: |
+        # Copy files from workspace to the repository
+        jf rt upload list.txt test-artifacts/folder/list.txt
+#}}}
+
+# vim: spell spelllang=pt,en

@@ -67,6 +67,7 @@ using namespace std;
 #include "PluginStepParser.hpp"
 #include "TemplatePluginStepParser.hpp"
 #include "VHDLFormatPluginStepParser.hpp"
+#include "JFrogPluginStepParser.hpp"
 
 // Configuration templates
 #include "new/bash.hpp"
@@ -89,6 +90,7 @@ using namespace std;
 #include "new/mkdocs_material_config.hpp"
 #include "new/mkdocs_material_index.hpp"
 #include "new/npm.hpp"
+#include "new/jfrog.hpp"
 #include "new/pandoc.hpp"
 #include "new/pikchr.hpp"
 #include "new/plantuml.hpp"
@@ -140,7 +142,8 @@ Options:
   -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
-  -n,--new minio           Create a upload/download internal artifact step
+  -n,--new minio           Create a upload/download artifact step
+  -n,--new jfrog           Create a upload/download artifact step
   -n,--new cppcheck        Create a C++ SAST step
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step
@@ -483,6 +486,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("vhdl-format", make_shared<VHDLFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
     uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("jfrog", make_shared<JFrogPluginStepParser>(&uCI));
     uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docker_build", make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
@@ -593,6 +597,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true,  "beamer",          ".microCI.yml",  yml, beamer);
       MICROCI_TPL(true,  "fetch",           ".microCI.yml",  yml, fetch);
       MICROCI_TPL(true,  "minio",           ".microCI.yml",  yml, minio);
+      MICROCI_TPL(true,  "jfrog",           ".microCI.yml",  yml, jfrog);
       MICROCI_TPL(true,  "flawfinder",      ".microCI.yml",  yml, flawfinder);
       MICROCI_TPL(true,  "docker_build",    ".microCI.yml",  yml, docker_build);
       MICROCI_TPL(true,  "pandoc",          ".microCI.yml",  yml, pandoc);

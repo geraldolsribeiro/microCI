@@ -73,6 +73,7 @@ test:
 	../bin/microCI -i ../new/template.yml                        > template.sh
 	cp dot_env_minio .env.yml
 	../bin/microCI -i ../new/minio.yml                           > minio.sh
+	../bin/microCI -i ../new/jfrog.yml                           > jfrog.sh
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
 	../bin/microCI -i ../.microCI.yml --list                     > list.txt

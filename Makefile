@@ -7,10 +7,13 @@ SHELL=bash
 .PHONY: all
 all: doc_plugin
 
+install-docmd:
+	cargo install docmd
+
 docs/plugin_%.md: new/%.yml
 	@echo "Writing $@..."
-	@INTMAIN_DOCMD_DETAILS=false INTMAIN_DOCMD_TOC=false INTMAIN_DOCMD_SHOW_SOURCE=false \
-		intmain_docmd yaml $^ $@
+	@DOCMD_DETAILS=false DOCMD_TOC=false DOCMD_SHOW_SOURCE=false \
+		docmd yaml $^ $@
 
 .PHONY: doc_plugin
 doc_plugin: \
@@ -25,6 +28,7 @@ doc_plugin: \
   docs/plugin_git_deploy.md \
   docs/plugin_git_publish.md \
   docs/plugin_minio.md \
+  docs/plugin_jfrog.md \
   docs/plugin_mkdocs_material_config.md \
   docs/plugin_mkdocs_material.md \
   docs/plugin_npm.md \
