@@ -42,7 +42,8 @@ Options:
   -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
-  -n,--new minio           Create a upload/download internal artifact step
+  -n,--new minio           Create a upload/download artifact step
+  -n,--new jfrog           Create a upload/download artifact step
   -n,--new cppcheck        Create a C++ SAST step
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step

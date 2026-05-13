@@ -289,6 +289,8 @@ function step_build_diagrams___pikchr() {
   echo -ne "[0;36m${title}[0m: "
   local ENV_1="1"
   local ENV_2="String with spaces"
+  local JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra"
+  local JFROG_URL="http://172.17.0.2:8082/artifactory"
   local MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
   local MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
   local MICROCI_MINIO_URL="http://11.22.33.44:9000"
@@ -313,6 +315,8 @@ function step_build_diagrams___pikchr() {
         --workdir /microci_workspace \
         --env ENV_1="1" \
         --env ENV_2="String with spaces" \
+        --env JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra" \
+        --env JFROG_URL="http://172.17.0.2:8082/artifactory" \
         --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
         --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
         --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \

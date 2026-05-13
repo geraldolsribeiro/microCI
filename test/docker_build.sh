@@ -293,6 +293,8 @@ function step_build_docker_image() {
   local DOCMD_TOC="false"
   local ENV_1="1"
   local ENV_2="String with spaces"
+  local JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra"
+  local JFROG_URL="http://172.17.0.2:8082/artifactory"
   local MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
   local MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
   local MICROCI_MINIO_URL="http://11.22.33.44:9000"
