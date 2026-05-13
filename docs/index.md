@@ -80,6 +80,7 @@ Example:
 
 ## Versions
 
+* `0.43.0` Plugin jfrog 
 * `0.42.0` Plugin mermaid
 * `0.41.0`
     * Extend step listing with hash ids; Add options -x and --hash
