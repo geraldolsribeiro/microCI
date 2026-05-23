@@ -13,7 +13,7 @@
 # ----------------------------------------------------------------------
 # Summary
 # ----------------------------------------------------------------------
-# The folloing steps are performed in this script:
+# The following steps are performed in this script:
 {{ STEPS_COMMENTS }}
 
 # Path without linefeed
@@ -115,25 +115,25 @@ case "$OS" in
 esac
 
 if [ ! -d ~/.ssh ]; then
-  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
-  echo "The ~/.ssh folder not found"
+  echo -e "{{RED}}Please set up SSH before using microCI{{CLEAR}}"
+  echo "The ~/.ssh folder was not found"
   echo "{{RED}}Try: {{GREEN}}ssh-keygen"
   exit 1
 fi
 
 if [ ! -f ~/.ssh/config ]; then
-  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
-  echo "The ~/.ssh/config file not found"
+  echo -e "{{RED}}Please set up SSH before using microCI{{CLEAR}}"
+  echo "The ~/.ssh/config file was not found"
   echo "Use the ~/.ssh/config file to pass options to hosts"
   echo "{{RED}}Try: {{GREEN}}touch ~/.ssh/config"
   exit 1
 fi
 
 if [ ! -f ~/.ssh/id_rsa.pub -a ! -f ~/.ssh/id_ed25519.pub ]; then
-  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
-  echo "The ~/.ssh/id_rsa.pub file not found"
-  echo "The ~/.ssh/id_ed25519.pub file not found"
-  echo "Use the ssh-keygen command to setup your pair of keys"
+  echo -e "{{RED}}Please set up SSH before using microCI{{CLEAR}}"
+  echo "The ~/.ssh/id_rsa.pub file was not found"
+  echo "The ~/.ssh/id_ed25519.pub file was not found"
+  echo "Use the ssh-keygen command to set up your pair of keys"
   echo "Consider to use ED25519 SSH keys"
   echo "The book Practical Cryptography With Go suggests that ED25519 keys are more secure and performant than RSA keys."
   echo "OpenSSH 6.5 introduced ED25519 SSH keys in 2014, and they should be available on most operating systems."
@@ -141,8 +141,8 @@ if [ ! -f ~/.ssh/id_rsa.pub -a ! -f ~/.ssh/id_ed25519.pub ]; then
 fi
 
 if [ ! -f ~/.ssh/known_hosts ]; then
-  echo -e "{{RED}}Please setup the SSH before use microCI{{CLEAR}}"
-  echo "The ~/.ssh/known_hosts file not found"
+  echo -e "{{RED}}Please set up SSH before using microCI{{CLEAR}}"
+  echo "The ~/.ssh/known_hosts file was not found"
   echo "Add your SSH public key to your git server, and"
   echo "clone one of your projects using the SSH protocol"
   echo "git clone git@your.git.server:/some/project.git /tmp"
@@ -157,7 +157,7 @@ for key in ~/.ssh/id_rsa ~/.ssh/id_ed25519; do
   fi
 done
 if [ "$is_ssh_key_protected_by_password" = "YES" ]; then
-  echo -e "{{RED}}Please use a SSH key not protected by password{{CLEAR}}"
+  echo -e "{{RED}}Please use an SSH key not protected by password{{CLEAR}}"
   echo ""
   exit 1
 fi
@@ -170,7 +170,7 @@ function gitOrigin {
 }
 
 function pwdRepoId {
-  # Como as chaves no json não podem começar com número foi prefixado com underline
+  # Since JSON keys cannot start with a number, it is prefixed with an underscore
   echo "_$(echo "${MICROCI_PWD}" | md5sum)" | cut -b 1-7
 }
 
