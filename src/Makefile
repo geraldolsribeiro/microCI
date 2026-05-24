@@ -216,7 +216,7 @@ mac_deps:
 
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl
 
 header_only:
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
