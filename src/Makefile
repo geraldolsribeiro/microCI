@@ -78,7 +78,7 @@ endif
 CXXFLAGS+= -Os
 
 # CXXFLAGS+= -flto # Link Time Optimizations
-CXXFLAGS+= -std=c++17
+CXXFLAGS+= -std=c++20
 # LDLIBS+= -lstdc++fs
 LDLIBS+= -lyaml-cpp
 LDLIBS+= -lcrypto

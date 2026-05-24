@@ -582,7 +582,7 @@ sudo rm -f /usr/bin/microCI
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{(char *)tpl.fileContent, tpl.fileSize};
+            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             out.open(fileName, ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
@@ -590,7 +590,7 @@ sudo rm -f /usr/bin/microCI
           } else {
             spdlog::debug(_("The config file '{}' was created from the template"), fileName);
             out.open(fileName);
-            out.write((char *)tpl.fileContent, tpl.fileSize);
+            out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
         }
       }
@@ -668,7 +668,7 @@ sudo rm -f /usr/bin/microCI
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{(char *)tpl.fileContent, tpl.fileSize};
+            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             ofstream out(fileName, ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
@@ -676,7 +676,7 @@ sudo rm -f /usr/bin/microCI
           } else {
             spdlog::debug(_("The file '{}' was created from the template"), fileName);
             ofstream out(fileName);
-            out.write((char *)tpl.fileContent, tpl.fileSize);
+            out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
         }
       }
@@ -775,7 +775,7 @@ sudo rm -f /usr/bin/microCI
         mdctx                       = EVP_MD_CTX_new();
         EVP_DigestInit_ex(mdctx, EVP_md5(), nullptr);
         EVP_DigestUpdate(mdctx, pwd.c_str(), pwd.size());
-        md5_digest = (unsigned char *)OPENSSL_malloc(md5_digest_len);
+        md5_digest = static_cast<unsigned char *>(OPENSSL_malloc(md5_digest_len));
         EVP_DigestFinal_ex(mdctx, md5_digest, &md5_digest_len);
         EVP_MD_CTX_free(mdctx);
 

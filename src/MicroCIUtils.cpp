@@ -74,7 +74,7 @@ auto sanitizeName(const string &name) -> string {
   }
 
   // Converte tudo para minúsculas
-  transform(ret.begin(), ret.end(), ret.begin(), [](unsigned char c) { return tolower(c); });
+  transform(ret.begin(), ret.end(), ret.begin(), [](unsigned char c) -> int { return tolower(c); });
 
   // Caracteres não permitidos são trocados por _
   const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
