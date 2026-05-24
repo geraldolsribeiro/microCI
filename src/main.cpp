@@ -45,7 +45,10 @@ using namespace std;
 #include "argh.h"
 #include "inicpp.h"
 
-#define _(String) gettext(String)
+// #include <libintl.h>
+// #include <locale.h>
+// #define _(String) gettext(String)
+#define _(String) String
 
 // Plugins
 #include "BashPluginStepParser.hpp"
