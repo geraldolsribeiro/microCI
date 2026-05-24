@@ -108,6 +108,27 @@ using namespace std;
 
 using namespace microci;
 
+auto commandLineValidOptions() -> std::set<std::string> {
+  return {
+    "A", "activity-diagram",
+    "a", "append-log",
+    "D", "update-dev",
+    "h", "help",
+    "H", "home",
+    "i", "input",
+    "l", "list",
+    "n", "config",
+    "N", "number",
+    "O", "only",
+    "T", "test-config",
+    "u", "update",
+    "U", "update-db",
+    "V", "version",
+    "x", "hash",
+    "X", "uninstall",
+  };
+};
+
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
@@ -126,7 +147,7 @@ Options:
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
-  -x,--uninstall           Uninstall
+  -X,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
   -H,--home alt_home_dir   Alternative home directory
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
@@ -438,6 +459,21 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
 
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
+    auto validOptions = commandLineValidOptions();
+    for( const auto &flag : cmdl.flags()) {
+      if( validOptions.find(flag) == validOptions.end() ) {
+        spdlog::error(_("Invalid command line option: -{}"), flag);
+        return 1;
+      }
+    }
+
+    for( const auto &param : cmdl.params()) {
+      if( validOptions.find(param.first) == validOptions.end() ) {
+        spdlog::error(_("Invalid command line option: -{} {}"), param.first, param.second);
+        return 1;
+      }
+    }
+
     if (cmdl[{"-u", "--update"}]) {
       cout << R"(
 echo "🚀 Updating to the latest stable release..."
@@ -460,7 +496,7 @@ microCI --version
 )";
       return 0;
     }
-    if (cmdl[{"-x", "--uninstall"}]) {
+    if (cmdl[{"-X", "--uninstall"}]) {
       cout << R"(
 echo "🔥 Removing microCI..."
 sudo rm -f /usr/bin/microCI
