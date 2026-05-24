@@ -63,7 +63,7 @@ auto version() -> string { return fmt::format("v{}", microCI_version); }
 auto sanitizeName(const string &name) -> string {
   auto ret = name;
 
-  // Troca os caracteres acentuados por versão sem acento
+  // Replace accented characters with version without accents
   map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto const &[from, to] : tr) {
     size_t pos = 0;
@@ -73,10 +73,10 @@ auto sanitizeName(const string &name) -> string {
     }
   }
 
-  // Converte tudo para minúsculas
+  // Convert everything to lowercase
   transform(ret.begin(), ret.end(), ret.begin(), [](unsigned char c) -> int { return tolower(c); });
 
-  // Caracteres não permitidos são trocados por _
+  // Characters not allowed are replaced by _
   const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
   size_t found            = ret.find_first_not_of(allowedChars);
   while (found != string::npos) {
