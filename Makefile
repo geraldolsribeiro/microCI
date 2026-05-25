@@ -5,7 +5,8 @@
 SHELL=bash
 
 .PHONY: all
-all: doc_plugin
+all:
+# all: doc_plugin
 
 install-docmd:
 	cargo install docmd

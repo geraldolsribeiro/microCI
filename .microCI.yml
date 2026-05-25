@@ -128,6 +128,7 @@ steps:
   - name: "Publish documentation to microci.dev"
     network: bridge
     ssh:
+      format: "id_ed25519"
     plugin:
       name: "git_publish"
       git_url: "git@github.com:geraldolsribeiro/microci.dev.git"

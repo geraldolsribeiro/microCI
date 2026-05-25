@@ -9,6 +9,7 @@ steps:
     # run_as: root
     # run_as: user # (default)
     ssh:
+      format: "id_ed25519"
       copy_from: "${HOME}/.ssh"
       # copy_to: "/root/.ssh"          # root
       # copy_to: "/tmp/microci_deploy" # user (default)

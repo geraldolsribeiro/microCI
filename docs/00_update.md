@@ -1,4 +1,6 @@
-# How to update
+# Update microCI
+
+<center>![Update](images/microci-update.svg)</center>
 
 Use the following command to download and install the latest stable version of **microCI**.
 
