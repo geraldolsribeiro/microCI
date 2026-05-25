@@ -4,7 +4,7 @@
 
 **microCI** is a powerful tool designed to streamline the creation of
 continuous-integration pipelines by generating portable, auditable scripts for
-executing tasks in Docker containers. 
+executing tasks in Docker containers.
 
 For complete documentation, visit [microci.dev](https://microci.dev).
 
@@ -12,25 +12,25 @@ For complete documentation, visit [microci.dev](https://microci.dev).
 
 CI/CD stands for Continuous Integration / Continuous Deployment. CI and CD
 pipelines form the backbone of modern software development, enabling teams to
-ship features faster and more reliably. Solid CI/CD pipeline architecture is
+ship features faster and more reliably. A solid CI/CD pipeline architecture is
 key to making these workflows scalable, secure, and efficient—not just
 automated.
 
 
 ## How it works?
 
-**microCI** creates a Bash script that implements the pipeline defined in an YAML file.
+**microCI** creates a Bash script that implements the pipeline defined in a YAML file.
 
 <center>![YAML to Bash](images/microci-yaml_to_bash.svg)</center>
 
-One portable Bash function is created to execute each step in the pipeline recipe.
+Each step in the pipeline recipe is executed by its own portable Bash function.
 
 
 ## How to execute?
 
 <center>![How to execute](images/microci-execute.svg)</center>
 
-To use `microCI` is very simple:
+Using `microCI` is very simple:
 
 ```bash
 microCI | bash
@@ -42,10 +42,10 @@ microCI | bash
 
 Every step in the process is fully reproducible across various environments:
 
-* Developer's workstation
-* Servers for automatic builds after commits
-* Servers for deployment to production
+* Developer workstations
+* Build servers triggered by commits
+* Deployment servers for production releases
 
-With microCI, the same tool, free of dependencies, can be used seamlessly in
-both development and production environments.
+With microCI, the same zero-dependency tool works seamlessly in both
+development and production environments.
 
