@@ -2,15 +2,20 @@
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 
-**microCI** ensures reliable, secure, and portable continuous-integration workflows by generating auditable scripts that execute tasks within Docker containers. Designed with a focus on high portability and minimal dependencies, microCI guarantees reproducible builds across diverse environments without introducing external overheads. Its security-auditable nature makes it ideal for both development and production pipelines:
+**microCI** is a powerful tool designed to streamline the creation of
+continuous-integration pipelines by generating portable, auditable scripts for
+executing tasks in Docker containers. This ensures that every step in the process
+is fully reproducible across various environments:
 
-* Developer workstations (Linux & MacOS)
-* Automated build servers triggered by commits
-* Production deployment environments
+* Developer's machines
+* Servers for automatic builds after commits
+* Servers for deployment to production
 
-microCI provides a dependency-free solution that operates seamlessly from local development to enterprise-grade production, ensuring consistent behavior across Linux and macOS platforms.
+With microCI, the same tool, free of dependencies, can be used seamlessly in
+both development and production environments. For complete documentation, visit
+microci.dev.
 
-For complete documentation, visit [microci.dev](https://microci.dev).
+The complete documentation can be found at [microci.dev](https://microci.dev).
 
 ## On the desktop
 
@@ -36,20 +41,10 @@ triggered, execute `microCI` in the respective project folders.
 
 ## Minimum requirements
 
-* A properly configured Docker environment
-* Bash shell
-* `jq` and `yq` utilities
-
-## Installation
-
-The installation is equally simple, just copy the executable to a folder in the `PATH`.
-To remove the `microCI` from the system delete the file copied to the PATH.
-
-```bash
-sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
-  -o /usr/bin/microCI
-sudo chmod 755 /usr/bin/microCI
-```
+* `bash`
+* `docker`
+* `jq`
+* `yq`
 
 ## Docker Container
 
@@ -60,18 +55,6 @@ You can use **any Docker container** for execution, both public ones from
 
 The simplest and safest way to use `microCI` to read from or write to
 repositories are to access them through an SSH key.
-
-## To do
-
-Below are some features that may be present in the next releases.
-
-* create deb package
-* create rpm package
-* pass current user to container to avoid generating files as `root` in the working directory
-* display error message from the failed step
-* variable substitution in steps
-* use of environment variables and secrets configured on the server
-* create a Docker image from a git repository
 
 ## Debian dependencies
 
@@ -97,6 +80,7 @@ Example:
 
 ## Versions
 
+* `0.43.0` Plugin jfrog 
 * `0.42.0` Plugin mermaid
 * `0.41.0`
     * Extend step listing with hash ids; Add options -x and --hash
@@ -147,36 +131,3 @@ Example:
 * `0.1.0` Plugin `bash` and `git_deploy`
 * `0.0.1` Proof of concept/Initial version
 
-## License
-
-MIT License
-
-Copyright (c) 2022-2026 Geraldo Luis da Silva Ribeiro
-
-```
-░░░░░░░░░░░░░░░░░
-░░░░░░░█▀▀░▀█▀░░░
-░░░█░█░█░░░░█░░░░
-░░░█▀▀░▀▀▀░▀▀▀░░░
-░░░▀░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░
-```
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
- 

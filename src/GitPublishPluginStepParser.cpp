@@ -69,7 +69,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
   data["STEP_NAME"]        = stepName(step);
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnamilegacy/git:latest");
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Publica arquivos em um repositório git");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Publish files to a git repository");
 
   beginFunction(data, envs);
   prepareRunDocker(data, envs, volumes);
@@ -97,7 +97,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
            && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} push origin {{ GIT_BRANCH }} 2>&1 \
-           || echo 'Atenção: Nenhuma modificação para commitar' \
+           || echo 'Attention: No changes to commit' \
 ")",
                                      data);
 
