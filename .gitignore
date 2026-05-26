@@ -20,3 +20,8 @@ macos/MicroCI-*.pkg
 /dockerfiles/mermaid/iperf_udp.png
 /dockerfiles/mermaid/iperf_udp.svg
 docs/diagrams/.$microci.drawio.bkp
+microci_*.dsc
+microci_*.tar.xz
+microci_*_amd64.buildinfo
+microci_*_amd64.changes
+microci_*_amd64.deb

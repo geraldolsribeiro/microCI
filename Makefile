@@ -4,6 +4,9 @@
 
 SHELL=bash
 
+VERSION=$(shell sed -n "s/#define microCI_version \"\([0-9\.]\+\)\"/\1/p" include/MicroCI.hpp)
+FIRST_GIT_COMMIT=$(shell git rev-list --max-parents=0 HEAD)
+
 .PHONY: all
 all:
 # all: doc_plugin
@@ -46,3 +49,12 @@ build:
 .PHONY: test
 test:
 	$(MAKE) -C test
+
+microci.equivs:
+	equivs-control $@
+
+.PHONY: deb
+deb: microci.equivs
+	./git2dch.sh > debian/changelog
+	sed -i "s/^Version:.*/Version: $(VERSION)/" $<
+	DEB_BUILD_OPTIONS=nostrip equivs-build --full $<
