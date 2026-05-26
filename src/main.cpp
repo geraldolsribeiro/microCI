@@ -112,12 +112,13 @@ auto commandLineValidOptions() -> std::set<std::string> {
   return {
     "A", "activity-diagram",
     "a", "append-log",
+    "c", "config",
     "D", "update-dev",
     "h", "help",
     "H", "home",
     "i", "input",
     "l", "list",
-    "n", "config",
+    "n", "new",
     "N", "number",
     "O", "only",
     "T", "test-config",
@@ -150,7 +151,7 @@ Options:
   -X,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
   -H,--home alt_home_dir   Alternative home directory
-  -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
+  -c,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
   -n,--new docmd           Create a documentation step

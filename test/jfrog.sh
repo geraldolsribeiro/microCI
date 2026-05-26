@@ -220,7 +220,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/vhdl-format.yml" |
+    yq -r .steps[].name "../new/jfrog.yml" |
       while IFS= read -r stepName; do
         updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
         ((++stepNum))
@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Process source code to make readable or match to a project code style
+# Description of this step
 # ----------------------------------------------------------------------
-function step_vhdl_source_code_formatter_and_beautifier() {
+function step_save_artifact_to_jfrog_artifact() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="VHDL source code formatter and beautifier"
-  local MICROCI_STEP_DESCRIPTION="Process source code to make readable or match to a project code style"
+  local MICROCI_STEP_NAME="Save artifact to jfrog artifact"
+  local MICROCI_STEP_DESCRIPTION="Description of this step"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -318,8 +318,12 @@ function step_vhdl_source_code_formatter_and_beautifier() {
   echo -ne "[0;36m${title}[0m: "
   local ENV_1="1"
   local ENV_2="String with spaces"
-  local ENV_YML_1="1"
-  local ENV_YML_2="String with spaces"
+  local HOME="/tmp/"
+  local JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra"
+  local JFROG_URL="http://172.17.0.2:8082/artifactory"
+  local MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI"
+  local MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro"
+  local MICROCI_MINIO_URL="http://11.22.33.44:9000"
 
   {
     (
@@ -328,64 +332,30 @@ function step_vhdl_source_code_formatter_and_beautifier() {
       echo ""
       echo ""
       echo ""
-      echo "Step: VHDL source code formatter and beautifier"
+      echo "Step: Save artifact to jfrog artifact"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
+        --entrypoint= \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_vhdl_source_code_formatter_and_beautifier_$(head -c 8 /proc/sys/kernel/random/uuid) \
-        --network none \
+        --name microci_save_artifact_to_jfrog_artifact_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --network host \
         --workdir /microci_workspace \
         --env ENV_1="1" \
         --env ENV_2="String with spaces" \
-        --env ENV_YML_1="1" \
-        --env ENV_YML_2="String with spaces" \
+        --env HOME="/tmp/" \
+        --env JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra" \
+        --env JFROG_URL="http://172.17.0.2:8082/artifactory" \
+        --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
+        --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
+        --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_ghdl:latest" \
-        bash -c "cd /microci_workspace
-        cat <<EOF > /microci_workspace/.emacs_vhdl_formatter.lisp
-;; microCI emacs configuration used for formatting VHDL code
-(custom-set-variables
-;; '(vhdl-align-group-separate "^\\s---*$")
-  '(vhdl-align-groups t)
-  '(vhdl-align-same-indent t)
-  '(vhdl-auto-align t)
-  '(vhdl-basic-offset 2)
-  '(vhdl-beautify-options '(t      ;; whitespace cleanup
-                            t      ;; single statement per line
-                            t      ;; indentation
-                            t      ;; aligment
-                            t))    ;; case fixing
-  ;; '(vhdl-standard '(8 nil))
-  '(vhdl-standard '(8 (ams math))) ;; VHDL-08
-  '(vhdl-array-index-record-field-in-sensitivity-list t)
-  '(vhdl-use-direct-instantiation 'always)
-
-  '(vhdl-upper-case-attributes t)
-  '(vhdl-upper-case-constants t)
-  '(vhdl-upper-case-enum-values t)
-  '(vhdl-upper-case-keywords t)
-  '(vhdl-upper-case-types t)
- 
-)
-EOF
-        echo "Formatting..." \
-        && cat <(compgen -G 'src/a*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && cat <(compgen -G 'src/b*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && cat <(compgen -G 'src/c*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && rm -f /microci_workspace/.emacs_vhdl_formatter.lisp"
+        "releases-docker.jfrog.io/jfrog/jfrog-cli-full-v2-jf" \
+        /bin/bash -c "cd /microci_workspace \
+           && jf rt upload list.txt test-artifacts/folder/list.txt --url=$JFROG_URL --access-token=$JFROG_ACCESS_TOKEN 2>&1"
 
     )
 
@@ -417,15 +387,15 @@ EOF
 echo 'Updating docker images...'
   echo 'Updating debian:stable-slim docker image...' >> .microCI.log
   docker pull debian:stable-slim --quiet 2>&1 >> .microCI.log
-  echo 'Updating intmain/microci_ghdl:latest docker image...' >> .microCI.log
-  docker pull intmain/microci_ghdl:latest --quiet 2>&1 >> .microCI.log
+  echo 'Updating releases-docker.jfrog.io/jfrog/jfrog-cli-full-v2-jf docker image...' >> .microCI.log
+  docker pull releases-docker.jfrog.io/jfrog/jfrog-cli-full-v2-jf --quiet 2>&1 >> .microCI.log
 
 
 # Execute all steps in the pipeline
 function main() {
   date >> .microCI.log
 
-  step_vhdl_source_code_formatter_and_beautifier
+  step_save_artifact_to_jfrog_artifact
 
   date >> .microCI.log
 }

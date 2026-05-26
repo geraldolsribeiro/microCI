@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: microci 0.43.0\n"
+"Project-Id-Version: microci 0.44.0\n"
 "Report-Msgid-Bugs-To: geraldolsribeiro@gmail.com\n"
-"POT-Creation-Date: 2026-05-13 22:07+0400\n"
+"POT-Creation-Date: 2026-05-26 21:38+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,8 @@ msgstr ""
 #: ../src/main.cpp:528 ../src/main.cpp:612 ../src/main.cpp:531
 #: ../src/main.cpp:616 ../src/main.cpp:534 ../src/main.cpp:619
 #: ../src/main.cpp:533 ../src/main.cpp:618 ../src/main.cpp:537
-#: ../src/main.cpp:623
+#: ../src/main.cpp:623 ../src/main.cpp:576 ../src/main.cpp:662
+#: ../src/main.cpp:577 ../src/main.cpp:663
 #, c++-format
 msgid "Creating folder '{}'"
 msgstr ""
@@ -40,7 +41,7 @@ msgstr ""
 #: ../src/main.cpp:632 ../src/main.cpp:634 ../src/main.cpp:638
 #: ../src/main.cpp:639 ../src/main.cpp:652 ../src/main.cpp:673
 #: ../src/main.cpp:677 ../src/main.cpp:680 ../src/main.cpp:679
-#: ../src/main.cpp:684
+#: ../src/main.cpp:684 ../src/main.cpp:723 ../src/main.cpp:724
 #, c++-format
 msgid "Failure reading the file '{}'"
 msgstr ""
@@ -56,7 +57,8 @@ msgstr ""
 #: ../src/main.cpp:533 ../src/main.cpp:617 ../src/main.cpp:536
 #: ../src/main.cpp:621 ../src/main.cpp:539 ../src/main.cpp:624
 #: ../src/main.cpp:538 ../src/main.cpp:623 ../src/main.cpp:542
-#: ../src/main.cpp:628
+#: ../src/main.cpp:628 ../src/main.cpp:581 ../src/main.cpp:667
+#: ../src/main.cpp:582 ../src/main.cpp:668
 #, c++-format
 msgid "File '{}' already exists"
 msgstr ""
@@ -68,7 +70,7 @@ msgstr ""
 #: ../src/main.cpp:671 ../src/main.cpp:673 ../src/main.cpp:677
 #: ../src/main.cpp:683 ../src/main.cpp:696 ../src/main.cpp:717
 #: ../src/main.cpp:721 ../src/main.cpp:724 ../src/main.cpp:723
-#: ../src/main.cpp:728
+#: ../src/main.cpp:728 ../src/main.cpp:767 ../src/main.cpp:768
 #, c++-format
 msgid "Git config: {}"
 msgstr ""
@@ -80,16 +82,26 @@ msgstr ""
 #: ../src/main.cpp:672 ../src/main.cpp:674 ../src/main.cpp:678
 #: ../src/main.cpp:684 ../src/main.cpp:697 ../src/main.cpp:718
 #: ../src/main.cpp:722 ../src/main.cpp:725 ../src/main.cpp:724
-#: ../src/main.cpp:729
+#: ../src/main.cpp:729 ../src/main.cpp:768 ../src/main.cpp:769
 #, c++-format
 msgid "Git origin: {}"
+msgstr ""
+
+#: ../src/main.cpp:465 ../src/main.cpp:466
+#, c++-format
+msgid "Invalid command line option: -{}"
+msgstr ""
+
+#: ../src/main.cpp:472 ../src/main.cpp:473
+#, c++-format
+msgid "Invalid command line option: -{} {}"
 msgstr ""
 
 #: ../src/main.cpp:261 ../src/main.cpp:267 ../src/main.cpp:271
 #: ../src/main.cpp:524 ../src/main.cpp:526 ../src/main.cpp:527
 #: ../src/main.cpp:528 ../src/main.cpp:541 ../src/main.cpp:552
 #: ../src/main.cpp:555 ../src/main.cpp:558 ../src/main.cpp:557
-#: ../src/main.cpp:561
+#: ../src/main.cpp:561 ../src/main.cpp:600 ../src/main.cpp:601
 #, c++-format
 msgid "Invalid config type: {}"
 msgstr ""
@@ -98,6 +110,7 @@ msgstr ""
 #: ../src/main.cpp:611 ../src/main.cpp:613 ../src/main.cpp:612
 #: ../src/main.cpp:626 ../src/main.cpp:637 ../src/main.cpp:641
 #: ../src/main.cpp:644 ../src/main.cpp:643 ../src/main.cpp:648
+#: ../src/main.cpp:687 ../src/main.cpp:688
 #, c++-format
 msgid "Invalid plugin type: {}"
 msgstr ""
@@ -115,7 +128,7 @@ msgstr ""
 #: ../src/main.cpp:670 ../src/main.cpp:672 ../src/main.cpp:676
 #: ../src/main.cpp:682 ../src/main.cpp:695 ../src/main.cpp:716
 #: ../src/main.cpp:720 ../src/main.cpp:723 ../src/main.cpp:722
-#: ../src/main.cpp:727
+#: ../src/main.cpp:727 ../src/main.cpp:766 ../src/main.cpp:767
 #, c++-format
 msgid "PWD: {}"
 msgstr ""
@@ -124,7 +137,7 @@ msgstr ""
 #: ../src/main.cpp:515 ../src/main.cpp:517 ../src/main.cpp:518
 #: ../src/main.cpp:519 ../src/main.cpp:532 ../src/main.cpp:543
 #: ../src/main.cpp:546 ../src/main.cpp:549 ../src/main.cpp:548
-#: ../src/main.cpp:552
+#: ../src/main.cpp:552 ../src/main.cpp:591 ../src/main.cpp:592
 #, c++-format
 msgid "The config file '{}' was created from the template"
 msgstr ""
@@ -136,6 +149,7 @@ msgstr ""
 #: ../src/main.cpp:602 ../src/main.cpp:601 ../src/main.cpp:603
 #: ../src/main.cpp:616 ../src/main.cpp:627 ../src/main.cpp:631
 #: ../src/main.cpp:634 ../src/main.cpp:633 ../src/main.cpp:638
+#: ../src/main.cpp:677 ../src/main.cpp:678
 #, c++-format
 msgid "The file '{}' was created from the template"
 msgstr ""
@@ -151,7 +165,8 @@ msgstr ""
 #: ../src/main.cpp:536 ../src/main.cpp:620 ../src/main.cpp:539
 #: ../src/main.cpp:624 ../src/main.cpp:542 ../src/main.cpp:627
 #: ../src/main.cpp:541 ../src/main.cpp:626 ../src/main.cpp:545
-#: ../src/main.cpp:631
+#: ../src/main.cpp:631 ../src/main.cpp:584 ../src/main.cpp:670
+#: ../src/main.cpp:585 ../src/main.cpp:671
 #, c++-format
 msgid "The file '{}' was edited from the template"
 msgstr ""
@@ -163,6 +178,7 @@ msgstr ""
 #: ../src/main.cpp:619 ../src/main.cpp:621 ../src/main.cpp:620
 #: ../src/main.cpp:634 ../src/main.cpp:645 ../src/main.cpp:649
 #: ../src/main.cpp:652 ../src/main.cpp:651 ../src/main.cpp:656
+#: ../src/main.cpp:695 ../src/main.cpp:696
 #, c++-format
 msgid "The input file '{}' was not found"
 msgstr ""
@@ -174,7 +190,7 @@ msgstr ""
 #: ../src/main.cpp:728 ../src/main.cpp:730 ../src/main.cpp:734
 #: ../src/main.cpp:740 ../src/main.cpp:753 ../src/main.cpp:774
 #: ../src/main.cpp:778 ../src/main.cpp:781 ../src/main.cpp:780
-#: ../src/main.cpp:785
+#: ../src/main.cpp:785 ../src/main.cpp:824 ../src/main.cpp:825
 msgid "Unknown exception"
 msgstr ""
 
@@ -182,7 +198,7 @@ msgstr ""
 #: ../src/main.cpp:526 ../src/main.cpp:528 ../src/main.cpp:529
 #: ../src/main.cpp:530 ../src/main.cpp:543 ../src/main.cpp:554
 #: ../src/main.cpp:557 ../src/main.cpp:560 ../src/main.cpp:559
-#: ../src/main.cpp:563
+#: ../src/main.cpp:563 ../src/main.cpp:602 ../src/main.cpp:603
 #, c++-format
 msgid "Use: microCI --config {}"
 msgstr ""
@@ -193,7 +209,8 @@ msgstr ""
 #: ../src/main.cpp:354 ../src/main.cpp:359 ../src/main.cpp:613
 #: ../src/main.cpp:615 ../src/main.cpp:614 ../src/main.cpp:628
 #: ../src/main.cpp:639 ../src/main.cpp:643 ../src/main.cpp:646
-#: ../src/main.cpp:645 ../src/main.cpp:650
+#: ../src/main.cpp:645 ../src/main.cpp:650 ../src/main.cpp:689
+#: ../src/main.cpp:690
 #, c++-format
 msgid "Use: microCI --new {}"
 msgstr ""

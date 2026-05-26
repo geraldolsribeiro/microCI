@@ -2,12 +2,12 @@
 #   
 #{{{
 steps:
-  - name: "Formatar código C++ com clang-format"
-    description: "Padroniza formato do código usando regras"
+  - name: "Format C++ code with clang-format"
+    description: "Standardizes code formatting using rules"
     run_as: user
     plugin:
       name: "clang-format"
-      source: # Lista arquivos a serem formatados
+      source: # List of files to be formatted
         - "src/*.cpp"
         - "test/*.cpp"
         - "include/*.hpp"

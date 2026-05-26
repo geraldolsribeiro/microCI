@@ -220,7 +220,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "../new/vhdl-format.yml" |
+    yq -r .steps[].name "../new/doxygen.yml" |
       while IFS= read -r stepName; do
         updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
         ((++stepNum))
@@ -296,14 +296,15 @@ reformatJson
 MICROCI_STEP_NUMBER=0
 
 # Notification by Discord is not possible
+# bash 
 
 # ----------------------------------------------------------------------
-# Process source code to make readable or match to a project code style
+# Build documentation with doxygen
 # ----------------------------------------------------------------------
-function step_vhdl_source_code_formatter_and_beautifier() {
+function step_build_documentation_with_doxygen() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="VHDL source code formatter and beautifier"
-  local MICROCI_STEP_DESCRIPTION="Process source code to make readable or match to a project code style"
+  local MICROCI_STEP_NAME="Build documentation with doxygen"
+  local MICROCI_STEP_DESCRIPTION="Build documentation with doxygen"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -328,7 +329,7 @@ function step_vhdl_source_code_formatter_and_beautifier() {
       echo ""
       echo ""
       echo ""
-      echo "Step: VHDL source code formatter and beautifier"
+      echo "Step: Build documentation with doxygen"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -336,7 +337,7 @@ function step_vhdl_source_code_formatter_and_beautifier() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_vhdl_source_code_formatter_and_beautifier_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_build_documentation_with_doxygen_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --network none \
         --workdir /microci_workspace \
         --env ENV_1="1" \
@@ -344,48 +345,18 @@ function step_vhdl_source_code_formatter_and_beautifier() {
         --env ENV_YML_1="1" \
         --env ENV_YML_2="String with spaces" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_ghdl:latest" \
-        bash -c "cd /microci_workspace
-        cat <<EOF > /microci_workspace/.emacs_vhdl_formatter.lisp
-;; microCI emacs configuration used for formatting VHDL code
-(custom-set-variables
-;; '(vhdl-align-group-separate "^\\s---*$")
-  '(vhdl-align-groups t)
-  '(vhdl-align-same-indent t)
-  '(vhdl-auto-align t)
-  '(vhdl-basic-offset 2)
-  '(vhdl-beautify-options '(t      ;; whitespace cleanup
-                            t      ;; single statement per line
-                            t      ;; indentation
-                            t      ;; aligment
-                            t))    ;; case fixing
-  ;; '(vhdl-standard '(8 nil))
-  '(vhdl-standard '(8 (ams math))) ;; VHDL-08
-  '(vhdl-array-index-record-field-in-sensitivity-list t)
-  '(vhdl-use-direct-instantiation 'always)
-
-  '(vhdl-upper-case-attributes t)
-  '(vhdl-upper-case-constants t)
-  '(vhdl-upper-case-enum-values t)
-  '(vhdl-upper-case-keywords t)
-  '(vhdl-upper-case-types t)
- 
-)
-EOF
-        echo "Formatting..." \
-        && cat <(compgen -G 'src/a*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && cat <(compgen -G 'src/b*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && cat <(compgen -G 'src/c*.vhd') \
-          | xargs --no-run-if-empty -I {} emacs -batch \
-            -l /microci_workspace/.emacs_vhdl_formatter.lisp \
-            {} -f vhdl-beautify-buffer 2>&1  \
-        && rm -f /microci_workspace/.emacs_vhdl_formatter.lisp"
+        "intmain/microci_doxygen" bash -c "cd /microci_workspace \
+          && if [ ! -f ./Doxyfile ]; then doxygen -g ./Doxyfile; fi \
+          && doxygen -u ./Doxyfile \
+          && sed -i 's#^OUTPUT_DIRECTORY.*#OUTPUT_DIRECTORY = doxygen#' ./Doxyfile \
+          && sed -i 's#^HAVE_DOT.*#HAVE_DOT = YES#' ./Doxyfile \
+          && sed -i 's#^CALL_GRAPH.*#CALL_GRAPH = YES#' ./Doxyfile \
+          && sed -i 's#^CALLER_GRAPH.*#CALLER_GRAPH = YES#' ./Doxyfile \
+          && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = doxygen/doxygen.log#' ./Doxyfile \
+          && mkdir -p auditing \
+          && doxygen ./Doxyfile; \
+          touch doxygen/doxygen.log \
+          && sed -i 's#/microci_workspace/##g' doxygen/doxygen.log"
 
     )
 
@@ -417,15 +388,15 @@ EOF
 echo 'Updating docker images...'
   echo 'Updating debian:stable-slim docker image...' >> .microCI.log
   docker pull debian:stable-slim --quiet 2>&1 >> .microCI.log
-  echo 'Updating intmain/microci_ghdl:latest docker image...' >> .microCI.log
-  docker pull intmain/microci_ghdl:latest --quiet 2>&1 >> .microCI.log
+  echo 'Updating intmain/microci_doxygen docker image...' >> .microCI.log
+  docker pull intmain/microci_doxygen --quiet 2>&1 >> .microCI.log
 
 
 # Execute all steps in the pipeline
 function main() {
   date >> .microCI.log
 
-  step_vhdl_source_code_formatter_and_beautifier
+  step_build_documentation_with_doxygen
 
   date >> .microCI.log
 }
