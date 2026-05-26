@@ -9,10 +9,12 @@
 
 'General
 skinparam shadowing false
-skinparam handwritten false
+' skinparam handwritten false
 skinparam backgroundColor transparent
 skinparam componentStyle uml2
 skinparam dpi 300
+
+!option handwritten false
 
 'Default'
 skinparam default{
@@ -26,7 +28,8 @@ skinparam default{
   'Other Style
   TextAlignment left
 }
-skinparam padding 2
+
+' skinparam padding 2
 
 'Header
 skinparam header {

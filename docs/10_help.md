@@ -1,6 +1,6 @@
 # Help
 
-The basic usage can be obtained by passing the  option:
+The basic usage can be obtained by passing the `--help` option:
 
 ```
 microCI --help
@@ -13,7 +13,7 @@ microCI --help
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.40.1
+                             microCI 0.44.0
 
 
 Options:
@@ -25,12 +25,14 @@ Options:
   -O,--only name           Execute only a single step
   -l,--list                List steps
   -N,--number N            Execute the Nth step
+  -x,--hash hh             Execute the hh step
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
-  -x,--uninstall           Uninstall
+  -X,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
-  -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
+  -H,--home alt_home_dir   Alternative home directory
+  -c,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
   -n,--new docmd           Create a documentation step
@@ -41,11 +43,13 @@ Options:
   -n,--new git_deploy      Create a production deploy step
   -n,--new plantuml        Create a diagram generation step
   -n,--new pikchr          Create a diagram generation step
+  -n,--new mermaid         Create a diagram generation step
   -n,--new clang-format    Create a code format step
   -n,--new vhdl-format     Create a code format step
   -n,--new beamer          Create a PDF presentation step
   -n,--new fetch           Create a download external artfact step
-  -n,--new minio           Create a upload/download internal artifact step
+  -n,--new minio           Create a upload/download artifact step
+  -n,--new jfrog           Create a upload/download artifact step
   -n,--new cppcheck        Create a C++ SAST step
   -n,--new clang-tidy      Create a C++ SAST step
   -n,--new flawfinder      Create a C++ SAST step

@@ -79,7 +79,7 @@ steps:
     plugin:
       name: "plantuml"
       source:
-        - "docs/**.puml"
+        - "docs/diagrams/*.puml"
       type: png
       config: "docs/diagrams/skinparams.iuml"
       output: "/microci_workspace/docs/diagrams"
