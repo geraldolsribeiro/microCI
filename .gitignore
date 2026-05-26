@@ -25,3 +25,4 @@ microci_*.tar.xz
 microci_*_amd64.buildinfo
 microci_*_amd64.changes
 microci_*_amd64.deb
+microci-*.x86_64.rpm

@@ -58,3 +58,7 @@ deb: microci.equivs
 	./git2dch.sh > debian/changelog
 	sed -i "s/^Version:.*/Version: $(VERSION)/" $<
 	DEB_BUILD_OPTIONS=nostrip equivs-build --full $<
+
+.PHONY: rpm
+rpm: deb
+	alien -r microci_$(VERSION)_amd64.deb

@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: 'Install dependencies'
-      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs
+      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs alien
     - name: 'Download headers'
       run: |
         mkdir -p include/nlohmann
@@ -23,19 +23,25 @@ jobs:
         wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
     - name: 'Build'
       run: make -C src clean all
-    - name: 'Debian'
-      run: make deb
-    - name: 'Upload Artifact binary'
+    - name: 'Debian/RHEL'
+      run: make deb rpm
+    - name: 'Upload Artifact Binary'
       uses: actions/upload-artifact@v4
       with:
-        name: microCI
+        name: 'microCI'
         path: bin/microCI
         retention-days: 30
-    - name: 'Upload Artifact binary'
+    - name: 'Upload Artifact Debian Package'
       uses: actions/upload-artifact@v4
       with:
-        name: package-debian
+        name: 'package-deb'
         path: ./microci_*.deb
+        retention-days: 30
+    - name: 'Upload Artifact RHEL Package'
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'package-rpm'
+        path: ./microci-*.x86_64.rpm
         retention-days: 30
     - name: 'Pre-Release'
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -47,4 +53,5 @@ jobs:
         files: |
           bin/microCI
           microci_*.deb
+          microci-*.x86_64.rpm
           LICENSE
