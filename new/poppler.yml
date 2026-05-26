@@ -2,8 +2,8 @@
 #   
 #{{{
 steps:
-  - name: "Converter pdf em jpg"
-    description: "Descrição deste passo"
+  - name: "Convert PDF to JPG"
+    description: "Description of this step"
     docker: intmain/microci_poppler:latest
     plugin:
       name: "bash"

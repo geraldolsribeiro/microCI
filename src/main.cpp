@@ -45,7 +45,10 @@ using namespace std;
 #include "argh.h"
 #include "inicpp.h"
 
-#define _(String) gettext(String)
+// #include <libintl.h>
+// #include <locale.h>
+// #define _(String) gettext(String)
+#define _(String) String
 
 // Plugins
 #include "BashPluginStepParser.hpp"
@@ -105,6 +108,27 @@ using namespace std;
 
 using namespace microci;
 
+auto commandLineValidOptions() -> std::set<std::string> {
+  return {
+    "A", "activity-diagram",
+    "a", "append-log",
+    "D", "update-dev",
+    "h", "help",
+    "H", "home",
+    "i", "input",
+    "l", "list",
+    "n", "config",
+    "N", "number",
+    "O", "only",
+    "T", "test-config",
+    "u", "update",
+    "U", "update-db",
+    "V", "version",
+    "x", "hash",
+    "X", "uninstall",
+  };
+};
+
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
@@ -123,7 +147,7 @@ Options:
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
   -D,--update-dev          Update microCI to development stream
-  -x,--uninstall           Uninstall
+  -X,--uninstall           Uninstall
   -i,--input file.yml      Load the configuration from file.yml
   -H,--home alt_home_dir   Alternative home directory
   -n,--config gitlab_ci    Create a .gitlab-ci.yml example config
@@ -435,6 +459,21 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
 
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
+    auto validOptions = commandLineValidOptions();
+    for( const auto &flag : cmdl.flags()) {
+      if( validOptions.find(flag) == validOptions.end() ) {
+        spdlog::error(_("Invalid command line option: -{}"), flag);
+        return 1;
+      }
+    }
+
+    for( const auto &param : cmdl.params()) {
+      if( validOptions.find(param.first) == validOptions.end() ) {
+        spdlog::error(_("Invalid command line option: -{} {}"), param.first, param.second);
+        return 1;
+      }
+    }
+
     if (cmdl[{"-u", "--update"}]) {
       cout << R"(
 echo "🚀 Updating to the latest stable release..."
@@ -457,7 +496,7 @@ microCI --version
 )";
       return 0;
     }
-    if (cmdl[{"-x", "--uninstall"}]) {
+    if (cmdl[{"-X", "--uninstall"}]) {
       cout << R"(
 echo "🔥 Removing microCI..."
 sudo rm -f /usr/bin/microCI
@@ -543,7 +582,7 @@ sudo rm -f /usr/bin/microCI
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{(char *)tpl.fileContent, tpl.fileSize};
+            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             out.open(fileName, ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
@@ -551,7 +590,7 @@ sudo rm -f /usr/bin/microCI
           } else {
             spdlog::debug(_("The config file '{}' was created from the template"), fileName);
             out.open(fileName);
-            out.write((char *)tpl.fileContent, tpl.fileSize);
+            out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
         }
       }
@@ -629,7 +668,7 @@ sudo rm -f /usr/bin/microCI
             continue;
           } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{(char *)tpl.fileContent, tpl.fileSize};
+            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             ofstream out(fileName, ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
@@ -637,7 +676,7 @@ sudo rm -f /usr/bin/microCI
           } else {
             spdlog::debug(_("The file '{}' was created from the template"), fileName);
             ofstream out(fileName);
-            out.write((char *)tpl.fileContent, tpl.fileSize);
+            out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
         }
       }
@@ -736,7 +775,7 @@ sudo rm -f /usr/bin/microCI
         mdctx                       = EVP_MD_CTX_new();
         EVP_DigestInit_ex(mdctx, EVP_md5(), nullptr);
         EVP_DigestUpdate(mdctx, pwd.c_str(), pwd.size());
-        md5_digest = (unsigned char *)OPENSSL_malloc(md5_digest_len);
+        md5_digest = static_cast<unsigned char *>(OPENSSL_malloc(md5_digest_len));
         EVP_DigestFinal_ex(mdctx, md5_digest, &md5_digest_len);
         EVP_MD_CTX_free(mdctx);
 

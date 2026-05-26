@@ -52,7 +52,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   } else if (step["plugin"]["sh"]) {
     cmdsStr = step["plugin"]["sh"].as<string>();
   } else {
-    spdlog::error("Tratar erro aqui");
+    spdlog::error("No 'bash' or 'sh' script defined in plugin configuration");
     invalidConfigurationDetected();
     throw invalid_argument("Script not found");
   }

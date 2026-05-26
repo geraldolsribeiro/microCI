@@ -1,14 +1,16 @@
-# How to update
+# Updating microCI
 
-Use the following command to download and install the latest stable version of **microCI**.
+<center>![Update](images/microci-update.svg)</center>
 
-```
+To download and install the latest stable version of **microCI**, run:
+
+```bash
 microCI --update | bash
 ```
 
-If you want to update to the latest development version, use this command.
+To update to the latest development version instead, use:
 
-```
+```bash
 microCI --update-dev | bash
 ```
 

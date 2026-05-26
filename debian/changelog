@@ -1,0 +1,626 @@
+microci (v0.43.0) unstable; urgency=low
+  * Create debian package
+  * Update documentation
+  * Update documentation
+  * Translate text
+  * Translate text
+  * refact: update generated code
+  * refact: modernize code
+  * Validate command line options
+  * Disable gettext translation macro
+  * Add UPX to debian_deps makefile target
+  * translate YAML from Portuguese to English
+  * improve error message in BashPluginStepParser
+  * refact: correct English texts
+  * refact: format sh
+  * Merge pull request #69 from geraldolsribeiro/feat-68-jfrog
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Wed, 13 May 2026 22:11:36 +0400
+
+microci (v0.42.0) unstable; urgency=low
+  * Bump version; update documentation
+  * feat: jfrog plugin
+  * fix: bitnamilegacy
+  * feat: add install.sh script
+  * Add code copy to mkdocs documentation
+  * Update brew recipe
+  * Compress binary using upx
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Sun, 15 Mar 2026 15:19:23 +0400
+
+microci (v0.41.0) unstable; urgency=low
+  * refact: update README
+  * feat: add mermaid plugin
+  * refact: update asn1
+  * refact: update cpp_compiler
+  * refact: update cppcheck docker image
+  * refact: update plantuml docker image
+  * refact: update copyright year
+  * refact: Makefile less verbose; add debian dependencies
+  * Update header only dependencies
+  * Update funding sources in FUNDING.yml
+  * Replace network bridge by host
+  * Bump version
+  * Create codeql.yml
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Thu, 9 Oct 2025 16:27:43 +0400
+
+microci (v0.40.3) unstable; urgency=low
+  * Set default ssh key name if environment variable is defined
+  * Increases hash size to avoid colisions
+  * Add options -x --hash
+  * Add git image
+  * Rename image from bitnami to bitnamilegacy
+  * Check for password protected ssh key
+  * Add check for null passwd
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Thu, 11 Sep 2025 20:56:40 +0400
+
+microci (v0.40.2) unstable; urgency=low
+  * Add alternative global configuration folder (-H --home)
+  * Documentation
+  * Add brew makefile with helper functions
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Sun, 7 Sep 2025 20:53:24 +0400
+
+microci (v0.40.1) unstable; urgency=low
+  * Vendoring header only dependencies
+  * Bump version
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Sun, 7 Sep 2025 13:33:27 +0400
+
+microci (v0.40.0) unstable; urgency=low
+  * Split target diagram
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Sat, 6 Sep 2025 12:48:24 +0400
+
+microci (v0.39.0) unstable; urgency=low
+  * Update README
+  * Merge pull request #59 from geraldolsribeiro/macport
+  * Use libintl only on mac
+  * Fix merge
+  * Merge branch 'master' into macport
+  * Reformat
+  * Add brew dependency tips
+  * Add uninstall option
+  * Use random number generator for macos
+  * Add format field for ssh
+  * Create macos installer
+  * Merge branch 'master' into macport
+  * Setup clang tools alternative
+  * Update clang tools to version 22
+  * Add headers argh.h and inicpp.h
+  * Build for macos arm64
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Wed, 21 May 2025 22:47:08 +0400
+
+microci (v0.38.0) unstable; urgency=low
+  * Bump version
+  * Hint for install yq
+  * Enable docker image replacement for pandoc plugin
+  * Fix --config gitlab_ci param
+  * Install yq with apt
+  * Hotfix: replace -isystem by --system-headers
+  * Add AUTHORS file
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Mon, 24 Feb 2025 22:00:26 +0400
+
+microci (v0.37.0) unstable; urgency=low
+  * Bump version to v0.38.0
+  * Hotfix: double quote to single quote
+  * Merge pull request #49 from geraldolsribeiro/update-dev
+  * Add --update-dev option
+  * Merge pull request #47 from geraldolsribeiro/hotfix
+  * Fix alignment
+  * Pull docker image even exist one with same tag name (i.e stable)
+  * Merge pull request #45 from geraldolsribeiro/hotfix-plantuml-path
+  * Hotfix: fix plantuml path
+  * Merge pull request #43 from geraldolsribeiro/update-dockerfiles
+  * Update plantuml and doxygen images
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Fri, 21 Feb 2025 00:10:11 +0400
+
+microci (v0.36.1) unstable; urgency=low
+  * Execute Nth step; List steps; bugfixes
+  * Reduce variable scope
+  * Pre-release github action
+  * Add user chown to the default target at fetch plugin
+  * Implement #37
+  * Merge pull request #36 from geraldolsribeiro/randomize-docker-name
+  * Add random suffix to docker container's name
+  * Merge pull request #34 from geraldolsribeiro/ED25519
+  * Merge pull request #33 from geraldolsribeiro/documentation
+  * Merge pull request #2 from geraldolsribeiro/feature-poac
+  * Check if key ED25519 exists
+  * Add documentation
+  * Create Makefile
+  * Create Dockerfile for poac
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Mon, 17 Feb 2025 22:58:25 +0400
+
+microci (v0.36.0) unstable; urgency=low
+  * Bugfix: #29 #30 #31
+  * Update header
+  * Update header
+  * Update index.md
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Fri, 14 Feb 2025 10:56:05 +0400
+
+microci (v0.35.0) unstable; urgency=low
+  * Bump version to v0.36.0
+  * Update header
+  * Implements #27 Add option to pass devices to docker run
+  * Update plantuml to version v1.2024.7
+  * Update version on generated script
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Tue, 1 Oct 2024 23:17:52 +0400
+
+microci (v0.34.1) unstable; urgency=low
+  * Bump version to v0.35.0
+  * Add option for doxyfile and output folder for doxygen plugin
+  * Add uppercase option to VHDL format plugin
+  * VHDL format plugin base
+  * Add text editor to ghdl image
+  * Add dockerfile for ghdl
+  * Add dockerfile for Omnet++
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Tue, 24 Sep 2024 23:19:36 +0400
+
+microci (v0.34.0) unstable; urgency=low
+  * Refactory clang-tidy plugin
+  * Add checks field to clang-tidy plugin
+  * Add xmlstarlet to utils image
+  * Implements #20 Import environment variables from gitlab-runner
+  * Change the XML cppcheck report path
+  * Documentation: support for running graphical application inside the container
+  * Server configuration documentation
+  * Regenerate header files from yml
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Thu, 19 Sep 2024 23:39:25 +0400
+
+microci (v0.33.1) unstable; urgency=low
+  * Execute test out of pipeline
+  * Refactoring expansion at Flawfinder plugin
+  * Code format; Test output updated
+  * Bump version
+  * Saves warning log for doxygen at auditing folder
+  * Hotfix
+  * Fix doxygen plugin; Refactor clang-tidy plugin
+  * Load environment variable from HOME/.microCI.env
+  * Fix doxygen inline edition
+  * Enable use of graphviz in doxygen plugin
+  * Fix docker image name for doxygen
+  * Implements #19
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Thu, 12 Sep 2024 22:38:24 +0400
+
+microci (v0.33.0) unstable; urgency=low
+  * Bump version
+  * Banner without author's name
+  * Fix #18; add --clobber
+  * Fix #5
+  * Add badge
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Mon, 9 Sep 2024 21:16:46 +0400
+
+microci (v0.32.0) unstable; urgency=low
+  * Code format; Translation
+  * Add HEAD as tag
+  * Bumb version on generated script
+  * Fix #10
+  * Add option --append-log
+  * Makes the current user owner of fetched files
+  * Fix parsing enviroment file with short line
+  * Translation to English
+  * Load enviroment from .env and .env.yml
+  * Add Dockerfile for asn.1
+  * Create Makefile
+  * Update c-cpp.yml
+  * Update c-cpp.yml
+  * Update c-cpp.yml
+  * Create c-cpp.yml
+  * Translation
+  * Bump docker image version
+  * Change image for building microCI (gcc:14 to microci_cpp_compiler)
+  * Use git tag for fetching at git_archive
+  * Add gcc-arm-linux-gnueabi
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Sun, 4 Aug 2024 15:49:20 +0400
+
+microci (v0.31.0) unstable; urgency=low
+  * Translation; Add support to Gitlab config
+  * Documentation
+  * Update mkdocs generated file
+  * Update documentation
+  * Move executable to /usr/bin/
+  * Merge pull request #3 from geraldolsribeiro/pandoc
+  * Fix font cache permission
+  * Add font-hack-nerd
+  * Documentation regarding private registry
+  * List of dependencies; Install hint
+  * Update plantuml version
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Wed, 19 Jun 2024 16:22:49 +0400
+
+microci (v0.30.0) unstable; urgency=low
+  * Plugin template
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Wed, 19 Jun 2024 10:38:01 +0400
+
+microci (v0.29.0) unstable; urgency=low
+  * Add activity diagram generation
+  * Add languages to docmd
+  * Avoid send image already on the registry
+  * Add bash, fontconfig, jq, make, msttcorefonts and plantuml
+  * Add utils image
+  * Remove index.en.md
+  * Merge microci_clang to the microci_cpp_compiler image
+  * Utility script to publish to internal registry
+  * Split package installation in layers
+  * Update generated code
+  * Docker image clang renamed to cpp_compiler based on gcc 14
+  * Tanslation to english
+  * Remote translation config from mkdocs_material
+  * Translation to english
+  * Name the container
+  * Add options support to bash plugin
+  * Function variable made local
+  * Suppress bitnami welcome message
+  * Translate documentation to English
+  * Documentation from the beggining of script
+  * invalidConfigurationDetected function added
+  * Translate documentation to English
+  * Plugin pikchr initial basic version
+  * Save pandoc default template for reference
+  * Translate documentation to English
+  * Translate documentation to English
+  * Update docker base image before create new image
+  * Translate documentation to English
+  * Update pandoc docker image
+  * Add documentation
+  * Upgrade plantuml version
+  * Upgrade docmd version
+  * Generated code formatting
+  * Throw exception when no proper shell is defined
+  * clang image 0.6
+  * mkdocs_material image updated
+  * Fix deprecated File.exists call
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Tue, 20 Feb 2024 17:25:22 +0400
+
+microci (v0.28.0) unstable; urgency=low
+  * Version 0.29.0
+  * Plugin docmd
+  * Update docmd
+  * Run update under sudo
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Tue, 20 Feb 2024 14:02:07 +0400
+
+microci (v0.27.3) unstable; urgency=low
+  * :zap: Check if docker image exist locally
+  * Upgrade default gcc container to gcc:13
+  * Append log during docker update
+  * Bump version
+  * Translation support started
+  * Add break line to the generated files
+  * Update header copyright
+  * Translate mkdocs_material configuration sample to English
+  * Translate to English
+  * Size optimized compilation
+  * Project includes
+  * Use new implementation for the MD5 (openSSL)
+
+ -- Geraldo Ribeiro <geraldolsribeiro@gmail.com>  Wed, 13 Sep 2023 11:35:35 +0400
+
+microci (v0.27.2) unstable; urgency=low
+  * Update pandoc docker image
+  * Fix path for publishing
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 10 Jan 2023 15:02:09 -0300
+
+microci (v0.27.1) unstable; urgency=low
+  * Specialized Docker image for pandoc
+  * Bump version
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 7 Nov 2022 11:39:29 -0300
+
+microci (v0.27.0) unstable; urgency=low
+  * Add support for pandoc options and base path
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 7 Nov 2022 10:59:51 -0300
+
+microci (v0.26.3) unstable; urgency=low
+  * Plugin pandoc
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 24 Oct 2022 17:47:22 -0300
+
+microci (v0.26.2) unstable; urgency=low
+  * Upgrade to clang 16
+  * Fix install clang-html
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 9 May 2022 12:47:17 -0300
+
+microci (v0.26.1) unstable; urgency=low
+  * clang-tidy command moved to microci_clang image
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 9 May 2022 10:53:19 -0300
+
+microci (v0.26.0) unstable; urgency=low
+  * Bump version
+  * Uses clang-format from microci_clang image
+  * Change base docker image for cppcheck
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 2 May 2022 21:47:39 -0300
+
+microci (v0.25.6) unstable; urgency=low
+  * Offline mode
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 27 Apr 2022 11:26:59 -0300
+
+microci (v0.25.5) unstable; urgency=low
+  * Corrige tentativa de publicação sem modificação
+  * Corrige tentativa de publicação sem modificação
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 26 Apr 2022 20:09:52 -0300
+
+microci (v0.25.4) unstable; urgency=low
+  * git_publish: Corrige path para git diff
+  * Adiciona libasio-dev libboost-all-dev à imagem clang
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 25 Apr 2022 13:17:06 -0300
+
+microci (v0.25.3) unstable; urgency=low
+  * Minio executando como user
+  * Acrescenta doxygen
+  * Opção update
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 18 Apr 2022 15:47:10 -0300
+
+microci (v0.25.1) unstable; urgency=low
+  * git_publish aceita repositório vazio; estilo para plantuml
+  * Trata repositório vazio
+  * Parâmetro config para plantuml
+  * Inclui def_list na configuração do mkdocs; comenta a tradução
+  * Corrige git publish
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 13 Apr 2022 12:45:21 -0300
+
+microci (v0.25.0) unstable; urgency=low
+  * Refatoração
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 12 Apr 2022 14:22:02 -0300
+
+microci (v0.24.0) unstable; urgency=low
+  * Inclui escolha de branch no plugin git_publish
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 11 Apr 2022 19:00:57 -0300
+
+microci (v0.23.0) unstable; urgency=low
+  * Redireciona saída de erro
+  * Plugin docker_build
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 8 Apr 2022 15:13:58 -0300
+
+microci (v0.22.0) unstable; urgency=low
+  * Download de repositório github
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 8 Apr 2022 11:32:56 -0300
+
+microci (v0.21.0) unstable; urgency=low
+  * Bump version
+  * Plugin fetch suportando github
+  * Dockerfiles renomeados
+  * Atualização das imagens
+  * Separa os dockerfiles por diretório
+  * Limpeza no script
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 31 Mar 2022 14:42:12 -0300
+
+microci (v0.20.0) unstable; urgency=low
+  * Plugin flawfinder
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 28 Mar 2022 17:19:54 -0300
+
+microci (v0.19.0) unstable; urgency=low
+  * Bump version
+  * Teste para bash
+  * Imagem microci_clang
+  * Valor padrão para network
+  * :memo:Documentação
+  * Link de download apontado para a última versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 25 Mar 2022 16:47:10 -0300
+
+microci (v0.18.0) unstable; urgency=low
+  * Cria minio; Imagem para intmain_docmd; Imagem plantuml com graphviz
+  * Popper
+  * :memo:Documentação
+  * :memo:Documentação de uso dos plugins
+  * Plugin minio
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 24 Mar 2022 14:30:32 -0300
+
+microci (v0.17.0) unstable; urgency=low
+  * Observabilidade rudimentar
+  * Atualização de status
+  * Formatação de código; Correção de função de geração de id
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 22 Mar 2022 14:46:36 -0300
+
+microci (v0.16.1) unstable; urgency=low
+  * Plugin skip; Funções de atualização de base
+  * Opção strip-components para fetch
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 22 Mar 2022 10:55:33 -0300
+
+microci (v0.16.0) unstable; urgency=low
+  * Incremento da versão
+  * Execução dos passos como usuário
+  * RUN_AS com parâmetro default
+  * Tradução do título da documentação
+  * Suporte à tradução de documentação
+  * :memo:Atualização da versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 21 Mar 2022 15:39:10 -0300
+
+microci (v0.15.2) unstable; urgency=low
+  * 0.16.0 Refatoração dos plugins
+  * Limpeza
+  * Versão e funções para download
+  * Link para git na documentação
+  * Versão; Funções para URL e download da última versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 17 Mar 2022 19:13:42 -0300
+
+microci (v0.15.1) unstable; urgency=low
+  * Versão
+  * Corrige copia de credencial ssh; Habilita rede para fetch
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 17 Mar 2022 18:01:37 -0300
+
+microci (v0.15.0) unstable; urgency=low
+  * Corrige cópia de credencial ssh
+  * Define GIT_SSH_COMMAND quando não for possível copiar chave
+  * Corrige expansão de padrão no git archive
+  * Documentação
+  * Remoção de arquivos externos
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 17 Mar 2022 12:07:31 -0300
+
+microci (v0.14.2) unstable; urgency=low
+  * 0.15.0 Plugin fetch
+  * Corrige parâmetro slide-level
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 16 Mar 2022 10:03:57 -0300
+
+microci (v0.14.1) unstable; urgency=low
+  * Corrige parâmetro slide-level
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 15 Mar 2022 16:51:36 -0300
+
+microci (v0.14.0) unstable; urgency=low
+  * Template para criação do tipo beamer
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 15 Mar 2022 16:13:00 -0300
+
+microci (v0.13.0) unstable; urgency=low
+  * 0.14.0 Plugin beamer
+  * Atualiza versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 11 Mar 2022 11:54:37 -0300
+
+microci (v0.12.0) unstable; urgency=low
+  * Configuração de rede
+  * Inclui arquivo clang-format
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 10 Mar 2022 14:51:33 -0300
+
+microci (v0.11.1) unstable; urgency=low
+  * 0.12.0 plugin clang-format e junit2html
+  * Bump version
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 4 Mar 2022 18:28:22 -0300
+
+microci (v0.11.0) unstable; urgency=low
+  * Bump version
+  * Notificação formatada via Discord
+  * Ícones para notificação
+  * Extrai título
+  * :memo:Documentação da versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 4 Mar 2022 09:54:23 -0300
+
+microci (v0.10.1) unstable; urgency=low
+  * 0.11.0 Notificação no discord
+  * Extrai o script inicial
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 2 Mar 2022 12:03:18 -0300
+
+microci (v0.10.0) unstable; urgency=low
+  * Corrige extensão para mkdocs_material
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 2 Mar 2022 11:49:33 -0300
+
+microci (v0.9.0) unstable; urgency=low
+  * 0.10.0 múltiplos arquivos de configuração
+  * Bump version
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 25 Feb 2022 19:08:36 -0300
+
+microci (v0.8.0) unstable; urgency=low
+  * Plugin plantuml
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 24 Feb 2022 16:52:59 -0300
+
+microci (v0.7.0) unstable; urgency=low
+  * Plugin clang-tidy
+  * imagem personalizada para mkdocs material; opções para cppcheck
+  * Modelos para git_publish e cppcheck
+  * :memo:Atualização da versão
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Wed, 23 Feb 2022 11:48:26 -0300
+
+microci (v0.6.1) unstable; urgency=low
+  * :memo: bump version
+  * Plugin cppcheck
+  * :memo:Documentação
+  * :memo:Documentação
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 21 Feb 2022 23:40:25 -0300
+
+microci (v0.6.0) unstable; urgency=low
+  * Bugfix: comando chown
+  * Delete str.diag
+  * :memo:Documentação
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 21 Feb 2022 23:24:07 -0300
+
+microci (v0.5.0) unstable; urgency=low
+  * REfatora copia de ssh
+  * Troca de aspas duplas por simple
+  * Refatoração
+  * Plugin git_publish
+  * :memo:Documentação
+  * Atualização do README
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Tue, 15 Feb 2022 15:24:49 -0300
+
+microci (v0.4.0) unstable; urgency=low
+  * Montagem de volumes; Cópia de chave SSH
+  * Volumes; SSH
+  * Merge branch 'master' of github.com:geraldolsribeiro/microCI
+  * Refactoring das funções em bash
+  * Create codeql-analysis.yml
+  * Delete LICENSE.md
+  * Create LICENSE
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Mon, 14 Feb 2022 08:26:02 -0300
+
+microci (v0.3.0) unstable; urgency=low
+  * Compilação do microCI pelo microCI
+  * Compilação do microCI pelo microCI
+  * Cabeçalhos
+  * Logo e licença
+  * Baixa imagens docker antes dos passos
+  * Corrige comando de download
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Sun, 13 Feb 2022 17:28:23 -0300
+
+microci (v0.1.0) unstable; urgency=low
+  * Criação de arquivo de configuração
+  * Mensagem para finalizar
+  * Adiciona porta servir mkdocs
+  * OnlyStep - execução de steps arbitrários
+  * Plugin de documentação mkdocs_material
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Fri, 11 Feb 2022 16:07:07 -0300
+
+microci (v0.0.1) unstable; urgency=low
+  * :memo:Documentação
+  * Tratamento de erros; formatação de cores
+  * Plugin git_deploy
+  * Refactoring
+  * Extração do método de parse para bash
+
+ -- Geraldo Ribeiro <geraldo@intmain.io>  Thu, 10 Feb 2022 13:27:11 -0300
+

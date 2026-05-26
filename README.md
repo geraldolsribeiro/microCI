@@ -2,181 +2,50 @@
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 
-**microCI** ensures reliable, secure, and portable continuous-integration workflows by generating auditable scripts that execute tasks within Docker containers. Designed with a focus on high portability and minimal dependencies, microCI guarantees reproducible builds across diverse environments without introducing external overheads. Its security-auditable nature makes it ideal for both development and production pipelines:
-
-* Developer workstations (Linux & MacOS)
-* Automated build servers triggered by commits
-* Production deployment environments
-
-microCI provides a dependency-free solution that operates seamlessly from local development to enterprise-grade production, ensuring consistent behavior across Linux and macOS platforms.
+**microCI** is a powerful tool designed to streamline the creation of
+continuous-integration pipelines by generating portable, auditable scripts for
+executing tasks in Docker containers. 
 
 For complete documentation, visit [microci.dev](https://microci.dev).
 
-## On the desktop
+<center>![CI/CD Pipeline](images/microci-ci_cd_pipeline.svg)</center>
 
-Using `microCI` on the developer's desktop is very simple:
+CI/CD stands for Continuous Integration / Continuous Deployment. CI and CD
+pipelines form the backbone of modern software development, enabling teams to
+ship features faster and more reliably. Solid CI/CD pipeline architecture is
+key to making these workflows scalable, secure, and efficient—not just
+automated.
+
+
+## How it works?
+
+**microCI** creates a Bash script that implements the pipeline defined in an YAML file.
+
+<center>![YAML to Bash](images/microci-yaml_to_bash.svg)</center>
+
+One portable Bash function is created to execute each step in the pipeline recipe.
+
+
+## How to execute?
+
+<center>![How to execute](images/microci-execute.svg)</center>
+
+To use `microCI` is very simple:
 
 ```bash
 microCI | bash
 ```
 
-In the above command, `microCI` reads a `.microCI.yml` file containing the
-description of the pipeline steps and generates a script for executing these
-steps. This script is written to standard output and can be chained with other
-tools or passed to a `bash` interpreter for execution.
+## Where can I use microCI?
 
-A file called `.microCI.log` is generated with all messages, warnings, errors
-from all executed commands and can be analyzed to resolve any problems that may
-occur.
+<center>![Where](images/microci-where.svg)</center>
 
-## On the server
+Every step in the process is fully reproducible across various environments:
 
-To run on the server, it is sufficient to expose **webhooks** that, when
-triggered, execute `microCI` in the respective project folders.
+* Developer's workstation
+* Servers for automatic builds after commits
+* Servers for deployment to production
 
-## Minimum requirements
+With microCI, the same tool, free of dependencies, can be used seamlessly in
+both development and production environments.
 
-* A properly configured Docker environment
-* Bash shell
-* `jq` and `yq` utilities
-
-## Installation
-
-The installation is equally simple, just copy the executable to a folder in the `PATH`.
-To remove the `microCI` from the system delete the file copied to the PATH.
-
-```bash
-sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
-  -o /usr/bin/microCI
-sudo chmod 755 /usr/bin/microCI
-```
-
-## Docker Container
-
-You can use **any Docker container** for execution, both public ones from
-[Docker HUB](https://hub.docker.com/) and those you develop internally.
-
-## Integration with github, gitlab, ...
-
-The simplest and safest way to use `microCI` to read from or write to
-repositories are to access them through an SSH key.
-
-## To do
-
-Below are some features that may be present in the next releases.
-
-* create deb package
-* create rpm package
-* pass current user to container to avoid generating files as `root` in the working directory
-* display error message from the failed step
-* variable substitution in steps
-* use of environment variables and secrets configured on the server
-* create a Docker image from a git repository
-
-## Debian dependencies
-
-For building standalone microCI binary the following dependencies should be installed:
-
-```bash
-sudo apt install gettext clang-format libspdlog-dev libfmt-dev libyaml-cpp-dev libssl-dev libcrypto++-dev
-```
-
-## Docker private repository
-
-In some cases, running a private registry without SSL is necessary to add the
-IP of the registry server to the `insecure-registries` section of the
-`/etc/docker/daemon.json` file.
-
-Example:
-
-```bash
-{
-	"insecure-registries": ["11.22.33.44:5000", "192.168.1.1:5000"]
-}
-```
-
-## Versions
-
-* `0.42.0` Plugin mermaid
-* `0.41.0`
-    * Extend step listing with hash ids; Add options -x and --hash
-    * Add git docker image
-    * Rename git docker image from bitnami to bitnamilegacy
-    * Check for password-protected SSH key
-    * Add check for null passwd
-* `0.40.0` Ported to MacOS
-* `0.39.0` Bugfixes and minor code refactor
-* `0.38.0` Add option `--update-dev` to use development version
-* `0.37.0` Execute Nth step; List steps; bugfixes
-* `0.36.0` Allows to run devices inside the container without the `--privileged` flag
-* `0.35.0` Plugin `vhdl-format`
-* `0.34.0` Plugin `Doxygen` 
-* `0.33.0` Global environment file parsing 
-* `0.32.0` Integration config file generation
-* `0.31.0` Plugin `template`
-* `0.30.0` Plugin `pikchr`
-* `0.29.0` Plugin `docmd`
-* `0.28.0` Translation support added
-* `0.27.0` Plugin `pandoc`
-* `0.26.3` Update `clang-tidy`
-* `0.26.0` Offline mode
-* `0.25.6` Plugin `git_publish` with branch selection support (p.e. `gh-pages`)
-* `0.24.0` Plugin `docker_build`
-* `0.23.0` Plugin `fetch` download from GitHub (advanced)
-* `0.22.0` Plugin `fetch` download from GitHub (folder)
-* `0.21.0` Plugin `flawfinder`
-* `0.20.0` Docker image `intmain/microci_clang`
-* `0.19.0` Documentation with `intmain/docmd`
-* `0.18.0` Plugin `minio`
-* `0.17.0` Plugin `skip`; Execution status
-* `0.16.1` Plugin refactoring; Default execution as non-root
-* `0.15.2` Plugin `fetch` URL and gitlab folder
-* `0.14.1` Plugin `beamer`
-* `0.13.0` Docker network configuration
-* `0.12.0` Plugins `clang-format` and `junit2html`
-* `0.11.1` Discord channel notification
-* `0.10.1` Multiple template added
-* `0.9.0` Plugin `plantuml`
-* `0.8.0` Plugin `clang-tidy`
-* `0.7.0` Plugin `cppcheck`
-* `0.6.1` Plugin `git_publish`
-* `0.5.0` Volume mounting; SSH key copy
-* `0.4.0` Building microCI by microCI
-* `0.3.0` Configuration files creation
-* `0.2.0` Plugin `mkdocs`
-* `0.1.0` Plugin `bash` and `git_deploy`
-* `0.0.1` Proof of concept/Initial version
-
-## License
-
-MIT License
-
-Copyright (c) 2022-2026 Geraldo Luis da Silva Ribeiro
-
-```
-░░░░░░░░░░░░░░░░░
-░░░░░░░█▀▀░▀█▀░░░
-░░░█░█░█░░░░█░░░░
-░░░█▀▀░▀▀▀░▀▀▀░░░
-░░░▀░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░
-```
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
- 

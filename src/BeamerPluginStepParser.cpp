@@ -87,9 +87,9 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
 #include <3rd/beamercolorthemestr.sty.hpp>
 #include <3rd/str-logo.png.hpp>
     ofstream strLogoPng("img/str-logo.png");
-    strLogoPng.write((char *)___3rd_str_logo_png, ___3rd_str_logo_png_len);
+    strLogoPng.write(reinterpret_cast<char *>(___3rd_str_logo_png), ___3rd_str_logo_png_len);
     ofstream beamercolorthemestr("beamercolorthemestr.sty");
-    beamercolorthemestr.write((char *)___3rd_beamercolorthemestr_sty, ___3rd_beamercolorthemestr_sty_len);
+    beamercolorthemestr.write(reinterpret_cast<char *>(___3rd_beamercolorthemestr_sty), ___3rd_beamercolorthemestr_sty_len);
   }
 
   for (const auto &key : {/* keys a seguir não são usadas pelo pandoc: */ "name", "output", "source", "theme",

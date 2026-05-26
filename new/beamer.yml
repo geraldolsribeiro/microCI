@@ -13,7 +13,7 @@ steps:
         - 99-references.md
       lang: pt-BR # en-US
       institute: Institution Name
-      date: 01 de Abril de 2023
+      date: April 1, 2023
       title: Presentation Title
       subtitle: Presentation Subtitle
       author:

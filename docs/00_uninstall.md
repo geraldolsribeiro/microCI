@@ -1,8 +1,10 @@
-# Uninstall
+# Uninstalling microCI
 
-Use the following command to remove **microCI** from your system.
+<center>![Uninstall](images/microci-uninstall.svg)</center>
 
-```
+To remove **microCI** from your system, run:
+
+```bash
 microCI --uninstall | bash
 ```
 
