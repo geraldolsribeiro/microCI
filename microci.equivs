@@ -7,10 +7,10 @@ Homepage: https://microci.dev
 Standards-Version: 3.9.2
 
 Package: microci
-Version: 0.43.0
+Version: 0.44.0
 Maintainer: Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
 # Pre-Depends: <comma-separated list of packages>
-Depends: jq
+Depends: jq, yq, curl, docker-ce, openssh-client
 # Recommends: <comma-separated list of packages>
 # Suggests: <comma-separated list of packages>
 # Provides: <comma-separated list of packages>

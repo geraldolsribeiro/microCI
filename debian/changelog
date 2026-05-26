@@ -1,4 +1,5 @@
 microci (v0.43.0) unstable; urgency=low
+  * Bump version; Fix -n option
   * Update documentation and generated files
   * Merge pull request #72 from geraldolsribeiro/opencode
   * Create debian package

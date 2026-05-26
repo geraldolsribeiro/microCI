@@ -12,23 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: install dependencies
-      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx
-    - name: download headers
+    - name: 'Install dependencies'
+      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs
+    - name: 'Download headers'
       run: |
         mkdir -p include/nlohmann
         wget -P include https://raw.githubusercontent.com/adishavit/argh/master/argh.h
         wget -P include https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         wget -P include https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
         wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-    - name: make
+    - name: 'Build'
       run: make -C src clean all
-    - name: 'Upload Artifact'
+    - name: 'Debian'
+      run: make deb
+    - name: 'Upload Artifact binary'
       uses: actions/upload-artifact@v4
       with:
         name: microCI
         path: bin/microCI
-        retention-days: 5
+        retention-days: 30
+    - name: 'Upload Artifact binary'
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-debian
+        path: ./microci_*.deb
+        retention-days: 30
     - name: 'Pre-Release'
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -38,4 +46,5 @@ jobs:
         title: "Development Build"
         files: |
           bin/microCI
+          microci_*.deb
           LICENSE
