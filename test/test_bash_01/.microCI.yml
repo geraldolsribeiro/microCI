@@ -1,0 +1,10 @@
+steps:
+  - name: "Test bash script 01"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo 'AAA' > file.txt
+        echo 'BBB' >> file.txt
+        cat /etc/issue.net >> file.txt
+        ls -l /microci_workspace >> file.txt

@@ -1,14 +1,21 @@
 # Activity diagram
 
-To generate activity diagrams for the current workflow use the option `--activity-diagram`:
+An activity diagram describes a workflow or process: the steps, the order they
+happen in, and the decisions and parallel paths along the way. It's well suited
+to business processes, algorithms, and anything that flows from a start to an
+end.
 
-Generate the Plantuml description file:
+MicroCI can generate activity diagrams for the current workflow via option `--activity-diagram`:
+
+## Example
+
+### Generate the Plantuml description file
 
 ```bash
 microCI --activity-diagram > docs/diagrams/microCI_activity_diagram.puml
 ```
 
-Generate the images from the description file:
+### Generate images from the description files
 
 ```yaml
 - steps:
@@ -24,6 +31,8 @@ Generate the images from the description file:
 ```
 
 
+## Output
+
 There are two king of steps:
 
 * **main** step: list of sequential steps executed on the **main** pipeline
@@ -32,7 +41,11 @@ There are two king of steps:
 The diagrams below are generated automatically by **microCI** based on
 [`.microCI.yml`](https://raw.githubusercontent.com/geraldolsribeiro/microCI/refs/heads/master/.microCI.yml) file.
 
+### Main pipeline
+
 ![Main pipeline](diagrams/microCI_activity_diagram.png)
+
+### Alternative pipeline
 
 ![Alternative step](diagrams/microCI_activity_diagram_001.png)
 

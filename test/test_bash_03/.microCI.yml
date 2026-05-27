@@ -1,0 +1,9 @@
+steps:
+  - name: "Test bash script 03"
+    docker: "debian:stable-slim"
+    run_as: root
+    plugin:
+      name: bash
+      bash: |
+        apt update
+        apt install -y libspdlog-dev
