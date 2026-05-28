@@ -1,2 +1,2 @@
 all:
-	microCI | bash || echo EXPECTED FAILURE
+	../../bin/microCI | bash || echo EXPECTED FAILURE

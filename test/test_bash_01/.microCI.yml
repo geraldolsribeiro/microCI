@@ -5,6 +5,6 @@ steps:
       name: bash
       bash: |
         echo 'AAA' > file.txt
-        echo 'BBB' >> file.txt
+        echo "BBB" >> file.txt
         cat /etc/issue.net >> file.txt
         ls -l /microci_workspace >> file.txt

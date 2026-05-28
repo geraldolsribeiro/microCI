@@ -1,2 +1,2 @@
 all:
-	microCI | bash
+	../../bin/microCI | bash

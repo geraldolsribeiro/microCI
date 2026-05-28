@@ -83,6 +83,12 @@ test:
 	rm -f .env.yml
 	#cat template.sh | bash
 
+test_run:
+	$(MAKE) -C test_bash_01/
+	$(MAKE) -C test_bash_02/
+	$(MAKE) -C test_bash_03/
+	$(MAKE) -C test_bash_04/
+
 clean:
 	rm -f .env
 	rm -f .env.yml

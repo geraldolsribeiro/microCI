@@ -144,7 +144,7 @@ steps:
         - "test/*.cpp"
         - "include/*.hpp"
 
-  - name: "Downlod project dependencies"
+  - name: "Download project dependencies"
     run_as: "root"
     description: "Download project dependencies"
     plugin:
