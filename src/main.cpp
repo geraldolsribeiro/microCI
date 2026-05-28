@@ -62,6 +62,7 @@ using namespace std;
 #include "FlawfinderPluginStepParser.hpp"
 #include "GitDeployPluginStepParser.hpp"
 #include "GitPublishPluginStepParser.hpp"
+#include "JFrogPluginStepParser.hpp"
 #include "MinioPluginStepParser.hpp"
 #include "MkdocsMaterialPluginStepParser.hpp"
 #include "PandocPluginStepParser.hpp"
@@ -70,7 +71,6 @@ using namespace std;
 #include "PluginStepParser.hpp"
 #include "TemplatePluginStepParser.hpp"
 #include "VHDLFormatPluginStepParser.hpp"
-#include "JFrogPluginStepParser.hpp"
 
 // Configuration templates
 #include "new/bash.hpp"
@@ -83,25 +83,25 @@ using namespace std;
 #include "new/docmd.hpp"
 #include "new/doxygen.hpp"
 #include "new/fetch.hpp"
+#include "new/fetch2.hpp"
 #include "new/flawfinder.hpp"
 #include "new/git_deploy.hpp"
 #include "new/git_publish.hpp"
 #include "new/gitlab-ci.hpp"
+#include "new/jfrog.hpp"
 #include "new/mermaid.hpp"
 #include "new/minio.hpp"
 #include "new/mkdocs_material.hpp"
 #include "new/mkdocs_material_config.hpp"
 #include "new/mkdocs_material_index.hpp"
 #include "new/npm.hpp"
-#include "new/jfrog.hpp"
 #include "new/pandoc.hpp"
 #include "new/pikchr.hpp"
 #include "new/plantuml.hpp"
+#include "new/poppler.hpp"
 #include "new/skip.hpp"
 #include "new/template.hpp"
 #include "new/vhdl-format.hpp"
-#include "new/fetch2.hpp"
-#include "new/poppler.hpp"
 
 // main class
 #include "MicroCI.hpp"
@@ -110,23 +110,23 @@ using namespace microci;
 
 auto commandLineValidOptions() -> std::set<std::string> {
   return {
-    "A", "activity-diagram",
-    "a", "append-log",
-    "c", "config",
-    "D", "update-dev",
-    "h", "help",
-    "H", "home",
-    "i", "input",
-    "l", "list",
-    "n", "new",
-    "N", "number",
-    "O", "only",
-    "T", "test-config",
-    "u", "update",
-    "U", "update-db",
-    "V", "version",
-    "x", "hash",
-    "X", "uninstall",
+      "A", "activity-diagram",
+      "a", "append-log",
+      "c", "config",
+      "D", "update-dev",
+      "h", "help",
+      "H", "home",
+      "i", "input",
+      "l", "list",
+      "n", "new",
+      "N", "number",
+      "O", "only",
+      "T", "test-config",
+      "u", "update",
+      "U", "update-db",
+      "V", "version",
+      "x", "hash",
+      "X", "uninstall",
   };
 };
 
@@ -461,15 +461,15 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     auto validOptions = commandLineValidOptions();
-    for( const auto &flag : cmdl.flags()) {
-      if( validOptions.find(flag) == validOptions.end() ) {
+    for (const auto &flag : cmdl.flags()) {
+      if (validOptions.find(flag) == validOptions.end()) {
         spdlog::error(_("Invalid command line option: -{}"), flag);
         return 1;
       }
     }
 
-    for( const auto &param : cmdl.params()) {
-      if( validOptions.find(param.first) == validOptions.end() ) {
+    for (const auto &param : cmdl.params()) {
+      if (validOptions.find(param.first) == validOptions.end()) {
         spdlog::error(_("Invalid command line option: -{} {}"), param.first, param.second);
         return 1;
       }

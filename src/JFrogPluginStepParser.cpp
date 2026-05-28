@@ -87,7 +87,8 @@ void JFrogPluginStepParser::Parse(const YAML::Node &step) {
         /bin/bash -c "cd {{ WORKSPACE }})",
                                      data);
   for (auto cmd : cmds) {
-    mMicroCI->Script() << fmt::format(" \\\n           && {} --url=$JFROG_URL --access-token=$JFROG_ACCESS_TOKEN 2>&1", cmd);
+    mMicroCI->Script() << fmt::format(" \\\n           && {} --url=$JFROG_URL --access-token=$JFROG_ACCESS_TOKEN 2>&1",
+                                      cmd);
   }
   mMicroCI->Script() << R"("
 )";

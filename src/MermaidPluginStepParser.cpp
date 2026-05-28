@@ -27,9 +27,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <spdlog/spdlog.h>
-
 #include "MermaidPluginStepParser.hpp"
+
+#include <spdlog/spdlog.h>
 
 namespace microci {
 using namespace std;
@@ -74,7 +74,7 @@ void MermaidPluginStepParser::Parse(const YAML::Node &step) {
   auto envs = parseEnvs(step);
   beginFunction(data, envs);
 
-  for( const auto &input: inputList ) {
+  for (const auto &input : inputList) {
     mMicroCI->Script() << inja::render(R"(
       # shellcheck disable=SC2140
       docker run \
@@ -89,13 +89,13 @@ void MermaidPluginStepParser::Parse(const YAML::Node &step) {
         --network {{ DOCKER_NETWORK }} \
         {{ DOCKER_IMAGE }} \
 )",
-                                     data);
+                                       data);
     for (const auto &option : optionList) {
       mMicroCI->Script() << "        " << option << " \\\n";
     }
 
-    std::filesystem::path outputFolderPath {outputFolder};
-    std::filesystem::path inputPath{ input };
+    std::filesystem::path outputFolderPath{outputFolder};
+    std::filesystem::path inputPath{input};
     auto outputPath = outputFolderPath / (inputPath.stem().string() + "." + outputFormat);
 
     mMicroCI->Script() << "        --input " << input << " \\\n";

@@ -39,7 +39,7 @@ using namespace std;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void GitPublishPluginStepParser::Parse(const YAML::Node& step) {
+void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
