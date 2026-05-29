@@ -1,6 +1,3 @@
-#   # clang-tidy plugin
-#   
-#{{{
 steps:
   - name: "Create C++ code verification report - clang-tidy"
     description: "Check C++ code and generate HTML report"
@@ -26,5 +23,3 @@ steps:
       source:
         - "src/*.cpp"
         - "test/*.cpp"
-#}}}
-# vim: spell spelllang=en
