@@ -5,4 +5,22 @@ UseTab: Never
 ColumnLimit: 120
 AlignConsecutiveAssignments: true
 PointerAlignment: Right
+
+# Enable include sorting
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+
+IncludeCategories:
+  # 1. System Headers (e.g., <vector>, <stdio.h>)
+  - Regex:           '^<.*'
+    Priority:        1
+  # 2. 3rd Party Libraries (Adjust regex to match your libraries, e.g., <gtest/...>, "boost/...")
+  - Regex:           '^(<|")(boost|gtest|benchmark|fmt|spdlog|inja|argh)/'
+    Priority:        2
+  # 3. Project Headers (Headers in quotes not matching 3rd party, or matching your project path)
+  - Regex:           '^".*'
+    Priority:        3
+  # 4. Main Header (Force it out of the default priority 0 if needed)
+  - Regex:           '.*'
+    Priority:        4
 ...

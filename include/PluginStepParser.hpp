@@ -30,13 +30,13 @@
 #ifndef PLUGIN_STEP_PARSER_HPP
 #define PLUGIN_STEP_PARSER_HPP
 
+#include <string>
 #include <yaml-cpp/yaml.h>
 
-#include <string>
+#include "inja/inja.hpp"
 
 #include "MicroCI.hpp"
 #include "MicroCIUtils.hpp"
-#include "inja/inja.hpp"
 #include "nlohmann/json.hpp"
 
 namespace microci {

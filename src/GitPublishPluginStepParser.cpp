@@ -29,9 +29,8 @@
 
 #include "GitPublishPluginStepParser.hpp"
 
-#include <spdlog/spdlog.h>
-
 #include <fstream>
+#include <spdlog/spdlog.h>
 
 namespace microci {
 

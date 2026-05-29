@@ -36,9 +36,8 @@
 
 //
 
-#include <yaml-cpp/yaml.h>
-
 #include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace microci {
 

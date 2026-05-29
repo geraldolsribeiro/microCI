@@ -29,14 +29,13 @@
 
 // https://stackoverflow.com/questions/69806220/advice-needed-for-migration-of-low-level-openssl-api-to-high-level-openssl-apis
 
-#include <libintl.h>
-#include <openssl/evp.h>
-#include <spdlog/spdlog.h>
-
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <libintl.h>
 #include <map>
+#include <openssl/evp.h>
+#include <spdlog/spdlog.h>
 #include <sstream>
 
 #include "argh.h"

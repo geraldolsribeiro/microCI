@@ -29,14 +29,14 @@
 
 #include "MicroCI.hpp"
 
+#include <iostream>
 #include <pwd.h>
 #include <spdlog/spdlog.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <iostream>
-
 #include "inja/inja.hpp"
+
 #include "sh/MicroCI.hpp"
 #include "sh/NotifyDiscord.hpp"
 

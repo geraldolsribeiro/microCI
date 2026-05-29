@@ -220,6 +220,7 @@ endif
 clean:
 	$(Q)$(RM) ../bin/microCI
 	$(Q)touch ../new/*.yml
+	$(Q)$(MAKE) -C ../docs/
 
 .PHONY: mac_deps
 mac_deps:
@@ -227,7 +228,7 @@ mac_deps:
 
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow
 
 header_only:
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/argh.h
