@@ -1,33 +1,28 @@
-#   # beamer plugin
-#   
-#{{{
 steps:
   - name: Create PDF presentation from Markdown
     plugin:
       name: beamer
       output: output_filename.pdf
-      source:
+      source: # List of source files, use the number for ordering the sections
         - 00-introduction.md
         - 01-body.md
         - 02-conclusion.md
         - 99-references.md
-      lang: pt-BR # en-US
-      institute: Institution Name
-      date: April 1, 2023
+      lang: en-US # Presentation language: pt-BR, en-US, ...
+      institute: Your Company Name
+      date: April 1, 2023 # Presentation date. Can be \today for current date
       title: Presentation Title
       subtitle: Presentation Subtitle
       author:
         - Geraldo Ribeiro
         - Other Author Name
-      # subject: Informação da propriedade Assunto do PDF
-      # keywords: [keyword1, keyword2, keyword3, PDF]
-      # slide-level: 2   # use second level ##  to start a new slide
-      # aspectratio: 169 # 16:9 format
+      # subject: Subject of presentation used in PDF property
+      # keywords: [keyword1, keyword2, keyword3, PDF] # list of keywords used for PDF properties
+      # slide-level: 2          # use second level `##` to start a new slide
+      # aspectratio: 169        # use 16:9 aspect ratio
       # links-as-notes: true
-      # natbib: true
-      # bibliography: refs.bib
+      # natbib: true            # Use natbib format
+      # bibliography: refs.bib  # Name of bibliography reference file
       # theme: STR
-      header-includes:
+      header-includes: # list of packages required by the presentation
         - \usepackage{tikz}
-#}}}
-# vim: spell spelllang=pt,en

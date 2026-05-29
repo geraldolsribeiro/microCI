@@ -1,85 +1,82 @@
-# 🎓 Beamer Plugin Documentation
+# Beamer Plugin Documentation (beamer)
 
-The `beamer` plugin is a specialized tool that allows users to generate professionally structured and aesthetically pleasing presentations directly from source Markdown files within the **microCI** workflow. By leveraging LaTeX compilation (specifically, the Beamer class), it ensures high fidelity and consistent visual design across all generated slides.
+## 🚀 Overview
+The **Beamer** plugin allows developers within the **microCI** environment to seamlessly generate professional, high-quality presentation slides directly from structured Markdown content. Designed for technical authors, researchers, and teams needing reproducible documentation output, this plugin leverages LaTeX's powerful Beamer class structure to transform markdown files into polished PDF presentations suitable for large audiences or formal reports.
 
-## Overview
-Beamer provides a robust mechanism for turning multi-file markdown content into printable PDF slide decks suitable for academic talks, corporate pitches, or educational materials. Instead of relying on basic image embedding, this plugin uses the power of LaTeX to manage layout, typography, and structure, resulting in professional-grade presentations that are guaranteed to compile correctly.
-
-A user should employ this plugin any time a formal, visually polished presentation needs to be generated as part of an automated build or deployment pipeline within **microCI**.
+Its primary function is simplifying the complex process of presentation creation by integrating it as a native step within your **microCI** CI/CD pipeline.
 
 ## ✨ Features
-The `beamer` plugin excels at streamlining the conversion process:
-
-*   **Produce Great Looking Presentations using Markdown:** This core feature allows developers to write content using simple markdown syntax (e.g., headers for sections, lists for bullet points) while retaining all the structural advantages of a powerful typesetting system like LaTeX/Beamer.
-    *   ***Use Case:*** Quickly prototyping slide decks where complex styling or academic formatting is required, without manually managing LaTeX source files.
+### Produce Great Looking Presentations using Markdown
+This core feature transforms plain Markdown syntax (which must be structured according to Beamer's conventions) into fully typeset LaTeX Beamer slides, resulting in a professional PDF output. Users benefit from:
+*   **Structured Templating:** Effortlessly apply consistent styling (themes, color schemes, etc.) across all slides without manual compilation effort.
+*   **Source Control Integration:** Since the content lives alongside the CI configuration (`.microCI.yml`), presentation source files are version-controlled and reproducible builds are guaranteed.
+*   **Modular Content Generation:** The ability to list multiple source markdown files (`source: []`) allows for breaking up a large presentation into manageable, independently editable modules (e.g., introduction, body, conclusion).
 
 ## ⚙️ Setup & Configuration
-The Beamer plugin processes multiple markdown sources into a single compiled output (PDF). Configuration involves defining the input structure and specifying metadata.
+To utilize the Beamer plugin, you must specify the core parameters in your `.microCI.yml` file under the `plugin:` block. The plugin requires access to all source markdown files and defines the final output metadata for the presentation.
 
-### Parameters Reference
+### Parameters
 
-| Parameter | Type | Default Value | Description | Required? |
+| Parameter | Type | Description | Required? | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| `output` | String | N/A | The desired filename for the compiled presentation (e.g., `report.pdf`). | Yes |
-| `source` | List<Path> | N/A | A list of markdown files (`*.md`) that contain content for the slides. Must be provided in logical order. | Yes |
-| `lang` | String | N/A | The language identifier for localized content (e.g., `en-US`, `pt-BR`). | Recommended |
-| `title` | String | N/A | The main title that will appear on the presentation's cover slide. | No |
-| `subtitle` | String | N/A | A secondary, descriptive subtitle for the presentation. | No |
-| `author` | List<String> | N/A | One or more authors responsible for the content. Can include names and affiliations. | No |
-| `institute` | String | N/A | The institution or organization affiliation displayed on the title page. | No |
-| `date` | String | Current Date | The date to be displayed on the presentation's cover slide (e.g., "April 2023"). | No |
-| `theme` | String | Default | Specifies the LaTeX Beamer theme to use (e.g., `Madrid`, `Boadilla`). | No |
-| `header-includes` | List<String> | [] | Custom raw LaTeX commands or packages that need to be included in the preamble (`\usepackage{...}`). | Optional |
+| `name` | String | The name of the step in the pipeline. | Yes | Used for reporting purposes within **microCI**. |
+| `output` | String | The filename for the resulting PDF presentation (e.g., `presentation.pdf`). | Yes | This determines the output artifact name. |
+| `source` | List[String] | A list of paths to the source Markdown files that contain slide content. | Yes | Files should be ordered logically, especially if using section numbering schemes like `01-`. |
+| `lang` | String | The language used in the presentation (e.g., `en-US`, `pt-BR`). | No | Influences date formatting and language packages. |
+| `title` | String | The main title displayed on the presentation's title slide. | Recommended | Mandatory for a complete title slide. |
+| `subtitle` | String | A secondary subtitle for the presentation. | Optional | Provides context to the title. |
+| `author` | List[String] | A list of names credited as authors. | Recommended | Format should be a list of strings. |
+| `institute` | String | The name of the presenting institution/company. | Optional | Appears in the header or footer metadata. |
+| `date` | String / Date | The date associated with the presentation (e.g., `\today`). | Optional | Can use LaTeX commands for dynamic dates. |
+| **Advanced** | | | | |
+| `theme` | String | Specifies the Beamer theme to be used (e.g., `Madrid`, `Boadilla`). | No | Overrides default styling. Check Beamer documentation for available themes. |
+| `header-includes`| List[String] | A list of raw LaTeX packages or commands to include at the start of the document (`\usepackage{...}`). | Optional | Use this for advanced features like complex math or TikZ graphics. |
 
-### Example Configuration (`new/beamer.yml`)
+## 💻 Examples
+The following example demonstrates how to use the **Beamer** plugin within a typical **microCI** workflow to build a multi-section presentation PDF.
+
+### Configuration File: `.microCI.yml` (Excerpt)
 
 ```yaml
 steps:
-  - name: Create PDF presentation from Markdown
+  - name: Build Presentation Slides
     plugin:
       name: beamer
-      output: output_filename.pdf
-      source:
+      output: final_tech_talk.pdf
+      source: # List of source files, use the number for ordering the sections
         - 00-introduction.md
         - 01-body.md
         - 02-conclusion.md
         - 99-references.md
-      lang: pt-BR # Set locale for proper translation of date/titles
-      institute: Institution Name
+      lang: en-US # Presentation language: pt-BR, en-US, ...
+      institute: Tech Solutions Corp
       date: April 1, 2023
-      title: Presentation Title
-      subtitle: Presentation Subtitle
+      title: Mastering MicroCI Plugins
+      subtitle: A Technical Deep Dive into CI/CD Automation
       author:
         - Geraldo Ribeiro
-        - Other Author Name
-      # Include custom packages needed by the slides
-      header-includes:
+        - AI Assistant Team
+      header-includes: # Custom LaTeX package inclusion
         - \usepackage{tikz}
 ```
 
-## 🚀 Examples
-This example demonstrates integrating the Beamer plugin into a **microCI** workflow file (`.microCI.yml`), ensuring the entire presentation build is executed in sequence.
+### Source File Example (`01-body.md`)
+*Content for the `source` files must be structured in Markdown, but will be processed by Beamer's underlying LaTeX engine.*
 
-### Usage in CI/CD Pipeline YAML (.microCI.yml)
+````markdown
+# Section 1: Plugin Architecture {#section-plugin-architecture}
 
-Place this snippet within your main workflow file:
+This is the main content of our body section. Every top-level heading (`#`) or second-level heading (`##`) defined within the source files becomes a slide in the final PDF.
 
-```yaml
-steps:
-    - name: "Compile Documentation Presentation"
-      plugin:
-        name: beamer
-        output: final_report.pdf
-        source:
-          - docs/slides/part1.md
-          - docs/slides/part2.md
-        lang: en-US
-        title: Project Status Review
-        subtitle: Q2 2026 Build Report
-        author:
-            - Jane Doe
-            - John Smith
-```
+## Key Components
 
-### Output Verification
-Upon successful execution in **microCI**, the compiled PDF presentation (`final_report.pdf`) will be generated and made available as a build artifact, ready for download or deployment.
+The plugin architecture consists of three parts:
+1. The **microCI** Runner (Execution Engine).
+2. The Plugin Core (Logic layer).
+3. The Beamer Renderer (Output formatter).
+
+We are demonstrating how easy it is to integrate complex tooling into a simple CI/CD workflow.
+````
+
+***
+*This documentation was generated by the Documentation Generator Skill.*
