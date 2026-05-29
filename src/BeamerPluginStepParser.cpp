@@ -45,7 +45,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
 
   data["STEP_NAME"]        = stepName(step);
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Apresentação PDF criada a partir do markdown");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Presentation PDF created from markdown");
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "pandoc/latex:latest");
   data["WORKSPACE"]        = stepDockerWorkspace(step, "/data");
 
@@ -58,16 +58,16 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   if (!inputMD.empty()) {
     data["INPUT_MD"] = inputMD;
   } else {
-    spdlog::error("É obrigatório especificar uma lista de arquivos de entrada");
-    throw std::runtime_error("É obrigatório especificar uma lista de arquivos de entrada");
+    spdlog::error("It is mandatory to specify a list of input files");
+    throw std::runtime_error("It is mandatory to specify a list of input files");
   }
 
   data["LANG"]        = step["plugin"]["lang"].as<std::string>("pt-BR");
-  data["DATE"]        = step["plugin"]["date"].as<std::string>("01 de Abril de 2023");
-  data["INSTITUTE"]   = step["plugin"]["institute"].as<std::string>("Nome da instituição");
-  data["TITLE"]       = step["plugin"]["title"].as<std::string>("Título da apresentação");
-  data["SUBTITLE"]    = step["plugin"]["subtitle"].as<std::string>("Subtítulo da apresentação");
-  data["SUBJECT"]     = step["plugin"]["subject"].as<std::string>("Informação da propriedade Assunto do PDF");
+  data["DATE"]        = step["plugin"]["date"].as<std::string>("April 1, 2023");
+  data["INSTITUTE"]   = step["plugin"]["institute"].as<std::string>("Institution name");
+  data["TITLE"]       = step["plugin"]["title"].as<std::string>("Presentation title");
+  data["SUBTITLE"]    = step["plugin"]["subtitle"].as<std::string>("Presentation subtitle");
+  data["SUBJECT"]     = step["plugin"]["subject"].as<std::string>("PDF subject matter information");
   data["SLIDE_LEVEL"] = step["plugin"]["slide-level"].as<std::string>("2");
   data["ASPECTRATIO"] = step["plugin"]["aspectratio"].as<std::string>("169");
   data["OUTPUT_PDF"]  = step["plugin"]["output"].as<std::string>("output.pdf");
@@ -82,7 +82,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
     strippedHeaderIncludes["header-includes"].push_back(R"(\usecolortheme{str})");
     strippedHeaderIncludes["header-includes"].push_back(R"(\logo{\includegraphics[height=7mm]{img/str-logo.png}})");
 
-// Encontrar uma solução mais elegante para disponibilizar arquivos de terceiros
+// Find a more elegant solution to make third-party files available
 #include <3rd/beamercolorthemestr.sty.hpp>
 #include <3rd/str-logo.png.hpp>
     std::ofstream strLogoPng("img/str-logo.png");
