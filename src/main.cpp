@@ -108,7 +108,7 @@
 #include "help/clang-tidy.hpp"
 #include "help/cppcheck.hpp"
 // #include "help/docker_build.hpp"
-// #include "help/docmd.hpp"
+#include "help/docmd.hpp"
 #include "help/doxygen.hpp"
 #include "help/fetch.hpp"
 // #include "help/fetch2.hpp"
@@ -579,7 +579,7 @@ sudo rm -f /usr/bin/microCI
     MICROCI_HELP(clang_tidy);
     MICROCI_HELP(cppcheck);
     // MICROCI_HELP(docker_build);
-    // MICROCI_HELP(docmd);
+    MICROCI_HELP(docmd);
     MICROCI_HELP(doxygen);
     MICROCI_HELP(fetch);
     MICROCI_HELP(flawfinder);

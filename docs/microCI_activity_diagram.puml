@@ -4,10 +4,6 @@
 @startuml
 start
 partition "Main pipeline" {
-:Extract plugin documentation; <<procedure>>
-floating note left: docmd
-floating note right: Extract documentation from source code to a markdown file
-
 :C++ check with cppcheck; <<procedure>>
 floating note left: cppcheck
 floating note right: No description available
