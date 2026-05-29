@@ -29,18 +29,15 @@
 
 // https://stackoverflow.com/questions/69806220/advice-needed-for-migration-of-low-level-openssl-api-to-high-level-openssl-apis
 
+#include <libintl.h>
 #include <openssl/evp.h>
+#include <spdlog/spdlog.h>
 
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
-
-using namespace std;
-
-#include <libintl.h>
-#include <spdlog/spdlog.h>
 
 #include "argh.h"
 #include "inicpp.h"
@@ -164,7 +161,7 @@ auto commandLineValidOptions() -> std::set<std::string> {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto help() -> string {
+auto help() -> std::string {
   return R"(
 Options:
   -h,--help                Print this help
@@ -209,13 +206,13 @@ Options:
 }
 
 struct TemplateFile {
-  string fileName;
+  std::string fileName;
   unsigned char *fileContent;
   unsigned int fileSize;
   bool appendIfExists;
 };
 
-using TemplateType = string;
+using TemplateType = std::string;
 
 // ----------------------------------------------------------------------
 //
@@ -223,7 +220,7 @@ using TemplateType = string;
 void loadMicroCIEnviromentVariables(MicroCI &uCI, char **envp) {
   // Load environment variables
   for (char **env = envp; *env != nullptr; env++) {
-    auto envStr = string{*env};
+    auto envStr = std::string{*env};
     if (envStr.size() > 7 and envStr.substr(0, 8) == "MICROCI_") {
       auto pos = envStr.find_first_of("=");
       EnvironmentVariable environmentVariable;
@@ -238,7 +235,7 @@ void loadMicroCIEnviromentVariables(MicroCI &uCI, char **envp) {
 // See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
 // ----------------------------------------------------------------------
 void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
-  set<string> allowedEnvironmentVariables = {
+  std::set<std::string> allowedEnvironmentVariables = {
       "CHAT_CHANNEL",          // Pipeline	The Source chat channel that triggered the ChatOps command.
       "CHAT_INPUT",            // Pipeline	The additional arguments passed with the ChatOps command.
       "CHAT_USER_ID",          // Pipeline	The chat service’s user ID of the user who triggered the ChatOps command.
@@ -462,9 +459,9 @@ void loadGitlabEnvironmentVariables(MicroCI &uCI, char **envp) {
   };
 
   for (char **env = envp; *env != nullptr; env++) {
-    auto envStr = string{*env};
+    auto envStr = std::string{*env};
     auto pos    = envStr.find_first_of("=");
-    if (pos != string::npos) {
+    if (pos != std::string::npos) {
       EnvironmentVariable environmentVariable;
       environmentVariable.name  = envStr.substr(0, pos);
       environmentVariable.value = envStr.substr(pos + 1);
@@ -540,35 +537,35 @@ sudo rm -f /usr/bin/microCI
 
     uCI.SetAppendLog(cmdl[{"-a", "--append-log"}]);
 
-    uCI.RegisterPlugin("skip", make_shared<SkipPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("bash", make_shared<BashPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("docmd", make_shared<DocmdPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("doxygen", make_shared<DoxygenPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("beamer", make_shared<BeamerPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("plantuml", make_shared<PlantumlPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("pikchr", make_shared<PikchrPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("mermaid", make_shared<MermaidPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("git_deploy", make_shared<GitDeployPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("git_publish", make_shared<GitPublishPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("mkdocs_material", make_shared<MkdocsMaterialPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("cppcheck", make_shared<CppCheckPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("clang-tidy", make_shared<ClangTidyPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("clang-format", make_shared<ClangFormatPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("vhdl-format", make_shared<VHDLFormatPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("fetch", make_shared<FetchPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("minio", make_shared<MinioPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("jfrog", make_shared<JFrogPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("flawfinder", make_shared<FlawfinderPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("docker_build", make_shared<DocmdPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("pandoc", make_shared<PandocPluginStepParser>(&uCI));
-    uCI.RegisterPlugin("template", make_shared<TemplatePluginStepParser>(&uCI));
+    uCI.RegisterPlugin("skip", std::make_shared<SkipPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("bash", std::make_shared<BashPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("docmd", std::make_shared<DocmdPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("doxygen", std::make_shared<DoxygenPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("beamer", std::make_shared<BeamerPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("plantuml", std::make_shared<PlantumlPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("pikchr", std::make_shared<PikchrPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("mermaid", std::make_shared<MermaidPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("git_deploy", std::make_shared<GitDeployPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("git_publish", std::make_shared<GitPublishPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("mkdocs_material", std::make_shared<MkdocsMaterialPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("cppcheck", std::make_shared<CppCheckPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("clang-tidy", std::make_shared<ClangTidyPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("clang-format", std::make_shared<ClangFormatPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("vhdl-format", std::make_shared<VHDLFormatPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("fetch", std::make_shared<FetchPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("minio", std::make_shared<MinioPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("jfrog", std::make_shared<JFrogPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("flawfinder", std::make_shared<FlawfinderPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("docker_build", std::make_shared<DocmdPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("pandoc", std::make_shared<PandocPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("template", std::make_shared<TemplatePluginStepParser>(&uCI));
 
     loadMicroCIEnviromentVariables(uCI, envp);
     loadGitlabEnvironmentVariables(uCI, envp);
 
     // Print version and exit
     if (cmdl[{"-V", "--version"}]) {
-      std::cout << microci::version() << endl;
+      std::cout << microci::version() << std::endl;
       return 0;
     }
 
@@ -607,7 +604,7 @@ sudo rm -f /usr/bin/microCI
     std::string pluginName{};
     if (cmdl[{"-h", "--help"}] or (cmdl({"-h", "--help"}) >> pluginName)) {
       if (pluginName.empty()) {
-        std::cout << microci::banner() << help() << endl;
+        std::cout << microci::banner() << help() << std::endl;
       } else {
         if (helps.count(pluginName) == 0) {
           std::cout << "Use microCI --help <pluginName>" << std::endl;
@@ -615,24 +612,24 @@ sudo rm -f /usr/bin/microCI
             std::cout << "microCI --help " << name << std::endl;
           }
         } else {
-          std::cout << helps.at(pluginName) << endl;
+          std::cout << helps.at(pluginName) << std::endl;
         }
       }
       return 0;
     }
 
     // Alternative path for the configuration file
-    auto yamlFileName = string{".microCI.yml"};
+    auto yamlFileName = std::string{".microCI.yml"};
     cmdl({"-i", "--input"}) >> yamlFileName;
 
-    auto newConfig = string{};
+    auto newConfig = std::string{};
     if ((cmdl({"-c", "--config"}) >> newConfig)) {
-      multimap<TemplateType, TemplateFile> templates;
+      std::multimap<TemplateType, TemplateFile> templates;
 
-#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)    \
-  templates.insert(                                                                         \
-      make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
-                                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)         \
+  templates.insert(                                                                              \
+      std::make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
+                                        ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
       // clang-format off
       MICROCI_TPL(false, "gitlab_ci",       ".gitlab-ci.yml", yml, gitlab_ci);
       // clang-format on
@@ -642,24 +639,24 @@ sudo rm -f /usr/bin/microCI
         if (newConfig == config) {
           isNewConfigFound = true;
 
-          ofstream out;
+          std::ofstream out;
           auto fileName = tpl.fileName;
 
           auto folderPos = fileName.find_last_of("/");
-          if (folderPos != string::npos) {
+          if (folderPos != std::string::npos) {
             auto folderName = fileName.substr(0, folderPos);
             spdlog::debug(_("Creating folder '{}'"), folderName);
-            filesystem::create_directories(folderName);
+            std::filesystem::create_directories(folderName);
           }
 
-          if (!tpl.appendIfExists and filesystem::exists(fileName)) {
+          if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
             spdlog::debug(_("File '{}' already exists"), fileName);
             continue;
-          } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
+          } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
+            std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
-            out.open(fileName, ios_base::app);
+            out.open(fileName, std::ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
             out << step;
           } else {
@@ -681,14 +678,14 @@ sudo rm -f /usr/bin/microCI
     }
 
     // Create or update the configuration file
-    auto newType = string{};
+    auto newType = std::string{};
     if ((cmdl({"-n", "--new"}) >> newType)) {
-      multimap<TemplateType, TemplateFile> templates;
+      std::multimap<TemplateType, TemplateFile> templates;
 
-#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)    \
-  templates.insert(                                                                         \
-      make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
-                                   ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)         \
+  templates.insert(                                                                              \
+      std::make_pair(TYPE, TemplateFile{FILE_NAME, ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
+                                        ___new_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
       // clang-format off
       MICROCI_TPL(true,  "skip",            ".microCI.yml",  yml, skip);
       MICROCI_TPL(true,  "bash",            ".microCI.yml",  yml, bash);
@@ -732,25 +729,25 @@ sudo rm -f /usr/bin/microCI
           }
 
           auto folderPos = fileName.find_last_of("/");
-          if (folderPos != string::npos) {
+          if (folderPos != std::string::npos) {
             auto folderName = fileName.substr(0, folderPos);
             spdlog::debug(_("Creating folder '{}'"), folderName);
-            filesystem::create_directories(folderName);
+            std::filesystem::create_directories(folderName);
           }
 
-          if (!tpl.appendIfExists and filesystem::exists(fileName)) {
+          if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
             spdlog::debug(_("File '{}' already exists"), fileName);
             continue;
-          } else if (tpl.appendIfExists and filesystem::exists(fileName)) {
+          } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
             spdlog::debug(_("The file '{}' was edited from the template"), fileName);
-            string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
+            std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
-            ofstream out(fileName, ios_base::app);
+            std::ofstream out(fileName, std::ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
             out << step;
           } else {
             spdlog::debug(_("The file '{}' was created from the template"), fileName);
-            ofstream out(fileName);
+            std::ofstream out(fileName);
             out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
         }
@@ -766,14 +763,14 @@ sudo rm -f /usr/bin/microCI
       return 1;
     }
 
-    if (!filesystem::exists(yamlFileName)) {
+    if (!std::filesystem::exists(yamlFileName)) {
       auto msg = fmt::format(_("The input file '{}' was not found"), yamlFileName);
       spdlog::error(msg);
       std::cout << fmt::format("echo '{}'\n", msg);
       return 1;
     }
 
-    auto onlyStep = string{};
+    auto onlyStep = std::string{};
     if ((cmdl({"-O", "--only"}) >> onlyStep)) {
       uCI.SetOnlyStep(onlyStep);
     }
@@ -783,18 +780,18 @@ sudo rm -f /usr/bin/microCI
       uCI.SetOnlyStepNumber(onlyStepNumber);
     }
 
-    auto onlyStepHash = string{};
+    auto onlyStepHash = std::string{};
     if ((cmdl({"-x", "--hash"}) >> onlyStepHash)) {
       uCI.SetOnlyStepHash(yamlFileName, onlyStepHash);
     }
 
-    auto altHome = string{};
+    auto altHome = std::string{};
     if ((cmdl({"-H", "--home"}) >> altHome)) {
       uCI.SetAltHome(altHome);
     }
 
     if (!uCI.ReadConfig(yamlFileName)) {
-      std::cout << microci::banner() << endl;
+      std::cout << microci::banner() << std::endl;
       auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
       spdlog::error(msg);
       std::cout << fmt::format("echo '{}'\n", msg);
@@ -802,13 +799,13 @@ sudo rm -f /usr/bin/microCI
     }
 
     if (cmdl[{"-l", "--list"}]) {
-      std::cout << uCI.List(yamlFileName) << endl;
+      std::cout << uCI.List(yamlFileName) << std::endl;
       return 0;
     }
 
     // Generate activity diagram and exit
     if (cmdl[{"-A", "--activity-diagram"}]) {
-      std::cout << uCI.ActivityDiagram(yamlFileName) << endl;
+      std::cout << uCI.ActivityDiagram(yamlFileName) << std::endl;
       return 0;
     }
 
@@ -817,32 +814,32 @@ sudo rm -f /usr/bin/microCI
     }
 
     if (cmdl[{"-U", "--update-db"}]) {
-      if (uCI.IsValid() and filesystem::exists("/opt/microCI/db.json")) {
+      if (uCI.IsValid() and std::filesystem::exists("/opt/microCI/db.json")) {
         json dbJson;
         {
-          ifstream jsonFile("/opt/microCI/db.json");
+          std::ifstream jsonFile("/opt/microCI/db.json");
           jsonFile >> dbJson;
         }
         auto CI = YAML::LoadFile(yamlFileName);
 
-        string pwd = filesystem::absolute(yamlFileName).parent_path().lexically_normal();
+        std::string pwd = std::filesystem::absolute(yamlFileName).parent_path().lexically_normal();
         if (pwd.at(pwd.size() - 1) == '/') {
           pwd.erase(pwd.size() - 1);  // remove a barra no final
         }
 
-        auto gitRemoteOrigin   = string{};
+        auto gitRemoteOrigin   = std::string{};
         auto gitConfigFilename = pwd + "/.git/config";
-        if (filesystem::exists(gitConfigFilename)) {
+        if (std::filesystem::exists(gitConfigFilename)) {
           ini::IniFile gitConfigIni;
           gitConfigIni.load(gitConfigFilename);
-          gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<string>();
+          gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<std::string>();
         }
 
         spdlog::debug(_("PWD: {}"), pwd);
         spdlog::debug(_("Git config: {}"), gitConfigFilename);
         spdlog::debug(_("Git origin: {}"), gitRemoteOrigin);
 
-        auto pwdRepoId = string{"_"};  // para evitar que a chave comece com número
+        auto pwdRepoId = std::string{"_"};  // para evitar que a chave comece com número
 
         EVP_MD_CTX *mdctx;
         unsigned char *md5_digest;
@@ -870,18 +867,18 @@ sudo rm -f /usr/bin/microCI
 
         size_t stepNo = 0;
         for (auto step : CI["steps"]) {
-          spdlog::debug("{} {}", stepNo, step["name"].as<string>());
-          dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"]   = step["name"].as<string>();
-          dbJson["repos"][pwdRepoId]["steps"][stepNo]["plugin"] = step["plugin"]["name"].as<string>();
+          spdlog::debug("{} {}", stepNo, step["name"].as<std::string>());
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"]   = step["name"].as<std::string>();
+          dbJson["repos"][pwdRepoId]["steps"][stepNo]["plugin"] = step["plugin"]["name"].as<std::string>();
           dbJson["repos"][pwdRepoId]["steps"][stepNo]["only"]   = bool(step["only"]);
           if (step["description"]) {
-            dbJson["repos"][pwdRepoId]["steps"][stepNo]["description"] = step["description"].as<string>();
+            dbJson["repos"][pwdRepoId]["steps"][stepNo]["description"] = step["description"].as<std::string>();
           }
           ++stepNo;
         }
 
         {
-          ofstream jsonFile("/opt/microCI/db.json");
+          std::ofstream jsonFile("/opt/microCI/db.json");
           jsonFile << dbJson.dump(2);
         }
       }
@@ -889,10 +886,10 @@ sudo rm -f /usr/bin/microCI
     }
 
     std::cout << uCI.ToString();
-  } catch (invalid_argument &e) {
+  } catch (std::invalid_argument &e) {
     spdlog::error(e.what());
     return 1;
-  } catch (runtime_error &e) {
+  } catch (std::runtime_error &e) {
     spdlog::error(e.what());
     return 1;
   } catch (...) {

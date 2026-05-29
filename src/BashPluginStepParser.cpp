@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -52,30 +51,30 @@ std::string replaceAll(std::string str, const std::string &from, const std::stri
 //
 // ----------------------------------------------------------------------
 void BashPluginStepParser::Parse(const YAML::Node &step) {
-  auto cmdsStr = string{};
-  auto cmds    = vector<string>{};
-  auto line    = string{};
-  list<string> opts{};
+  auto cmdsStr = std::string{};
+  auto cmds    = std::vector<std::string>{};
+  auto line    = std::string{};
+  std::list<std::string> opts{};
 
   auto data = mMicroCI->DefaultDataTemplate();
 
   if (step["plugin"]["bash"]) {
-    cmdsStr = step["plugin"]["bash"].as<string>();
+    cmdsStr = step["plugin"]["bash"].as<std::string>();
   } else if (step["plugin"]["sh"]) {
-    cmdsStr = step["plugin"]["sh"].as<string>();
+    cmdsStr = step["plugin"]["sh"].as<std::string>();
   } else {
     spdlog::error("No 'bash' or 'sh' script defined in plugin configuration");
     invalidConfigurationDetected();
-    throw invalid_argument("Script not found");
+    throw std::invalid_argument("Script not found");
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<string>());
+      opts.push_back(opt.as<std::string>());
     }
   }
 
-  auto ss = stringstream{cmdsStr};
+  auto ss = std::stringstream{cmdsStr};
   while (getline(ss, line, '\n')) {
     line = replaceAll(line, "\"", "\\\"");
 
@@ -109,7 +108,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
         /bin/bash)",
                                        data);
   } else {
-    throw invalid_argument("No valid shell defined");
+    throw std::invalid_argument("No valid shell defined");
   }
 
   for (const auto &opt : opts) {

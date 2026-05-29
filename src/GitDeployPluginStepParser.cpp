@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -44,10 +43,10 @@ void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
   auto data = mMicroCI->DefaultDataTemplate();
   data      = parseRunAs(step, data, "user");
 
-  const auto name     = step["plugin"]["name"].as<string>();
-  const auto repo     = step["plugin"]["repo"].as<string>();
-  const auto gitDir   = step["plugin"]["git_dir"].as<string>();
-  const auto workTree = step["plugin"]["work_tree"].as<string>();
+  const auto name     = step["plugin"]["name"].as<std::string>();
+  const auto repo     = step["plugin"]["repo"].as<std::string>();
+  const auto gitDir   = step["plugin"]["git_dir"].as<std::string>();
+  const auto workTree = step["plugin"]["work_tree"].as<std::string>();
   auto clean          = true;
 
   if (step["plugin"]["clean"]) {

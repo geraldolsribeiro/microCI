@@ -34,17 +34,16 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
-  auto platform = string{"unix64"};
-  auto standard = string{"c++11"};
-  list<string> includeList;
-  list<string> sourceList;
-  list<string> opts{"--enable=all", "--inconclusive", "--xml", "--xml-version=2"};
+  auto platform = std::string{"unix64"};
+  auto standard = std::string{"c++11"};
+  std::list<std::string> includeList;
+  std::list<std::string> sourceList;
+  std::list<std::string> opts{"--enable=all", "--inconclusive", "--xml", "--xml-version=2"};
 
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
@@ -54,28 +53,28 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<string>());
+      opts.push_back(opt.as<std::string>());
     }
   }
 
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
     for (const auto &inc : step["plugin"]["include"]) {
-      includeList.push_back(inc.as<string>());
+      includeList.push_back(inc.as<std::string>());
     }
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+      sourceList.push_back(src.as<std::string>());
     }
   }
 
   if (step["plugin"]["platform"]) {
-    platform = step["plugin"]["platform"].as<string>();
+    platform = step["plugin"]["platform"].as<std::string>();
   }
 
   if (step["plugin"]["std"]) {
-    standard = step["plugin"]["std"].as<string>();
+    standard = step["plugin"]["std"].as<std::string>();
   }
 
   data["STEP_NAME"]        = stepName(step);

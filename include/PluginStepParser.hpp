@@ -40,36 +40,36 @@
 #include "nlohmann/json.hpp"
 
 namespace microci {
-using namespace std;
 using nlohmann::json;
 
 class PluginStepParser {
  public:
   PluginStepParser(MicroCI *microCI) : mMicroCI(microCI) {}
   virtual ~PluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<string>() << endl; }
+  virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<std::string>() << std::endl; }
   virtual bool IsValid() const;
 
  protected:
   void invalidConfigurationDetected();
-  void beginFunction(const json &data, const set<EnvironmentVariable> &envs);
+  void beginFunction(const json &data, const std::set<EnvironmentVariable> &envs);
   void endFunction(const json &data);
 
-  [[nodiscard]] json parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const;
-  [[nodiscard]] json parseNetwork(const YAML::Node &step, const json &data, const string &defaultValue) const;
+  [[nodiscard]] json parseRunAs(const YAML::Node &step, const json &data, const std::string &defaultValue) const;
+  [[nodiscard]] json parseNetwork(const YAML::Node &step, const json &data, const std::string &defaultValue) const;
   [[nodiscard]] json parseDevices(const YAML::Node &step, const json &data) const;
-  [[nodiscard]] set<EnvironmentVariable> parseEnvs(const YAML::Node &step) const;
-  [[nodiscard]] set<DockerVolume> parseVolumes(const YAML::Node &step) const;
-  [[nodiscard]] tuple<json, set<DockerVolume>, set<EnvironmentVariable>> parseSsh(
-      const YAML::Node &step, const json &data, const set<DockerVolume> &volumes,
-      const set<EnvironmentVariable> &envs) const;
+  [[nodiscard]] std::set<EnvironmentVariable> parseEnvs(const YAML::Node &step) const;
+  [[nodiscard]] std::set<DockerVolume> parseVolumes(const YAML::Node &step) const;
+  [[nodiscard]] std::tuple<json, std::set<DockerVolume>, std::set<EnvironmentVariable>> parseSsh(
+      const YAML::Node &step, const json &data, const std::set<DockerVolume> &volumes,
+      const std::set<EnvironmentVariable> &envs) const;
 
   void copySshIfAvailable(const YAML::Node &step, const json &data);
 
-  [[nodiscard]] string stepDockerImage(const YAML::Node &step, const string &image = "") const;
-  [[nodiscard]] string stepDockerWorkspace(const YAML::Node &step, const string &workspace = "") const;
+  [[nodiscard]] std::string stepDockerImage(const YAML::Node &step, const std::string &image = "") const;
+  [[nodiscard]] std::string stepDockerWorkspace(const YAML::Node &step, const std::string &workspace = "") const;
 
-  void prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs, const set<DockerVolume> &volumes);
+  void prepareRunDocker(const json &data, const std::set<EnvironmentVariable> &envs,
+                        const std::set<DockerVolume> &volumes);
 
   MicroCI *mMicroCI = nullptr;
   bool mIsValid     = true;

@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -88,9 +87,9 @@ void DocmdPluginStepParser::Parse(const YAML::Node &step) {
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     for (const auto &item : step["plugin"]["items"]) {
       if (item.IsSequence()) {
-        data["DOCMD_LANG"]   = item[0].as<string>();
-        data["DOCMD_INPUT"]  = item[1].as<string>();
-        data["DOCMD_OUTPUT"] = item[2].as<string>();
+        data["DOCMD_LANG"]   = item[0].as<std::string>();
+        data["DOCMD_INPUT"]  = item[1].as<std::string>();
+        data["DOCMD_OUTPUT"] = item[2].as<std::string>();
 
         prepareRunDocker(data, envs, volumes);
         mMicroCI->Script() << inja::render(R"( {{ DOCMD_LANG }} {{ DOCMD_INPUT }} {{ DOCMD_OUTPUT }})", data);

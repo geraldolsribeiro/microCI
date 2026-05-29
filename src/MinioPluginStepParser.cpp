@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -43,19 +42,19 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
-  auto cmdsStr = string{};
-  auto cmds    = vector<string>{};
-  auto line    = string{};
+  auto cmdsStr = std::string{};
+  auto cmds    = std::vector<std::string>{};
+  auto line    = std::string{};
 
   data = parseRunAs(step, data, "user");
 
   if (step["plugin"]["bash"]) {
-    cmdsStr = step["plugin"]["bash"].as<string>();
+    cmdsStr = step["plugin"]["bash"].as<std::string>();
   } else if (step["plugin"]["sh"]) {
-    cmdsStr = step["plugin"]["sh"].as<string>();
+    cmdsStr = step["plugin"]["sh"].as<std::string>();
   }
 
-  auto ss = stringstream{cmdsStr};
+  auto ss = std::stringstream{cmdsStr};
   while (getline(ss, line, '\n')) {
     if (!line.empty() && line.at(0) != '#') {
       cmds.push_back(line);

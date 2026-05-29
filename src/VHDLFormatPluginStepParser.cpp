@@ -34,23 +34,22 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void VHDLFormatPluginStepParser::Parse(const YAML::Node &step) {
-  auto data                = mMicroCI->DefaultDataTemplate();
-  auto volumes             = parseVolumes(step);
-  auto envs                = parseEnvs(step);
-  data                     = parseRunAs(step, data, "user");
-  data                     = parseNetwork(step, data, "none");
-  tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
-  list<string> sourceList;
+  auto data                     = mMicroCI->DefaultDataTemplate();
+  auto volumes                  = parseVolumes(step);
+  auto envs                     = parseEnvs(step);
+  data                          = parseRunAs(step, data, "user");
+  data                          = parseNetwork(step, data, "none");
+  std::tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
+  std::list<std::string> sourceList;
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+      sourceList.push_back(src.as<std::string>());
     }
   }
 
@@ -68,7 +67,7 @@ void VHDLFormatPluginStepParser::Parse(const YAML::Node &step) {
   auto emacsConfigFilename              = inja::render("{{ WORKSPACE }}/.emacs_vhdl_formatter.lisp", data);
   data["EMACS_VHDL_FORMATTER_FILENAME"] = emacsConfigFilename;
 
-  ostringstream emacsConfig;
+  std::ostringstream emacsConfig;
   emacsConfig << inja::render(R"(;; microCI emacs configuration used for formatting VHDL code
 (custom-set-variables
 ;; '(vhdl-align-group-separate "^\\s---*$")

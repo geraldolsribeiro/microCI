@@ -32,34 +32,33 @@
 #include <spdlog/spdlog.h>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void PandocPluginStepParser::Parse(const YAML::Node &step) {
-  auto output   = string{"output.pdf"};
-  auto basePath = string{"."};
-  list<string> inputList;
-  list<string> optionList = {"--pdf-engine=xelatex"};
+  auto output   = std::string{"output.pdf"};
+  auto basePath = std::string{"."};
+  std::list<std::string> inputList;
+  std::list<std::string> optionList = {"--pdf-engine=xelatex"};
 
   if (step["plugin"]["output"]) {
-    output = step["plugin"]["output"].as<string>();
+    output = step["plugin"]["output"].as<std::string>();
   }
 
   if (step["plugin"]["base_path"]) {
-    basePath = step["plugin"]["base_path"].as<string>();
+    basePath = step["plugin"]["base_path"].as<std::string>();
   }
 
   if (step["plugin"]["inputs"] && step["plugin"]["inputs"].IsSequence()) {
     for (const auto &filename : step["plugin"]["inputs"]) {
-      inputList.push_back(filename.as<string>());
+      inputList.push_back(filename.as<std::string>());
     }
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      optionList.push_back(opt.as<string>());
+      optionList.push_back(opt.as<std::string>());
     }
   }
 

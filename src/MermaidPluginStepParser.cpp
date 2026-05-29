@@ -32,7 +32,6 @@
 #include <spdlog/spdlog.h>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -40,8 +39,8 @@ using namespace std;
 void MermaidPluginStepParser::Parse(const YAML::Node &step) {
   std::string outputFormat{"png"};
   std::string outputFolder{"./"};
-  list<string> inputList;
-  list<string> optionList;
+  std::list<std::string> inputList;
+  std::list<std::string> optionList;
 
   if (step["plugin"]["output_format"]) {
     outputFormat = step["plugin"]["output_format"].as<std::string>();
@@ -53,13 +52,13 @@ void MermaidPluginStepParser::Parse(const YAML::Node &step) {
 
   if (step["plugin"]["inputs"] && step["plugin"]["inputs"].IsSequence()) {
     for (const auto &filename : step["plugin"]["inputs"]) {
-      inputList.push_back(filename.as<string>());
+      inputList.push_back(filename.as<std::string>());
     }
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      optionList.push_back(opt.as<string>());
+      optionList.push_back(opt.as<std::string>());
     }
   }
 

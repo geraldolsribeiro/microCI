@@ -34,36 +34,35 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
-  auto header     = string{};
-  auto footer     = string{};
-  auto stylesheet = string{};
-  auto doxyfile   = string{"./Doxyfile"};
-  auto output_dir = string{"doxygen"};
+  auto header     = std::string{};
+  auto footer     = std::string{};
+  auto stylesheet = std::string{};
+  auto doxyfile   = std::string{"./Doxyfile"};
+  auto output_dir = std::string{"doxygen"};
 
   if (step["plugin"]["html"]) {
     if (step["plugin"]["html"]["header"]) {
-      header = step["plugin"]["html"]["header"].as<string>();
+      header = step["plugin"]["html"]["header"].as<std::string>();
     }
     if (step["plugin"]["html"]["footer"]) {
-      footer = step["plugin"]["html"]["footer"].as<string>();
+      footer = step["plugin"]["html"]["footer"].as<std::string>();
     }
     if (step["plugin"]["html"]["stylesheet"]) {
-      stylesheet = step["html"]["stylesheet"].as<string>();
+      stylesheet = step["html"]["stylesheet"].as<std::string>();
     }
   }
 
   if (step["plugin"]["doxyfile"]) {
-    doxyfile = step["plugin"]["doxyfile"].as<string>();
+    doxyfile = step["plugin"]["doxyfile"].as<std::string>();
   }
 
   if (step["plugin"]["output_dir"]) {
-    output_dir = step["plugin"]["output_dir"].as<string>();
+    output_dir = step["plugin"]["output_dir"].as<std::string>();
   }
 
   auto data                = mMicroCI->DefaultDataTemplate();

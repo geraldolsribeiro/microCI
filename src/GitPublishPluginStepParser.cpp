@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -54,13 +53,13 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
-  const auto name   = step["plugin"]["name"].as<string>();
-  const auto gitURL = step["plugin"]["git_url"].as<string>();
+  const auto name   = step["plugin"]["name"].as<std::string>();
+  const auto gitURL = step["plugin"]["git_url"].as<std::string>();
 
-  auto pluginCopyFrom = step["plugin"]["copy_from"].as<string>("site");
-  auto pluginCopyTo   = step["plugin"]["copy_to"].as<string>("/tmp/microci_deploy");
+  auto pluginCopyFrom = step["plugin"]["copy_from"].as<std::string>("site");
+  auto pluginCopyTo   = step["plugin"]["copy_to"].as<std::string>("/tmp/microci_deploy");
   auto cleanBefore    = step["plugin"]["clean_before"].as<bool>(true);
-  auto gitBranch      = step["plugin"]["branch"].as<string>("main");
+  auto gitBranch      = step["plugin"]["branch"].as<std::string>("main");
 
   data["GIT_URL"]          = gitURL;
   data["PLUGIN_COPY_TO"]   = pluginCopyTo;

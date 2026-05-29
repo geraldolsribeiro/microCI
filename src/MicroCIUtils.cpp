@@ -36,7 +36,7 @@ using std::string;
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto banner() -> string {
+auto banner() -> std::string {
   return fmt::format(R"(
 
 
@@ -55,19 +55,19 @@ auto banner() -> string {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto version() -> string { return fmt::format("v{}", microCI_version); }
+auto version() -> std::string { return fmt::format("v{}", microCI_version); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto sanitizeName(const string &name) -> string {
+auto sanitizeName(const std::string &name) -> std::string {
   auto ret = name;
 
   // Replace accented characters with version without accents
-  map<string, string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
+  std::map<string, std::string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto const &[from, to] : tr) {
     size_t pos = 0;
-    while ((pos = ret.find(from, pos)) != string::npos) {
+    while ((pos = ret.find(from, pos)) != std::string::npos) {
       ret.replace(pos, from.length(), to);
       pos += to.length();
     }
@@ -79,7 +79,7 @@ auto sanitizeName(const string &name) -> string {
   // Characters not allowed are replaced by _
   const auto allowedChars = "abcdefghijklmnopqrstuvwxyz01234567890";
   size_t found            = ret.find_first_not_of(allowedChars);
-  while (found != string::npos) {
+  while (found != std::string::npos) {
     ret[found] = '_';
     found      = ret.find_first_not_of(allowedChars, found + 1);
   }
@@ -89,19 +89,19 @@ auto sanitizeName(const string &name) -> string {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto stepRequiredValue(const YAML::Node &step, const string &var) -> string {
+auto stepRequiredValue(const YAML::Node &step, const std::string &var) -> std::string {
   if (!step[var]) {
     throw std::invalid_argument(fmt::format("Campo {} não encontrado no passo", var));
   }
-  return step[var].as<string>();
+  return step[var].as<std::string>();
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto stepOptionalValue(const YAML::Node &step, const string &var, const string &defaultValue) -> string {
+auto stepOptionalValue(const YAML::Node &step, const std::string &var, const std::string &defaultValue) -> std::string {
   if (step[var]) {
-    return step[var].as<string>();
+    return step[var].as<std::string>();
   } else {
     return defaultValue;
   }
@@ -110,12 +110,12 @@ auto stepOptionalValue(const YAML::Node &step, const string &var, const string &
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto stepName(const YAML::Node &step) -> string { return stepRequiredValue(step, "name"); }
+auto stepName(const YAML::Node &step) -> std::string { return stepRequiredValue(step, "name"); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto stepDescription(const YAML::Node &step, const string &defaultValue) -> string {
+auto stepDescription(const YAML::Node &step, const std::string &defaultValue) -> std::string {
   return stepOptionalValue(step, "description", defaultValue);
   return defaultValue;
 }

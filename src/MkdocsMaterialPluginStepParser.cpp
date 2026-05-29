@@ -34,23 +34,22 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
 void MkdocsMaterialPluginStepParser::Parse(const YAML::Node &step) {
-  auto action = string{"build"};
-  auto port   = string{"8000"};
+  auto action = std::string{"build"};
+  auto port   = std::string{"8000"};
 
   if (step["plugin"]["action"]) {
-    action = step["plugin"]["action"].as<string>();
+    action = step["plugin"]["action"].as<std::string>();
     if (action == "serve") {
       action += " --dev-addr=0.0.0.0:8000";
     }
   }
   if (step["plugin"]["port"]) {
-    port = step["plugin"]["port"].as<string>();
+    port = step["plugin"]["port"].as<std::string>();
   }
 
   auto data = mMicroCI->DefaultDataTemplate();

@@ -27,17 +27,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+#include "MicroCI.hpp"
+
 #include <pwd.h>
+#include <spdlog/spdlog.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <iostream>
 
-using namespace std;
-
-#include <spdlog/spdlog.h>
-
-#include "MicroCI.hpp"
 #include "inja/inja.hpp"
 #include "sh/MicroCI.hpp"
 #include "sh/NotifyDiscord.hpp"
@@ -76,8 +74,8 @@ void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::List(const string &filename) const -> string {
-  string ret;
+auto MicroCI::List(const std::string &filename) const -> std::string {
+  std::string ret;
 
   YAML::Node CI;
 
@@ -86,7 +84,7 @@ auto MicroCI::List(const string &filename) const -> string {
     if (CI["steps"].IsSequence()) {
       std::size_t number = 1;
       for (auto step : CI["steps"]) {
-        auto name = step["name"].as<string>();
+        auto name = step["name"].as<std::string>();
         auto hhh  = std::hash<std::string>{}(name) & 0xffff;
         ret += fmt::format("{:>2} {:04x} {}\n", number++, hhh, name);
       }
@@ -105,17 +103,17 @@ auto MicroCI::List(const string &filename) const -> string {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::ActivityDiagram(const string &filename) const -> string {
-  string ret;
+auto MicroCI::ActivityDiagram(const std::string &filename) const -> std::string {
+  std::string ret;
 
-  string beginDiagram{R"(
+  std::string beginDiagram{R"(
 
 ' Generated Diagram! Do not edit
 @startuml
 start
 )"};
 
-  string endDiagram{R"(
+  std::string endDiagram{R"(
 stop
 @enduml
 )"};
@@ -130,20 +128,20 @@ stop
       ret += "partition \"Main pipeline\" {\n";
       for (auto step : CI["steps"]) {
         if (!step["only"]) {
-          string stereotype{"<<procedure>>"};
-          string plugin{"No plugin name available"};
+          std::string stereotype{"<<procedure>>"};
+          std::string plugin{"No plugin name available"};
           if (step["plugin"] and step["plugin"]["name"]) {
-            plugin = step["plugin"]["name"].as<string>();
+            plugin = step["plugin"]["name"].as<std::string>();
             if (plugin == "fetch") {
               stereotype = "<<input>>";
             }
           }
-          string description{"No description available"};
+          std::string description{"No description available"};
           if (step["description"]) {
-            description = step["description"].as<string>();
+            description = step["description"].as<std::string>();
           }
 
-          ret += fmt::format(":{}; {}\n", step["name"].as<string>(), stereotype);
+          ret += fmt::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
           ret += fmt::format("floating note left: {}\n", plugin);
           ret += fmt::format("floating note right: {}\n\n", description);
         }
@@ -153,22 +151,22 @@ stop
 
       for (auto step : CI["steps"]) {
         if (step["only"]) {
-          string stereotype{"<<procedure>>"};
-          string plugin{"No plugin name available"};
+          std::string stereotype{"<<procedure>>"};
+          std::string plugin{"No plugin name available"};
           if (step["plugin"] and step["plugin"]["name"]) {
-            plugin = step["plugin"]["name"].as<string>();
+            plugin = step["plugin"]["name"].as<std::string>();
             if (plugin == "fetch") {
               stereotype = "<<input>>";
             }
           }
-          string description{"No description available"};
+          std::string description{"No description available"};
           if (step["description"]) {
-            description = step["description"].as<string>();
+            description = step["description"].as<std::string>();
           }
 
           ret += beginDiagram;
           ret += "partition \"Alternative flow\" {\n";
-          ret += fmt::format(":{}; {}\n", step["name"].as<string>(), stereotype);
+          ret += fmt::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
           ret += fmt::format("floating note left: {}\n", plugin);
           ret += fmt::format("floating note right: {}\n\n", description);
           ret += "}\n";
@@ -190,29 +188,29 @@ stop
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::RegisterPlugin(const string &name, shared_ptr<PluginStepParser> pluginStepParser) {
+void MicroCI::RegisterPlugin(const std::string &name, std::shared_ptr<PluginStepParser> pluginStepParser) {
   mPluginParserMap[name] = pluginStepParser;
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::Script() -> stringstream & {
+auto MicroCI::Script() -> std::stringstream & {
   if (IsValid()) {
     return mScript;
   }
-  throw runtime_error("Invalid configuration detected");
+  throw std::runtime_error("Invalid configuration detected");
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultDockerImage() const -> string { return mDefaultDockerImage; }
+auto MicroCI::DefaultDockerImage() const -> std::string { return mDefaultDockerImage; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultWorkspace() const -> string { return mDefaultWorkspace; }
+auto MicroCI::DefaultWorkspace() const -> std::string { return mDefaultWorkspace; }
 
 // ----------------------------------------------------------------------
 //
@@ -222,12 +220,12 @@ void MicroCI::SetEnvironmentVariable(const EnvironmentVariable &env) { mEnvs.ins
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetAltHome(const string &altHome) { mAltHome = altHome; }
+void MicroCI::SetAltHome(const std::string &altHome) { mAltHome = altHome; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetOnlyStep(const string &onlyStep) { mOnlyStep = onlyStep; }
+void MicroCI::SetOnlyStep(const std::string &onlyStep) { mOnlyStep = onlyStep; }
 
 // ----------------------------------------------------------------------
 //
@@ -245,7 +243,7 @@ void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh
       std::size_t number = 1;
       mOnlyStepNumber    = std::nullopt;
       for (auto step : CI["steps"]) {
-        auto name = step["name"].as<string>();
+        auto name = step["name"].as<std::string>();
         auto hhi  = fmt::format("{:04x}", std::hash<std::string>{}(name) & 0xffff);
         if (hh == hhi) {
           mOnlyStepNumber = number;
@@ -253,7 +251,7 @@ void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh
         }
         number++;
       }
-      throw invalid_argument(fmt::format("Invalid step hash: {}", hh));
+      throw std::invalid_argument(fmt::format("Invalid step hash: {}", hh));
     }
   } catch (const YAML::BadFile &e) {
     spdlog::error("Failure loading the file .microCI.yml");
@@ -272,23 +270,23 @@ void MicroCI::SetAppendLog(const bool appendLog) { mAppendLog = appendLog; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::ToString() const -> string {
+auto MicroCI::ToString() const -> std::string {
   if (IsValid()) {
     return mScript.str();
   }
-  throw runtime_error("Invalid configuration detected");
+  throw std::runtime_error("Invalid configuration detected");
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::AddDockerImage(const string &image) { mDockerImages.insert(image); }
+void MicroCI::AddDockerImage(const std::string &image) { mDockerImages.insert(image); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
-  if (filesystem::exists(filename)) {
+void MicroCI::LoadEnvironmentFromYamlFile(const std::string &filename) {
+  if (std::filesystem::exists(filename)) {
     auto dotEnv = YAML::LoadFile(filename);
     if (dotEnv.size() == 0) {
       spdlog::error("The file {} was found but it has no valid configuration", filename);
@@ -297,8 +295,8 @@ void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
     }
     for (auto it : dotEnv) {
       EnvironmentVariable env;
-      env.name  = it.first.as<string>();
-      env.value = it.second.as<string>();
+      env.name  = it.first.as<std::string>();
+      env.value = it.second.as<std::string>();
       mEnvs.insert(env);
     }
   }
@@ -307,10 +305,10 @@ void MicroCI::LoadEnvironmentFromYamlFile(const string &filename) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
-  if (filesystem::exists(filename)) {
-    ifstream envFile(filename);
-    string line;
+void MicroCI::LoadEnvironmentFromEnvFile(const std::string &filename) {
+  if (std::filesystem::exists(filename)) {
+    std::ifstream envFile(filename);
+    std::string line;
     while (getline(envFile, line)) {
       // Skip comments and short lines
       if (line.size() < 3 or line[0] == '#') {
@@ -325,7 +323,7 @@ void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
         }
       }
       auto eqPos = line.find_first_of("=");
-      if (eqPos != string::npos) {
+      if (eqPos != std::string::npos) {
         EnvironmentVariable env;
         env.name  = line.substr(0, eqPos);
         env.value = line.substr(eqPos + 1);
@@ -338,7 +336,7 @@ void MicroCI::LoadEnvironmentFromEnvFile(const string &filename) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::ReadConfig(const string &filename) -> bool {
+auto MicroCI::ReadConfig(const std::string &filename) -> bool {
   YAML::Node CI;
 
   try {
@@ -360,8 +358,8 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
     if (CI["envs"] and CI["envs"].IsMap()) {
       for (auto it : CI["envs"]) {
         EnvironmentVariable env;
-        env.name  = it.first.as<string>();
-        env.value = it.second.as<string>();
+        env.name  = it.first.as<std::string>();
+        env.value = it.second.as<std::string>();
         mEnvs.insert(env);
       }
     }
@@ -387,39 +385,40 @@ auto MicroCI::ReadConfig(const string &filename) -> bool {
 
   // Imagem docker global (opcional)
   if (CI["docker"].IsScalar()) {
-    mDefaultDockerImage = CI["docker"].as<string>();
+    mDefaultDockerImage = CI["docker"].as<std::string>();
   }
 
   if (mOnlyStepNumber) {
     if (CI["steps"].size() < mOnlyStepNumber.value() or mOnlyStepNumber.value() < 1) {
-      throw invalid_argument(fmt::format("Invalid step number: {}", mOnlyStepNumber.value()));
+      throw std::invalid_argument(fmt::format("Invalid step number: {}", mOnlyStepNumber.value()));
     }
     auto step = CI["steps"][mOnlyStepNumber.value() - 1];
     if (!step or !step["plugin"] or !step["plugin"]["name"]) {
-      throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
+      throw std::invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
     }
     parsePluginStep(step);
-    mScript << "# Execute step #" << mOnlyStepNumber.value() << endl;
-    mScript << "step_" << sanitizeName(step["name"].as<string>()) << endl;
-    mScript << "exit 0;" << endl;
+    mScript << "# Execute step #" << mOnlyStepNumber.value() << std::endl;
+    mScript << "step_" << sanitizeName(step["name"].as<std::string>()) << std::endl;
+    mScript << "exit 0;" << std::endl;
   } else if (!mOnlyStep.empty()) {
     // FIXME: Verificar se existe
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
-        throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
+        throw std::invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
       }
-      if (step["only"] and step["only"].as<string>() == mOnlyStep) {
+      if (step["only"] and step["only"].as<std::string>() == mOnlyStep) {
         parsePluginStep(step);
-        mScript << "# Execute only this step" << endl;
-        mScript << "step_" << sanitizeName(step["name"].as<string>()) << endl;
-        mScript << "exit 0;" << endl;
+        mScript << "# Execute only this step" << std::endl;
+        mScript << "step_" << sanitizeName(step["name"].as<std::string>()) << std::endl;
+        mScript << "exit 0;" << std::endl;
       }
     }
   } else {
     if (CI["steps"].IsSequence()) {
       for (auto step : CI["steps"]) {
         if (!step["plugin"] or !step["plugin"]["name"]) {
-          throw invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<string>()));
+          throw std::invalid_argument(
+              fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
         }
         if (step["only"]) {
           SkipPluginStepParser skipPluginStepParser{this};
@@ -452,8 +451,8 @@ function main() {
         // if (step["only"]) {
         //   continue;
         // }
-        auto stepName = step["name"].as<string>();
-        mScript << "  step_" << sanitizeName(stepName) << endl;
+        auto stepName = step["name"].as<std::string>();
+        mScript << "  step_" << sanitizeName(stepName) << std::endl;
       }
       mScript << R"(
   date >> .microCI.log
@@ -481,7 +480,7 @@ main
 //
 // ----------------------------------------------------------------------
 void MicroCI::parsePluginStep(const YAML::Node &step) {
-  auto pluginName = step["plugin"]["name"].as<string>();
+  auto pluginName = step["plugin"]["name"].as<std::string>();
 
   if (mPluginParserMap.count(pluginName)) {
     mPluginParserMap.at(pluginName)->Parse(step);
@@ -490,7 +489,7 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
     }
     return;
   } else {
-    auto stepName = step["name"].as<string>();
+    auto stepName = step["name"].as<std::string>();
     spdlog::error("The plugin '{}' was not found at the step '{}'", pluginName, stepName);
     for (const auto &p : mPluginParserMap) {
       spdlog::warn("Plugin '{}'", p.first);
@@ -502,15 +501,15 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultVolumes() const -> set<DockerVolume> {
-  set<DockerVolume> volumes{{"/microci_workspace", "${MICROCI_PWD}", "rw"}};
+auto MicroCI::DefaultVolumes() const -> std::set<DockerVolume> {
+  std::set<DockerVolume> volumes{{"/microci_workspace", "${MICROCI_PWD}", "rw"}};
   return volumes;
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultEnvs() const -> set<EnvironmentVariable> { return mEnvs; }
+auto MicroCI::DefaultEnvs() const -> std::set<EnvironmentVariable> { return mEnvs; }
 
 // ----------------------------------------------------------------------
 //
@@ -560,10 +559,10 @@ void MicroCI::initBash(const YAML::Node &CI) {
         continue;
       }
       if (step["name"]) {
-        stepsComments << "# Step: " << step["name"].as<string>() << "\n";
+        stepsComments << "# Step: " << step["name"].as<std::string>() << "\n";
       }
       if (step["description"]) {
-        stepsComments << "#       " << step["description"].as<string>() << "\n\n";
+        stepsComments << "#       " << step["description"].as<std::string>() << "\n\n";
       }
     }
   }
@@ -575,18 +574,18 @@ void MicroCI::initBash(const YAML::Node &CI) {
     data["MICROCI_STEP_NUMBER"] = 0;
   }
 
-  auto scriptMicroCI = string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
-  mScript << inja::render(scriptMicroCI, data) << endl;
+  auto scriptMicroCI = std::string{reinterpret_cast<const char *>(___sh_MicroCI_sh), ___sh_MicroCI_sh_len};
+  mScript << inja::render(scriptMicroCI, data) << std::endl;
 
   auto envs       = DefaultEnvs();
   auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
   if (envs.count(webhookEnv)) {
     auto scriptNotifyDiscord =
-        string{reinterpret_cast<const char *>(___sh_NotifyDiscord_sh), ___sh_NotifyDiscord_sh_len};
+        std::string{reinterpret_cast<const char *>(___sh_NotifyDiscord_sh), ___sh_NotifyDiscord_sh_len};
 
-    mScript << inja::render(scriptNotifyDiscord, data) << endl;
+    mScript << inja::render(scriptNotifyDiscord, data) << std::endl;
   } else {
-    mScript << "# Notification by Discord is not possible" << endl;
+    mScript << "# Notification by Discord is not possible" << std::endl;
   }
 }
 

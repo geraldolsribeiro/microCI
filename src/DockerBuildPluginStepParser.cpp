@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -46,10 +45,10 @@ void DockerBuildPluginStepParser::Parse(const YAML::Node &step) {
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_DESCRIPTION"] = stepDescription(step, "Builds a docker image");
 
-  auto folder        = step["plugin"]["folder"].as<string>("dockerfiles");
-  auto dockerfile    = step["plugin"]["dockerfile"].as<string>("Dockerfile");
-  auto targetName    = step["plugin"]["target"].as<string>("my_image");
-  auto targetVersion = step["plugin"]["version"].as<string>("0.1.0");
+  auto folder        = step["plugin"]["folder"].as<std::string>("dockerfiles");
+  auto dockerfile    = step["plugin"]["dockerfile"].as<std::string>("Dockerfile");
+  auto targetName    = step["plugin"]["target"].as<std::string>("my_image");
+  auto targetVersion = step["plugin"]["version"].as<std::string>("0.1.0");
   auto isLatest      = step["plugin"]["is_latest"].as<bool>(false);
   auto doPush        = step["plugin"]["push"].as<bool>(false);
 

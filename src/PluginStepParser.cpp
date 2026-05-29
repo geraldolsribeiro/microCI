@@ -48,11 +48,12 @@ void PluginStepParser::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const string &defaultValue) const -> json {
+auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const std::string &defaultValue) const
+    -> json {
   auto data_      = data;
   data_["RUN_AS"] = defaultValue;
   if (step["run_as"]) {
-    data_["RUN_AS"] = step["run_as"].as<string>();
+    data_["RUN_AS"] = step["run_as"].as<std::string>();
   }
   return data_;
 }
@@ -60,12 +61,12 @@ auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, cons
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, const string &defaultValue) const
+auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, const std::string &defaultValue) const
     -> json {
   auto data_              = data;
   data_["DOCKER_NETWORK"] = defaultValue;
   if (step["network"]) {
-    data_["DOCKER_NETWORK"] = step["network"].as<string>();
+    data_["DOCKER_NETWORK"] = step["network"].as<std::string>();
   }
   return data_;
 }
@@ -73,8 +74,8 @@ auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, co
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::stepDockerImage(const YAML::Node &step, const string &image) const -> string {
-  string dockerImage = mMicroCI->DefaultDockerImage();
+auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &image) const -> std::string {
+  std::string dockerImage = mMicroCI->DefaultDockerImage();
 
   if (!image.empty()) {
     dockerImage = image;
@@ -82,7 +83,7 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const string &ima
   }
 
   if (step["docker"]) {
-    dockerImage = step["docker"].as<string>();
+    dockerImage = step["docker"].as<std::string>();
   }
 
   mMicroCI->AddDockerImage(dockerImage);
@@ -98,7 +99,7 @@ auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) co
 
   if (step["devices"] and step["devices"].IsSequence()) {
     for (const auto &dev : step["devices"]) {
-      data_["DOCKER_DEVICES"].push_back(dev.as<string>());
+      data_["DOCKER_DEVICES"].push_back(dev.as<std::string>());
     }
   }
   return data_;
@@ -107,15 +108,15 @@ auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) co
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const string &workspace) const -> string {
-  string dockerWorkspace = mMicroCI->DefaultWorkspace();
+auto PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const std::string &workspace) const -> std::string {
+  std::string dockerWorkspace = mMicroCI->DefaultWorkspace();
 
   if (!workspace.empty()) {
     dockerWorkspace = workspace;
   }
 
   if (step["workspace"]) {
-    dockerWorkspace = step["workspace"].as<string>();
+    dockerWorkspace = step["workspace"].as<std::string>();
   }
 
   return dockerWorkspace;
@@ -124,13 +125,13 @@ auto PluginStepParser::stepDockerWorkspace(const YAML::Node &step, const string 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseEnvs(const YAML::Node &step) const -> set<EnvironmentVariable> {
+auto PluginStepParser::parseEnvs(const YAML::Node &step) const -> std::set<EnvironmentVariable> {
   auto ret = mMicroCI->DefaultEnvs();
   if (step["envs"] and step["envs"].IsMap()) {
     for (const auto &it : step["envs"]) {
       EnvironmentVariable env;
-      env.name  = it.first.as<string>();
-      env.value = it.second.as<string>();
+      env.name  = it.first.as<std::string>();
+      env.value = it.second.as<std::string>();
       ret.insert(env);
     }
   }
@@ -140,7 +141,7 @@ auto PluginStepParser::parseEnvs(const YAML::Node &step) const -> set<Environmen
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::beginFunction(const json &data, const set<EnvironmentVariable> &envs) {
+void PluginStepParser::beginFunction(const json &data, const std::set<EnvironmentVariable> &envs) {
   mMicroCI->Script() << inja::render(R"(
 # ----------------------------------------------------------------------
 # {{ STEP_DESCRIPTION }}
@@ -227,14 +228,14 @@ void PluginStepParser::endFunction(const json &data) {
                                        data);
   }
 
-  mMicroCI->Script() << "}" << endl;
+  mMicroCI->Script() << "}" << std::endl;
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentVariable> &envs,
-                                        const set<DockerVolume> &volumes) {
+void PluginStepParser::prepareRunDocker(const json &data, const std::set<EnvironmentVariable> &envs,
+                                        const std::set<DockerVolume> &volumes) {
   mMicroCI->Script() << inja::render(R"(
       echo ""
       echo ""
@@ -296,11 +297,11 @@ void PluginStepParser::prepareRunDocker(const json &data, const set<EnvironmentV
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const set<DockerVolume> &volumes,
-                                const set<EnvironmentVariable> &envs) const
-    -> tuple<json, set<DockerVolume>, set<EnvironmentVariable>> {
-  auto sshMountForCopy = string{"${HOME}/.ssh"};
-  auto sshKeyFormat    = string{"id_rsa"};
+auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const std::set<DockerVolume> &volumes,
+                                const std::set<EnvironmentVariable> &envs) const
+    -> std::tuple<json, std::set<DockerVolume>, std::set<EnvironmentVariable>> {
+  auto sshMountForCopy = std::string{"${HOME}/.ssh"};
+  auto sshKeyFormat    = std::string{"id_rsa"};
   auto volumes_        = volumes;
   auto data_           = data;
   auto envs_           = envs;
@@ -313,21 +314,21 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
     sshKeyFormat = defSshKeyNameItem->value;
   }
 
-  data_["SSH_COPY_TO"]   = string{};
+  data_["SSH_COPY_TO"]   = std::string{};
   data_["SSH_COPY_FROM"] = "/.microCI_ssh";
 
   if (step["ssh"]) {
     // the folder specified by copy_from will be mounted at /.microCI_ssh
     if (step["ssh"]["copy_from"]) {
-      sshMountForCopy = step["ssh"]["copy_from"].as<string>();
+      sshMountForCopy = step["ssh"]["copy_from"].as<std::string>();
     }
 
     if (step["ssh"]["format"]) {
-      sshKeyFormat = step["ssh"]["format"].as<string>();
+      sshKeyFormat = step["ssh"]["format"].as<std::string>();
     }
 
     if (step["ssh"]["copy_to"]) {
-      data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<string>();
+      data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<std::string>();
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
           "GIT_SSH_COMMAND",
@@ -366,16 +367,16 @@ void PluginStepParser::copySshIfAvailable(const YAML::Node &step, const json &da
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseVolumes(const YAML::Node &step) const -> set<DockerVolume> {
+auto PluginStepParser::parseVolumes(const YAML::Node &step) const -> std::set<DockerVolume> {
   auto volumes = mMicroCI->DefaultVolumes();
 
   if (step["volumes"] && step["volumes"].IsSequence()) {
     for (const auto &volume : step["volumes"]) {
       DockerVolume vol;
-      vol.destination = volume["destination"].as<string>();
-      vol.source      = volume["source"].as<string>();
+      vol.destination = volume["destination"].as<std::string>();
+      vol.source      = volume["source"].as<std::string>();
       if (volume["mode"]) {
-        vol.mode = volume["mode"].as<string>();
+        vol.mode = volume["mode"].as<std::string>();
       } else {
         vol.mode = "ro";
       }

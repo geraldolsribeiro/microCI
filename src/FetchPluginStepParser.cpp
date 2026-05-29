@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -60,7 +59,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   envs.insert(bitnamiDisableWelcomeMessage);
 
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
-    auto defaultTarget = step["plugin"]["target"].as<string>("include/");
+    auto defaultTarget = step["plugin"]["target"].as<std::string>("include/");
 
     beginFunction(data, envs);
     prepareRunDocker(data, envs, volumes);
@@ -70,17 +69,17 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     copySshIfAvailable(step, data);
 
     for (const auto &item : step["plugin"]["items"]) {
-      auto gitTag     = item["tag"].as<string>("master");
+      auto gitTag     = item["tag"].as<std::string>("master");
       data["GIT_TAG"] = gitTag;
-      data["TARGET"]  = item["target"].as<string>(defaultTarget);
+      data["TARGET"]  = item["target"].as<std::string>(defaultTarget);
       mMicroCI->Script() << inja::render(
           R"( \
            && mkdir -p {{ TARGET }})",
           data);
 
       if (item["github"]) {
-        auto gitRemote = string{};
-        stringstream ss(item["github"].as<string>());
+        auto gitRemote = std::string{};
+        std::stringstream ss(item["github"].as<std::string>());
         ss >> gitRemote >> gitTag;
         data["GIT_TAG"] = gitTag;
 
@@ -98,7 +97,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         }
 
         if (item["offline"]) {
-          gitRemote = "file://" + item["offline"].as<string>();
+          gitRemote = "file://" + item["offline"].as<std::string>();
         }
 
         data["GIT_REMOTE"]       = gitRemote;
@@ -113,18 +112,18 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
             data);
 
       } else if (item["git_archive"]) {
-        string gitRemote;
+        std::string gitRemote;
         if (item["offline"]) {
-          data["GIT_REMOTE"] = gitRemote = item["offline"].as<string>();
+          data["GIT_REMOTE"] = gitRemote = item["offline"].as<std::string>();
         } else {
-          data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<string>();
+          data["GIT_REMOTE"] = gitRemote = item["git_archive"].as<std::string>();
         }
-        bool isGithubURL   = gitRemote.find("github.com") != string::npos;
+        bool isGithubURL   = gitRemote.find("github.com") != std::string::npos;
         bool isDotGitEnded = gitRemote.substr(gitRemote.size() - 4) == ".git";
 
-        auto files = string{};
+        auto files = std::string{};
         if (isGithubURL) {
-          auto repoName = string{};
+          auto repoName = std::string{};
           if (isDotGitEnded) {
             // https://github.com/User/repo.git
             repoName = gitRemote.substr(gitRemote.find_last_of("/") + 1);
@@ -137,12 +136,12 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
           for (const auto &f : item["files"]) {
             // aspas simples para não expandir
-            files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<string>());
+            files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
           }
         } else {
           for (const auto &f : item["files"]) {
             // aspas simples para não expandir
-            files += fmt::format("'{}' ", f.as<string>());
+            files += fmt::format("'{}' ", f.as<std::string>());
           }
         }
 
@@ -154,13 +153,13 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
         if (isGithubURL) {
           if (item["strip-components"]) {
-            data["STRIP_COMPONENTS"] = " --strip-components=" + to_string(item["strip-components"].as<int>() + 1);
+            data["STRIP_COMPONENTS"] = " --strip-components=" + std::to_string(item["strip-components"].as<int>() + 1);
           } else {
             data["STRIP_COMPONENTS"] = " --strip-components=1";
           }
         } else {
           if (item["strip-components"]) {
-            data["STRIP_COMPONENTS"] = " --strip-components=" + item["strip-components"].as<string>();
+            data["STRIP_COMPONENTS"] = " --strip-components=" + item["strip-components"].as<std::string>();
           } else {
             data["STRIP_COMPONENTS"] = "";
           }
@@ -168,7 +167,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
         if (isGithubURL and item["token"]) {
           // https://<personal_token>:@github.com/<your_repo>/archive/main.tar.gz
-          gitRemote.insert(gitRemote.find("github.com"), item["token"].as<string>() + "@");
+          gitRemote.insert(gitRemote.find("github.com"), item["token"].as<std::string>() + "@");
           data["GIT_REMOTE"] = gitRemote;
         }
 
@@ -198,8 +197,8 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         }
 
       } else if (item["url"]) {
-        data["TARGET"] = item["target"].as<string>(defaultTarget);
-        data["URL"]    = item["url"].as<string>();
+        data["TARGET"] = item["target"].as<std::string>(defaultTarget);
+        data["URL"]    = item["url"].as<std::string>();
         mMicroCI->Script() << inja::render(
             R"( \
            && pushd {{ TARGET }} \

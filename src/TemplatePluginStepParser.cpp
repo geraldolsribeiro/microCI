@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -91,9 +90,9 @@ void TemplatePluginStepParser::Parse(const YAML::Node &step) {
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     for (const auto &item : step["plugin"]["items"]) {
       if (item.IsSequence()) {
-        data["TEMPLATE_DATA"]   = item[0].as<string>();
-        data["TEMPLATE_INPUT"]  = item[1].as<string>();
-        data["TEMPLATE_OUTPUT"] = item[2].as<string>();
+        data["TEMPLATE_DATA"]   = item[0].as<std::string>();
+        data["TEMPLATE_INPUT"]  = item[1].as<std::string>();
+        data["TEMPLATE_OUTPUT"] = item[2].as<std::string>();
 
         prepareRunDocker(data, envs, volumes);
         mMicroCI->Script() << inja::render(R"( --template /microci_workspace/{{ TEMPLATE_INPUT }} \

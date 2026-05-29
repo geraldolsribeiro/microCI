@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -43,32 +42,32 @@ void PikchrPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
-  list<string> sourceList;
-  // list<string> opts = {"-nometadata", "-charset utf-8 ", "-r"};
+  std::list<std::string> sourceList;
+  // std::list<std::string> opts = {"-nometadata", "-charset utf-8 ", "-r"};
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
 
   // if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
   //   for (const auto &opt : step["plugin"]["options"]) {
-  //     opts.push_back(opt.as<string>());
+  //     opts.push_back(opt.as<std::string>());
   //   }
   // }
   //
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+      sourceList.push_back(src.as<std::string>());
     }
   }
 
-  set<string> validTypes{"svg", "png", "pdf"};
+  std::set<std::string> validTypes{"svg", "png", "pdf"};
 
-  auto type         = step["plugin"]["type"].as<string>("svg");
-  auto outputFolder = step["plugin"]["output_folder"].as<string>("");
-  // auto config = step["plugin"]["config"].as<string>("");
+  auto type         = step["plugin"]["type"].as<std::string>("svg");
+  auto outputFolder = step["plugin"]["output_folder"].as<std::string>("");
+  // auto config = step["plugin"]["config"].as<std::string>("");
 
   if (validTypes.count(type) == 0) {
-    throw invalid_argument(fmt::format("Invalid type! {}", type));
+    throw std::invalid_argument(fmt::format("Invalid type! {}", type));
   }
   data["TYPE"] = type;
 

@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -43,12 +42,12 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
-  auto runAs   = string{};
-  list<string> checkList;
-  list<string> includeList;
-  list<string> systemIncludeList;
-  list<string> sourceList;
-  list<string> optionList;
+  auto runAs   = std::string{};
+  std::list<std::string> checkList;
+  std::list<std::string> includeList;
+  std::list<std::string> systemIncludeList;
+  std::list<std::string> sourceList;
+  std::list<std::string> optionList;
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
@@ -57,31 +56,31 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
 
   if (step["plugin"]["checks"] && step["plugin"]["checks"].IsSequence()) {
     for (const auto &inc : step["plugin"]["checks"]) {
-      checkList.push_back(inc.as<string>());
+      checkList.push_back(inc.as<std::string>());
     }
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
     for (const auto &opt : step["plugin"]["options"]) {
-      optionList.push_back(opt.as<string>());
+      optionList.push_back(opt.as<std::string>());
     }
   }
 
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
     for (const auto &inc : step["plugin"]["include"]) {
-      includeList.push_back(inc.as<string>());
+      includeList.push_back(inc.as<std::string>());
     }
   }
 
   if (step["plugin"]["system_include"] && step["plugin"]["system_include"].IsSequence()) {
     for (const auto &inc : step["plugin"]["system_include"]) {
-      systemIncludeList.push_back(inc.as<string>());
+      systemIncludeList.push_back(inc.as<std::string>());
     }
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+      sourceList.push_back(src.as<std::string>());
     }
   }
 
@@ -111,7 +110,7 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   if (checkList.empty()) {
     mMicroCI->Script() << "        -checks='-*,cppcoreguidelines-*' \\\n";
   } else {
-    string concatenatedList;
+    std::string concatenatedList;
     for (const auto &check : checkList) {
       if (!concatenatedList.empty()) {
         concatenatedList += ",";

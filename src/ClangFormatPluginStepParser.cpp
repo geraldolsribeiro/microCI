@@ -34,7 +34,6 @@
 #include <fstream>
 
 namespace microci {
-using namespace std;
 
 // ----------------------------------------------------------------------
 //
@@ -43,14 +42,14 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
-  list<string> sourceList;
+  std::list<std::string> sourceList;
 
   data = parseRunAs(step, data, "user");
   data = parseNetwork(step, data, "none");
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
     for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<string>());
+      sourceList.push_back(src.as<std::string>());
     }
   }
 

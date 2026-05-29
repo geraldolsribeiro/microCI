@@ -34,7 +34,7 @@
 #include <optional>
 #include <string>
 
-using namespace std;
+//
 
 #include <yaml-cpp/yaml.h>
 
@@ -50,9 +50,9 @@ using nlohmann::json;
 //
 // ----------------------------------------------------------------------
 struct DockerVolume {
-  string destination;
-  string source;
-  string mode;
+  std::string destination;
+  std::string source;
+  std::string mode;
 };
 
 // Using the target as key allowing to mount the same folder at more than one place.
@@ -62,8 +62,8 @@ inline bool operator<(const DockerVolume &lhs, const DockerVolume &rhs) { return
 //
 // ----------------------------------------------------------------------
 struct EnvironmentVariable {
-  string name;
-  string value;
+  std::string name;
+  std::string value;
 };
 
 // ----------------------------------------------------------------------
@@ -80,49 +80,49 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
-  [[nodiscard]] string ToString() const;
+  [[nodiscard]] std::string ToString() const;
   [[nodiscard]] bool IsValid() const;
-  [[nodiscard]] string ActivityDiagram(const string &filename) const;
-  [[nodiscard]] string List(const string &filename) const;
+  [[nodiscard]] std::string ActivityDiagram(const std::string &filename) const;
+  [[nodiscard]] std::string List(const std::string &filename) const;
 
   // Variável de ambiente global a todos os passos
   void SetEnvironmentVariable(const EnvironmentVariable &env);
-  bool ReadConfig(const string &yaml);
-  stringstream &Script();
-  void SetAltHome(const string &altHome);
-  void SetOnlyStep(const string &onlyStep);
+  bool ReadConfig(const std::string &yaml);
+  std::stringstream &Script();
+  void SetAltHome(const std::string &altHome);
+  void SetOnlyStep(const std::string &onlyStep);
   void SetOnlyStepNumber(const std::size_t number);
   void SetOnlyStepHash(const std::string &fileName, const std::string &hh);
   void SetAppendLog(const bool appendLog);
-  void AddDockerImage(const string &image);
+  void AddDockerImage(const std::string &image);
 
   [[nodiscard]] json DefaultDataTemplate() const;
-  string DefaultDockerImage() const;
-  string DefaultWorkspace() const;
-  [[nodiscard]] set<DockerVolume> DefaultVolumes() const;
-  [[nodiscard]] set<EnvironmentVariable> DefaultEnvs() const;
-  void RegisterPlugin(const string &name, shared_ptr<microci::PluginStepParser> pluginStepParser);
+  std::string DefaultDockerImage() const;
+  std::string DefaultWorkspace() const;
+  [[nodiscard]] std::set<DockerVolume> DefaultVolumes() const;
+  [[nodiscard]] std::set<EnvironmentVariable> DefaultEnvs() const;
+  void RegisterPlugin(const std::string &name, std::shared_ptr<microci::PluginStepParser> pluginStepParser);
 
  private:
   void initBash(const YAML::Node &CI);
   void parsePluginStep(const YAML::Node &step);
   void invalidConfigurationDetected();
-  void LoadEnvironmentFromYamlFile(const string &filename);
-  void LoadEnvironmentFromEnvFile(const string &filename);
+  void LoadEnvironmentFromYamlFile(const std::string &filename);
+  void LoadEnvironmentFromEnvFile(const std::string &filename);
 
-  string mAltHome;
-  string mYamlFilename = ".microCI.yml";
-  set<EnvironmentVariable> mEnvs;
-  set<string> mDockerImages;
-  string mOnlyStep;
+  std::string mAltHome;
+  std::string mYamlFilename = ".microCI.yml";
+  std::set<EnvironmentVariable> mEnvs;
+  std::set<std::string> mDockerImages;
+  std::string mOnlyStep;
   std::optional<std::size_t> mOnlyStepNumber;
-  string mDefaultDockerImage;
-  string mDefaultWorkspace;
-  stringstream mScript;
+  std::string mDefaultDockerImage;
+  std::string mDefaultWorkspace;
+  std::stringstream mScript;
   bool mIsValid   = true;
   bool mAppendLog = false;
 
-  map<string, shared_ptr<microci::PluginStepParser>> mPluginParserMap;
+  std::map<std::string, std::shared_ptr<microci::PluginStepParser>> mPluginParserMap;
 };
 
 }  // namespace microci
