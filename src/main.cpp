@@ -114,7 +114,7 @@ using namespace std;
 // #include "help/docmd.hpp"
 #include "help/doxygen.hpp"
 #include "help/fetch.hpp"
-#include "help/fetch2.hpp"
+// #include "help/fetch2.hpp"
 #include "help/flawfinder.hpp"
 #include "help/git_deploy.hpp"
 #include "help/git_publish.hpp"
