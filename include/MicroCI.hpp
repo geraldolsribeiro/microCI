@@ -37,6 +37,7 @@
 using namespace std;
 
 #include <yaml-cpp/yaml.h>
+
 #include <nlohmann/json.hpp>
 
 namespace microci {

@@ -1,4 +1,4 @@
-# Help
+# microCI Help
 
 The basic usage can be obtained by passing the `--help` option:
 

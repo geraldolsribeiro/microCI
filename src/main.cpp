@@ -103,6 +103,37 @@ using namespace std;
 #include "new/template.hpp"
 #include "new/vhdl-format.hpp"
 
+// Help
+#include "help/bash.hpp"
+#include "help/beamer.hpp"
+#include "help/clang-format.hpp"
+// #include "help/clang-format_config.hpp"
+#include "help/clang-tidy.hpp"
+#include "help/cppcheck.hpp"
+// #include "help/docker_build.hpp"
+// #include "help/docmd.hpp"
+#include "help/doxygen.hpp"
+#include "help/fetch.hpp"
+#include "help/fetch2.hpp"
+#include "help/flawfinder.hpp"
+#include "help/git_deploy.hpp"
+#include "help/git_publish.hpp"
+// #include "help/gitlab-ci.hpp"
+#include "help/jfrog.hpp"
+// #include "help/mermaid.hpp"
+#include "help/minio.hpp"
+#include "help/mkdocs_material.hpp"
+// #include "help/mkdocs_material_config.hpp"
+// #include "help/mkdocs_material_index.hpp"
+#include "help/npm.hpp"
+#include "help/pandoc.hpp"
+#include "help/pikchr.hpp"
+#include "help/plantuml.hpp"
+// #include "help/poppler.hpp"
+#include "help/skip.hpp"
+// #include "help/template.hpp"
+// #include "help/vhdl-format.hpp"
+
 // main class
 #include "MicroCI.hpp"
 
@@ -476,7 +507,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     }
 
     if (cmdl[{"-u", "--update"}]) {
-      cout << R"(
+      std::cout << R"(
 echo "🚀 Updating to the latest stable release..."
 sudo curl -fsSL \
   github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
@@ -487,7 +518,7 @@ microCI --version
       return 0;
     }
     if (cmdl[{"-D", "--update-dev"}]) {
-      cout << R"(
+      std::cout << R"(
 echo "🚧 Updating to the development stream..."
 sudo curl -fsSL \
   github.com/geraldolsribeiro/microci/releases/download/latest/microCI \
@@ -498,7 +529,7 @@ microCI --version
       return 0;
     }
     if (cmdl[{"-X", "--uninstall"}]) {
-      cout << R"(
+      std::cout << R"(
 echo "🔥 Removing microCI..."
 sudo rm -f /usr/bin/microCI
 )";
@@ -535,15 +566,58 @@ sudo rm -f /usr/bin/microCI
     loadMicroCIEnviromentVariables(uCI, envp);
     loadGitlabEnvironmentVariables(uCI, envp);
 
-    // Print version and exist
+    // Print version and exit
     if (cmdl[{"-V", "--version"}]) {
-      cout << microci::version() << endl;
+      std::cout << microci::version() << endl;
       return 0;
     }
 
-    // Print help and exist
-    if (cmdl[{"-h", "--help"}]) {
-      cout << microci::banner() << help() << endl;
+    std::map<std::string, std::string> helps;
+#define MICROCI_HELP(NAME) \
+  helps.insert(            \
+      make_pair(#NAME, std::string(reinterpret_cast<const char *>(___help_##NAME##_txt), ___help_##NAME##_txt_len)));
+    MICROCI_HELP(bash);
+    MICROCI_HELP(beamer)
+    MICROCI_HELP(clang_format);
+    MICROCI_HELP(clang_tidy);
+    MICROCI_HELP(cppcheck);
+    // MICROCI_HELP(docker_build);
+    // MICROCI_HELP(docmd);
+    MICROCI_HELP(doxygen);
+    MICROCI_HELP(fetch);
+    MICROCI_HELP(flawfinder);
+    MICROCI_HELP(git_deploy);
+    MICROCI_HELP(git_publish);
+    MICROCI_HELP(jfrog);
+    // MICROCI_HELP(mermaid);
+    MICROCI_HELP(minio);
+    MICROCI_HELP(mkdocs_material);
+    MICROCI_HELP(mkdocs_material);
+    MICROCI_HELP(mkdocs_material);
+    MICROCI_HELP(npm);
+    MICROCI_HELP(pandoc);
+    MICROCI_HELP(pikchr);
+    MICROCI_HELP(plantuml);
+    MICROCI_HELP(skip);
+    // MICROCI_HELP(template);
+    // MICROCI_HELP(vhdl_format);
+#undef MICROCI_HELP
+
+    // Print help and exit
+    std::string pluginName{};
+    if (cmdl[{"-h", "--help"}] or (cmdl({"-h", "--help"}) >> pluginName)) {
+      if (pluginName.empty()) {
+        std::cout << microci::banner() << help() << endl;
+      } else {
+        if (helps.count(pluginName) == 0) {
+          std::cout << "Use microCI --help <pluginName>" << std::endl;
+          for (const auto &[name, _] : helps) {
+            std::cout << "microCI --help " << name << std::endl;
+          }
+        } else {
+          std::cout << helps.at(pluginName) << endl;
+        }
+      }
       return 0;
     }
 
@@ -695,7 +769,7 @@ sudo rm -f /usr/bin/microCI
     if (!filesystem::exists(yamlFileName)) {
       auto msg = fmt::format(_("The input file '{}' was not found"), yamlFileName);
       spdlog::error(msg);
-      cout << fmt::format("echo '{}'\n", msg);
+      std::cout << fmt::format("echo '{}'\n", msg);
       return 1;
     }
 
@@ -720,21 +794,21 @@ sudo rm -f /usr/bin/microCI
     }
 
     if (!uCI.ReadConfig(yamlFileName)) {
-      cout << microci::banner() << endl;
+      std::cout << microci::banner() << endl;
       auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
       spdlog::error(msg);
-      cout << fmt::format("echo '{}'\n", msg);
+      std::cout << fmt::format("echo '{}'\n", msg);
       return 1;
     }
 
     if (cmdl[{"-l", "--list"}]) {
-      cout << uCI.List(yamlFileName) << endl;
+      std::cout << uCI.List(yamlFileName) << endl;
       return 0;
     }
 
     // Generate activity diagram and exit
     if (cmdl[{"-A", "--activity-diagram"}]) {
-      cout << uCI.ActivityDiagram(yamlFileName) << endl;
+      std::cout << uCI.ActivityDiagram(yamlFileName) << endl;
       return 0;
     }
 
@@ -814,7 +888,7 @@ sudo rm -f /usr/bin/microCI
       return 0;
     }
 
-    cout << uCI.ToString();
+    std::cout << uCI.ToString();
   } catch (invalid_argument &e) {
     spdlog::error(e.what());
     return 1;

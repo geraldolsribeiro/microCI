@@ -172,10 +172,21 @@ test_ptBR:
 	$(Q)echo "// clang-format on" >> $@
 	$(Q)touch main.cpp
 
+../include/help/%.hpp: ../help/%.txt
+	$(Q)echo "Creating $@..."
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
+
 NEW_HPP=$(subst ../new/,../include/new/,$(addsuffix .hpp,$(basename $(wildcard ../new/*.*))))
+HELP_HPP=$(subst ../help/,../include/help/,$(addsuffix .hpp,$(basename $(wildcard ../help/*.txt))))
 
 single_compilation_unit.cpp: \
 	$(NEW_HPP) \
+	$(HELP_HPP) \
 	$(filter-out single_compilation_unit.cpp, $(wildcard *cpp)) \
 	$(wildcard ../include/*hpp) \
 	$(wildcard ../include/new/*hpp) \
