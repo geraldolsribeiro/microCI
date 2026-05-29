@@ -1,12 +1,10 @@
-#   # skip plugin
-#   
-#{{{
 steps:
   - name: "Ignored step"
     description: "This step should be ignored"
     plugin:
-      name: skip
-  - name: "Build static version of microCI"
+      name: skip # This step will not be executed
+
+  - name: "Another ignored step - build static version of microCI"
     description: "This step should be executed"
     docker: "gcc:13"
     network: bridge
@@ -21,6 +19,3 @@ steps:
         make -C test
         # Changes the file owner from root to the current user
         chown $(id -u):$(id -g) -Rv src/microCI
-#}}}
-
-# vim: spell spelllang=pt,en
