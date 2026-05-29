@@ -1,4 +1,4 @@
-<mxfile host="Electron" pages="7">
+<mxfile host="Electron" pages="8">
   <diagram name="ci_cd_pipeline" id="dvluue4tV4Yf8u-9ettG">
     <mxGraphModel dx="1414" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -341,7 +341,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="xSzBrvJNDyyaNIy0Zea1-8" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontColor=light-dark(#0C34B1,#0C34B1);strokeColor=light-dark(#0C34B1,#0C34B1);fillColor=none;" value="" vertex="1">
+        <mxCell id="xSzBrvJNDyyaNIy0Zea1-8" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontColor=light-dark(#0C34B1,#0C34B1);strokeColor=light-dark(#0C34B1,#0C34B1);fillColor=none;" value="Current&lt;div&gt;version&lt;/div&gt;" vertex="1">
           <mxGeometry height="80" width="120" x="220" y="230" as="geometry" />
         </mxCell>
         <mxCell id="xSzBrvJNDyyaNIy0Zea1-2" parent="1" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.jumpInArrow;dy=15;dx=38;arrowHead=55;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=light-dark(#00994D,#0C34B1);fontColor=#00994D;" value="" vertex="1">
@@ -361,6 +361,29 @@
         </mxCell>
         <mxCell id="xSzBrvJNDyyaNIy0Zea1-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;fontColor=light-dark(#0C34B1,#0C34B1);" value="Development" vertex="1">
           <mxGeometry height="30" width="130" x="550" y="85" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="lRZxVXaZhr_TCCIrkXu6" name="plugin_common">
+    <mxGraphModel dx="1414" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HVsoaYSPYdTEHM6Xuzih-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fillColor=none;strokeColor=light-dark(#0C34B1,#0C34B1);" value="" vertex="1">
+          <mxGeometry height="281" width="460" x="90" y="99" as="geometry" />
+        </mxCell>
+        <mxCell id="UBljIbT2O4N5rSXL9HJf-1" parent="1" style="text;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;fontColor=light-dark(#0C34B1,#0C34B1);sketch=1;curveFitting=1;jiggle=2;" value="steps:&#xa;  - name: &quot;Build static version of microCI&quot;&#xa;    description: &quot;Description of this step&quot;&#xa;    docker: &quot;gcc:13&quot;&#xa;    network: bridge&#xa;    run_as: root&#xa;    envs:&#xa;      ENV1: &quot;value of the environment variable&quot;&#xa;    plugin:&#xa;      name: bash" vertex="1">
+          <mxGeometry height="257" width="440" x="100" y="99" as="geometry" />
+        </mxCell>
+        <mxCell id="Bw5ba5ONf59FLpmOxTwm-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontColor=light-dark(#CC0000,#CC0000);sketch=1;curveFitting=1;jiggle=2;" value="bridge | host | none" vertex="1">
+          <mxGeometry height="30" width="140" x="310" y="206" as="geometry" />
+        </mxCell>
+        <mxCell id="HVsoaYSPYdTEHM6Xuzih-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontColor=light-dark(#CC0000,#CC0000);" value="image name" vertex="1">
+          <mxGeometry height="30" width="140" x="310" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="HVsoaYSPYdTEHM6Xuzih-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontColor=light-dark(#CC0000,#CC0000);" value="root | user" vertex="1">
+          <mxGeometry height="30" width="140" x="310" y="229" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
