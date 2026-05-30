@@ -8,8 +8,9 @@
 *   `{{list of feature}}`: A list of key features, functions, or capabilities of the plugin, separated by commas or bullet points.
 
 **Instructions:**
-Reuse and refine previous documentation if possible.
-Using the provided information about the `{{plugin name}}}` and its core functionalities listed in `{{list of feature}}`, please draft/enhance the documentation for the file `{{markdown documentation}}`. The output must be suitable for direct insertion into the specified Markdown file.
+Reuse and refine previous documentation from {{markdown documentation}}.
+Using the provided information about the `{{plugin name}}}` and its core functionalities listed in `{{list of feature}}`, please draft/enhance the documentation for the file `{{markdown documentation}}`.
+The output must be suitable for direct insertion into the specified Markdown file.
 
 The resulting documentation should cover the following sections:
 1.  **Overview:** A high-level description of what this plugin does and why a user would use it.
