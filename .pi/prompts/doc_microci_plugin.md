@@ -9,8 +9,19 @@
 
 **Instructions:**
 Reuse and refine previous documentation from {{markdown documentation}}.
-Using the provided information about the `{{plugin name}}}` and its core functionalities listed in `{{list of feature}}`, please draft/enhance the documentation for the file `{{markdown documentation}}`.
+Using the provided information about the `{{plugin name}}` and its core functionalities listed in `{{list of feature}}`, please draft/enhance the documentation for the file `{{markdown documentation}}`.
 The output must be suitable for direct insertion into the specified Markdown file.
+
+**Clarification policy for GPT-5:**
+- If any required input is missing, ambiguous, or inconsistent, stop and ask for the missing parameter(s) before writing the documentation.
+- Do not guess plugin behavior, configuration fields, or examples when the YAML configuration is incomplete.
+- Ask for the minimum set of missing details needed to produce accurate documentation, such as:
+  - the plugin name,
+  - the target Markdown file,
+  - the feature list,
+  - the YAML configuration,
+  - or the previous documentation to reuse.
+- If the YAML configuration contains multiple possible interpretations, ask a clarifying question instead of inferring the intended one.
 
 The resulting documentation should cover the following sections:
 1.  **Overview:** A high-level description of what this plugin does and why a user would use it.
