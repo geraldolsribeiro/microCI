@@ -10,12 +10,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: debian:trixie-slim
+
     steps:
     - uses: actions/checkout@v4
+
     - name: 'Install dependencies'
       run: |
-        sudo apt-get update
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs alien glow
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs alien glow make g++ wget git
+
     - name: 'Download headers'
       run: |
         mkdir -p include/nlohmann
@@ -23,28 +28,34 @@ jobs:
         wget -P include https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         wget -P include https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
         wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+
     - name: 'Build'
       run: make -C src clean all
+
     - name: 'Debian/RHEL'
       run: make deb rpm
+
     - name: 'Upload Artifact Binary'
       uses: actions/upload-artifact@v4
       with:
         name: 'microCI'
         path: bin/microCI
         retention-days: 30
+
     - name: 'Upload Artifact Debian Package'
       uses: actions/upload-artifact@v4
       with:
         name: 'package-deb'
         path: ./microci_*.deb
         retention-days: 30
+
     - name: 'Upload Artifact RHEL Package'
       uses: actions/upload-artifact@v4
       with:
         name: 'package-rpm'
         path: ./microci-*.x86_64.rpm
         retention-days: 30
+
     - name: 'Pre-Release'
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
