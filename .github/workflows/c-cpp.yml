@@ -13,7 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: 'Install dependencies'
-      run: sudo apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs alien glow
+      run: |
+        sudo apt-get update
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext upx equivs alien glow
     - name: 'Download headers'
       run: |
         mkdir -p include/nlohmann
