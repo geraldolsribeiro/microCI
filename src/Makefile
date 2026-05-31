@@ -220,6 +220,9 @@ endif
 clean:
 	$(Q)$(RM) ../bin/microCI
 	$(Q)touch ../new/*.yml
+
+.PHONY: rebuild
+rebuild: clean
 	$(Q)$(MAKE) -C ../docs/
 
 .PHONY: mac_deps
