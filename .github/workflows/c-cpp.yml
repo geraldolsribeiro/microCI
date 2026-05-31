@@ -14,7 +14,7 @@ jobs:
       image: debian:trixie-slim
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: 'Install dependencies'
       run: |
@@ -36,21 +36,21 @@ jobs:
       run: make deb rpm
 
     - name: 'Upload Artifact Binary'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'microCI'
         path: bin/microCI
         retention-days: 30
 
     - name: 'Upload Artifact Debian Package'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'package-deb'
         path: ./microci_*.deb
         retention-days: 30
 
     - name: 'Upload Artifact RHEL Package'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'package-rpm'
         path: ./microci-*.x86_64.rpm
