@@ -220,6 +220,7 @@ endif
 clean:
 	$(Q)$(RM) ../bin/microCI
 	$(Q)touch ../new/*.yml
+	$(Q)touch ../docs/*.md
 
 .PHONY: rebuild
 rebuild: clean

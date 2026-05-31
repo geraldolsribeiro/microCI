@@ -2,9 +2,9 @@ PLUGINS_TXT=$(addprefix ../help/,$(subst .md,.txt,$(subst 20_plugin_,,$(wildcard
 
 .PHONY: all
 all: \
+	$(PLUGINS_TXT) \
 	10_help.md \
-	microCI_activity_diagram.puml \
-	$(PLUGINS_TXT)
+	microCI_activity_diagram.puml
 
 GLOW_STYLE=tokyo-night
 GLOW_STYLE=dracula
