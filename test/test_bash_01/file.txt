@@ -2,5 +2,5 @@ AAA
 BBB
 Debian GNU/Linux 13
 total 8
--rw-rw-r-- 1 1000 1000 21 May 27 17:40 Makefile
--rw-r--r-- 1 1000 1000 28 May 27 17:57 file.txt
+-rw-rw-r-- 1 1000 1000 31 May 28 04:36 Makefile
+-rw-rw-r-- 1 1000 1000 28 Jun 13 08:42 file.txt

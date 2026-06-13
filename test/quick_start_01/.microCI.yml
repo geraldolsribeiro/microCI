@@ -1,0 +1,7 @@
+steps:
+  - name: "Run shell commands"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo 'hello from microCI'

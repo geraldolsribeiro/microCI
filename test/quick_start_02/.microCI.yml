@@ -1,0 +1,7 @@
+steps:
+  - name: "Hello world step"
+    docker: "gcc:14"
+    plugin:
+      name: bash
+      bash: |
+        g++ hello.cpp -o hello

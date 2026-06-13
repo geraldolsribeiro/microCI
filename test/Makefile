@@ -83,6 +83,8 @@ test:
 	#cat template.sh | bash
 
 test_run:
+	$(MAKE) -C quick_start_01/
+	$(MAKE) -C quick_start_02/
 	$(MAKE) -C test_bash_01/
 	$(MAKE) -C test_bash_02/
 	$(MAKE) -C test_bash_03/
