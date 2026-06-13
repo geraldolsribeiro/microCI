@@ -357,9 +357,9 @@ function step_ignored_step() {
 # ----------------------------------------------------------------------
 # This step should be executed
 # ----------------------------------------------------------------------
-function step_build_static_version_of_microci() {
+function step_another_ignored_step___build_static_version_of_microci() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Build static version of microCI"
+  local MICROCI_STEP_NAME="Another ignored step - build static version of microCI"
   local MICROCI_STEP_DESCRIPTION="This step should be executed"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
@@ -422,7 +422,7 @@ function main() {
   date >> .microCI.log
 
   step_ignored_step
-  step_build_static_version_of_microci
+  step_another_ignored_step___build_static_version_of_microci
 
   date >> .microCI.log
 }

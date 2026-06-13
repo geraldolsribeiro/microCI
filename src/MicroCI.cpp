@@ -401,7 +401,7 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
     mScript << "step_" << sanitizeName(step["name"].as<std::string>()) << std::endl;
     mScript << "exit 0;" << std::endl;
   } else if (!mOnlyStep.empty()) {
-    // FIXME: Verificar se existe
+    // FIXME: Check whether it exists
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
         throw std::invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));

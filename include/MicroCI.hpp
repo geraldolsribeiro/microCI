@@ -84,7 +84,7 @@ class MicroCI {
   [[nodiscard]] std::string ActivityDiagram(const std::string &filename) const;
   [[nodiscard]] std::string List(const std::string &filename) const;
 
-  // Variável de ambiente global a todos os passos
+  // Global environment variable available to all steps
   void SetEnvironmentVariable(const EnvironmentVariable &env);
   bool ReadConfig(const std::string &yaml);
   std::stringstream &Script();

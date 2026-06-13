@@ -433,7 +433,7 @@ function step_publish_documentation() {
            && git -C /deploy add . 2>&1 \
            && git -C /deploy commit -am ':rocket:microCI git_publish' 2>&1 \
            && git -C /deploy push origin main 2>&1 \
-           || echo 'Attention: No changes to commit' \
+           || echo 'Notice: No changes to commit' \
 "
     )
 

@@ -325,7 +325,7 @@ function step_deploy_vuejs_application_page() {
     (
       set -e
 
-      # Caso ainda não exista realiza o clone inicial
+      # If it does not exist yet, perform the initial clone
       if [ ! -d "/opt/microCI/repos/app_frontend_deploy" ]; then
         git clone "git@gitlab.xyx.com.br:str/app_frontend_deploy.git" \
           --separate-git-dir="/opt/microCI/repos/app_frontend_deploy" \
@@ -333,12 +333,12 @@ function step_deploy_vuejs_application_page() {
       fi
 
 
-      # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
+      # Clean the folder -- USE WITH CARE WHEN MERGING REPOS
       git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
         --work-tree="/var/www/my-intranet/html/app" \
         clean -xfd 2>&1
 
-      # Extrai a versão atual
+      # Check out the current version
       git --git-dir="/opt/microCI/repos/app_frontend_deploy" \
         --work-tree="/var/www/my-intranet/html/app" \
         checkout -f 2>&1 \
@@ -346,7 +346,7 @@ function step_deploy_vuejs_application_page() {
         --work-tree="/var/www/my-intranet/html/app" \
         pull 2>&1
 
-      # Remove o arquivo .git que aponta para o git-dir
+      # Remove the .git file that points to the git-dir
       rm -f "/var/www/my-intranet/html/app/.git" 2>&1
 
       date

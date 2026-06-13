@@ -61,7 +61,7 @@ void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
 
   beginFunction(data, envs);
   mMicroCI->Script() << inja::render(R"(
-      # Caso ainda não exista realiza o clone inicial
+      # If it does not exist yet, perform the initial clone
       if [ ! -d "{{GIT_DIR}}" ]; then
         git clone "{{GIT_URL}}" \
           --separate-git-dir="{{GIT_DIR}}" \
@@ -73,7 +73,7 @@ void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
 
   if (clean) {
     mMicroCI->Script() << inja::render(R"(
-      # Limpa a pasta -- CUIDADO AO MESCLAR REPOS
+      # Clean the folder -- USE WITH CARE WHEN MERGING REPOS
       git --git-dir="{{GIT_DIR}}" \
         --work-tree="{{GIT_WORK}}" \
         clean -xfd 2>&1
@@ -82,7 +82,7 @@ void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   mMicroCI->Script() << inja::render(R"(
-      # Extrai a versão atual
+      # Check out the current version
       git --git-dir="{{GIT_DIR}}" \
         --work-tree="{{GIT_WORK}}" \
         checkout -f 2>&1 \
@@ -90,7 +90,7 @@ void GitDeployPluginStepParser::Parse(const YAML::Node &step) {
         --work-tree="{{GIT_WORK}}" \
         pull 2>&1
 
-      # Remove o arquivo .git que aponta para o git-dir
+      # Remove the .git file that points to the git-dir
       rm -f "{{GIT_WORK}}/.git" 2>&1
 
       date

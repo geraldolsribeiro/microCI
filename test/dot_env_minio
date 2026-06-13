@@ -1,4 +1,4 @@
-# Atenção, não inclua este arquivo no controle de versão!
+# Warning: do not add this file to version control!
 
 MICROCI_MINIO_URL: "http://11.22.33.44:9000"
 MICROCI_MINIO_ACCESS_KEY: "Micro00000000000000CI"

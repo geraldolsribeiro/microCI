@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Download de dependências utilizadas na compilação
+# Retrieve build dependencies from external sources.
 # ----------------------------------------------------------------------
-function step_baixar_arquivos_externos_ao_projeto() {
+function step_download_external_files_into_the_project() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Baixar arquivos externos ao projeto"
-  local MICROCI_STEP_DESCRIPTION="Download de dependências utilizadas na compilação"
+  local MICROCI_STEP_NAME="Download external files into the project"
+  local MICROCI_STEP_DESCRIPTION="Retrieve build dependencies from external sources."
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -330,14 +330,14 @@ function step_baixar_arquivos_externos_ao_projeto() {
       echo ""
       echo ""
       echo ""
-      echo "Step: Baixar arquivos externos ao projeto"
+      echo "Step: Download external files into the project"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_baixar_arquivos_externos_ao_projeto_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_download_external_files_into_the_project_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --network host \
         --workdir /microci_workspace \
         --env DISABLE_WELCOME_MESSAGE="true" \
@@ -430,6 +430,116 @@ function step_baixar_arquivos_externos_ao_projeto() {
 
   ((++MICROCI_STEP_NUMBER))
 }
+
+# ----------------------------------------------------------------------
+# Retrieve build dependencies from external sources.
+# ----------------------------------------------------------------------
+function step_download_external_files_into_the_project() {
+  local SECONDS=0
+  local MICROCI_STEP_NAME="Download external files into the project"
+  local MICROCI_STEP_DESCRIPTION="Retrieve build dependencies from external sources."
+  local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
+  local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
+  local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
+  local MICROCI_STEP_STATUS=":ok:"
+  local MICROCI_STEP_SKIP="no"
+  local MICROCI_STEP_DURATION=$SECONDS
+
+  # Make step line with 60 characters
+  local title="$(( MICROCI_STEP_NUMBER + 1 )) ${MICROCI_STEP_NAME}.............................................................."
+  local title=${title:0:60}
+
+  echo -ne "[0;36m${title}[0m: "
+  local DISABLE_WELCOME_MESSAGE="true"
+  local ENV_1="1"
+  local ENV_2="String with spaces"
+  local ENV_YML_1="1"
+  local ENV_YML_2="String with spaces"
+
+  {
+    (
+      set -e
+
+      echo ""
+      echo ""
+      echo ""
+      echo "Step: Download external files into the project"
+      # shellcheck disable=SC2140,SC2046
+      docker run \
+        --interactive \
+        --attach stdout \
+        --attach stderr \
+        --rm \
+        --name microci_download_external_files_into_the_project_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --network host \
+        --workdir /microci_workspace \
+        --env DISABLE_WELCOME_MESSAGE="true" \
+        --env ENV_1="1" \
+        --env ENV_2="String with spaces" \
+        --env ENV_YML_1="1" \
+        --env ENV_YML_2="String with spaces" \
+        --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
+        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
+        "bitnamilegacy/git:latest" \
+        /bin/bash -c "cd /microci_workspace \
+           && mkdir -p /home/bitnami/.ssh 2>&1 \
+           && cp -Rv /.microCI_ssh /home/bitnami/.ssh 2>&1 \
+           && chmod 700 /home/bitnami/.ssh/ 2>&1 \
+           && chmod 644 /home/bitnami/.ssh/id_rsa.pub 2>&1 \
+           && chmod 600 /home/bitnami/.ssh/id_rsa 2>&1 \
+           && mkdir -p /tmp/include/ \
+           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git master 'README.md' 'include/*.h'  \
+             | tar -C /tmp/include/ -vxf - 2>&1 \
+           ; chown $(id -u):$(id -g) -Rv /tmp/include/ \
+           && mkdir -p /tmp/lib/ \
+           && git archive --format=tar --remote=git@gitlabcorp.xyz.com.br:group/repo.git master 'lib/*.so'  \
+             | tar -C /tmp/lib/ -vxf - 2>&1 \
+           ; chown $(id -u):$(id -g) -Rv /tmp/lib/ \
+           && mkdir -p /tmp/include \
+           && pushd /tmp/include \
+           && curl -fSL -R -J --clobber -O https://raw.githubusercontent.com/adishavit/argh/master/argh.h 2>&1 \
+           && popd \
+           ; chown $(id -u):$(id -g) -Rv /tmp/include \
+           && mkdir -p include \
+           && pushd include \
+           && curl -fSL -R -J --clobber -O https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp 2>&1 \
+           && popd \
+           ; chown $(id -u):$(id -g) -Rv include \
+           && mkdir -p include \
+           && pushd include \
+           && curl -fSL -R -J --clobber -O https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp 2>&1 \
+           && popd \
+           ; chown $(id -u):$(id -g) -Rv include \
+           ; echo 'Default target chown' \
+           ; chown $(id -u):$(id -g) -Rv include"
+
+    )
+
+    status=$?
+    MICROCI_STEP_DURATION=$SECONDS
+    echo "Status: ${status}"
+    echo "Duration: ${MICROCI_STEP_DURATION}"
+  } >> .microCI.log
+
+  # Notification at the terminal
+  if [ "${MICROCI_STEP_SKIP}" = "yes" ]
+  then
+    echo -e "[0;34mSKIP[0m"
+    setStepStatusSkipJson
+  elif [ "${status}" = "0" ]
+  then
+    echo -e "[0;32mOK[0m"
+    setStepStatusOkJson
+  else
+    echo -e "[0;31mFAILED[0m"
+    setStepStatusFailJson
+    echo "See the complete log at .microCI.log"
+    tail -50 .microCI.log
+    exit 1
+  fi
+
+  ((++MICROCI_STEP_NUMBER))
+}
 echo 'Updating docker images...'
   echo 'Updating bitnamilegacy/git:latest docker image...' >> .microCI.log
   docker pull bitnamilegacy/git:latest --quiet 2>&1 >> .microCI.log
@@ -441,7 +551,8 @@ echo 'Updating docker images...'
 function main() {
   date >> .microCI.log
 
-  step_baixar_arquivos_externos_ao_projeto
+  step_download_external_files_into_the_project
+  step_download_external_files_into_the_project
 
   date >> .microCI.log
 }

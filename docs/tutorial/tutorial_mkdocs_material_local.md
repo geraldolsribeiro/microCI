@@ -1,18 +1,14 @@
 # Tutorial mkdocs local
 
-## Introdução
+## Introduction
 
-O objetivo deste tutorial é a execução do `microCI` localmente para criar
-documentação.
+The goal of this tutorial is to run `microCI` locally to create documentation.
 
-A ferramenta [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
-oferece uma maneira prática para documentar o projeto usando arquivos no
-formato markdown. Neste tutorial veremos como criar um projeto mkdocs e gerar
-uma documentação usando o `microCI`.
+The [mkdocs-material](https://squidfunk.github.io/mkdocs-material/) tool offers a practical way to document a project using Markdown files. In this tutorial, we'll see how to create a mkdocs project and generate documentation using `microCI`.
 
-## Configuração do microCI
+## microCI setup
 
-O `microCI` cria um arquivo de configuração inicial para executar  o `mkdocs-material`:
+`microCI` creates an initial configuration file to run `mkdocs-material`:
 
 ```bash
 microCI --new mkdocs_material
@@ -20,66 +16,60 @@ microCI --new mkdocs_material
 
 ![microCI pipe bash](tutorial_mkdocs_material_01.gif)
 
-Um arquivo chamado `.microCI.yml` foi criado no diretório atual:
+A file named `.microCI.yml` was created in the current directory:
 
 ```yaml
 ---
 steps:
-  # Remova este passo após a primeira execução
-  - name: "Criar arquivos iniciais do mkdocs"
+  # Remove this step after the first run
+  - name: "Create initial mkdocs files"
     plugin:
       name: "mkdocs_material"
       action: "new ."
-  - name: "Construir documentação em formato HTML"
-    description: "Documentação do projeto"
+  - name: "Build documentation as HTML"
+    description: "Project documentation"
     plugin:
       name: "mkdocs_material"
       action: "build"
-      # Contruindo para uma pasta personalizada
+      # Build into a custom directory
       # action: "build --site-dir public
-  - name: "Servidor local na porta 8000 (Ctrl+C para finalizar)"
-    description: "Executa servidor local para preview da documentação"
-    # passo executado localmente
+  - name: "Local server on port 8000 (Ctrl+C to stop)"
+    description: "Runs a local server to preview the documentation"
+    # step executed locally
     only: "local-step"
     plugin:
       name: "mkdocs_material"
       action: "serve"
-      # Porta personalizada, caso já esteja utilizando a padrão 8000
+      # Custom port, if you are already using the default 8000
       # port: 9001
 ```
 
-Cada chave `name` inicia um novo passo. No arquivo criado existem 3 passos:
+Each `name` key starts a new step. The generated file contains 3 steps:
 
-* `Criar arquivos iniciais do mkdocs`
-* `Construir documentação em formato HTML`
-* `Servidor local na porta 8000`
+* `Create initial mkdocs files`
+* `Build documentation as HTML`
+* `Local server on port 8000`
 
-Passos com a chave `only` não são executados por padrão.
+Steps with the `only` key are not executed by default.
 
-## Primeira execução
+## First run
 
-Edite o arquivo `.microCI.yml` para ajustar a configuração se necessário
-e execute:
-
+Edit `.microCI.yml` to adjust the configuration if needed, then run:
 
 ```bash
 microCI | bash
 ```
 
-Se a geração foi bem sucedida o nome dos passos seguidos de `OK` são exibidos
-no terminal:
-
+If generation succeeds, the step names followed by `OK` are shown in the terminal:
 
 ```
-Criar arquivos iniciais do mkdocs...............: OK
-Construir documentação em formato HTML..........: OK
+Create initial mkdocs files....................: OK
+Build documentation as HTML.....................: OK
 ```
 
 ![microCI pipe bash](tutorial_mkdocs_material_02.gif)
 
-
-Remova o primeiro passo (Criar arquivos iniciais do mkdocs) e execute o comando novamente:
-
+Remove the first step (Create initial mkdocs files) and run the command again:
 
 ```bash
 microCI | bash
@@ -87,10 +77,9 @@ microCI | bash
 
 ![microCI pipe bash](tutorial_mkdocs_material_03.gif)
 
-## Passos adicionais
+## Additional steps
 
-A configuração contem um passo que pode ser executado sozinho para subir um
-servidor para previsualizar a documentação.
+The configuration includes a step that can be run on its own to start a server for previewing the documentation.
 
 ```bash
 microCI --only local-step | bash

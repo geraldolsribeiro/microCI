@@ -61,7 +61,6 @@ test:
 	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
 	../bin/microCI -i ../new/mermaid.yml                         > mermaid.sh
 	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
-	../bin/microCI -i ../new/fetch2.yml                          > fetch2.sh
 	../bin/microCI -i ../new/skip.yml                            > skip.sh
 	source skip.sh
 	../bin/microCI -i ../new/skip.yml  --append-log              > skip_append_log.sh

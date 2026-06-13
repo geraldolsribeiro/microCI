@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Apresentação PDF criada a partir do markdown
+# Create a PDF presentation from markdown
 # ----------------------------------------------------------------------
 function step_create_pdf_presentation_from_markdown() {
   local SECONDS=0
   local MICROCI_STEP_NAME="Create PDF presentation from Markdown"
-  local MICROCI_STEP_DESCRIPTION="Apresentação PDF criada a partir do markdown"
+  local MICROCI_STEP_DESCRIPTION="Create a PDF presentation from markdown"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -336,12 +336,12 @@ function step_create_pdf_presentation_from_markdown() {
         --volume "${MICROCI_PWD}":/data \
         --user $(id -u):$(id -g) \
         pandoc/latex:latest \
-        --variable lang='pt-BR' \
+        --variable lang='en-US' \
         --variable date='April 1, 2023' \
-        --variable institute='Institution Name' \
+        --variable institute='Your Company Name' \
         --variable title='Presentation Title' \
         --variable subtitle='Presentation Subtitle' \
-        --variable subject='Informação da propriedade Assunto do PDF' \
+        --variable subject='PDF subject matter information' \
         --variable aspectratio=169 \
         --slide-level=2 \
         --to=beamer \

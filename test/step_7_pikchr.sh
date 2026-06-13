@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=6
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Build diagrams from textual description
+# Build project documentation
 # ----------------------------------------------------------------------
-function step_build_diagrams___pikchr() {
+function step_build_html_documentation() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Build diagrams - pikchr"
-  local MICROCI_STEP_DESCRIPTION="Build diagrams from textual description"
+  local MICROCI_STEP_NAME="Build HTML documentation"
+  local MICROCI_STEP_DESCRIPTION="Build project documentation"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -328,39 +328,21 @@ function step_build_diagrams___pikchr() {
     (
       set -e
 
-      echo ""
-      echo ""
-      echo ""
-      echo "Step: Build diagrams - pikchr"
-      # shellcheck disable=SC2140,SC2046
+      # shellcheck disable=SC2140
       docker run \
         --user $(id -u):$(id -g) \
         --interactive \
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_build_diagrams___pikchr_$(head -c 8 /proc/sys/kernel/random/uuid) \
-        --network none \
+        --name microci_build_html_documentation_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --workdir /microci_workspace \
-        --env ENV_1="1" \
-        --env ENV_2="String with spaces" \
-        --env JFROG_ACCESS_TOKEN="eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJra" \
-        --env JFROG_URL="http://172.17.0.2:8082/artifactory" \
-        --env MICROCI_MINIO_ACCESS_KEY="Micro00000000000000CI" \
-        --env MICROCI_MINIO_SECRET_KEY="microcimicrocimicrocimicrocimicrocimicro" \
-        --env MICROCI_MINIO_URL="http://11.22.33.44:9000" \
-        --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "intmain/microci_pikchr:latest" \
-           /bin/bash -c "cd /microci_workspace \
-           && for pikchr_input in \
-             docs/diagrams/*.pikchr \
+        --volume "${MICROCI_PWD}":/microci_workspace \
+        --network host \
+        --publish 8000:8000 \
+        intmain/microci_mkdocs_material:0.4 \
+        mkdocs build 2>&1
 
-           do
-             output_filename_svg=\${pikchr_input%.*}.svg
-             pikchr --svg-only \${pikchr_input} > \${output_filename_svg}
-           done
-              2>&1"
-  
     )
 
     status=$?
@@ -389,5 +371,5 @@ function step_build_diagrams___pikchr() {
   ((++MICROCI_STEP_NUMBER))
 }
 # Execute step #7
-step_build_diagrams___pikchr
+step_build_html_documentation
 exit 0;

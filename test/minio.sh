@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Description of this step
+# Save artifact to MinIO, fetch artifact from MinIO
 # ----------------------------------------------------------------------
-function step_save_artifact_in_bucket() {
+function step_manage_artifacts_in_bucket() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="Save artifact in bucket"
-  local MICROCI_STEP_DESCRIPTION="Description of this step"
+  local MICROCI_STEP_NAME="Manage artifacts in bucket"
+  local MICROCI_STEP_DESCRIPTION="Save artifact to MinIO, fetch artifact from MinIO"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -332,7 +332,7 @@ function step_save_artifact_in_bucket() {
       echo ""
       echo ""
       echo ""
-      echo "Step: Save artifact in bucket"
+      echo "Step: Manage artifacts in bucket"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -341,7 +341,7 @@ function step_save_artifact_in_bucket() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_save_artifact_in_bucket_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_manage_artifacts_in_bucket_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --network host \
         --workdir /microci_workspace \
         --env ENV_1="1" \
@@ -398,7 +398,7 @@ echo 'Updating docker images...'
 function main() {
   date >> .microCI.log
 
-  step_save_artifact_in_bucket
+  step_manage_artifacts_in_bucket
 
   date >> .microCI.log
 }

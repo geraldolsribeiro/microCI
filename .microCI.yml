@@ -184,7 +184,7 @@ steps:
       bash: |
         apt update
         apt upgrade -y
-        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext
+        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext glow upx-ucl
         make -C docs
         make -C src
         chown $(id -u):$(id -g) -Rv bin/microCI

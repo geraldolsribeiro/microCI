@@ -95,7 +95,7 @@ void GitPublishPluginStepParser::Parse(const YAML::Node &step) {
            && git -C {{ PLUGIN_COPY_TO }} add . 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} commit -am ':rocket:microCI git_publish' 2>&1 \
            && git -C {{ PLUGIN_COPY_TO }} push origin {{ GIT_BRANCH }} 2>&1 \
-           || echo 'Attention: No changes to commit' \
+           || echo 'Notice: No changes to commit' \
 ")",
                                      data);
 

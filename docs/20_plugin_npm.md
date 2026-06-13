@@ -10,14 +10,14 @@ Source file: `new/npm.yml`
 ```yaml
 docker: "node:16"
 steps:
-  - name: "Instalar dependências"
-    description: "Descrição do passo"
+  - name: "Install dependencies"
+    description: "Step description"
     bash: |
       npm install
-  - name: "Verificar o código"
+  - name: "Check code"
     bash: |
       npm run lint --fix
-  - name: "Construir"
+  - name: "Build"
     bash: |
       npm run build
 ```

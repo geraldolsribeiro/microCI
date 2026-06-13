@@ -63,7 +63,7 @@ auto version() -> std::string { return fmt::format("v{}", microCI_version); }
 auto sanitizeName(const std::string &name) -> std::string {
   auto ret = name;
 
-  // Replace accented characters with version without accents
+  // Replace accented characters with unaccented versions
   std::map<string, std::string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto const &[from, to] : tr) {
     size_t pos = 0;
@@ -91,7 +91,7 @@ auto sanitizeName(const std::string &name) -> std::string {
 // ----------------------------------------------------------------------
 auto stepRequiredValue(const YAML::Node &step, const std::string &var) -> std::string {
   if (!step[var]) {
-    throw std::invalid_argument(fmt::format("Campo {} não encontrado no passo", var));
+    throw std::invalid_argument(fmt::format("Field {} not found in step", var));
   }
   return step[var].as<std::string>();
 }

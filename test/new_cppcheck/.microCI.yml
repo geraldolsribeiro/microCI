@@ -1,6 +1,3 @@
-#   # cppcheck plugin
-#   
-#{{{
 steps:
   - name: "Create C++ code verification report - cppcheck"
     description: "Check C++ code and generate HTML report"
@@ -10,13 +7,10 @@ steps:
         # - "-j 2"             # two jobs simultaneously
         # - "--clang=clang-11" # uses clang as analyser
         # - "--bug-hunting"    # useful for code review
-        # - "--std=c++11"
+        # - "--std=c++11"      # specify the C++ standard
       include:
-        - "include"
+        - "include"            # include folder
       source:
-        - "src"
+        - "src"                # source folder or filename
         - "test"
       platform: "unix64"
-#}}}
-
-# vim: spell spelllang=en

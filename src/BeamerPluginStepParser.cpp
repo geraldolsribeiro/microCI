@@ -44,7 +44,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
 
   data["STEP_NAME"]        = stepName(step);
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Presentation PDF created from markdown");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Create a PDF presentation from markdown");
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "pandoc/latex:latest");
   data["WORKSPACE"]        = stepDockerWorkspace(step, "/data");
 
@@ -91,15 +91,15 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
                               ___3rd_beamercolorthemestr_sty_len);
   }
 
-  for (const auto &key : {/* keys a seguir não são usadas pelo pandoc: */ "name", "output", "source", "theme",
-                          /* keys a seguir já foram passadas via linha de comando: */ "lang", "date", "institute",
-                          "title", "subtitle", "subject", "slide-level", "aspectratio"}) {
+  for (const auto &key : {/* keys not used by pandoc: */ "name", "output", "source", "theme",
+                          /* keys already passed via command line: */ "lang", "date", "institute", "title", "subtitle",
+                          "subject", "slide-level", "aspectratio"}) {
     strippedHeaderIncludes.remove(key);
   }
 
   yaml << "---\n";
-  yaml << "# Atenção, este arquivo é gerado automaticamente!\n";
-  yaml << "# Se necessário edite o arquivo .microCI.yml\n";
+  yaml << "# Warning: this file is generated automatically!\n";
+  yaml << "# Edit the .microCI.yml file if needed\n";
   yaml << strippedHeaderIncludes;
   yaml << "\n..." << std::endl;
   data["HEADER_INCLUDES"] = filename;

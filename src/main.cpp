@@ -836,7 +836,7 @@ sudo rm -f /usr/bin/microCI
         spdlog::debug(_("Git config: {}"), gitConfigFilename);
         spdlog::debug(_("Git origin: {}"), gitRemoteOrigin);
 
-        auto pwdRepoId = std::string{"_"};  // para evitar que a chave comece com número
+        auto pwdRepoId = std::string{"_"};  // avoid keys starting with a number
 
         EVP_MD_CTX *mdctx;
         unsigned char *md5_digest;

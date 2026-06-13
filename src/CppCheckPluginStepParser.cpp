@@ -79,7 +79,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   data["STEP_NAME"]        = stepName(step);
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Verifica código C++");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Check C++ code");
   data["PLATFORM"]         = platform;
   data["STD"]              = standard;
   data["REPORT_TITLE"]     = "MicroCI::CppCheck";
@@ -109,7 +109,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << "          " << src << " \\\n";
   }
 
-  // xml é escrito na saída de erro
+  // XML is written to stderr
   mMicroCI->Script() << inja::render(R"(          2> auditing/cppcheck/cppcheck.xml \
         && cppcheck-htmlreport \
           --title='{{ REPORT_TITLE }}' \

@@ -44,7 +44,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   data                     = parseNetwork(step, data, "host");
   data["STEP_NAME"]        = stepName(step);
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
-  data["STEP_DESCRIPTION"] = stepDescription(step, "Baixa arquivos externos ao projeto");
+  data["STEP_DESCRIPTION"] = stepDescription(step, "Fetch external files used by the project");
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "bitnamilegacy/git:latest");
 
   auto volumes             = parseVolumes(step);
@@ -100,7 +100,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         }
 
         data["GIT_REMOTE"]       = gitRemote;
-        data["FILES"]            = "";  // Todos os arquivos
+        data["FILES"]            = "";  // All files
         data["STRIP_COMPONENTS"] = " --strip-components=1";
         // data["STRIP_COMPONENTS"] = "";
 
@@ -134,18 +134,18 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           }
 
           for (const auto &f : item["files"]) {
-            // aspas simples para não expandir
+            // Single quotes to avoid expansion
             files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
           }
         } else {
           for (const auto &f : item["files"]) {
-            // aspas simples para não expandir
+            // Single quotes to avoid expansion
             files += fmt::format("'{}' ", f.as<std::string>());
           }
         }
 
         if (files.empty()) {
-          throw std::runtime_error("Is mandatory to specify the list of file");
+          throw std::runtime_error("It is mandatory to specify a file list");
         }
 
         data["FILES"] = files;

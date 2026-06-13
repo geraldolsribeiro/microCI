@@ -1,122 +1,96 @@
-# Tutorial mkdocs servidor
+# Tutorial mkdocs server
 
-## Introdução
+## Introduction
 
-Depois de executar o `microCI` localmente no tutorial anterrior, podemos
-começar a automação da pipeline através de webhooks e execução remota.
+After running `microCI` locally in the previous tutorial, we can start automating the pipeline through webhooks and remote execution.
 
-Neste tutorial será mostrado como, a partir de um `commit` no repositório de
-trabalho, é gerada a versão final e disponibilização em produção. 
+This tutorial shows how a final version is generated and deployed to production from a `commit` in the working repository.
 
-A execução se dará conforme a figura abaixo:
+The execution will follow the figure below:
 
 ![Flowchart](awesome_flowchart.png)
 
-**Evento inicial:** O desenvolvedor atualiza a documentação realiza um `commit`
-e envia para o servidor git.
+**Initial event:** The developer updates the documentation, makes a `commit`, and pushes it to the Git server.
 
+**Step 1:** The Git server receives the `push` event with the user's `commits` and triggers a webhook linked to the repository.
 
-**Passo 1:** O servidor git recebe o evento de `push` com os `commits` do
-usuário e dispara um webhook vinculado ao repositório.
+> Note: the `push` event happens only once even if it contains multiple `commits`.
 
-> Nota: o evento de `push` ocorre uma única vez mesmo que este contenha vários
-`commits`.
+**Step 2:** The webhook server receives the information for the latest `commit` and runs the script linked to the webhook.
 
-**Passo 2:** O servidor de webhook recebe as informações do último `commit` e
-executa um script vinculado ao webhook.
+> Note: the `webhook` server used in this example can be found at <https://github.com/adnanh/webhook>.
 
-> Nota: o servidor de `webhook` utilizado neste exemplo pode ser obtido
-em <https://github.com/adnanh/webhook>.
-
-Abaixo estão a declaração dois webhooks usados neste tutorial:
+Below is the declaration of the two webhooks used in this tutorial:
 
 ```yaml
-# Disparado no passo 2
+# Triggered in step 2
 - id: "microCI_awesome"
   execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome/"
 
-# Disparado no passo 5
+# Triggered in step 5
 - id: "microCI_awesome_deploy"
   execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome_deploy/"
 ```
 
+> Note: all webhooks run the same script
 
-> Nota: todos os webhooks executam o mesmo script
-
-**Passo 3:** Uma implementação mínima do script de adaptação do webhook para o microCI 
-pode ser vista a seguir:
+**Step 3:** A minimal implementation of the webhook adapter script for microCI can be seen below:
 
 ```bash
 #!/bin/bash
-# Arquivo microCI.sh
-# Acrescente suas personalizações aqui
+# microCI.sh file
+# Add your customizations here
 
 if [ -d ".git" ]; then
   git pull
 fi
 
-# Este comando é executado no caminho do repositório
+# This command runs in the repository directory
 microCI | bash
 ```
 
-
-> Nota: O procedimento é idêntico ao executado localmente: o `microCI` lê
-a configuração do arquivo `.microCI.yml` e executa os passos descritos.
+> Note: The procedure is identical to the local run: `microCI` reads the configuration from `.microCI.yml` and executes the described steps.
 
 ```yaml
-# Arquivo .microCI.yml do repositório awesome
+# .microCI.yml file for the awesome repository
 ---
 steps:
-  - name: "Construir documentação em formato HTML"
-    description: "Documentação do projeto"
+  - name: "Build documentation as HTML"
+    description: "Project documentation"
     plugin:
       name: "mkdocs_material"
       action: "build"
-  - name: "Publicar HTML para repositório git"
+  - name: "Publish HTML to Git repository"
     ssh:
       copy_from: "${HOME}/.ssh"
       copy_to: "/root/.ssh"
     plugin:
       name: "git_publish"
-      git_url: "git@nome_do_servidor.com.br:awesome_deploy.git"
+      git_url: "git@your-server-name.com:awesome_deploy.git"
       copy_to: "/deploy"
       copy_from: "site"
       clean_before: true
 ```
 
-O plugin `mkdocs_material` com a ação `build` lê os arquivos markdown
-e constroi a documentação em formato HTML e a salva na pasta `site` para ser
-utilizada no próximo passo.
+The `mkdocs_material` plugin with the `build` action reads the Markdown files, builds the documentation as HTML, and saves it in the `site` folder for use in the next step.
 
-O plugin `git_publish` clona o repositório apontado por `git_url` na pasta
-`/deploy`, então copia o conteúdo da pasta `site` para a pasta `/deploy`,
-dentro do container, e faz o `commit` para atualizando o repostório.
+The `git_publish` plugin clones the repository specified by `git_url` into `/deploy`, then copies the contents of the `site` folder into `/deploy` inside the container, and commits the update to the repository.
 
-**Passo 4**: O repositório `awesome_deploy` recebe o `post` lançado pelo
-plugin `git_publish` no passo anterior e dispara outro webhook.
+**Step 4**: The `awesome_deploy` repository receives the `post` sent by the `git_publish` plugin in the previous step and triggers another webhook.
 
-**Passo 5:** O servidor de webhook recebe as informações do último `commit` e
-executa um script vinculado ao webhook.
+**Step 5:** The webhook server receives the information for the latest `commit` and runs the script linked to the webhook.
 
 ```yaml
-# Disparado no passo 5
+# Triggered in step 5
 - id: "microCI_awesome_deploy"
   execute-command: "/usr/bin/microCI.sh"
   command-working-directory: "/opt/microCI/repos/awesome_deploy/"
 ```
 
-> Nota: executa o procedimento igual ao do passo 2, mas desta vez na pasta do
-repositório `awesome_deploy`.
+> Note: it performs the same procedure as step 2, but this time in the `awesome_deploy` repository folder.
 
-**Passo 6:** O `microCI` executa o plugin `git_deploy` que realiza o `checkout`
-do repositório na pasta de implantação. Para garantir que o histórico com os
-commits antigos não estarão disponíveis em produção o checkout é realizado de
-forma dividida, ficando o histórico (`.git`) em uma pasta privada e somente os
-arquivos do último `commit` no caminho de `deploy` especificado.
+**Step 6:** `microCI` runs the `git_deploy` plugin, which checks out the repository into the deployment folder. To ensure older commits are not available in production, the checkout is split: the history (`.git`) stays in a private folder, and only the files from the latest `commit` are placed in the specified `deploy` path.
 
-**Passo 7:** A pasta de `deploy` atualizada no passo anterior está disponível
-em produção.
-
-
+**Step 7:** The updated `deploy` folder from the previous step is now available in production.

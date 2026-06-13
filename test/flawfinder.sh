@@ -298,12 +298,12 @@ MICROCI_STEP_NUMBER=0
 # Notification by Discord is not possible
 
 # ----------------------------------------------------------------------
-# Analisa estaticamente o código fonte com a ferramenta flawfinder
+# Statically analyzes the source code with the flawfinder tool
 # ----------------------------------------------------------------------
-function step_sast_com_flawfinder() {
+function step_sast_with_flawfinder() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="SAST com flawfinder"
-  local MICROCI_STEP_DESCRIPTION="Analisa estaticamente o código fonte com a ferramenta flawfinder"
+  local MICROCI_STEP_NAME="SAST with flawfinder"
+  local MICROCI_STEP_DESCRIPTION="Statically analyzes the source code with the flawfinder tool"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
   local MICROCI_GIT_COMMIT_MSG=$( git show -s --format=%s )
@@ -336,7 +336,7 @@ function step_sast_com_flawfinder() {
       echo ""
       echo ""
       echo ""
-      echo "Step: SAST com flawfinder"
+      echo "Step: SAST with flawfinder"
       # shellcheck disable=SC2140,SC2046
       docker run \
         --user $(id -u):$(id -g) \
@@ -344,7 +344,7 @@ function step_sast_com_flawfinder() {
         --attach stdout \
         --attach stderr \
         --rm \
-        --name microci_sast_com_flawfinder_$(head -c 8 /proc/sys/kernel/random/uuid) \
+        --name microci_sast_with_flawfinder_$(head -c 8 /proc/sys/kernel/random/uuid) \
         --network none \
         --workdir /microci_workspace \
         --env ENV_1="1" \
@@ -401,7 +401,7 @@ echo 'Updating docker images...'
 function main() {
   date >> .microCI.log
 
-  step_sast_com_flawfinder
+  step_sast_with_flawfinder
 
   date >> .microCI.log
 }
