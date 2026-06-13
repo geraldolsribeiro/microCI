@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+#
+# microCI Installation Script
+# Designed for automated installation via curl | bash.
+# WARNING: This script uses 'sudo' and downloads external binaries, 
+# so ensure you fully trust the source (geraldolsribeiro/microci) before execution.
+#
+
+set -e # Exit immediately if a command exits with a non-zero status.
+
+echo "🚀 Starting microCI installation..."
+
+OS=$(uname -s)
+INSTALL_TARGET="/usr/local/bin" # Standard system binary path as requested
+
+case "$OS" in
+  Linux*)
+    echo "🐧 Detected Linux OS."
+
+    # --- Dependency Check: curl ---
+    if ! command -v curl &>/dev/null; then
+      echo -e "\n⚠️ The 'curl' utility was not found. Attempting to install..."
+      
+      # Try common package managers
+      if command -v apt-get >/dev/null; then
+        sudo apt-get update && sudo apt-get install -y curl
+      elif command -v dnf >/dev/null; then
+        sudo dnf install -y curl
+      elif command -v yum >/dev/null; then
+        sudo yum install -y curl
+      else
+        echo "❌ Error: Could not find a supported package manager (apt, dnf, or yum) to install 'curl'."
+        exit 1
+      fi
+    fi
+
+    # --- Installation Logic ---
+    LATEST_RELEASE_URL="https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI"
+
+    echo "📥 Downloading microCI from $LATEST_RELEASE_URL..."
+    if ! curl -fsSL "$LATEST_RELEASE_URL" -o "/tmp/microCI_download"; then
+        echo "❌ Failed to download the binary. Check your network connection."
+        exit 1
+    fi
+
+    # Move and set permissions using sudo, enforcing /usr/local/bin
+    echo "✨ Installing microCI binary to $INSTALL_TARGET/microCI (Requires elevated privileges)..."
+    if sudo mv "/tmp/microCI_download" "$INSTALL_TARGET/microCI"; then
+        sudo chmod 755 "$INSTALL_TARGET/microCI"
+        echo "✅ Binary installed successfully."
+    else
+        # If moving fails, it's a critical error as we rely on system paths.
+        echo "❌ Critical Error: Failed to move binary to $INSTALL_TARGET/microCI."
+        echo "Please check permissions or run the script with appropriate sudo rights."
+        exit 1
+    fi
+
+    ;;
+  Darwin*)
+    echo "🍏 Detected macOS (Darwin)."
+    # Homebrew installation remains robust for macOS.
+    if ! command -v brew &>/dev/null; then
+        echo "❌ Error: Homebrew ('brew') is required for macOS installation but was not found."
+        echo "Please install Homebrew following instructions at https://brew.sh"
+        exit 1
+    fi
+
+    echo "🚀 Installing microCI using Homebrew tap..."
+    if brew tap geraldolsribeiro/tap && brew install microci; then
+        echo "✅ microCI installed successfully via Homebrew."
+    else
+        echo "❌ Error: Failed to install microCI using Homebrew. Check if the tap or package name has changed."
+        exit 1
+    fi
+
+    ;;
+  *)
+    echo -e "\n🔴 FATAL ERROR: Unsupported operating system detected: $OS"
+    echo "Please run this script only on Linux or macOS."
+    exit 1
+    ;;
+esac
+
+echo ""
+echo -e "\n========================================\n========================================"
+echo -e "🎉 SUCCESS! microCI installation is complete!"
+echo "========================================\\n"
+
+# Final verification check
+if command -v microCI &>/dev/null; then
+    microCI --version
+else
+    echo "⚠️ Warning: 'microCI' command not found in PATH after installation. You might need to restart your shell (e.g., source ~/.bashrc)."
+fi

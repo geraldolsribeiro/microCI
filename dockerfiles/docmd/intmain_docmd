@@ -60,12 +60,12 @@ end
 #   A documentação deste projeto é mantida utilizando-se o `intmain_docmd`:
 #   
 #   ```bash
-#   intmain_docmd ruby     bin/intmain_docmd               doc/10_Gerador_de_documentação_intmain_docmd.md
-#   intmain_docmd bash     bin/intmain_resize_screenshots  doc/20_Redimensionador_de_screenshots.md
-#   intmain_docmd bash     scripts/Common/intmain.bash     doc/20_Biblioteca_de_scripts_intmain.md
-#   intmain_docmd bash     scripts/Common/taoker.bash      doc/21_Biblioteca_de_scripts_taoker.md
-#   intmain_docmd bash     scripts/Common/common.bash      doc/30_Biblioteca_de_funções_bash.md
-#   intmain_docmd makefile scripts/Common/Makefile.include doc/40_Biblioteca_de_alvos_make.md
+#   intmain_docmd ruby     bin/intmain_docmd               doc/236_plugin_docmd.md
+#   intmain_docmd bash     bin/intmain_resize_screenshots  doc/110_Redimensionador_de_screenshots.md
+#   intmain_docmd bash     scripts/Common/intmain.bash     doc/110_Biblioteca_de_scripts_intmain.md
+#   intmain_docmd bash     scripts/Common/taoker.bash      doc/111_Biblioteca_de_scripts_taoker.md
+#   intmain_docmd bash     scripts/Common/common.bash      doc/120_Biblioteca_de_funções_bash.md
+#   intmain_docmd makefile scripts/Common/Makefile.include doc/130_Biblioteca_de_alvos_make.md
 #   ```
 #   
 #   ## Variáveis de controle
@@ -308,9 +308,6 @@ File.open(output_filename, "w") do |output|
     end
   end
 
-  if show_source
-    output << "Source file: `#{source_filename}`\n\n"
-  end
 
   lines = []
 

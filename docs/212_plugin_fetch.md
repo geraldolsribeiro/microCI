@@ -1,10 +1,10 @@
-# Fetch Plugin
+# ⚙️ Fetch plugin
 
 ## Overview
 
-The **microCI** `fetch` plugin downloads external files and archives into the build workspace. It is commonly used to retrieve third-party headers, binaries, or repository snapshots required during a pipeline run.
+The **microCI** `fetch` plugin downloads external files and archives into the build workspace. It is useful when a pipeline needs assets that live outside the repository.
 
-Use this plugin when your build depends on external artifacts that are not committed to the repository.
+Use this plugin when your workflow depends on external artifacts that are not committed to the repository.
 
 ## Features
 
@@ -26,7 +26,7 @@ Use this plugin when your build depends on external artifacts that are not commi
 - **Path filtering and globbing**  
   Extract specific files using path patterns such as `include/*.h` or `lib/*.so`.
 
-## Setup & Configuration
+## Setup and configuration
 
 ### Enable the plugin
 
