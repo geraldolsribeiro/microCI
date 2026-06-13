@@ -1,52 +1,50 @@
-# Installing microCI 
+# Install microCI
 
-If you're running macOS, Linux, or another Unix-like operating system, you can
-install **microCI** by running the following command in your terminal:
+microCI is designed to stay lightweight: one YAML pipeline, one generated Bash script, and a small set of runtime requirements.
+
+## Requirements
+
+microCI relies on a small set of standard tools:
+
+- `bash` — runs the generated pipeline script
+- `docker` — provides isolated execution environments for steps
+- `jq` — handles JSON data when pipelines need to inspect or transform structured output
+- `yq` — handles YAML data when pipelines need to read or update configuration files
+
+These tools are necessary because microCI generates Bash and expects a minimal runtime layer to execute portable steps consistently across machines.
+
+At runtime, the simplicity stays the same: `microCI | bash`.
+
+## Install
 
 <center>![Install](images/microci-install.svg)</center>
 
 ```bash
 curl -fsSL https://microci.dev/install.sh | bash
 ```
+## Update
 
-## Alternative installation methods
+Keep the same workflow and refresh the binary:
 
-### Install on Linux
-
-To install the latest stable version on Linux:
-
-#### Binary
+<center>![Update](images/microci-update.svg)</center>
 
 ```bash
-sudo curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
-  -o /usr/bin/microCI
-sudo chmod 755 /usr/bin/microCI
+microCI --update | bash
 ```
 
-
-#### Debian/Ubuntu
-
-* Download [microci_0.44.0_amd64.deb](https://github.com/geraldolsribeiro/microCI/releases/download/latest/microci_0.44.0_amd64.deb)
-  from [github releases](https://github.com/geraldolsribeiro/microCI/releases):
-
-#### Fedora/openSUSE
-
-* Download [microci-0.44.0-2.x86_64.rpm](https://github.com/geraldolsribeiro/microCI/releases/download/latest/microci-0.44.0-2.x86_64.rpm)
-  from [github releases](https://github.com/geraldolsribeiro/microCI/releases):
-
-### Install on macOS
-
-To install the latest stable version on macOS:
+To track development builds instead:
 
 ```bash
-brew install geraldolsribeiro/tap/microci
+microCI --update-dev | bash
 ```
 
-### Install using G-Tools
+## Remove
 
-**G-Tools** automatically detects your OS and installs **microCI** accordingly.
+Remove microCI from your system:
+
+<center>![Uninstall](images/microci-uninstall.svg)</center>
 
 ```bash
-cargo install g-tools
-G microci install
+microCI --uninstall | bash
 ```
+
