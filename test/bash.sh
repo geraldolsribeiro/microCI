@@ -184,6 +184,59 @@ function microCI_download_latest_binary {
   curl -fsSL github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/bin/microCI
 }
 
+MICROCI_CACHE_FILE="${HOME}/.cache/microCI/docker-images.json"
+
+function microCI_cache_key() {
+  local key="$1"
+  printf 'docker-image-%s' "$key" | md5sum | cut -c 1-12
+}
+
+function microCI_cache_get() {
+  local key="$1"
+  local cache_key
+  cache_key=$(microCI_cache_key "$key")
+  if [ -f "$MICROCI_CACHE_FILE" ]; then
+    jq -r --arg key "$cache_key" '.[$key] // 0' "$MICROCI_CACHE_FILE" 2>/dev/null || echo 0
+  else
+    echo 0
+  fi
+}
+
+function microCI_cache_set() {
+  local key="$1"
+  local value="$2"
+  local cache_key
+  local tmp_file
+  cache_key=$(microCI_cache_key "$key")
+  tmp_file="${MICROCI_CACHE_FILE}.$$"
+  mkdir -p "$(dirname "$MICROCI_CACHE_FILE")"
+  if [ -f "$MICROCI_CACHE_FILE" ]; then
+    jq --arg key "$cache_key" --argjson value "$value" '.[$key] = $value' "$MICROCI_CACHE_FILE" > "$tmp_file"
+  else
+    jq -n --arg key "$cache_key" --argjson value "$value" '{($key): $value}' > "$tmp_file"
+  fi
+  mv "$tmp_file" "$MICROCI_CACHE_FILE"
+}
+
+function microCI_should_pull_docker_image() {
+  local image="$1"
+  local cache_hours="${MICROCI_DOCKER_PULL_CACHE_HOURS:-12}"
+  local now
+  local last_pull
+  local ttl_seconds
+
+  now=$(date +%s)
+  ttl_seconds=$((cache_hours * 3600))
+  last_pull=$(microCI_cache_get "$image")
+
+  if [ $((now - last_pull)) -lt "$ttl_seconds" ] 2>/dev/null; then
+    return 1
+  fi
+
+  microCI_cache_set "$image" "$now"
+  return 0
+}
+
 function updateStepStatusJson {
   if [ -f "${MICROCI_DB_JSON}" ]; then
     local repoId=$1
@@ -349,7 +402,7 @@ function step_build_static_version_of_microci() {
         --env ENV_YML_1="1" \
         --env ENV_YML_2="String with spaces" \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
-        "gcc:13" \
+        "gcc:14" \
         /bin/bash -c "cd /microci_workspace \
            && apt update 2>&1 \
            && apt upgrade -y 2>&1 \
@@ -385,11 +438,14 @@ function step_build_static_version_of_microci() {
 
   ((++MICROCI_STEP_NUMBER))
 }
-echo 'Updating docker images...'
-  echo 'Updating debian:stable-slim docker image...' >> .microCI.log
-  docker pull debian:stable-slim --quiet 2>&1 >> .microCI.log
-  echo 'Updating gcc:13 docker image...' >> .microCI.log
-  docker pull gcc:13 --quiet 2>&1 >> .microCI.log
+  if microCI_should_pull_docker_image 'debian:stable-slim'; then
+    echo 'Updating debian:stable-slim docker image...'
+    docker pull debian:stable-slim --quiet
+  fi
+  if microCI_should_pull_docker_image 'gcc:14'; then
+    echo 'Updating gcc:14 docker image...'
+    docker pull gcc:14 --quiet
+  fi
 
 
 # Execute all steps in the pipeline

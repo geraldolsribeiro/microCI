@@ -6,7 +6,7 @@ steps:
 
   - name: "Another ignored step - build static version of microCI"
     description: "This step should be executed"
-    docker: "gcc:13"
+    docker: "gcc:14"
     network: bridge
     run_as: root
     plugin:

@@ -6,7 +6,7 @@
 steps:
   - name: "Build static version of microCI"
     description: "Description of this step"
-    docker: "gcc:13"     # Required; Docker image that will be executed
+    docker: "gcc:14"     # Required; Docker image that will be executed
     network: bridge      # Optional; Default: none; Options: bridge | host | none
     devices:             # Optional; Default: empty
       - "/dev/dri/"

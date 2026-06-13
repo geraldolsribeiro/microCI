@@ -433,10 +433,11 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
       }
 
       if (mDockerImages.size()) {
-        mScript << "echo 'Updating docker images...'\n";
         for (const auto &dockerImage : mDockerImages) {
-          mScript << fmt::format("  echo 'Updating {} docker image...' >> .microCI.log\n", dockerImage);
-          mScript << fmt::format("  docker pull {} --quiet 2>&1 >> .microCI.log\n", dockerImage);
+          mScript << fmt::format("  if microCI_should_pull_docker_image '{}'; then\n", dockerImage);
+          mScript << fmt::format("    echo 'Updating {} docker image...'\n", dockerImage);
+          mScript << fmt::format("    docker pull {} --quiet\n", dockerImage);
+          mScript << "  fi\n";
         }
       }
 
