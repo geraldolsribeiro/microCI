@@ -32,7 +32,6 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <libintl.h>
 #include <map>
 #include <openssl/evp.h>
 #include <spdlog/spdlog.h>
@@ -41,10 +40,6 @@
 #include "argh.h"
 #include "inicpp.h"
 
-// #include <libintl.h>
-// #include <locale.h>
-// #define _(String) gettext(String)
-#define _(String) String
 
 // Plugins
 #include "BashPluginStepParser.hpp"
@@ -476,11 +471,6 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
   //{{{
 
   try {
-    setlocale(LC_ALL, "");
-    bindtextdomain("microci", nullptr);
-    bind_textdomain_codeset("microci", "UTF-8");
-    textdomain("microci");
-
     spdlog::set_pattern("# MicroCI [%H:%M:%S %z] [%^%l%$] %v");
 
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
@@ -488,14 +478,14 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     auto validOptions = commandLineValidOptions();
     for (const auto &flag : cmdl.flags()) {
       if (validOptions.find(flag) == validOptions.end()) {
-        spdlog::error(_("Invalid command line option: -{}"), flag);
+        spdlog::error("Invalid command line option: -{}", flag);
         return 1;
       }
     }
 
     for (const auto &param : cmdl.params()) {
       if (validOptions.find(param.first) == validOptions.end()) {
-        spdlog::error(_("Invalid command line option: -{} {}"), param.first, param.second);
+        spdlog::error("Invalid command line option: -{} {}", param.first, param.second);
         return 1;
       }
     }
@@ -642,22 +632,22 @@ sudo rm -f /usr/bin/microCI
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != std::string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            spdlog::debug(_("Creating folder '{}'"), folderName);
+            spdlog::debug("Creating folder '{}'", folderName);
             std::filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            spdlog::debug(_("File '{}' already exists"), fileName);
+            spdlog::debug("File '{}' already exists", fileName);
             continue;
           } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            spdlog::debug(_("The file '{}' was edited from the template"), fileName);
+            spdlog::debug("The file '{}' was edited from the template", fileName);
             std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             out.open(fileName, std::ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
             out << step;
           } else {
-            spdlog::debug(_("The config file '{}' was created from the template"), fileName);
+            spdlog::debug("The config file '{}' was created from the template", fileName);
             out.open(fileName);
             out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
@@ -666,9 +656,9 @@ sudo rm -f /usr/bin/microCI
       if (isNewConfigFound) {
         return 0;
       }
-      spdlog::error(_("Invalid config type: {}"), newConfig);
+      spdlog::error("Invalid config type: {}", newConfig);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        spdlog::debug(_("Use: microCI --config {}"), it->first);
+        spdlog::debug("Use: microCI --config {}", it->first);
       }
       return -1;
 #undef MICROCI_TPL
@@ -728,22 +718,22 @@ sudo rm -f /usr/bin/microCI
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != std::string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            spdlog::debug(_("Creating folder '{}'"), folderName);
+            spdlog::debug("Creating folder '{}'", folderName);
             std::filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            spdlog::debug(_("File '{}' already exists"), fileName);
+            spdlog::debug("File '{}' already exists", fileName);
             continue;
           } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            spdlog::debug(_("The file '{}' was edited from the template"), fileName);
+            spdlog::debug("The file '{}' was edited from the template", fileName);
             std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             std::ofstream out(fileName, std::ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
             out << step;
           } else {
-            spdlog::debug(_("The file '{}' was created from the template"), fileName);
+            spdlog::debug("The file '{}' was created from the template", fileName);
             std::ofstream out(fileName);
             out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
@@ -753,15 +743,15 @@ sudo rm -f /usr/bin/microCI
       if (isNewPluginFound) {
         return 0;  // All done
       }
-      spdlog::error(_("Invalid plugin type: {}"), newType);
+      spdlog::error("Invalid plugin type: {}", newType);
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        spdlog::debug(_("Use: microCI --new {}"), it->first);
+        spdlog::debug("Use: microCI --new {}", it->first);
       }
       return 1;
     }
 
     if (!std::filesystem::exists(yamlFileName)) {
-      auto msg = fmt::format(_("The input file '{}' was not found"), yamlFileName);
+      auto msg = fmt::format("The input file '{}' was not found", yamlFileName);
       spdlog::error(msg);
       std::cout << fmt::format("echo '{}'\n", msg);
       return 1;
@@ -789,7 +779,7 @@ sudo rm -f /usr/bin/microCI
 
     if (!uCI.ReadConfig(yamlFileName)) {
       std::cout << microci::banner() << std::endl;
-      auto msg = fmt::format(_("Failure reading the file '{}'"), yamlFileName);
+      auto msg = fmt::format("Failure reading the file '{}'", yamlFileName);
       spdlog::error(msg);
       std::cout << fmt::format("echo '{}'\n", msg);
       return 1;
@@ -832,9 +822,9 @@ sudo rm -f /usr/bin/microCI
           gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<std::string>();
         }
 
-        spdlog::debug(_("PWD: {}"), pwd);
-        spdlog::debug(_("Git config: {}"), gitConfigFilename);
-        spdlog::debug(_("Git origin: {}"), gitRemoteOrigin);
+        spdlog::debug("PWD: {}", pwd);
+        spdlog::debug("Git config: {}", gitConfigFilename);
+        spdlog::debug("Git origin: {}", gitRemoteOrigin);
 
         auto pwdRepoId = std::string{"_"};  // avoid keys starting with a number
 
@@ -890,7 +880,7 @@ sudo rm -f /usr/bin/microCI
     spdlog::error(e.what());
     return 1;
   } catch (...) {
-    spdlog::error(_("Unknown exception"));
+    spdlog::error("Unknown exception");
     return 1;
   }
   return 0;

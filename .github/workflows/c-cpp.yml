@@ -19,7 +19,7 @@ jobs:
     - name: 'Install dependencies'
       run: |
         apt-get update
-        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev gettext upx equivs alien glow make g++ wget git
+        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev upx equivs alien glow make g++ wget git
 
     - name: 'Download headers'
       run: |

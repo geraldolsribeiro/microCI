@@ -11,7 +11,7 @@ microci (v0.43.0) unstable; urgency=low
   * refact: update generated code
   * refact: modernize code
   * Validate command line options
-  * Disable gettext translation macro
+  * Simplify the codebase
   * Add UPX to debian_deps makefile target
   * translate YAML from Portuguese to English
   * improve error message in BashPluginStepParser
@@ -81,7 +81,7 @@ microci (v0.40.0) unstable; urgency=low
 microci (v0.39.0) unstable; urgency=low
   * Update README
   * Merge pull request #59 from geraldolsribeiro/macport
-  * Use libintl only on mac
+  * Improve macOS build compatibility
   * Fix merge
   * Merge branch 'master' into macport
   * Reformat
@@ -264,7 +264,7 @@ microci (v0.29.0) unstable; urgency=low
   * Update generated code
   * Docker image clang renamed to cpp_compiler based on gcc 14
   * Tanslation to english
-  * Remote translation config from mkdocs_material
+  * Refactor mkdocs_material configuration handling
   * Translation to english
   * Name the container
   * Add options support to bash plugin

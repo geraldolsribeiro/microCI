@@ -88,13 +88,12 @@ LDLIBS+= -lz
 # Mac ARM-specific settings
 ifdef IS_MAC_ARM
 CXXFLAGS += -I/opt/homebrew/include
-LDLIBS+= -lintl
 LDLIBS += -L/opt/homebrew/lib
 # LIBS += -lmyarmlib
 endif
 
 .PHONY: all
-all: ../locales/pt_BR/microci.mo ../bin/microCI 
+all: ../bin/microCI 
 
 .PHONY: diagram
 diagram:
@@ -104,28 +103,6 @@ diagram:
 tidy:
 	clang-tidy *.cpp -- $(CXXFLAGS)
 
-../locales/microci.pot: ../src/*.cpp
-	xgettext $^ \
-		--keyword="_" \
-		--output="$@" \
-		--language=C++ \
-		--add-comments \
-		--sort-output \
-		--join-existing \
-		--copyright-holder="Geraldo Luis da Silva Ribeiro" \
-		--package-name="microci" \
-		--package-version="$(shell sed -n "s/#define microCI_version \"\(.*\)\"/\1/p" ../include/MicroCI.hpp)" \
-		--msgid-bugs-address="geraldolsribeiro@gmail.com" \
-
-../locales/pt_BR/microci.po: ../locales/microci.pot
-	msgmerge $@ $^ --output-file=$@
-
-../locales/pt_BR/microci.mo: ../locales/pt_BR/microci.po
-	msgfmt $^ --output-file=$@
-
-test_ptBR:
-	sudo cp ../locales/pt_BR/microci.mo /usr/share/locale/pt_BR/LC_MESSAGES/
-	LC_ALL=pt_BR.UTF-8 ../bin/microCI
 
 ../include/new/%.hpp: ../new/%.yml
 	$(Q)echo "Creating $@..."

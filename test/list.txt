@@ -5,7 +5,7 @@
  5 d154 Build diagrams with plantuml
  6 7e4a Build diagrams - pikchr
  7 ee7b Build HTML documentation
- 8 6c44 Documentation preview at port 8000
+ 8 e159 Documentation preview http://localhost:8000
  9 e516 Configure github pages
 10 0d3e Build PDF documentation
 11 a99b Publish documentation to microci.dev
