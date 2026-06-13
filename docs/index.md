@@ -1,51 +1,75 @@
-# Welcome to microCI
+# Write your pipeline once. Execute it anywhere.
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 
-**microCI** is a powerful tool designed to streamline the creation of
-continuous-integration pipelines by generating portable, auditable scripts for
-executing tasks in Docker containers.
+**microCI** is a portable pipeline engine: describe automation in YAML, generate plain Bash, and run the same pipeline locally, in CI, behind a webhook server, or in production.
 
 For complete documentation, visit [microci.dev](https://microci.dev).
 
-<center>![CI/CD Pipeline](images/microci-ci_cd_pipeline.svg)</center>
+<center>
 
-CI/CD stands for Continuous Integration / Continuous Deployment. CI and CD
-pipelines form the backbone of modern software development, enabling teams to
-ship features faster and more reliably. A solid CI/CD pipeline architecture is
-key to making these workflows scalable, secure, and efficient—not just
-automated.
+![Portable Pipelines](images/microci-ci_cd_pipeline.svg)
 
+</center>
 
-## How it works?
+microCI is built around a simple idea:
 
-**microCI** creates a Bash script that implements the pipeline defined in a YAML file.
+- define the workflow once
+- keep it auditable and reproducible
+- execute it wherever you need
 
-<center>![YAML to Bash](images/microci-yaml_to_bash.svg)</center>
+It fits many automation use cases, including:
 
-Each step in the pipeline recipe is executed by its own portable Bash function.
+- CI
+- CD
+- release automation
+- documentation generation
+- static site publishing
+- container building
+- firmware pipelines
+- embedded software delivery
+- internal operations
 
+## How it works
 
-## How to execute?
+**microCI** reads a YAML pipeline and generates a Bash script.
 
-<center>![How to execute](images/microci-execute.svg)</center>
+<center>
 
-Using `microCI` is very simple:
+![YAML to Bash](images/microci-yaml_to_bash.svg)
+
+</center>
+
+The generated script can be executed directly, with no hidden runtime.
+
+## Execute anywhere
+
+<center>
+
+![How to execute](images/microci-execute.svg)
+
+</center>
+
+Use the same pipeline definition in different environments:
 
 ```bash
 microCI | bash
 ```
 
-## Where can I use microCI?
+## Why microCI?
 
-<center>![Where](images/microci-where.svg)</center>
+<center>
 
-Every step in the process is fully reproducible across various environments:
+![Where](images/microci-where.svg)
 
-* Developer workstations
-* Build servers triggered by commits
-* Deployment servers for production releases
+</center>
 
-With microCI, the same zero-dependency tool works seamlessly in both
-development and production environments.
+microCI focuses on:
 
+- pipeline portability
+- auditability
+- reproducibility
+- vendor independence
+- local-first execution
+
+The result is one pipeline definition that can travel across environments without changing the source of truth.
