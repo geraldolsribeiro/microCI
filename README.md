@@ -1,6 +1,7 @@
 # Write your pipeline once. Execute it anywhere.
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/geraldolsribeiro/microCI/total)
 
 **microCI** is a portable pipeline engine: describe automation in YAML, generate plain Bash, and run the same pipeline locally, in CI, behind a webhook server, or in production.
 
