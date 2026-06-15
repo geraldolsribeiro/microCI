@@ -61,7 +61,7 @@ RUN set -eux; \
 FROM mcr.microsoft.com/dotnet/runtime:10.0
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
-COPY --from=builder /src/asn1scc/asn1scc/bin/Release/net9.0/ /opt/asn1scc
+COPY --from=builder /src/asn1scc/asn1scc/bin/Release/net10.0/ /opt/asn1scc
 #WORKDIR /tmp
 WORKDIR /microci_workspace 
 
