@@ -87,50 +87,21 @@ RUN set -eux; \
 RUN mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MANAGED.old \
   && PIP_NO_CACHE_DIR=1 pip install --no-cache-dir clang-html
 
-
 RUN set -eux; \
   echo "2025-07-22" > /dev/null \
   && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
   && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
   && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
 
-CMD [ "/bin/echo", "microCI C++ compiler image (x86_64)" ]
+RUN set -eux; \
+  echo "2026-06-15" > /dev/null \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    apt-utils \
+    gcc-arm-linux-gnueabi \
+    g++-arm-linux-gnueabi \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-# Note: libboost-all-dev was removed due some issue related to gfortran dependencies
-# Maybe more useful add libraries individually instead all one
-#   Depends: libboost-dev
-#   Depends: libboost-tools-dev
-#     libboost-tools-dev:i386
-#   Depends: libboost-atomic-dev
-#   Depends: libboost-chrono-dev
-#   Depends: libboost-container-dev
-#   Depends: libboost-context-dev
-#   Depends: libboost-coroutine-dev
-#   Depends: libboost-date-time-dev
-#   Depends: libboost-exception-dev
-#   Depends: libboost-fiber-dev
-#   Depends: libboost-filesystem-dev
-#   Depends: libboost-graph-dev
-#   Depends: libboost-graph-parallel-dev
-#   Depends: libboost-iostreams-dev
-#   Depends: libboost-locale-dev
-#   Depends: libboost-log-dev
-#   Depends: libboost-math-dev
-#   Depends: libboost-mpi-dev
-#   Depends: libboost-mpi-python-dev
-#   Depends: libboost-numpy-dev
-#   Depends: libboost-program-options-dev
-#   Depends: libboost-python-dev
-#   Depends: libboost-random-dev
-#   Depends: libboost-regex-dev
-#   Depends: libboost-serialization-dev
-#   Depends: libboost-stacktrace-dev
-#   Depends: libboost-system-dev
-#   Depends: libboost-test-dev
-#   Depends: libboost-thread-dev
-#   Depends: libboost-timer-dev
-#   Depends: libboost-type-erasure-dev
-#   Depends: libboost-wave-dev
-#   Depends: libboost-nowide-dev
+CMD [ "/bin/echo", "microCI C++ compiler image (x86_64)" ]
 
 # vim: ft=dockerfile
