@@ -107,14 +107,14 @@ steps:
       name: "mkdocs_material"
       action: "serve"
 
-  - name: "Configure github pages"
+  - name: "Configure Github pages and README"
     description: "Configure Apex domain for github pages and README file"
     plugin:
       name: bash
       bash: |
         mkdir -p site/
         cp github-pages/CNAME site/
-        cat docs/index.md | sed 's#(images#(docs/images#' > README.md
+        cat docs/index.md | sed 's#(images#(docs/images#' | sed 's#<center>#<div align="center">#' | sed 's#</center>#</div>#' > README.md
         # Cover page
         cp README.md site/
 
