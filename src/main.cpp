@@ -40,13 +40,13 @@
 #include "argh.h"
 #include "inicpp.h"
 
-
 // Plugins
 #include "BashPluginStepParser.hpp"
 #include "BeamerPluginStepParser.hpp"
 #include "ClangFormatPluginStepParser.hpp"
 #include "ClangTidyPluginStepParser.hpp"
 #include "CppCheckPluginStepParser.hpp"
+#include "CppPluginStepParser.hpp"
 #include "DocmdPluginStepParser.hpp"
 #include "DoxygenPluginStepParser.hpp"
 #include "FetchPluginStepParser.hpp"
@@ -69,6 +69,7 @@
 #include "new/clang-format.hpp"
 #include "new/clang-format_config.hpp"
 #include "new/clang-tidy.hpp"
+#include "new/cpp.hpp"
 #include "new/cppcheck.hpp"
 #include "new/docker_build.hpp"
 #include "new/docmd.hpp"
@@ -97,6 +98,7 @@
 #include "help/bash.hpp"
 #include "help/beamer.hpp"
 #include "help/clang-format.hpp"
+#include "help/cpp.hpp"
 // #include "help/clang-format_config.hpp"
 #include "help/clang-tidy.hpp"
 #include "help/cppcheck.hpp"
@@ -174,6 +176,7 @@ Options:
   -c,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
+  -n,--new cpp             Create a C++ command line build step
   -n,--new docmd           Create a documentation step
   -n,--new mkdocs_material Create a documentation step
   -n,--new doxygen         Create a documentation step
@@ -536,6 +539,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("git_publish", std::make_shared<GitPublishPluginStepParser>(&uCI));
     uCI.RegisterPlugin("mkdocs_material", std::make_shared<MkdocsMaterialPluginStepParser>(&uCI));
     uCI.RegisterPlugin("cppcheck", std::make_shared<CppCheckPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("cpp", std::make_shared<CppPluginStepParser>(&uCI));
     uCI.RegisterPlugin("clang-tidy", std::make_shared<ClangTidyPluginStepParser>(&uCI));
     uCI.RegisterPlugin("clang-format", std::make_shared<ClangFormatPluginStepParser>(&uCI));
     uCI.RegisterPlugin("vhdl-format", std::make_shared<VHDLFormatPluginStepParser>(&uCI));
@@ -562,6 +566,7 @@ sudo rm -f /usr/bin/microCI
       make_pair(#NAME, std::string(reinterpret_cast<const char *>(___help_##NAME##_txt), ___help_##NAME##_txt_len)));
     MICROCI_HELP(bash);
     MICROCI_HELP(beamer)
+    MICROCI_HELP(cpp)
     MICROCI_HELP(clang_format);
     MICROCI_HELP(clang_tidy);
     MICROCI_HELP(cppcheck);
@@ -690,6 +695,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true,  "pikchr",          ".microCI.yml",  yml, pikchr);
       MICROCI_TPL(true,  "mermaid",         ".microCI.yml",  yml, mermaid);
       MICROCI_TPL(true,  "vhdl-format",     ".microCI.yml",  yml, vhdl_format);
+      MICROCI_TPL(true,  "cpp",             ".microCI.yml",  yml, cpp);
       MICROCI_TPL(true,  "clang-format",    ".microCI.yml",  yml, clang_format);
       MICROCI_TPL(false, "clang-format",    ".clang-format", yml, clang_format_config);
       MICROCI_TPL(true,  "beamer",          ".microCI.yml",  yml, beamer);

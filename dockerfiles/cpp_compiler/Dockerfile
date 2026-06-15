@@ -27,18 +27,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM gcc:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+FROM debian:trixie-slim
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN set -eux; \
-  echo "2026-03-14" > /dev/null \
+  echo "2026-06-15" > /dev/null \
   && apt-get update \
-  && apt-get install -y curl \
+  && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gcc \
+    g++ \
+    make \
+    build-essential \
+    xxd \
+    git \
+    pkg-config \
+    cmake \
+    python3 \
+    python3-pip \
+  && apt-get clean autoclean \
+  && rm -rf /var/lib/apt/lists/* \
   && echo "deb http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" > /etc/apt/sources.list.d/llvm.list \
   && echo "deb-src http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" >> /etc/apt/sources.list.d/llvm.list \
   && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
   && apt-get update \
-  && apt-get upgrade --yes \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
@@ -46,54 +59,34 @@ RUN set -eux; \
 RUN set -eux; \
   echo "2026-03-14" > /dev/null \
   && apt-get update \
-  && apt-get install -y \
-    build-essential \
+  && apt-get install -y --no-install-recommends \
     clang-22 \
     clang-format-22 \
     clang-tidy-22 \
-    clang-tools-22 \
-    cmake \
     cppcheck \
-    crossbuild-essential-arm64 \
     doxygen \
-    gettext \
-    git \
     lcov \
-    xxd \
+    ninja-build \
   && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+  && rm -rf /var/lib/apt/lists/*
 
 # The package libpcre3 will not exist on trixie and the code should be ported to libpcre2.
 RUN set -eux; \
   echo "2024-06-06" > /dev/null \
   && apt-get update \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
     libasio-dev \
     libcrypto++-dev \
     libpcre2-dev \
     libspdlog-dev \
     libyaml-cpp-dev \
-    ninja-build \
-    python3-full \
-    python3-pip \
   && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
+  && rm -rf /var/lib/apt/lists/*
 
 #  https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3
 RUN mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MANAGED.old \
-  && PIP_NO_CACHE_DIR=1 pip install clang-html
+  && PIP_NO_CACHE_DIR=1 pip install --no-cache-dir clang-html
 
-RUN set -eux; \
-  echo "2024-06-06" > /dev/null \
-  && apt-get update \
-  && apt-get upgrade -y \
-  && apt-get install -y \
-    apt-utils \
-    gcc-arm-linux-gnueabi \
-    g++-arm-linux-gnueabi \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN set -eux; \
   echo "2025-07-22" > /dev/null \
@@ -101,7 +94,7 @@ RUN set -eux; \
   && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
   && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
 
-CMD [ "/bin/echo", "microCI C++ compiler image" ]
+CMD [ "/bin/echo", "microCI C++ compiler image (x86_64)" ]
 
 # Note: libboost-all-dev was removed due some issue related to gfortran dependencies
 # Maybe more useful add libraries individually instead all one

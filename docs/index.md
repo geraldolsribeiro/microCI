@@ -1,7 +1,11 @@
 # Write your pipeline once. Execute it anywhere.
 
+<div align="center">
+
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/geraldolsribeiro/microCI/total)
+
+</div>
 
 ## Why microCI exists
 
@@ -21,11 +25,11 @@ Define automation in YAML. Generate plain Bash. Run the same pipeline anywhere.
 - in containers
 - behind webhooks
 
-<center>
+<div align="center">
 
 ![Portable Pipelines](images/microci-ci_cd_pipeline.svg)
 
-</center>
+</div>
 
 ## What microCI does
 
@@ -48,11 +52,11 @@ It fits many automation use cases:
 
 **microCI** reads a YAML pipeline and generates a Bash script.
 
-<center>
+<div align="center">
 
 ![YAML to Bash](images/microci-yaml_to_bash.svg)
 
-</center>
+</div>
 
 The generated script can be executed directly. No hidden platform. No vendor lock-in.
 
@@ -64,11 +68,11 @@ Use the same pipeline definition in different environments:
 microCI | bash
 ```
 
-<center>
+<div align="center">
 
 ![How to execute](images/microci-execute.svg)
 
-</center>
+</div>
 
 ## Why it matters
 

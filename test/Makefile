@@ -89,6 +89,7 @@ test_run:
 	$(MAKE) -C test_bash_02/
 	$(MAKE) -C test_bash_03/
 	$(MAKE) -C test_bash_04/
+	$(MAKE) -C new_cpp/
 
 clean:
 	rm -f .env

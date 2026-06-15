@@ -1,4 +1,5 @@
-PLUGINS_TXT=$(addprefix ../help/,$(subst .md,.txt,$(subst _plugin_,,$(wildcard ???_plugin_*.md))))
+# Convert ???_plugin_name.md -> ../help/name.txt
+PLUGINS_TXT=$(foreach f,$(wildcard ???_plugin_*.md),../help/$(word 2,$(subst _plugin_, ,$(basename $(notdir $(f))))).txt)
 
 .PHONY: all
 all: \

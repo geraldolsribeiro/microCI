@@ -1,0 +1,20 @@
+steps:
+  - name: "Build static version of microCI"
+    description: "Description of this step"
+    plugin:
+      name: cpp
+      bash: |
+        # Use GCC compiler directly
+        gcc prog.c -o prog_c
+        g++ prog.cpp -o prog_cpp
+        # Test
+        ./prog_c
+        ./prog_cpp
+        # Or build systems
+        make clean
+        # Use Clang compiler directly
+        clang-22 prog.c -o prog_c
+        clang++-22 prog.cpp -o prog_cpp
+        ./prog_c
+        ./prog_cpp
+        make clean
