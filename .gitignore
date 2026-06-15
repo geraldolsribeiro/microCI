@@ -16,9 +16,10 @@ test/failure_test/a.c
 macos/package/usr/local/bin
 macos/MicroCI-*.pkg
 .DS_Store
-/dockerfiles/mermaid/iperf_udp.pdf
-/dockerfiles/mermaid/iperf_udp.png
-/dockerfiles/mermaid/iperf_udp.svg
+dockerfiles/asn1/test/
+dockerfiles/mermaid/iperf_udp.pdf
+dockerfiles/mermaid/iperf_udp.png
+dockerfiles/mermaid/iperf_udp.svg
 docs/diagrams/.$microci.drawio.bkp
 microci_*.dsc
 microci_*.tar.xz

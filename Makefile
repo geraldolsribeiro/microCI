@@ -45,5 +45,7 @@ clean:
 	$(RM) microci_*.dsc
 	$(RM) microci_*.tar.xz
 
-README.md: docs/index.md
-	cat $< | sed 's#(images#(docs/images#' > $@
+publish:
+	microCI -N 7 | bash
+	microCI -N 9 | bash
+	microCI -N 11 | bash
