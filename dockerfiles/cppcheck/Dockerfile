@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM debian:testing-slim
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN set -eux; \
   apt-get update \

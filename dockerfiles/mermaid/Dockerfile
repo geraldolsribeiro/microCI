@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM minlag/mermaid-cli
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 USER root
 RUN apk update

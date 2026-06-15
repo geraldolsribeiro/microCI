@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM pandoc/latex:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN tlmgr update --self \
   && tlmgr install \

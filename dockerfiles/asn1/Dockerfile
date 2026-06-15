@@ -30,7 +30,7 @@
 # Based on https://raw.githubusercontent.com/maxime-esa/asn1scc/master/Dockerfile.runtime
 
 FROM  mcr.microsoft.com/dotnet/sdk:10.0 AS builder
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN set -eux; \
   echo "2026-03-14" > /dev/null \
@@ -59,7 +59,7 @@ RUN set -eux; \
 
 
 FROM mcr.microsoft.com/dotnet/runtime:10.0
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 COPY --from=builder /src/asn1scc/asn1scc/bin/Release/net9.0/ /opt/asn1scc
 #WORKDIR /tmp

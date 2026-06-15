@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM alpine:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN apk add --no-cache rsvg-convert bash inkscape
 RUN mkdir -p /.config/inkscape && chmod 777 /.config/inkscape

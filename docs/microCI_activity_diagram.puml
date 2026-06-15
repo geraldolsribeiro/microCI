@@ -80,7 +80,7 @@ stop
 @startuml
 start
 partition "Alternative flow" {
-:Documentation preview at port 8000; <<procedure>>
+:Documentation preview http://localhost:8000; <<procedure>>
 floating note left: mkdocs_material
 floating note right: Serve documentation preview at port 8000
 

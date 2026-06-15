@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM ubuntu:noble
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN set -eux; \
   echo "2024-09-25" > /dev/null \

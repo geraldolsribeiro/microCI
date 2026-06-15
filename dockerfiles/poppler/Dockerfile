@@ -28,6 +28,6 @@
 # SOFTWARE.
 
 FROM alpine:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN apk --no-cache add poppler poppler-utils

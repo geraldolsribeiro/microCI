@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM alpine:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 # ADD https://github.com/sclevine/yj/releases/download/v5.1.0/yj-linux-amd64 /bin/yj
 ADD https://github.com/sclevine/yj/releases/latest/download/yj-linux-amd64 /bin/yj

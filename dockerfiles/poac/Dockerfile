@@ -1,5 +1,5 @@
 FROM debian:stable-slim
-MAINTAINER Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>
+MAINTAINER Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>
 
 RUN set -eux; \
   apt-get update \

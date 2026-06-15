@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM alpine:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 # Very similar image to doxygen
 RUN echo "2026-05-26" \

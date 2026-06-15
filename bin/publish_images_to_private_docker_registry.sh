@@ -1,6 +1,6 @@
 #!/bin/bash
 ### ----------------------------------------------------------------------
-### Copyright (C) 2022-2026 Geraldo Ribeiro <geraldo@intmain.io>
+### Copyright (C) 2022-2026 Geraldo Ribeiro <geraldolsribeiro@gmail.com>
 ### ----------------------------------------------------------------------
 
 DOCKER_REGISTRY_IP=192.168.1.11

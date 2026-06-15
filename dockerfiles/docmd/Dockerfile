@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM ruby:alpine
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 WORKDIR /microci_workspace/
 COPY intmain_docmd /bin/

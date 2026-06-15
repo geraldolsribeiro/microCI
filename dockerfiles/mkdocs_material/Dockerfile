@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM python:slim-bookworm
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN PIP_NO_CACHE_DIR=1 pip3 install --no-cache --upgrade pip setuptools \
   Pygments \

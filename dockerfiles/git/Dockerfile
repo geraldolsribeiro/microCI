@@ -28,7 +28,7 @@
 # SOFTWARE.
 
 FROM alpine:latest
-LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldo@intmain.io>"
+LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN echo "2025-02-21" \
   && apk add --no-cache \
