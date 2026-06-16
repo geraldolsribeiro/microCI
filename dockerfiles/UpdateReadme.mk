@@ -1,7 +1,9 @@
 ifneq ($(wildcard ../.env),)
 include ../.env
 
-UPDATE_README_IMAGE=peterevans/dockerhub-description:4
+# .env sample:
+# DOCKERHUB_USERNAME=geraldolsribeiro
+# DOCKERHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 publish::
 	docker run --rm -v $(shell pwd):/workspace \
@@ -9,5 +11,5 @@ publish::
   	-e DOCKERHUB_PASSWORD=$(DOCKERHUB_TOKEN) \
   	-e DOCKERHUB_REPOSITORY=intmain/$(IMAGE_NAME) \
   	-e README_FILEPATH=/workspace/README.md \
-		$(UPDATE_README_IMAGE)
+		peterevans/dockerhub-description:4
 endif
