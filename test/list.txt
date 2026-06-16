@@ -6,7 +6,7 @@
  6 7e4a Build diagrams - pikchr
  7 ee7b Build HTML documentation
  8 e159 Documentation preview http://localhost:8000
- 9 e516 Configure github pages
+ 9 cb76 Configure Github pages and README
 10 0d3e Build PDF documentation
 11 a99b Publish documentation to microci.dev
 12 4680 C++ code format with clang-format

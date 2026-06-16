@@ -181,7 +181,7 @@ function microCI_latest_download_URL_with_version {
 }
 
 function microCI_download_latest_binary {
-  curl -fsSL github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/bin/microCI
+  curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/bin/microCI
 }
 
 MICROCI_CACHE_FILE="${HOME}/.cache/microCI/docker-images.json"
@@ -211,9 +211,9 @@ function microCI_cache_set() {
   tmp_file="${MICROCI_CACHE_FILE}.$$"
   mkdir -p "$(dirname "$MICROCI_CACHE_FILE")"
   if [ -f "$MICROCI_CACHE_FILE" ]; then
-    jq --arg key "$cache_key" --argjson value "$value" '.[$key] = $value' "$MICROCI_CACHE_FILE" > "$tmp_file"
+    jq --arg key "$cache_key" --argjson value "$value" '.[$key] = $value' "$MICROCI_CACHE_FILE" >"$tmp_file"
   else
-    jq -n --arg key "$cache_key" --argjson value "$value" '{($key): $value}' > "$tmp_file"
+    jq -n --arg key "$cache_key" --argjson value "$value" '{($key): $value}' >"$tmp_file"
   fi
   mv "$tmp_file" "$MICROCI_CACHE_FILE"
 }

@@ -28,7 +28,7 @@ floating note right: Build diagrams from textual description
 floating note left: mkdocs_material
 floating note right: Build project documentation
 
-:Configure github pages; <<procedure>>
+:Configure Github pages and README; <<procedure>>
 floating note left: bash
 floating note right: Configure Apex domain for github pages and README file
 

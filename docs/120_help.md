@@ -13,7 +13,7 @@ microCI --help
                            ░░░█▀▀░▀▀▀░▀▀▀░░░
                            ░░░▀░░░░░░░░░░░░░
                            ░░░░░░░░░░░░░░░░░
-                             microCI 0.44.0
+                             microCI 0.45.1
 
 
 Options:
@@ -35,6 +35,7 @@ Options:
   -c,--config gitlab_ci    Create a .gitlab-ci.yml example config
   -n,--new skip            Create a placeholder step
   -n,--new bash            Create a command line step
+  -n,--new cpp             Create a C++ command line build step
   -n,--new docmd           Create a documentation step
   -n,--new mkdocs_material Create a documentation step
   -n,--new doxygen         Create a documentation step

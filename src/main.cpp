@@ -497,7 +497,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
       std::cout << R"(
 echo "🚀 Updating to the latest stable release..."
 sudo curl -fsSL \
-  github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
+  https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 microCI --version
@@ -508,7 +508,7 @@ microCI --version
       std::cout << R"(
 echo "🚧 Updating to the development stream..."
 sudo curl -fsSL \
-  github.com/geraldolsribeiro/microci/releases/download/latest/microCI \
+  https://github.com/geraldolsribeiro/microci/releases/download/latest/microCI \
   -o /usr/bin/microCI
 sudo chmod 755 /usr/bin/microCI
 microCI --version
