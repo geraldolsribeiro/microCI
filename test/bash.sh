@@ -448,7 +448,7 @@ function step_build_static_version_of_microci() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

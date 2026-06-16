@@ -29,6 +29,7 @@
 
 #include "MicroCI.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <pwd.h>
 #include <spdlog/spdlog.h>
@@ -230,7 +231,7 @@ void MicroCI::SetOnlyStep(const std::string &onlyStep) { mOnlyStep = onlyStep; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetOnlyStepNumber(const std::size_t onlyStepNumber) { mOnlyStepNumber = onlyStepNumber; }
+void MicroCI::SetOnlyStepNumber(const std::set<std::size_t> &onlyStepNumbers) { mOnlyStepNumbers = onlyStepNumbers; }
 
 // ----------------------------------------------------------------------
 //
@@ -241,12 +242,12 @@ void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh
     CI = YAML::LoadFile(filename);
     if (CI["steps"].IsSequence()) {
       std::size_t number = 1;
-      mOnlyStepNumber    = std::nullopt;
+      mOnlyStepNumbers.clear();
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<std::string>();
         auto hhi  = fmt::format("{:04x}", std::hash<std::string>{}(name) & 0xffff);
         if (hh == hhi) {
-          mOnlyStepNumber = number;
+          mOnlyStepNumbers.insert(number);
           return;
         }
         number++;
@@ -388,19 +389,7 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
     mDefaultDockerImage = CI["docker"].as<std::string>();
   }
 
-  if (mOnlyStepNumber) {
-    if (CI["steps"].size() < mOnlyStepNumber.value() or mOnlyStepNumber.value() < 1) {
-      throw std::invalid_argument(fmt::format("Invalid step number: {}", mOnlyStepNumber.value()));
-    }
-    auto step = CI["steps"][mOnlyStepNumber.value() - 1];
-    if (!step or !step["plugin"] or !step["plugin"]["name"]) {
-      throw std::invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
-    }
-    parsePluginStep(step);
-    mScript << "# Execute step #" << mOnlyStepNumber.value() << std::endl;
-    mScript << "step_" << sanitizeName(step["name"].as<std::string>()) << std::endl;
-    mScript << "exit 0;" << std::endl;
-  } else if (!mOnlyStep.empty()) {
+  if (!mOnlyStep.empty()) {
     // FIXME: Check whether it exists
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
@@ -415,6 +404,7 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
     }
   } else {
     if (CI["steps"].IsSequence()) {
+      std::size_t stepNumber = 1;
       for (auto step : CI["steps"]) {
         if (!step["plugin"] or !step["plugin"]["name"]) {
           throw std::invalid_argument(
@@ -426,6 +416,7 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
         } else {
           parsePluginStep(step);
         }
+        stepNumber++;
       }
 
       if (!mDefaultDockerImage.empty()) {
@@ -443,17 +434,20 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
 
       mScript << R"(
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 
 )";
+      stepNumber = 1;
       for (auto step : CI["steps"]) {
-        // if (step["only"]) {
-        //   continue;
-        // }
         auto stepName = step["name"].as<std::string>();
+        if (!mOnlyStepNumbers.empty() and mOnlyStepNumbers.count(stepNumber) == 0) {
+          stepNumber++;
+          continue;
+        }
         mScript << "  step_" << sanitizeName(stepName) << std::endl;
+        stepNumber++;
       }
       mScript << R"(
   date >> .microCI.log
@@ -569,8 +563,8 @@ void MicroCI::initBash(const YAML::Node &CI) {
   }
   data["STEPS_COMMENTS"] = stepsComments.str();
 
-  if (mOnlyStepNumber) {
-    data["MICROCI_STEP_NUMBER"] = mOnlyStepNumber.value() - 1;
+  if (!mOnlyStepNumbers.empty()) {
+    data["MICROCI_STEP_NUMBER"] = *mOnlyStepNumbers.begin() - 1;
   } else {
     data["MICROCI_STEP_NUMBER"] = 0;
   }

@@ -15,6 +15,8 @@ These tools are necessary because microCI generates Bash and expects a minimal r
 
 At runtime, the simplicity stays the same: `microCI | bash`.
 
+To run only specific steps, use `-O/--only` for a single named step or `-N/--number` with one or more comma-separated step numbers, such as `microCI --number 2,3,5`.
+
 ## Install
 
 <center>![Install](images/microci-install.svg)</center>

@@ -452,7 +452,7 @@ function step_create_c___code_verification_report___clang_tidy() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

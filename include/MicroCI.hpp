@@ -32,6 +32,7 @@
 
 #include <memory>
 #include <optional>
+#include <set>
 #include <string>
 
 //
@@ -90,7 +91,7 @@ class MicroCI {
   std::stringstream &Script();
   void SetAltHome(const std::string &altHome);
   void SetOnlyStep(const std::string &onlyStep);
-  void SetOnlyStepNumber(const std::size_t number);
+  void SetOnlyStepNumber(const std::set<std::size_t> &numbers);
   void SetOnlyStepHash(const std::string &fileName, const std::string &hh);
   void SetAppendLog(const bool appendLog);
   void AddDockerImage(const std::string &image);
@@ -114,7 +115,7 @@ class MicroCI {
   std::set<EnvironmentVariable> mEnvs;
   std::set<std::string> mDockerImages;
   std::string mOnlyStep;
-  std::optional<std::size_t> mOnlyStepNumber;
+  std::set<std::size_t> mOnlyStepNumbers;
   std::string mDefaultDockerImage;
   std::string mDefaultWorkspace;
   std::stringstream mScript;

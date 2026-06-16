@@ -473,7 +473,7 @@ function step_another_ignored_step___build_static_version_of_microci() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

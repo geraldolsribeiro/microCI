@@ -433,7 +433,7 @@ function step_generate_pdf_from_markdown() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

@@ -445,7 +445,7 @@ function step_build_diagrams() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

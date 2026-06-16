@@ -582,7 +582,7 @@ function step_launch_local_documentation_server_127_0_0_1_8000__ctrl_c_to_stop_(
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

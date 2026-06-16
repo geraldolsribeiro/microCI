@@ -36,6 +36,7 @@
 #include <openssl/evp.h>
 #include <spdlog/spdlog.h>
 #include <sstream>
+#include <set>
 
 #include "argh.h"
 #include "inicpp.h"
@@ -165,7 +166,7 @@ Options:
   -a,--append-log          Append log
   -O,--only name           Execute only a single step
   -l,--list                List steps
-  -N,--number N            Execute the Nth step
+  -N,--number N[,N...]     Execute one or more numbered steps
   -x,--hash hh             Execute the hh step
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream
@@ -768,9 +769,21 @@ sudo rm -f /usr/bin/microCI
       uCI.SetOnlyStep(onlyStep);
     }
 
-    std::size_t onlyStepNumber{0};
+    auto onlyStepNumber = std::string{};
     if ((cmdl({"-N", "--number"}) >> onlyStepNumber)) {
-      uCI.SetOnlyStepNumber(onlyStepNumber);
+      auto onlyStepNumbers = std::set<std::size_t>{};
+      auto ss              = std::stringstream{onlyStepNumber};
+      auto item            = std::string{};
+      while (std::getline(ss, item, ',')) {
+        if (item.empty()) {
+          continue;
+        }
+        onlyStepNumbers.insert(std::stoul(item));
+      }
+      if (onlyStepNumbers.empty()) {
+        throw std::invalid_argument("The --number option requires at least one step number");
+      }
+      uCI.SetOnlyStepNumber(onlyStepNumbers);
     }
 
     auto onlyStepHash = std::string{};

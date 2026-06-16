@@ -443,7 +443,7 @@ function step_format_c___code_with_clang_format() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

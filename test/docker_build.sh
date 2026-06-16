@@ -422,7 +422,7 @@ function step_build_docker_image() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

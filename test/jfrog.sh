@@ -447,7 +447,7 @@ function step_save_artifact_to_jfrog_artifact() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

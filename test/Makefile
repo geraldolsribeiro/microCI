@@ -28,6 +28,7 @@ SHELL=bash
 %.test: % %.ref
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
+.PHONY: test
 test:
 	rm -f .env
 	rm -f .env.yml
@@ -76,12 +77,32 @@ test:
 	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
 	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
 	../bin/microCI -i ../.microCI.yml --list                     > list.txt
-	../bin/microCI -i ../.microCI.yml --number 7                 > step_7_pikchr.sh
+	../bin/microCI -i ../.microCI.yml --number 7                 > step_7.sh
+	../bin/microCI -i ../.microCI.yml --number 7,9,11            > step_7_9_11_A.sh
+	../bin/microCI -i ../.microCI.yml --number 11,7,9,11,9       > step_7_9_11_B.sh
+	diff step_7_9_11_A.sh step_7_9_11_B.sh
 	$(MAKE) -C failure_test/ test
 	rm -f .env
 	rm -f .env.yml
 	#cat template.sh | bash
 
+#  1 05b1 C++ check with clang-tidy
+#  2 ec9f C++ check with cppcheck
+#  3 92ad SAST com flawfinder
+#  4 9eba Convert pdf to jpg
+#  5 d154 Build diagrams with plantuml
+#  6 7e4a Build diagrams - pikchr
+#  7 ee7b Build HTML documentation
+#  8 e159 Documentation preview http://localhost:8000
+#  9 cb76 Configure Github pages and README
+# 10 0d3e Build PDF documentation
+# 11 a99b Publish documentation to microci.dev
+# 12 4680 C++ code format with clang-format
+# 13 b7b7 Download project dependencies
+# 14 bf1d Build microCI static version
+# 15 f82a Build docker image for microci_cpp_compiler
+
+.PHONY: test_run
 test_run:
 	$(MAKE) -C quick_start_01/
 	$(MAKE) -C quick_start_02/
@@ -91,6 +112,7 @@ test_run:
 	$(MAKE) -C test_bash_04/
 	$(MAKE) -C new_cpp/
 
+.PHONY: clean
 clean:
 	rm -f .env
 	rm -f .env.yml

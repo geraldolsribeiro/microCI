@@ -450,7 +450,7 @@ function step_manage_artifacts_in_bucket() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

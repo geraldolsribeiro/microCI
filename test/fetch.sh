@@ -603,7 +603,7 @@ function step_download_external_files_into_the_project() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

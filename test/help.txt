@@ -18,7 +18,7 @@ Options:
   -a,--append-log          Append log
   -O,--only name           Execute only a single step
   -l,--list                List steps
-  -N,--number N            Execute the Nth step
+  -N,--number N[,N...]     Execute one or more numbered steps
   -x,--hash hh             Execute the hh step
   -U,--update-db           Update observability database
   -u,--update              Update microCI to stable stream

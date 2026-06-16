@@ -448,7 +448,7 @@ function step_build_documentation_with_doxygen() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 

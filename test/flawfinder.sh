@@ -453,7 +453,7 @@ function step_sast_with_flawfinder() {
   fi
 
 
-# Execute all steps in the pipeline
+# Execute steps in the pipeline
 function main() {
   date >> .microCI.log
 
