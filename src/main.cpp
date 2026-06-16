@@ -482,16 +482,16 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
 
     auto validOptions = commandLineValidOptions();
     for (const auto &flag : cmdl.flags()) {
-      if (std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; }) ==
-          validOptions.end()) {
+      const auto it = std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; });
+      if (it == validOptions.end()) {
         spdlog::error("Invalid command line option: -{}", flag);
         return 1;
       }
     }
 
     for (const auto &param : cmdl.params()) {
-      if (std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; }) ==
-          validOptions.end()) {
+      const auto it = std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; });
+      if (it == validOptions.end()) {
         spdlog::error("Invalid command line option: -{} {}", param.first, param.second);
         return 1;
       }
