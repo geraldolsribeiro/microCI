@@ -36,7 +36,7 @@ namespace microci {
 
 class ClangTidyPluginStepParser : public PluginStepParser {
  public:
-  ClangTidyPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit ClangTidyPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~ClangTidyPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

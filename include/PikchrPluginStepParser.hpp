@@ -36,7 +36,7 @@ namespace microci {
 
 class PikchrPluginStepParser : public PluginStepParser {
  public:
-  PikchrPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit PikchrPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~PikchrPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

@@ -36,7 +36,7 @@ namespace microci {
 
 class DocmdPluginStepParser : public PluginStepParser {
  public:
-  DocmdPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit DocmdPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~DocmdPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

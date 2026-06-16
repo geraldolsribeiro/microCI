@@ -36,7 +36,7 @@ namespace microci {
 
 class DoxygenPluginStepParser : public PluginStepParser {
  public:
-  DoxygenPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit DoxygenPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~DoxygenPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

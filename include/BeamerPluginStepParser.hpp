@@ -36,7 +36,7 @@ namespace microci {
 
 class BeamerPluginStepParser : public PluginStepParser {
  public:
-  BeamerPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit BeamerPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~BeamerPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

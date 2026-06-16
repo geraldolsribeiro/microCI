@@ -36,7 +36,7 @@ namespace microci {
 
 class MermaidPluginStepParser : public PluginStepParser {
  public:
-  MermaidPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit MermaidPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~MermaidPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

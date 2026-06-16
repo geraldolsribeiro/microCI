@@ -44,7 +44,7 @@ using nlohmann::json;
 
 class PluginStepParser {
  public:
-  PluginStepParser(MicroCI *microCI) : mMicroCI(microCI) {}
+  explicit PluginStepParser(MicroCI *microCI) : mMicroCI(microCI) {}
   virtual ~PluginStepParser() = default;
   virtual void Parse(const YAML::Node &step) { mMicroCI->Script() << step["name"].as<std::string>() << '\n'; }
   [[nodiscard]] virtual auto IsValid() const -> bool;

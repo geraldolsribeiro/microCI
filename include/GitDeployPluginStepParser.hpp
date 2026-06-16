@@ -36,7 +36,7 @@ namespace microci {
 
 class GitDeployPluginStepParser : public PluginStepParser {
  public:
-  GitDeployPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit GitDeployPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~GitDeployPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

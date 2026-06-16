@@ -36,7 +36,7 @@ namespace microci {
 
 class TemplatePluginStepParser : public PluginStepParser {
  public:
-  TemplatePluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit TemplatePluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~TemplatePluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };

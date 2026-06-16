@@ -36,7 +36,7 @@ namespace microci {
 
 class DockerBuildPluginStepParser : public PluginStepParser {
  public:
-  DockerBuildPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
+  explicit DockerBuildPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
   ~DockerBuildPluginStepParser() override = default;
   void Parse(const YAML::Node &step) override;
 };
