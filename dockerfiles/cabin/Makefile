@@ -27,8 +27,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.2
-IMAGE_NAME=microci_utils
+VERSION=0.1
+IMAGE_NAME=microci_cabin
 
 .PHONY: all
 all: publish
@@ -44,7 +44,11 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):latest yj -h
+	docker run -it intmain/$(IMAGE_NAME):latest cabin -h
+	docker run -it intmain/$(IMAGE_NAME):latest pwd
+	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest rm -rf myproj
+	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest cabin new myproj
+	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest { cd myproj; cabin run; }
 
 .PHONY: publish
 publish:: build

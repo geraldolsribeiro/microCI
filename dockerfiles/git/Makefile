@@ -27,14 +27,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.1
+VERSION=0.2
 IMAGE_NAME=microci_git
 
+.PHONY: all
 all: publish
 
+.PHONY: update
 update:
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
+.PHONY: build
 build:
 	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
@@ -42,14 +45,16 @@ build:
 bash:
 	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) bash
 
+.PHONY: test
 test:
 	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION)
 	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) git archive --format=tar --remote='https://github.com/geraldolsribeiro/microCI.git' HEAD 'README.md'
 	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) git clone https://github.com/geraldolsribeiro/microCI.git /tmp/microCI
 
-publish: build
+.PHONY: publish
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
 
-.PHONY: all build test publish
+include ../UpdateReadme.mk

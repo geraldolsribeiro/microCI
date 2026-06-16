@@ -30,47 +30,51 @@
 VERSION=0.1
 IMAGE_NAME=microci_mermaid
 
+.PHONY: all
 all: publish
 
+.PHONY: build
 build:
 	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
+.PHONY: test
 test:
 	docker run -it --rm --user $(shell id -u):$(shell id -g) \
-		-v ${PWD}/:/microci_workspace \
+		-v $(shell pwd)/:/microci_workspace \
 		intmain/$(IMAGE_NAME):latest \
 		--input  /microci_workspace/iperf_udp.mmd \
 		--output /microci_workspace/iperf_udp.png
 	docker run -it --rm --user $(shell id -u):$(shell id -g) \
-		-v ${PWD}/:/microci_workspace \
+		-v $(shell pwd)/:/microci_workspace \
 		intmain/$(IMAGE_NAME):latest \
 		--input  /microci_workspace/iperf_udp.mmd \
 		--output /microci_workspace/iperf_udp.svg
 	docker run -it --rm --user $(shell id -u):$(shell id -g) \
-		-v ${PWD}/:/microci_workspace \
+		-v $(shell pwd)/:/microci_workspace \
 		intmain/$(IMAGE_NAME):latest \
 		--input  /microci_workspace/iperf_udp.mmd \
 		--output /microci_workspace/iperf_udp.pdf
 #	rsvg-convert --format=pdf iperf_udp.svg > iperf_udp.pdf
 
-	# 		pikchr --svg-only sample.pikchr > sample.svg
+# 		pikchr --svg-only sample.pikchr > sample.svg
 # 	docker run -it --rm --user $(shell id -u):$(shell id -g) \
-# 		-v ${PWD}/:/microci_workspace \
+# 		-v $(shell pwd)/:/microci_workspace \
 # 		intmain/$(IMAGE_NAME):latest \
 # 	 	inkscape \
 #                  --export-type=pdf \
 #                  --export-overwrite \
 #                  --export-filename sample1.pdf sample.svg
 # 	docker run -it --rm --user $(shell id -u):$(shell id -g) \
-# 		-v ${PWD}/:/microci_workspace \
+# 		-v $(shell pwd)/:/microci_workspace \
 # 		intmain/$(IMAGE_NAME):latest \
 # 		rsvg-convert --format=pdf sample.svg > sample2.pdf
 
 
-publish: build test
+.PHONY: publish
+publish:: build test
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
 
-.PHONY: all build test publish
+include ../UpdateReadme.mk

@@ -30,6 +30,7 @@
 VERSION=0.2
 IMAGE_NAME=microci_ghdl
 
+.PHONY: all
 all: publish
 
 .PHONY: update
@@ -58,7 +59,7 @@ test:
 		ghdl -a --std=08 all08.vhdl
 
 .PHONY: publish
-publish: build
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
@@ -72,3 +73,4 @@ all08.vhdl:
 ams08.vhdl:
 	wget https://raw.githubusercontent.com/ghdl/ghdl/refs/heads/master/testsuite/sanity/004all08/ams08.vhdl
 
+include ../UpdateReadme.mk

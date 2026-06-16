@@ -30,15 +30,23 @@
 VERSION=0.11.0
 IMAGE_NAME=microci_cpp_compiler
 
+.PHONY: all
 all: publish
 
+.PHONY: update
 update:
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
+.PHONY: build
 build:
 	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
+.PHONY: bash
+bash:
+	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) bash
+
+.PHONY: test
 test:
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-format --version
@@ -46,9 +54,10 @@ test:
 	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang --version
 		docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 
-publish: build
+.PHONY: publish
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
 
-.PHONY: all build test publish
+include ../UpdateReadme.mk

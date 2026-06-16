@@ -68,7 +68,6 @@ void CppPluginStepParser::Parse(const YAML::Node &step) {
     }
   }
 
-  // TODO: Create variant for ARM microci_cpp_compiler_arm
   data["STEP_NAME"]        = stepName(step);
   data["DOCKER_IMAGE"]     = stepDockerImage(step, "intmain/microci_cpp_compiler:latest");
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));

@@ -30,21 +30,26 @@
 VERSION=0.2
 IMAGE_NAME=microci_flawfinder
 
+.PHONY: all
 all: publish
 
+.PHONY: update
 update:
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
+.PHONY: build
 build: update
 	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
+.PHONY: test
 test:
 	docker run -it intmain/$(IMAGE_NAME):latest --listrules
 
-publish: build
+.PHONY: publish
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
 
-.PHONY: all build test publish
+include ../UpdateReadme.mk

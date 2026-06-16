@@ -50,8 +50,9 @@ test:
 		ruby dockerfiles/docmd/intmain_docmd docs/intmain_docmd.md
 
 .PHONY: publish
-publish: build
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
 
+include ../UpdateReadme.mk

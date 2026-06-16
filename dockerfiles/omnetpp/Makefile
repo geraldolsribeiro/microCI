@@ -30,6 +30,8 @@
 VERSION=0.1
 IMAGE_NAME=microci_omnetpp
 
+skip:
+
 ifneq (,$(wildcard ./.env))
 	include .env
 	export
@@ -62,6 +64,8 @@ bash:
 		intmain/$(IMAGE_NAME):latest bash -l
 
 .PHONY: publish
-publish: build
+publish:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
+
+include ../UpdateReadme.mk

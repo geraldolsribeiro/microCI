@@ -65,14 +65,17 @@ RUN set -eux; \
     python3-pip \
     python3-scipy \
     python3-seaborn \
-    qt5-qmake \
-    qtbase5-dev \
-    qtbase5-dev-tools \
     qtchooser \
     wget \
     vim \
     xxd \
     zlib1g-dev \
+    qt6-base-dev \
+    qt6-base-dev-tools \
+    qmake6 \
+    libqt6svg6 \
+    qt6-wayland \
+    libwebkit2gtk-4.1-0 \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/apt /var/lib/dpkg /var/lib/cache/ /var/lib/log/
@@ -81,7 +84,8 @@ RUN pip install --no-cache-dir --break-system-packages posix-ipc
 
 WORKDIR /root
 
-ARG OMNETPP_VERSION=6.1rc1
+# ARG OMNETPP_VERSION=6.1rc1
+ARG OMNETPP_VERSION=6.4.0
 RUN wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-core.tgz \
          -O omnetpp-${OMNETPP_VERSION}-core.tgz --progress=dot:giga \
     && tar xf omnetpp-${OMNETPP_VERSION}-core.tgz \
@@ -90,9 +94,9 @@ RUN wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_
 
 WORKDIR /root/omnetpp-${OMNETPP_VERSION}-linux
 
-ENV PATH /root/omnetpp-${OMNETPP_VERSION}-linux/bin:$PATH
-ENV __omnetpp_root_dir /root/omnetpp-${OMNETPP_VERSION}-linux
-ENV OMNETPP_RELEASE omnetpp-${OMNETPP_VERSION}
+ENV PATH=/root/omnetpp-${OMNETPP_VERSION}-linux/bin:$PATH
+ENV __omnetpp_root_dir=/root/omnetpp-${OMNETPP_VERSION}-linux
+ENV OMNETPP_RELEASE=omnetpp-${OMNETPP_VERSION}
 
 RUN ./configure WITH_QTENV=yes WITH_OSG=yes WITH_OSGEARTH=no WITH_LIBXML=yes
 RUN make -j "$(nproc --ignore=2)"

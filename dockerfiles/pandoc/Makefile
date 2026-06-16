@@ -48,7 +48,7 @@ test:
 	docker run -it intmain/$(IMAGE_NAME):latest --help
 
 .PHONY: publish
-publish: build
+publishi:: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
@@ -60,3 +60,5 @@ bash:
 .PHONY: fc-list
 fc-list:
 	docker run --rm -it --entrypoint fc-list intmain/$(IMAGE_NAME):$(VERSION)
+
+include ../UpdateReadme.mk

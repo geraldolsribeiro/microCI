@@ -30,19 +30,24 @@
 VERSION=0.1
 IMAGE_NAME=microci_ipp
 
+.PHONY: all
 all:
 #all: publish
 
+.PHONY: update
 update:
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
+.PHONY: build
 build: update
 	docker build -t intmain/$(IMAGE_NAME):0.1 -f Dockerfile .
 
+.PHONY: test
 test:
 	echo "Fixme"
 
-publish: build
+.PHONY: publish
+publish:: build
 	echo "Fixme"
 
-.PHONY: all build test publish
+# include ../UpdateReadme.mk
