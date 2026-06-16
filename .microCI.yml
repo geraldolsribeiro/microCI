@@ -66,6 +66,7 @@ steps:
         - "-i src/single_compilation_unit.cpp"
         - "--suppress=missingInclude"
         - "--suppress=missingIncludeSystem"
+        - "--check-level=exhaustive"
 
   - name: "SAST com flawfinder"
     description: "C++ check with flawfinder"

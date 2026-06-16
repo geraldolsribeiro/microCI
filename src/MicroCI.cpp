@@ -489,7 +489,7 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultVolumes() const -> std::set<DockerVolume> {
+auto MicroCI::DefaultVolumes() -> std::set<DockerVolume> {
   std::set<DockerVolume> volumes{{"/microci_workspace", "${MICROCI_PWD}", "rw"}};
   return volumes;
 }

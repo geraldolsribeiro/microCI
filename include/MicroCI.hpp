@@ -103,7 +103,7 @@ class MicroCI {
   [[nodiscard]] auto DefaultDataTemplate() const -> json;
   auto DefaultDockerImage() const -> const std::string &;
   auto DefaultWorkspace() const -> const std::string &;
-  [[nodiscard]] auto DefaultVolumes() const -> std::set<DockerVolume>;
+  [[nodiscard]] static auto DefaultVolumes() -> std::set<DockerVolume>;
   [[nodiscard]] auto DefaultEnvs() const -> const std::set<EnvironmentVariable> &;
   void RegisterPlugin(const std::string &name, std::shared_ptr<microci::PluginStepParser> pluginStepParser);
 
