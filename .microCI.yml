@@ -114,7 +114,7 @@ steps:
       bash: |
         mkdir -p site/
         cp github-pages/CNAME site/
-        cat docs/index.md | sed 's#(images#(docs/images#' | sed 's#<center>#<div align="center">#' | sed 's#</center>#</div>#' > README.md
+        cat docs/index.md | sed 's#<center>#<div align="center">#' | sed 's#</center>#</div>#' > README.md
         # Cover page
         cp README.md site/
 

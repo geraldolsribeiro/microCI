@@ -12,6 +12,7 @@ all: build
 
 .PHONY: build
 build:
+	microCI -D | bash
 	microCI | bash
 
 .PHONY: test
@@ -45,7 +46,9 @@ clean:
 	$(RM) microci_*.dsc
 	$(RM) microci_*.tar.xz
 
+.PHONY: publish
 publish:
-	microCI -N 7 | bash
-	microCI -N 9 | bash
-	microCI -N 11 | bash
+	bin/microCI --number 7,9,11 | bash
+	# microCI -N 7 | bash
+	# microCI -N 9 | bash
+	# microCI -N 11 | bash

@@ -44,7 +44,7 @@ namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.45.1"
+#define microCI_version "0.45.2"
 
 // ----------------------------------------------------------------------
 //

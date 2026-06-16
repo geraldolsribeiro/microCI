@@ -15,6 +15,7 @@ theme:
   features:
     - content.code.copy
 markdown_extensions:
+  - md_in_html
   - admonition
   - pymdownx.superfences:
       custom_fences:
