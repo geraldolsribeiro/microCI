@@ -129,7 +129,6 @@ auto stepName(const YAML::Node &step) -> std::string { return stepRequiredValue(
 // ----------------------------------------------------------------------
 auto stepDescription(const YAML::Node &step, const std::string &defaultValue) -> std::string {
   return stepOptionalValue(step, "description", defaultValue);
-  return defaultValue;
 }
 
 }  // namespace microci

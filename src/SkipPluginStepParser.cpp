@@ -38,9 +38,8 @@ namespace microci {
 //
 // ----------------------------------------------------------------------
 void SkipPluginStepParser::Parse(const YAML::Node &step) {
-  auto data    = mMicroCI->DefaultDataTemplate();
-  auto envs    = parseEnvs(step);
-  auto volumes = parseVolumes(step);
+  auto data = mMicroCI->DefaultDataTemplate();
+  auto envs = parseEnvs(step);
 
   data["MICROCI_STEP_SKIP"] = "yes";
   data["STEP_NAME"]         = stepName(step);

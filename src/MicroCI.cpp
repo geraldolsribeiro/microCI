@@ -49,10 +49,7 @@ namespace microci {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-MicroCI::MicroCI() {
-  mDefaultDockerImage = "debian:stable-slim";
-  mDefaultWorkspace   = "/microci_workspace";
-}
+MicroCI::MicroCI() : mDefaultDockerImage("debian:stable-slim"), mDefaultWorkspace("/microci_workspace") {}
 
 // ----------------------------------------------------------------------
 //
@@ -74,13 +71,13 @@ void MicroCI::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::List(const std::string &filename) const -> std::string {
+auto MicroCI::List(const std::string &fileName) const -> std::string {
   std::string ret;
 
   YAML::Node CI;
 
   try {
-    CI = YAML::LoadFile(filename);
+    CI = YAML::LoadFile(fileName);
     if (CI["steps"].IsSequence()) {
       std::size_t number = 1;
       for (auto step : CI["steps"]) {
@@ -103,7 +100,7 @@ auto MicroCI::List(const std::string &filename) const -> std::string {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::ActivityDiagram(const std::string &filename) const -> std::string {
+auto MicroCI::ActivityDiagram(const std::string &fileName) const -> std::string {
   std::string ret;
 
   std::string beginDiagram{R"(
@@ -121,7 +118,7 @@ stop
   YAML::Node CI;
 
   try {
-    CI = YAML::LoadFile(filename);
+    CI = YAML::LoadFile(fileName);
 
     if (CI["steps"].IsSequence()) {
       ret += beginDiagram;
@@ -235,10 +232,10 @@ void MicroCI::SetOnlyStepNumber(const std::set<std::size_t> &onlyStepNumbers) { 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::SetOnlyStepHash(const std::string &filename, const std::string &hh) {
+void MicroCI::SetOnlyStepHash(const std::string &fileName, const std::string &hh) {
   YAML::Node CI;
   try {
-    CI = YAML::LoadFile(filename);
+    CI = YAML::LoadFile(fileName);
     if (CI["steps"].IsSequence()) {
       std::size_t number = 1;
       mOnlyStepNumbers.clear();
@@ -285,11 +282,11 @@ void MicroCI::AddDockerImage(const std::string &image) { mDockerImages.insert(im
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::LoadEnvironmentFromYamlFile(const std::string &filename) {
-  if (std::filesystem::exists(filename)) {
-    auto dotEnv = YAML::LoadFile(filename);
+void MicroCI::LoadEnvironmentFromYamlFile(const std::string &fileName) {
+  if (std::filesystem::exists(fileName)) {
+    auto dotEnv = YAML::LoadFile(fileName);
     if (dotEnv.size() == 0) {
-      spdlog::error("The file {} was found but it has no valid configuration", filename);
+      spdlog::error("The file {} was found but it has no valid configuration", fileName);
       invalidConfigurationDetected();
       // return false;
     }
@@ -305,9 +302,9 @@ void MicroCI::LoadEnvironmentFromYamlFile(const std::string &filename) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void MicroCI::LoadEnvironmentFromEnvFile(const std::string &filename) {
-  if (std::filesystem::exists(filename)) {
-    std::ifstream envFile(filename);
+void MicroCI::LoadEnvironmentFromEnvFile(const std::string &fileName) {
+  if (std::filesystem::exists(fileName)) {
+    std::ifstream envFile(fileName);
     std::string line;
     while (getline(envFile, line)) {
       // Skip comments and short lines
@@ -336,11 +333,11 @@ void MicroCI::LoadEnvironmentFromEnvFile(const std::string &filename) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::ReadConfig(const std::string &filename) -> bool {
+auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
   YAML::Node CI;
 
   try {
-    CI = YAML::LoadFile(filename);
+    CI = YAML::LoadFile(fileName);
 
     // Global environment configuration
     if (mAltHome.empty()) {
@@ -364,7 +361,7 @@ auto MicroCI::ReadConfig(const std::string &filename) -> bool {
       }
     }
 
-    mYamlFilename = filename;
+    mYamlFilename = fileName;
 
     LoadEnvironmentFromYamlFile(".env.yml");
     LoadEnvironmentFromEnvFile(".env");
@@ -440,12 +437,12 @@ function main() {
 )";
       stepNumber = 1;
       for (auto step : CI["steps"]) {
-        auto stepName = step["name"].as<std::string>();
+        auto name = step["name"].as<std::string>();
         if (!mOnlyStepNumbers.empty() and mOnlyStepNumbers.count(stepNumber) == 0) {
           stepNumber++;
           continue;
         }
-        mScript << "  step_" << sanitizeName(stepName) << std::endl;
+        mScript << "  step_" << sanitizeName(name) << std::endl;
         stepNumber++;
       }
       mScript << R"(
@@ -483,8 +480,8 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
     }
     return;
   } else {
-    auto stepName = step["name"].as<std::string>();
-    spdlog::error("The plugin '{}' was not found at the step '{}'", pluginName, stepName);
+    auto name = step["name"].as<std::string>();
+    spdlog::error("The plugin '{}' was not found at the step '{}'", pluginName, name);
     for (const auto &p : mPluginParserMap) {
       spdlog::warn("Plugin '{}'", p.first);
     }

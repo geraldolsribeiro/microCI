@@ -41,7 +41,6 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   auto data    = mMicroCI->DefaultDataTemplate();
   auto volumes = parseVolumes(step);
   auto envs    = parseEnvs(step);
-  auto runAs   = std::string{};
   std::list<std::string> checkList;
   std::list<std::string> includeList;
   std::list<std::string> systemIncludeList;

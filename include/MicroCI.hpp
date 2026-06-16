@@ -56,7 +56,9 @@ struct DockerVolume {
 };
 
 // Using the target as key allowing to mount the same folder at more than one place.
-inline auto operator<(const DockerVolume &lhs, const DockerVolume &rhs) -> bool { return lhs.destination < rhs.destination; }
+inline auto operator<(const DockerVolume &lhs, const DockerVolume &rhs) -> bool {
+  return lhs.destination < rhs.destination;
+}
 
 // ----------------------------------------------------------------------
 //
@@ -69,7 +71,9 @@ struct EnvironmentVariable {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-inline auto operator<(const EnvironmentVariable &lhs, const EnvironmentVariable &rhs) -> bool { return lhs.name < rhs.name; }
+inline auto operator<(const EnvironmentVariable &lhs, const EnvironmentVariable &rhs) -> bool {
+  return lhs.name < rhs.name;
+}
 
 class PluginStepParser;
 
@@ -82,16 +86,16 @@ class MicroCI {
   virtual ~MicroCI();
   [[nodiscard]] auto ToString() const -> std::string;
   [[nodiscard]] auto IsValid() const -> bool;
-  [[nodiscard]] auto ActivityDiagram(const std::string &filename) const -> std::string;
-  [[nodiscard]] auto List(const std::string &filename) const -> std::string;
+  [[nodiscard]] auto ActivityDiagram(const std::string &fileName) const -> std::string;
+  [[nodiscard]] auto List(const std::string &fileName) const -> std::string;
 
   // Global environment variable available to all steps
   void SetEnvironmentVariable(const EnvironmentVariable &env);
-  auto ReadConfig(const std::string &yaml) -> bool;
+  auto ReadConfig(const std::string &fileName) -> bool;
   auto Script() -> std::stringstream &;
   void SetAltHome(const std::string &altHome);
   void SetOnlyStep(const std::string &onlyStep);
-  void SetOnlyStepNumber(const std::set<std::size_t> &numbers);
+  void SetOnlyStepNumber(const std::set<std::size_t> &onlyStepNumbers);
   void SetOnlyStepHash(const std::string &fileName, const std::string &hh);
   void SetAppendLog(const bool appendLog);
   void AddDockerImage(const std::string &image);
@@ -107,8 +111,8 @@ class MicroCI {
   void initBash(const YAML::Node &CI);
   void parsePluginStep(const YAML::Node &step);
   void invalidConfigurationDetected();
-  void LoadEnvironmentFromYamlFile(const std::string &filename);
-  void LoadEnvironmentFromEnvFile(const std::string &filename);
+  void LoadEnvironmentFromYamlFile(const std::string &fileName);
+  void LoadEnvironmentFromEnvFile(const std::string &fileName);
 
   std::string mAltHome;
   std::string mYamlFilename = ".microCI.yml";

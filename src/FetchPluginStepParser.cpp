@@ -122,7 +122,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 
         auto files = std::string{};
         if (isGithubURL) {
-          auto repoName = std::string{};
+          std::string repoName;
           if (isDotGitEnded) {
             // https://github.com/User/repo.git
             repoName = gitRemote.substr(gitRemote.find_last_of('/') + 1);
