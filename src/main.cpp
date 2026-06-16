@@ -34,9 +34,9 @@
 #include <iostream>
 #include <map>
 #include <openssl/evp.h>
+#include <set>
 #include <spdlog/spdlog.h>
 #include <sstream>
-#include <set>
 
 #include "argh.h"
 #include "inicpp.h"

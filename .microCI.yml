@@ -158,23 +158,6 @@ steps:
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
           target: include/nlohmann
 
-  # - name: "Baixar spirit-po"
-  #   description: "Download de dependências utilizadas na compilação"
-  #   plugin:
-  #     name: "fetch"
-  #     target: include/spirit_po
-  #     items:
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/catalog.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/catalog_metadata.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/default_plural_forms_compiler.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/default_plural_forms_expressions.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/exceptions.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/po_grammar.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/po_message.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/po_message_adapted.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/spirit_po.hpp
-  #       - url: https://raw.githubusercontent.com/garbageslam/spirit-po/master/include/spirit_po/version.hpp
-
   - name: "Build microCI static version"
     docker: "intmain/microci_cpp_compiler:latest"
     run_as: root
@@ -184,7 +167,7 @@ steps:
       bash: |
         apt update
         apt upgrade -y
-        apt install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev gettext glow upx-ucl
+        apt install -y xxd libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow zlib1g-dev
         make -C docs
         make -C src
         chown $(id -u):$(id -g) -Rv bin/microCI
