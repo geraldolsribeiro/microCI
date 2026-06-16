@@ -1,4 +1,4 @@
-# Docker Registry UI
+# 🐳 Docker Registry UI
 
 ## `docker-compose.yml` example
 

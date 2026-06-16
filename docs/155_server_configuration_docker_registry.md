@@ -1,4 +1,4 @@
-# Docker Registry Server
+# 🐳 Docker Registry Server
 
 The following `Makefile` can be used to setup a private docker registry.
 

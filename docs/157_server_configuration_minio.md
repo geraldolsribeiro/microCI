@@ -1,4 +1,4 @@
-# MinIO Server
+# 📦 MinIO Server
 
 A MinIO Server can be deployed by docker container.
 
