@@ -25,7 +25,7 @@ steps:
   #       - ['yaml', 'new/plantuml.yml', 'docs/plugin_plantuml.md']
   #       - ['yaml', 'new/skip.yml', 'docs/plugin_skip.md']
   - name: "C++ check with clang-tidy"
-    # only: clangtidy
+    only: clangtidy
     network: bridge
     plugin:
       name: "clang-tidy"

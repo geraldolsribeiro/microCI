@@ -29,7 +29,9 @@
 
 #include "PlantumlPluginStepParser.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <iterator>
 #include <spdlog/spdlog.h>
 
 namespace microci {
@@ -48,15 +50,13 @@ void PlantumlPluginStepParser::Parse(const YAML::Node &step) {
   data = parseNetwork(step, data, "none");
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<std::string>());
-    }
+    std::transform(step["plugin"]["options"].begin(), step["plugin"]["options"].end(), std::back_inserter(opts),
+                   [](const auto &opt) { return opt.template as<std::string>(); });
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<std::string>());
-    }
+    std::transform(step["plugin"]["source"].begin(), step["plugin"]["source"].end(), std::back_inserter(sourceList),
+                   [](const auto &src) { return src.template as<std::string>(); });
   }
 
   auto type         = step["plugin"]["type"].as<std::string>("png");

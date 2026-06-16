@@ -29,7 +29,9 @@
 
 #include "BashPluginStepParser.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <iterator>
 #include <spdlog/spdlog.h>
 
 namespace microci {
@@ -56,9 +58,8 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto &opt : step["plugin"]["options"]) {
-      opts.push_back(opt.as<std::string>());
-    }
+    std::transform(step["plugin"]["options"].begin(), step["plugin"]["options"].end(), std::back_inserter(opts),
+                   [](const auto &opt) { return opt.template as<std::string>(); });
   }
 
   auto ss = std::stringstream{cmdsStr};

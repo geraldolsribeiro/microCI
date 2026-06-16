@@ -54,19 +54,22 @@ class PluginStepParser {
   void beginFunction(const json &data, const std::set<EnvironmentVariable> &envs);
   void endFunction(const json &data);
 
-  [[nodiscard]] auto parseRunAs(const YAML::Node &step, const json &data, const std::string &defaultValue) const -> json;
-  [[nodiscard]] auto parseNetwork(const YAML::Node &step, const json &data, const std::string &defaultValue) const -> json;
+  [[nodiscard]] auto parseRunAs(const YAML::Node &step, const json &data, const std::string &defaultValue) const
+      -> json;
+  [[nodiscard]] auto parseNetwork(const YAML::Node &step, const json &data, const std::string &defaultValue) const
+      -> json;
   [[nodiscard]] auto parseDevices(const YAML::Node &step, const json &data) const -> json;
   [[nodiscard]] auto parseEnvs(const YAML::Node &step) const -> std::set<EnvironmentVariable>;
   [[nodiscard]] auto parseVolumes(const YAML::Node &step) const -> std::set<DockerVolume>;
-  [[nodiscard]] auto parseSsh(
-      const YAML::Node &step, const json &data, const std::set<DockerVolume> &volumes,
-      const std::set<EnvironmentVariable> &envs) const -> std::tuple<json, std::set<DockerVolume>, std::set<EnvironmentVariable>>;
+  [[nodiscard]] auto parseSsh(const YAML::Node &step, const json &data, const std::set<DockerVolume> &volumes,
+                              const std::set<EnvironmentVariable> &envs) const
+      -> std::tuple<json, std::set<DockerVolume>, std::set<EnvironmentVariable>>;
 
   void copySshIfAvailable(const YAML::Node &step, const json &data);
 
   [[nodiscard]] auto stepDockerImage(const YAML::Node &step, const std::string &image = "") const -> std::string;
-  [[nodiscard]] auto stepDockerWorkspace(const YAML::Node &step, const std::string &workspace = "") const -> std::string;
+  [[nodiscard]] auto stepDockerWorkspace(const YAML::Node &step, const std::string &workspace = "") const
+      -> std::string;
 
   void prepareRunDocker(const json &data, const std::set<EnvironmentVariable> &envs,
                         const std::set<DockerVolume> &volumes);

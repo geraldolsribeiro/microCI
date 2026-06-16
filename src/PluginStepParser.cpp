@@ -29,9 +29,8 @@
 
 #include "PluginStepParser.hpp"
 
-#include <spdlog/spdlog.h>
-
 #include <algorithm>
+#include <spdlog/spdlog.h>
 
 #include "MicroCI.hpp"
 
@@ -100,9 +99,8 @@ auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) co
   data_["DOCKER_DEVICES"] = json::array();
 
   if (step["devices"] and step["devices"].IsSequence()) {
-    for (const auto &dev : step["devices"]) {
-      data_["DOCKER_DEVICES"].push_back(dev.as<std::string>());
-    }
+    std::transform(step["devices"].begin(), step["devices"].end(), std::back_inserter(data_["DOCKER_DEVICES"]),
+                   [](const auto &dev) { return dev.template as<std::string>(); });
   }
   return data_;
 }
@@ -213,7 +211,7 @@ void PluginStepParser::endFunction(const json &data) {
                                      data);
 
   auto envs       = mMicroCI->DefaultEnvs();
-  auto webhookEnv = EnvironmentVariable{.name="MICROCI_DISCORD_WEBHOOK", .value=""};
+  auto webhookEnv = EnvironmentVariable{.name = "MICROCI_DISCORD_WEBHOOK", .value = ""};
   if (envs.count(webhookEnv)) {
     mMicroCI->Script() << inja::render(R"(
   # Notification via Discord
@@ -310,9 +308,8 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
   auto envs_           = envs;
 
   // Set default ssh key name if environment variable is defined
-  auto defSshKeyNameItem = std::ranges::find_if(envs, [](const EnvironmentVariable &e) -> bool {
-    return e.name == "MICROCI_DEFAULT_SSH_KEY_NAME";
-  });
+  auto defSshKeyNameItem = std::ranges::find_if(
+      envs, [](const EnvironmentVariable &e) -> bool { return e.name == "MICROCI_DEFAULT_SSH_KEY_NAME"; });
   if (defSshKeyNameItem != envs.end()) {
     sshKeyFormat = defSshKeyNameItem->value;
   }
@@ -334,9 +331,9 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
       data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<std::string>();
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
-          .name="GIT_SSH_COMMAND",
-          .value=fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
-                      sshKeyFormat)};
+          .name  = "GIT_SSH_COMMAND",
+          .value = fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
+                               sshKeyFormat)};
       envs_.insert(gitSshCommandEnv);
     }
 

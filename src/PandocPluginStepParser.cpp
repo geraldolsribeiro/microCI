@@ -29,6 +29,8 @@
 
 #include "PandocPluginStepParser.hpp"
 
+#include <algorithm>
+#include <iterator>
 #include <spdlog/spdlog.h>
 
 namespace microci {
@@ -51,15 +53,13 @@ void PandocPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   if (step["plugin"]["inputs"] && step["plugin"]["inputs"].IsSequence()) {
-    for (const auto &filename : step["plugin"]["inputs"]) {
-      inputList.push_back(filename.as<std::string>());
-    }
+    std::transform(step["plugin"]["inputs"].begin(), step["plugin"]["inputs"].end(), std::back_inserter(inputList),
+                   [](const auto &filename) { return filename.template as<std::string>(); });
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto &opt : step["plugin"]["options"]) {
-      optionList.push_back(opt.as<std::string>());
-    }
+    std::transform(step["plugin"]["options"].begin(), step["plugin"]["options"].end(), std::back_inserter(optionList),
+                   [](const auto &opt) { return opt.template as<std::string>(); });
   }
 
   auto data = mMicroCI->DefaultDataTemplate();

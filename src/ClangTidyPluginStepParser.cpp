@@ -29,7 +29,9 @@
 
 #include "ClangTidyPluginStepParser.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <iterator>
 #include <spdlog/spdlog.h>
 
 namespace microci {
@@ -53,33 +55,28 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
   bool fixSourceCode = step["plugin"]["fix"] and step["plugin"]["fix"].as<bool>(false);
 
   if (step["plugin"]["checks"] && step["plugin"]["checks"].IsSequence()) {
-    for (const auto &inc : step["plugin"]["checks"]) {
-      checkList.push_back(inc.as<std::string>());
-    }
+    std::transform(step["plugin"]["checks"].begin(), step["plugin"]["checks"].end(), std::back_inserter(checkList),
+                   [](const auto &inc) { return inc.template as<std::string>(); });
   }
 
   if (step["plugin"]["options"] && step["plugin"]["options"].IsSequence()) {
-    for (const auto &opt : step["plugin"]["options"]) {
-      optionList.push_back(opt.as<std::string>());
-    }
+    std::transform(step["plugin"]["options"].begin(), step["plugin"]["options"].end(), std::back_inserter(optionList),
+                   [](const auto &opt) { return opt.template as<std::string>(); });
   }
 
   if (step["plugin"]["include"] && step["plugin"]["include"].IsSequence()) {
-    for (const auto &inc : step["plugin"]["include"]) {
-      includeList.push_back(inc.as<std::string>());
-    }
+    std::transform(step["plugin"]["include"].begin(), step["plugin"]["include"].end(), std::back_inserter(includeList),
+                   [](const auto &inc) { return inc.template as<std::string>(); });
   }
 
   if (step["plugin"]["system_include"] && step["plugin"]["system_include"].IsSequence()) {
-    for (const auto &inc : step["plugin"]["system_include"]) {
-      systemIncludeList.push_back(inc.as<std::string>());
-    }
+    std::transform(step["plugin"]["system_include"].begin(), step["plugin"]["system_include"].end(),
+                   std::back_inserter(systemIncludeList), [](const auto &inc) { return inc.template as<std::string>(); });
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {
-    for (const auto &src : step["plugin"]["source"]) {
-      sourceList.push_back(src.as<std::string>());
-    }
+    std::transform(step["plugin"]["source"].begin(), step["plugin"]["source"].end(), std::back_inserter(sourceList),
+                   [](const auto &src) { return src.template as<std::string>(); });
   }
 
   data["STEP_NAME"]        = stepName(step);
