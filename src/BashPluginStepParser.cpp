@@ -37,18 +37,6 @@ namespace microci {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-std::string replaceAll(std::string str, const std::string &from, const std::string &to) {
-  auto &&pos = str.find(from, size_t{});
-  while (pos != std::string::npos) {
-    str.replace(pos, from.length(), to);
-    pos = str.find(from, pos + to.length());
-  }
-  return str;
-}
-
-// ----------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------
 void BashPluginStepParser::Parse(const YAML::Node &step) {
   auto cmdsStr = std::string{};
   auto cmds    = std::vector<std::string>{};

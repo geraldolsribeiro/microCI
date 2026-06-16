@@ -85,10 +85,10 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
 #include <3rd/beamercolorthemestr.sty.hpp>
 #include <3rd/str-logo.png.hpp>
     std::ofstream strLogoPng("img/str-logo.png");
-    strLogoPng.write(reinterpret_cast<char *>(___3rd_str_logo_png), ___3rd_str_logo_png_len);
+    strLogoPng.write(reinterpret_cast<char *>(_3rd_str_logo_png), _3rd_str_logo_png_len);
     std::ofstream beamercolorthemestr("beamercolorthemestr.sty");
-    beamercolorthemestr.write(reinterpret_cast<char *>(___3rd_beamercolorthemestr_sty),
-                              ___3rd_beamercolorthemestr_sty_len);
+    beamercolorthemestr.write(reinterpret_cast<char *>(_3rd_beamercolorthemestr_sty),
+                              _3rd_beamercolorthemestr_sty_len);
   }
 
   for (const auto &key : {/* keys not used by pandoc: */ "name", "output", "source", "theme",
@@ -101,7 +101,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   yaml << "# Warning: this file is generated automatically!\n";
   yaml << "# Edit the .microCI.yml file if needed\n";
   yaml << strippedHeaderIncludes;
-  yaml << "\n..." << std::endl;
+  yaml << "\n..." << '\n';
   data["HEADER_INCLUDES"] = filename;
 
   if (step["plugin"]["natbib"] and step["plugin"]["natbib"].as<bool>()) {

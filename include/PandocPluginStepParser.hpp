@@ -37,8 +37,8 @@ namespace microci {
 class PandocPluginStepParser : public PluginStepParser {
  public:
   PandocPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~PandocPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~PandocPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

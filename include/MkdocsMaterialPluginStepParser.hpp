@@ -37,8 +37,8 @@ namespace microci {
 class MkdocsMaterialPluginStepParser : public PluginStepParser {
  public:
   MkdocsMaterialPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~MkdocsMaterialPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~MkdocsMaterialPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

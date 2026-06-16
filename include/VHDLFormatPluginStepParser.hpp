@@ -37,8 +37,8 @@ namespace microci {
 class VHDLFormatPluginStepParser : public PluginStepParser {
  public:
   VHDLFormatPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~VHDLFormatPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~VHDLFormatPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

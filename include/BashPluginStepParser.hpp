@@ -37,8 +37,8 @@ namespace microci {
 class BashPluginStepParser : public PluginStepParser {
  public:
   BashPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~BashPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~BashPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

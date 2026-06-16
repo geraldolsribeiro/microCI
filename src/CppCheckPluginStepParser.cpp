@@ -102,7 +102,7 @@ void CppCheckPluginStepParser::Parse(const YAML::Node &step) {
   }
 
   for (const auto &inc : includeList) {
-    mMicroCI->Script() << "          --include=" << inc << " \\\n";
+    mMicroCI->Script() << "          -I " << inc << " \\\n";
   }
 
   for (const auto &src : sourceList) {

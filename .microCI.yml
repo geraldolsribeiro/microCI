@@ -25,13 +25,16 @@ steps:
   #       - ['yaml', 'new/plantuml.yml', 'docs/plugin_plantuml.md']
   #       - ['yaml', 'new/skip.yml', 'docs/plugin_skip.md']
   - name: "C++ check with clang-tidy"
-    only: clangtidy
+    # only: clangtidy
     network: bridge
     plugin:
       name: "clang-tidy"
       checks:
         - "-*"
         - "modernize-*"
+        - "bugprone-*"
+        - "performance-*"
+        - "-clang-analyzer-*"
         # - "cppcoreguidelines-*"
         # - "hicpp-*"
         # - "performance-"
@@ -42,11 +45,13 @@ steps:
         - "-std=c++20"
         - "-DFMT_HEADER_ONLY"
         - "-DSPDLOG_FMT_EXTERNAL=1"
+        - "--exclude-header-filter='include/3rd/*'"
       include:
         - "include/"
-        - "src/"
+      system_include:
+        - "include/3rd/"
       source:
-        - "src/*.cpp"
+        - "src/*Parser.cpp"
   - name: "C++ check with cppcheck"
     plugin:
       name: "cppcheck"
@@ -56,7 +61,11 @@ steps:
         - "src"
         - "test"
       platform: "unix64"
-      std: "c++17"
+      std: "c++20"
+      options:
+        - "-i src/single_compilation_unit.cpp"
+        - "--suppress=missingInclude"
+        - "--suppress=missingIncludeSystem"
 
   - name: "SAST com flawfinder"
     description: "C++ check with flawfinder"

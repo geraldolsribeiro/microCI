@@ -125,12 +125,12 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
           auto repoName = std::string{};
           if (isDotGitEnded) {
             // https://github.com/User/repo.git
-            repoName = gitRemote.substr(gitRemote.find_last_of("/") + 1);
+            repoName = gitRemote.substr(gitRemote.find_last_of('/') + 1);
             repoName.erase(repoName.find(".git"));
           } else {
             // https://github.com/User/repo/archive/master.tar.gz
             repoName = gitRemote.substr(0, gitRemote.find("/archive/"));
-            repoName = repoName.substr(repoName.find_last_of("/") + 1);
+            repoName = repoName.substr(repoName.find_last_of('/') + 1);
           }
 
           for (const auto &f : item["files"]) {

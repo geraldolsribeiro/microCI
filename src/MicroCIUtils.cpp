@@ -60,11 +60,23 @@ auto version() -> std::string { return fmt::format("v{}", microCI_version); }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
+auto replaceAll(std::string str, const std::string &from, const std::string &to) -> std::string {
+  auto &&pos = str.find(from, size_t{});
+  while (pos != std::string::npos) {
+    str.replace(pos, from.length(), to);
+    pos = str.find(from, pos + to.length());
+  }
+  return str;
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
 auto sanitizeName(const std::string &name) -> std::string {
   auto ret = name;
 
   // Replace accented characters with unaccented versions
-  std::map<string, std::string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
+  std::map<std::string, std::string> tr = {{"ç", "c"}, {"á", "a"}, {"ã", "a"}, {"ê", "e"}, {"ó", "o"}, {"õ", "o"}};
   for (auto const &[from, to] : tr) {
     size_t pos = 0;
     while ((pos = ret.find(from, pos)) != std::string::npos) {

@@ -56,7 +56,7 @@ struct DockerVolume {
 };
 
 // Using the target as key allowing to mount the same folder at more than one place.
-inline bool operator<(const DockerVolume &lhs, const DockerVolume &rhs) { return lhs.destination < rhs.destination; }
+inline auto operator<(const DockerVolume &lhs, const DockerVolume &rhs) -> bool { return lhs.destination < rhs.destination; }
 
 // ----------------------------------------------------------------------
 //
@@ -69,7 +69,7 @@ struct EnvironmentVariable {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-inline bool operator<(const EnvironmentVariable &lhs, const EnvironmentVariable &rhs) { return lhs.name < rhs.name; }
+inline auto operator<(const EnvironmentVariable &lhs, const EnvironmentVariable &rhs) -> bool { return lhs.name < rhs.name; }
 
 class PluginStepParser;
 
@@ -80,15 +80,15 @@ class MicroCI {
  public:
   MicroCI();
   virtual ~MicroCI();
-  [[nodiscard]] std::string ToString() const;
-  [[nodiscard]] bool IsValid() const;
-  [[nodiscard]] std::string ActivityDiagram(const std::string &filename) const;
-  [[nodiscard]] std::string List(const std::string &filename) const;
+  [[nodiscard]] auto ToString() const -> std::string;
+  [[nodiscard]] auto IsValid() const -> bool;
+  [[nodiscard]] auto ActivityDiagram(const std::string &filename) const -> std::string;
+  [[nodiscard]] auto List(const std::string &filename) const -> std::string;
 
   // Global environment variable available to all steps
   void SetEnvironmentVariable(const EnvironmentVariable &env);
-  bool ReadConfig(const std::string &yaml);
-  std::stringstream &Script();
+  auto ReadConfig(const std::string &yaml) -> bool;
+  auto Script() -> std::stringstream &;
   void SetAltHome(const std::string &altHome);
   void SetOnlyStep(const std::string &onlyStep);
   void SetOnlyStepNumber(const std::set<std::size_t> &numbers);
@@ -96,11 +96,11 @@ class MicroCI {
   void SetAppendLog(const bool appendLog);
   void AddDockerImage(const std::string &image);
 
-  [[nodiscard]] json DefaultDataTemplate() const;
-  std::string DefaultDockerImage() const;
-  std::string DefaultWorkspace() const;
-  [[nodiscard]] std::set<DockerVolume> DefaultVolumes() const;
-  [[nodiscard]] std::set<EnvironmentVariable> DefaultEnvs() const;
+  [[nodiscard]] auto DefaultDataTemplate() const -> json;
+  auto DefaultDockerImage() const -> std::string;
+  auto DefaultWorkspace() const -> std::string;
+  [[nodiscard]] auto DefaultVolumes() const -> std::set<DockerVolume>;
+  [[nodiscard]] auto DefaultEnvs() const -> std::set<EnvironmentVariable>;
   void RegisterPlugin(const std::string &name, std::shared_ptr<microci::PluginStepParser> pluginStepParser);
 
  private:

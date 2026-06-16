@@ -31,6 +31,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include <algorithm>
+
 #include "MicroCI.hpp"
 
 namespace microci {
@@ -211,7 +213,7 @@ void PluginStepParser::endFunction(const json &data) {
                                      data);
 
   auto envs       = mMicroCI->DefaultEnvs();
-  auto webhookEnv = EnvironmentVariable{"MICROCI_DISCORD_WEBHOOK", ""};
+  auto webhookEnv = EnvironmentVariable{.name="MICROCI_DISCORD_WEBHOOK", .value=""};
   if (envs.count(webhookEnv)) {
     mMicroCI->Script() << inja::render(R"(
   # Notification via Discord
@@ -228,7 +230,7 @@ void PluginStepParser::endFunction(const json &data) {
                                        data);
   }
 
-  mMicroCI->Script() << "}" << std::endl;
+  mMicroCI->Script() << "}" << '\n';
 }
 
 // ----------------------------------------------------------------------
@@ -245,7 +247,7 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
       docker run)",
                                      data);
 
-  if (string{data["RUN_AS"]} != "root") {
+  if (std::string{data["RUN_AS"]} != "root") {
     mMicroCI->Script() << inja::render(R"( \
         --user $(id -u):$(id -g))",
                                        data);
@@ -297,8 +299,9 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const std::set<DockerVolume> &volumes,
-                                const std::set<EnvironmentVariable> &envs) const
+[[nodiscard]] auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data,
+                                              const std::set<DockerVolume> &volumes,
+                                              const std::set<EnvironmentVariable> &envs) const
     -> std::tuple<json, std::set<DockerVolume>, std::set<EnvironmentVariable>> {
   auto sshMountForCopy = std::string{"${HOME}/.ssh"};
   auto sshKeyFormat    = std::string{"id_rsa"};
@@ -307,7 +310,7 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
   auto envs_           = envs;
 
   // Set default ssh key name if environment variable is defined
-  auto defSshKeyNameItem = std::find_if(envs.begin(), envs.end(), [](const EnvironmentVariable &e) -> bool {
+  auto defSshKeyNameItem = std::ranges::find_if(envs, [](const EnvironmentVariable &e) -> bool {
     return e.name == "MICROCI_DEFAULT_SSH_KEY_NAME";
   });
   if (defSshKeyNameItem != envs.end()) {
@@ -331,8 +334,8 @@ auto PluginStepParser::parseSsh(const YAML::Node &step, const json &data, const 
       data_["SSH_COPY_TO"] = step["ssh"]["copy_to"].as<std::string>();
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
-          "GIT_SSH_COMMAND",
-          fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
+          .name="GIT_SSH_COMMAND",
+          .value=fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
                       sshKeyFormat)};
       envs_.insert(gitSshCommandEnv);
     }

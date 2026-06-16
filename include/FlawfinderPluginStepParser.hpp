@@ -37,8 +37,8 @@ namespace microci {
 class FlawfinderPluginStepParser : public PluginStepParser {
  public:
   FlawfinderPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~FlawfinderPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~FlawfinderPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

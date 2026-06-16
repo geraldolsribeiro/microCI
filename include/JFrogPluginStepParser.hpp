@@ -37,8 +37,8 @@ namespace microci {
 class JFrogPluginStepParser : public PluginStepParser {
  public:
   JFrogPluginStepParser(MicroCI *microCI) : PluginStepParser(microCI) {}
-  virtual ~JFrogPluginStepParser() {}
-  virtual void Parse(const YAML::Node &step) override;
+  ~JFrogPluginStepParser() override = default;
+  void Parse(const YAML::Node &step) override;
 };
 
 }  // namespace microci

@@ -28,11 +28,13 @@
 // IN THE SOFTWARE.
 
 namespace microci {
-std::string banner();
-std::string version();
-std::string sanitizeName(const std::string &name);
-std::string stepRequiredValue(const YAML::Node &step, const std::string &var);
-std::string stepOptionalValue(const YAML::Node &step, const std::string &var, const std::string &defaultValue = "");
-std::string stepName(const YAML::Node &step);
-std::string stepDescription(const YAML::Node &step, const std::string &defaultDescription = "");
+auto banner() -> std::string;
+auto version() -> std::string;
+auto sanitizeName(const std::string &name) -> std::string;
+auto stepRequiredValue(const YAML::Node &step, const std::string &var) -> std::string;
+auto stepOptionalValue(const YAML::Node &step, const std::string &var, const std::string &defaultValue = "")
+    -> std::string;
+auto stepName(const YAML::Node &step) -> std::string;
+auto stepDescription(const YAML::Node &step, const std::string &defaultDescription = "") -> std::string;
+auto replaceAll(std::string str, const std::string &from, const std::string &to) -> std::string;
 }  // namespace microci

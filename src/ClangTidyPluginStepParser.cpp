@@ -102,10 +102,6 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << "        --fix-errors \\\n";
   }
 
-  for (const auto &inc : systemIncludeList) {
-    mMicroCI->Script() << "        --system-headers " << inc << " \\\n";
-  }
-
   if (checkList.empty()) {
     mMicroCI->Script() << "        -checks='-*,cppcoreguidelines-*' \\\n";
   } else {
@@ -125,6 +121,11 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
 
   if (!optionList.empty() or !includeList.empty()) {
     mMicroCI->Script() << "        -- \\\n";
+  }
+
+  for (const auto &inc : systemIncludeList) {
+    // mMicroCI->Script() << "        --system-headers " << inc << " \\\n";
+    mMicroCI->Script() << "        -isystem " << inc << " \\\n";
   }
 
   for (const auto &opt : optionList) {

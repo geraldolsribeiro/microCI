@@ -30,13 +30,12 @@
 #include "MicroCI.hpp"
 
 #include <algorithm>
+#include <inja/inja.hpp>
 #include <iostream>
 #include <pwd.h>
 #include <spdlog/spdlog.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#include "inja/inja.hpp"
 
 #include "sh/MicroCI.hpp"
 #include "sh/NotifyDiscord.hpp"
