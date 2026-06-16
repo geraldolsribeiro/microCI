@@ -102,25 +102,22 @@ auto MicroCI::List(const std::string &fileName) const -> std::string {
 // ----------------------------------------------------------------------
 auto MicroCI::ActivityDiagram(const std::string &fileName) const -> std::string {
   std::string ret;
-
-  std::string beginDiagram{R"(
-
-' Generated Diagram! Do not edit
-@startuml
-start
-)"};
-
-  std::string endDiagram{R"(
-stop
-@enduml
-)"};
-
   YAML::Node CI;
 
   try {
     CI = YAML::LoadFile(fileName);
 
     if (CI["steps"].IsSequence()) {
+      std::string beginDiagram{R"(
+
+' Generated Diagram! Do not edit
+@startuml
+start
+)"};
+      std::string endDiagram{R"(
+stop
+@enduml
+)"};
       ret += beginDiagram;
       ret += "partition \"Main pipeline\" {\n";
       for (auto step : CI["steps"]) {
@@ -202,12 +199,12 @@ auto MicroCI::Script() -> std::stringstream & {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultDockerImage() const -> std::string { return mDefaultDockerImage; }
+auto MicroCI::DefaultDockerImage() const -> const std::string & { return mDefaultDockerImage; }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultWorkspace() const -> std::string { return mDefaultWorkspace; }
+auto MicroCI::DefaultWorkspace() const -> const std::string & { return mDefaultWorkspace; }
 
 // ----------------------------------------------------------------------
 //
@@ -500,7 +497,7 @@ auto MicroCI::DefaultVolumes() const -> std::set<DockerVolume> {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto MicroCI::DefaultEnvs() const -> std::set<EnvironmentVariable> { return mEnvs; }
+auto MicroCI::DefaultEnvs() const -> const std::set<EnvironmentVariable> & { return mEnvs; }
 
 // ----------------------------------------------------------------------
 //

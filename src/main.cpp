@@ -29,6 +29,7 @@
 
 // https://stackoverflow.com/questions/69806220/advice-needed-for-migration-of-low-level-openssl-api-to-high-level-openssl-apis
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -481,14 +482,16 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
 
     auto validOptions = commandLineValidOptions();
     for (const auto &flag : cmdl.flags()) {
-      if (validOptions.find(flag) == validOptions.end()) {
+      if (std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; }) ==
+          validOptions.end()) {
         spdlog::error("Invalid command line option: -{}", flag);
         return 1;
       }
     }
 
     for (const auto &param : cmdl.params()) {
-      if (validOptions.find(param.first) == validOptions.end()) {
+      if (std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; }) ==
+          validOptions.end()) {
         spdlog::error("Invalid command line option: -{} {}", param.first, param.second);
         return 1;
       }
