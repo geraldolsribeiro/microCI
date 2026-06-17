@@ -49,7 +49,7 @@ CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1
 CXXFLAGS+= -I../include/
 CXXFLAGS+= -I../include/3rd/
 
-CXXFLAGS+= -Wall -Wextra
+CXXFLAGS+= -Wall -Wextra -Wpedantic -Werror
 
 ifndef IS_MAC_ARM
 

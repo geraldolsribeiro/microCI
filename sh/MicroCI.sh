@@ -37,7 +37,7 @@ OS=$(uname -s)
   echo -e "{{BLUE}}┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░▀░░░░░░░░░░░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
-  echo -e "{{BLUE}}┃                            microCI {{ VERSION }}                      ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                           microCI {{ VERSION }}                       ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
   echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"
   echo ""

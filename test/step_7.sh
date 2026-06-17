@@ -37,7 +37,7 @@ OS=$(uname -s)
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                            microCI v0.45.2                         ┃[0m"
+  echo -e "[0;34m┃                           microCI v0.45.2                          ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
   echo ""
@@ -475,9 +475,12 @@ function step_c___check_with_cppcheck() {
           --xml \
           --xml-version=2 \
           -i src/single_compilation_unit.cpp \
+          --checkers-report=auditing/cppcheck/report.txt \
           --suppress=missingInclude \
           --suppress=missingIncludeSystem \
           --check-level=exhaustive \
+          --enable=performance \
+          --enable=all \
           -I include \
           src \
           test \

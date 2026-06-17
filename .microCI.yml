@@ -64,9 +64,13 @@ steps:
       std: "c++20"
       options:
         - "-i src/single_compilation_unit.cpp"
+        - "--checkers-report=auditing/cppcheck/report.txt"
         - "--suppress=missingInclude"
         - "--suppress=missingIncludeSystem"
         - "--check-level=exhaustive"
+        - "--enable=performance"
+        - "--enable=all"
+        # - "--addon=misra"
 
   - name: "SAST com flawfinder"
     description: "C++ check with flawfinder"
