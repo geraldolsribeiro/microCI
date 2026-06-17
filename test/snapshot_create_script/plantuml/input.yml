@@ -1,0 +1,17 @@
+#   # plantuml plugin
+#   
+#{{{
+steps:
+  - name: "Build diagrams"
+    description: "Build diagrams from textual description"
+    plugin:
+      name: "plantuml"
+      source:
+        - "src/**.cpp"                        # Search for inline plantuml recursively inside all C++ source code
+        - "docs/**.puml"                      # Search for all filename with puml extension
+      type: svg                               # Can be svg, png or pdf
+      output_folder: "docs/diagrams/"         # Folder for saving generated diagrams
+      config: "docs/diagrams/skinparams.iuml" # Common styles
+#}}}
+
+# vim: spell spelllang=pt,en

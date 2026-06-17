@@ -28,8 +28,8 @@ SHELL=bash
 %.test: % %.ref
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
-.PHONY: test snapshot_test snapshot_update
-test: snapshot_test
+.PHONY: test snapshot_create_script_test snapshot_create_script_update snapshot_cmd_new_test
+test: snapshot_create_script_test snapshot_cmd_new_test
 	rm -f .env
 	rm -f .env.yml
 	rm -f test_npm.yml
@@ -49,33 +49,33 @@ test: snapshot_test
 	../bin/microCI -h                                            > help.txt
 	../bin/microCI -n npm -i test_npm.yml
 	../bin/microCI -n npm -i test_npm.yml
-	../bin/microCI -i ../new/git_deploy.yml                      > git_deploy.sh
-	../bin/microCI -i ../new/mkdocs_material.yml                 > mkdocs_material.sh
-	../bin/microCI -i ../new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
-	../bin/microCI -i ../new/doxygen.yml                         > doxygen.sh
-	../bin/microCI -i ../new/cppcheck.yml                        > cppcheck.sh
-	../bin/microCI -i ../new/vhdl-format.yml                     > vhdl-format.sh
-	../bin/microCI -i ../new/clang-tidy.yml                      > clang-tidy.sh
-	../bin/microCI -i ../new/clang-format.yml                    > clang-format.sh
-	../bin/microCI -i ../new/plantuml.yml                        > plantuml.sh
-	../bin/microCI -i ../new/pikchr.yml                          > pikchr.sh
-	../bin/microCI -i ../new/beamer.yml                          > beamer.sh
-	../bin/microCI -i ../new/mermaid.yml                         > mermaid.sh
-	../bin/microCI -i ../new/fetch.yml                           > fetch.sh
-	../bin/microCI -i ../new/skip.yml                            > skip.sh
+	../bin/microCI -i ../snapshot_cmd_new/git_deploy.yml                      > git_deploy.sh
+	../bin/microCI -i ../snapshot_cmd_new/mkdocs_material.yml                 > mkdocs_material.sh
+	../bin/microCI -i ../snapshot_cmd_new/mkdocs_material.yml -O "local-step" > mkdocs_material_only.sh
+	../bin/microCI -i ../snapshot_cmd_new/doxygen.yml                         > doxygen.sh
+	../bin/microCI -i ../snapshot_cmd_new/cppcheck.yml                        > cppcheck.sh
+	../bin/microCI -i ../snapshot_cmd_new/vhdl-format.yml                     > vhdl-format.sh
+	../bin/microCI -i ../snapshot_cmd_new/clang-tidy.yml                      > clang-tidy.sh
+	../bin/microCI -i ../snapshot_cmd_new/clang-format.yml                    > clang-format.sh
+	../bin/microCI -i ../snapshot_cmd_new/plantuml.yml                        > plantuml.sh
+	../bin/microCI -i ../snapshot_cmd_new/pikchr.yml                          > pikchr.sh
+	../bin/microCI -i ../snapshot_cmd_new/beamer.yml                          > beamer.sh
+	../bin/microCI -i ../snapshot_cmd_new/mermaid.yml                         > mermaid.sh
+	../bin/microCI -i ../snapshot_cmd_new/fetch.yml                           > fetch.sh
+	../bin/microCI -i ../snapshot_cmd_new/skip.yml                            > skip.sh
 	source skip.sh
-	../bin/microCI -i ../new/skip.yml  --append-log              > skip_append_log.sh
+	../bin/microCI -i ../snapshot_cmd_new/skip.yml  --append-log              > skip_append_log.sh
 	source skip_append_log.sh
 	cat .microCI.log > skip_append_log.log
-	../bin/microCI -i ../new/bash.yml                            > bash.sh
-	../bin/microCI -i ../new/docmd.yml                           > docmd.sh
-	../bin/microCI -i ../new/pandoc.yml                          > pandoc.sh
-	../bin/microCI -i ../new/template.yml                        > template.sh
+	../bin/microCI -i ../snapshot_cmd_new/bash.yml                            > bash.sh
+	../bin/microCI -i ../snapshot_cmd_new/docmd.yml                           > docmd.sh
+	../bin/microCI -i ../snapshot_cmd_new/pandoc.yml                          > pandoc.sh
+	../bin/microCI -i ../snapshot_cmd_new/template.yml                        > template.sh
 	cp dot_env_minio .env.yml
-	../bin/microCI -i ../new/minio.yml                           > minio.sh
-	../bin/microCI -i ../new/jfrog.yml                           > jfrog.sh
-	../bin/microCI -i ../new/flawfinder.yml                      > flawfinder.sh
-	../bin/microCI -i ../new/docker_build.yml                    > docker_build.sh
+	../bin/microCI -i ../snapshot_cmd_new/minio.yml                           > minio.sh
+	../bin/microCI -i ../snapshot_cmd_new/jfrog.yml                           > jfrog.sh
+	../bin/microCI -i ../snapshot_cmd_new/flawfinder.yml                      > flawfinder.sh
+	../bin/microCI -i ../snapshot_cmd_new/docker_build.yml                    > docker_build.sh
 	../bin/microCI -i ../.microCI.yml --list                     > list.txt
 	../bin/microCI -i ../.microCI.yml --number 7                 > step_7.sh
 	../bin/microCI -i ../.microCI.yml --number 7,9,11            > step_7_9_11_A.sh
@@ -86,11 +86,14 @@ test: snapshot_test
 	rm -f .env.yml
 	#cat template.sh | bash
 
-snapshot_test:
-	./snapshots/snapshot_test.sh
+snapshot_create_script_test:
+	./snapshot_create_script/snapshot_test.sh
 
-snapshot_update:
-	./snapshots/snapshot_update.sh
+snapshot_create_script_update:
+	./snapshot_create_script/snapshot_update.sh
+
+snapshot_cmd_new_test:
+	./snapshot_cmd_new/snapshot_test.sh
 
 #  1 05b1 C++ check with clang-tidy
 #  2 ec9f C++ check with cppcheck

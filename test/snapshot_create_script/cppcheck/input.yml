@@ -1,0 +1,16 @@
+steps:
+  - name: "Create C++ code verification report - cppcheck"
+    description: "Check C++ code and generate HTML report"
+    plugin:
+      name: "cppcheck"
+      options:
+        # - "-j 2"             # two jobs simultaneously
+        # - "--clang=clang-11" # uses clang as analyser
+        # - "--bug-hunting"    # useful for code review
+        # - "--std=c++11"      # specify the C++ standard
+      include:
+        - "include"            # include folder
+      source:
+        - "src"                # source folder or filename
+        - "test"
+      platform: "unix64"
