@@ -128,9 +128,10 @@ steps:
       bash: |
         mkdir -p site/
         cp github-pages/CNAME site/
-        cat docs/index.md | sed 's#<center>#<div align="center">#' | sed 's#</center>#</div>#' > README.md
-        # Cover page
-        cp README.md site/
+        # README for https://github.com/geraldolsribeiro/microci.dev
+        cat docs/index.md | sed 's#<center>#<div align="center">#' | sed 's#</center>#</div>#' > site/README.md
+        # README for https://github.com/geraldolsribeiro/microCI
+        cat docs/index.md | sed 's#](images/#](docs/images/#' > README.md
 
   - name: "Build PDF documentation"
     description: "Build PDF documentation"
