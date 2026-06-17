@@ -1,0 +1,6 @@
+steps:
+  - name: "Beamer"
+    plugin:
+      name: beamer
+      input:
+        - "slides.md"

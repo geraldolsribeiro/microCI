@@ -28,8 +28,8 @@ SHELL=bash
 %.test: % %.ref
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
-.PHONY: test
-test:
+.PHONY: test snapshot_test snapshot_update
+test: snapshot_test
 	rm -f .env
 	rm -f .env.yml
 	rm -f test_npm.yml
@@ -85,6 +85,12 @@ test:
 	rm -f .env
 	rm -f .env.yml
 	#cat template.sh | bash
+
+snapshot_test:
+	./snapshots/snapshot_test.sh
+
+snapshot_update:
+	./snapshots/snapshot_update.sh
 
 #  1 05b1 C++ check with clang-tidy
 #  2 ec9f C++ check with cppcheck

@@ -1,0 +1,6 @@
+steps:
+  - name: "Flawfinder"
+    plugin:
+      name: flawfinder
+      source:
+        - "src"

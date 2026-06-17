@@ -1,0 +1,15 @@
+#   # clang-format plugin
+#   
+#{{{
+steps:
+  - name: "Format C++ code with clang-format"
+    description: "Standardizes code formatting using rules"
+    run_as: user
+    plugin:
+      name: "clang-format"
+      source: # List of files to be formatted
+        - "src/*.cpp"
+        - "test/*.cpp"
+        - "include/*.hpp"
+#}}}
+# vim: spell spelllang=pt,en

@@ -1077,8 +1077,8 @@ function step_configure_github_pages_and_readme() {
         /bin/bash -c "cd /microci_workspace \
            && mkdir -p site/ 2>&1 \
            && cp github-pages/CNAME site/ 2>&1 \
-           && cat docs/index.md | sed 's#<center>#<div align=\"center\">#' | sed 's#</center>#</div>#' > README.md 2>&1 \
-           && cp README.md site/ 2>&1"
+           && cat docs/index.md | sed 's#<center>#<div align=\"center\">#' | sed 's#</center>#</div>#' > site/README.md 2>&1 \
+           && cat docs/index.md | sed 's#](images/#](docs/images/#' > README.md 2>&1"
 
     )
 

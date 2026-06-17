@@ -1,0 +1,6 @@
+steps:
+  - name: "VHDL format"
+    plugin:
+      name: vhdl-format
+      source:
+        - "src/*.vhd"

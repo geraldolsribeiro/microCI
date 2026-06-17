@@ -1,0 +1,19 @@
+#   # git_deploy plugin
+#   
+#{{{
+---
+steps:
+  - name: "Deploy VueJS application page"
+    description: "Description of this step"
+    plugin:
+      name: "git_deploy"
+      # Repository containing the latest version of the application
+      repo: "git@gitlab.xyx.com.br:str/app_frontend_deploy.git"
+      # Location on the server where the local git repository will be stored
+      git_dir: "/opt/microCI/repos/app_frontend_deploy"
+      # Location on the server where files will be deployed
+      work_tree: "/var/www/my-intranet/html/app"
+      clean: true
+#}}}
+
+# vim: spell spelllang=pt,en

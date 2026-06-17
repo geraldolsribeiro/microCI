@@ -1,0 +1,6 @@
+steps:
+  - name: "Mermaid"
+    plugin:
+      name: mermaid
+      inputs:
+        - "diagram.mmd"

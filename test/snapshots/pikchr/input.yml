@@ -1,0 +1,6 @@
+steps:
+  - name: "Pikchr"
+    plugin:
+      name: pikchr
+      source:
+        - "diagram.pikchr"
