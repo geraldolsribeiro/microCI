@@ -19,4 +19,4 @@ Execution chain:
 Layout:
 - `input.yml` — fixture used to generate the script
 - `expected.sh` — golden shell output
-- `run.sh` — thin wrapper that calls the shared snapshot runner
+- `test.sh` — thin wrapper that calls the shared snapshot runner

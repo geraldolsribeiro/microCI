@@ -11,7 +11,7 @@ The test tree is auto-discovered, so adding a new plugin only requires adding a
 new directory under `test/snapshot_cmd_new/<plugin>/`.
 
 Status convention:
-- `run.sh` may print `SKIP` for fixtures that are not ready yet
+- `test.sh` may print `SKIP` for fixtures that are not ready yet
 - the aggregator counts `PASS`, `FAIL`, and `SKIP` and prints a summary
 
 Run with:

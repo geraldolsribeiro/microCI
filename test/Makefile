@@ -28,8 +28,8 @@ SHELL=bash
 %.test: % %.ref
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
-.PHONY: test snapshot_create_script_test snapshot_create_script_update snapshot_cmd_new_test
-test: snapshot_create_script_test snapshot_cmd_new_test
+.PHONY: test snapshot_create_script_test snapshot_create_script_update snapshot_cmd_new_test runtime_test
+test: snapshot_create_script_test snapshot_cmd_new_test runtime_test
 	rm -f .env
 	rm -f .env.yml
 	rm -f test_npm.yml
@@ -94,6 +94,9 @@ snapshot_create_script_update:
 
 snapshot_cmd_new_test:
 	./snapshot_cmd_new/test_all.sh
+
+runtime_test:
+	./runtime/test_all.sh
 
 #  1 05b1 C++ check with clang-tidy
 #  2 ec9f C++ check with cppcheck
