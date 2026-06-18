@@ -5,7 +5,9 @@ set -euo pipefail
 # First verify the generated script executes successfully.
 # Then run custom assertions (to be filled by the developer).
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if ! "$script_dir/../runner_helper.sh" "clang-tidy_01"; then
+cd "$script_dir"
+runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
+if ! "$script_dir/../runner_helper.sh" "clang-tidy_01" "$runtime_timeout"; then
   exit 1
 fi
 
