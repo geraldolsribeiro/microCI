@@ -14,7 +14,9 @@ Layout:
 Pattern:
 - `test.sh` defines a `run_microci()` function for its own command line
 - `runner_helper.sh` runs that command and handles timeout cleanup
-- `custom_output_check()` contains the developer-defined assertions
+- `verify_runtime_output()` contains the developer-defined assertions
+- use `return` inside helper functions and `exit` in top-level flow
+- future improvements may factor shared assertions into reusable helpers
 
 Convention:
 - each plugin may have more than one runtime test folder
@@ -27,6 +29,7 @@ Convention:
 Skip policy:
 - runtime tests are skipped in `test_all.sh` by name pattern
 - current skipped prefixes: `beamer_`, `docmd_`, `doxygen_`, `jfrog_`, `minio_`, `npm_`, `mermaid_`, `pikchr_`, `vhdl-format_`
+- future improvement: store skip status next to each fixture instead of hard-coding names
 
 Timeout control:
 - `runner_helper.sh` accepts an optional timeout argument

@@ -7,6 +7,9 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 
 # Auto-discovered runtime tests under test/runtime/<plugin>_<NN>/.
+#
+# Keep this file focused on suite orchestration so future improvements can be
+# made in the per-test scripts without rewriting discovery/summary logic.
 # Each per-test test.sh wrapper invokes the shared runner.
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 pass=0
@@ -19,6 +22,8 @@ for dir in "$script_dir"/*/; do
 
   case "$test_name" in
     beamer_*|docmd_*|doxygen_*|jfrog_*|minio_*|npm_*|mermaid_*|pikchr_*|vhdl-format_*)
+      # Placeholder skip list for fixtures that still need concrete assertions.
+      # Future improvement: move this metadata next to each fixture.
       echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
       skip=$((skip + 1))
       continue

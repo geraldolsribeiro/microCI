@@ -2,6 +2,11 @@
 set -euo pipefail
 
 # Shared runner for runtime tests.
+#
+# Keep this file generic: it should only execute the provided command and
+# manage common concerns (output capture, timeout cleanup, exit status).
+# Per-test wrappers own the actual microCI command line and assertions.
+#
 # It is called by per-test wrappers under test/runtime/<plugin>_<NN>/test.sh.
 #
 # Command chain:
@@ -11,7 +16,8 @@ set -euo pipefail
 #         -> ./runtime/runner_helper.sh <name>
 #
 # This helper only executes the provided shell command and reports its result.
-# Per-test scripts may add custom output verification after this call.
+# Future improvements can extend this runner with richer diagnostics, artifact
+# collection, or per-test log capture without duplicating logic in test.sh.
 if [[ $# -ne 2 ]]; then
   echo "Usage: $0 <name> <command>" >&2
   exit 2
