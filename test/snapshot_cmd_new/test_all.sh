@@ -18,12 +18,14 @@ for dir in "$script_dir"/*/; do
   [[ -f "${dir}test.sh" ]] || continue
   test_name="$(basename "$dir")"
 
+  #beamer|docmd|doxygen|fetch|jfrog|minio|mermaid|pikchr|vhdl-format)
+
   case "$test_name" in
-    beamer|docmd|doxygen|fetch|jfrog|minio|mermaid|pikchr|vhdl-format)
-      echo -e "[cmd new all] ${YELLOW}SKIP${RESET}  $test_name"
-      skip=$((skip + 1))
-      continue
-      ;;
+  npm | plugin_abc | plugin_xyz)
+    echo -e "[cmd new all] ${YELLOW}SKIP${RESET}  $test_name"
+    skip=$((skip + 1))
+    continue
+    ;;
   esac
 
   if "${dir}test.sh"; then

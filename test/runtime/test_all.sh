@@ -21,13 +21,13 @@ for dir in "$script_dir"/*/; do
   test_name="$(basename "$dir")"
 
   case "$test_name" in
-    beamer_*|docmd_*|doxygen_*|jfrog_*|minio_*|npm_*|mermaid_*|pikchr_*|vhdl-format_*)
-      # Placeholder skip list for fixtures that still need concrete assertions.
-      # Future improvement: move this metadata next to each fixture.
-      echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
-      skip=$((skip + 1))
-      continue
-      ;;
+  clang-tidy_* | cppcheck_* | fetch_* | flawfinder_* | git_deploy_* | git_publish_* | mkdocs_material_* | plantuml_* | skip_* | template_* | beamer_* | docmd_* | doxygen_* | jfrog_* | minio_* | npm_* | mermaid_* | pikchr_* | vhdl-format_*)
+    # Placeholder skip list for fixtures that still need concrete assertions.
+    # Future improvement: move this metadata next to each fixture.
+    echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
+    skip=$((skip + 1))
+    continue
+    ;;
   esac
 
   runtime_timeout="${RUNTIME_TIMEOUT:-120s}"

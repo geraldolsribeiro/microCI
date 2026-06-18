@@ -1,1 +1,449 @@
-# MicroCI [11:32:50 +04:00] [error] Plugin not defined at the step 'Install dependencies'
+echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Install dependencies''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
+echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Check code''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
+echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Build''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
+echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
+#!/bin/bash
+# ----------------------------------------------------------------------
+# DON'T EDIT THIS FILE!
+# ----------------------------------------------------------------------
+# This bash script was generated by microCI v0.45.2
+# based on the configuration files:
+# - .microCI.yml   Pipeline steps
+# - ~/.microCI.env Global environment variables, secrets, and other non-versioned information
+# - .env           Project environment variables, secrets, and other non-versioned information
+#
+# The microCI documentation can be found at the website <https://microci.dev>.
+#
+# ----------------------------------------------------------------------
+# Summary
+# ----------------------------------------------------------------------
+# The following steps are performed in this script:
+
+# Path without linefeed
+MICROCI_PWD=$(pwd -P | tr -d '\n')
+export MICROCI_PWD
+
+OS=$(uname -s)
+
+# ----------------------------------------------------------------------
+# Project banner
+# ----------------------------------------------------------------------
+{
+  echo ""
+  echo ""
+  echo ""
+  echo -e "[0;34m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m"
+  echo -e "[0;34m┃                                                                    ┃[0m"
+  echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
+  echo -e "[0;34m┃                          ░░░░░░░█▀▀░▀█▀░░░                         ┃[0m"
+  echo -e "[0;34m┃                          ░░░█░█░█░░░░█░░░░                         ┃[0m"
+  echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
+  echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
+  echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
+  echo -e "[0;34m┃                           microCI v0.45.2                          ┃[0m"
+  echo -e "[0;34m┃                                                                    ┃[0m"
+  echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
+  echo ""
+  echo ""
+} | tee .microCI.log
+
+# ----------------------------------------------------------------------
+# Bash configuration and redirections
+# ----------------------------------------------------------------------
+set -o posix
+shopt -so pipefail
+
+exec 5> .microCI.dbg
+BASH_XTRACEFD="5"
+PS4='Line $LINENO: '
+
+# ----------------------------------------------------------------------
+# Check if the dependencies are installed at the workstation
+# ----------------------------------------------------------------------
+command -v jq &> /dev/null ||
+  {
+    echo -e "[0;31mThe utility jq was not found in the system[0m"
+    echo "[0;31mTry: [0;32msudo apt install jq"
+    echo "[0;31mTry: [0;32mbrew install jq"
+    exit 1
+  }
+
+command -v yq &> /dev/null ||
+  {
+    echo -e "[0;31mThe utility yq was not found in the system[0m"
+    echo "[0;31mTry: [0;32msudo apt install yq"
+    echo "[0;31mTry: [0;32msudo snap install yq"
+    echo "[0;31mTry: [0;32mbrew install yq"
+    exit 1
+  }
+
+command -v curl &> /dev/null ||
+  {
+    echo -e "[0;31mThe utility curl was not found in the system[0m"
+    echo "[0;31mTry: [0;32msudo apt install curl"
+    echo "[0;31mTry: [0;32mbrew install curl"
+    exit 1
+  }
+
+command -v docker &> /dev/null ||
+  {
+    echo -e "[0;31mThe utility docker was not found in the system[0m"
+    echo "See page 'Install Docker Engine on Ubuntu' at"
+    echo "https://docs.docker.com/engine/install/ubuntu/"
+    echo "See page 'Install Docker Desktop on Mac' at"
+    echo "https://docs.docker.com/desktop/setup/install/mac-install/"
+    exit 1
+  }
+
+command -v ssh-keygen &> /dev/null ||
+  {
+    echo -e "[0;31mThe utility ssh-keygen was not found in the system[0m"
+    echo "[0;31mTry: [0;32msudo apt install openssh-client"
+    echo "[0;31mTry: [0;32mbrew install openssh"
+    exit 1
+  }
+
+case "$OS" in
+  "Linux")
+    groups | grep -q docker || {
+      echo -e "[0;31mPlease finish the docker installation adding your user to the docker group[0m"
+      exit 1
+    }
+    ;;
+  "Darwin") ;;
+  *)
+    echo "Running on an unknown operating system: $OS"
+    exit 1
+    ;;
+esac
+
+if [ ! -d ~/.ssh ]; then
+  echo -e "[0;31mPlease set up SSH before using microCI[0m"
+  echo "The ~/.ssh folder was not found"
+  echo "[0;31mTry: [0;32mssh-keygen"
+  exit 1
+fi
+
+if [ ! -f ~/.ssh/config ]; then
+  echo -e "[0;31mPlease set up SSH before using microCI[0m"
+  echo "The ~/.ssh/config file was not found"
+  echo "Use the ~/.ssh/config file to pass options to hosts"
+  echo "[0;31mTry: [0;32mtouch ~/.ssh/config"
+  exit 1
+fi
+
+if [ ! -f ~/.ssh/id_rsa.pub -a ! -f ~/.ssh/id_ed25519.pub ]; then
+  echo -e "[0;31mPlease set up SSH before using microCI[0m"
+  echo "The ~/.ssh/id_rsa.pub file was not found"
+  echo "The ~/.ssh/id_ed25519.pub file was not found"
+  echo "Use the ssh-keygen command to set up your pair of keys"
+  echo "Consider to use ED25519 SSH keys"
+  echo "The book Practical Cryptography With Go suggests that ED25519 keys are more secure and performant than RSA keys."
+  echo "OpenSSH 6.5 introduced ED25519 SSH keys in 2014, and they should be available on most operating systems."
+  exit 1
+fi
+
+if [ ! -f ~/.ssh/known_hosts ]; then
+  echo -e "[0;31mPlease set up SSH before using microCI[0m"
+  echo "The ~/.ssh/known_hosts file was not found"
+  echo "Add your SSH public key to your git server, and"
+  echo "clone one of your projects using the SSH protocol"
+  echo "git clone git@your.git.server:/some/project.git /tmp"
+  exit 1
+fi
+
+# Check for password protected SSH key
+is_ssh_key_protected_by_password=YES
+for key in ~/.ssh/id_rsa ~/.ssh/id_ed25519; do
+  if [ -f $key ]; then
+    ssh-keygen -y -P "" -f $key > /dev/null 2> /dev/null && is_ssh_key_protected_by_password=NO
+  fi
+done
+if [ "$is_ssh_key_protected_by_password" = "YES" ]; then
+  echo -e "[0;31mPlease use an SSH key not protected by password[0m"
+  echo ""
+  exit 1
+fi
+
+MICROCI_DB_JSON=/opt/microCI/db.json
+MICROCI_STEP_NUMBER=0
+
+function gitOrigin {
+  git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND!"
+}
+
+function pwdRepoId {
+  # Since JSON keys cannot start with a number, it is prefixed with an underscore
+  echo "_$(echo "${MICROCI_PWD}" | md5sum)" | cut -b 1-7
+}
+
+function microCI_latest_download_URL_with_version {
+  curl -s https://api.github.com/repos/geraldolsribeiro/microci/releases/latest |
+    grep browser_download_url |
+    grep -o -E "https://github.com/geraldolsribeiro/microCI/releases/download/(.*)/microCI"
+}
+
+function microCI_download_latest_binary {
+  curl -fsSL https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI -o /usr/bin/microCI
+}
+
+MICROCI_CACHE_FILE="${HOME}/.cache/microCI/docker-images.json"
+
+function microCI_cache_key() {
+  local key="$1"
+  printf 'docker-image-%s' "$key" | md5sum | cut -c 1-12
+}
+
+function microCI_cache_get() {
+  local key="$1"
+  local cache_key
+  cache_key=$(microCI_cache_key "$key")
+  if [ -f "$MICROCI_CACHE_FILE" ]; then
+    jq -r --arg key "$cache_key" '.[$key] // 0' "$MICROCI_CACHE_FILE" 2> /dev/null || echo 0
+  else
+    echo 0
+  fi
+}
+
+function microCI_cache_set() {
+  local key="$1"
+  local value="$2"
+  local cache_key
+  local tmp_file
+  cache_key=$(microCI_cache_key "$key")
+  tmp_file="${MICROCI_CACHE_FILE}.$$"
+  mkdir -p "$(dirname "$MICROCI_CACHE_FILE")"
+  if [ -f "$MICROCI_CACHE_FILE" ]; then
+    jq --arg key "$cache_key" --argjson value "$value" '.[$key] = $value' "$MICROCI_CACHE_FILE" > "$tmp_file"
+  else
+    jq -n --arg key "$cache_key" --argjson value "$value" '{($key): $value}' > "$tmp_file"
+  fi
+  mv "$tmp_file" "$MICROCI_CACHE_FILE"
+}
+
+function microCI_should_pull_docker_image() {
+  local image="$1"
+  local cache_hours="${MICROCI_DOCKER_PULL_CACHE_HOURS:-12}"
+  local now
+  local last_pull
+  local ttl_seconds
+
+  now=$(date +%s)
+  ttl_seconds=$((cache_hours * 3600))
+  last_pull=$(microCI_cache_get "$image")
+
+  if [ $((now - last_pull)) -lt "$ttl_seconds" ] 2> /dev/null; then
+    return 1
+  fi
+
+  microCI_cache_set "$image" "$now"
+  return 0
+}
+
+function updateStepStatusJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    local repoId=$1
+    shift
+    local stepNum=$1
+    shift
+    local status=$1
+    shift
+    local name=$1
+    shift
+    local ts
+    #local id
+    ts=$(date +%s)
+    # id=$( echo "${repoId} ${stepName}" | md5sum | sed "s/^[0-9]\+//" | cut -b 1-6)
+    # echo $( jq --arg id     "$id"     ".repos.$repoId.steps[$stepNum].id     = (\$id)"     ${MICROCI_DB_JSON} ) > ${MICROCI_DB_JSON}
+    jq --arg name "$name" ".repos.$repoId.steps[$stepNum].name   = (\$name)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --argjson ts "$ts" ".repos.$repoId.steps[$stepNum].ts     = (\$ts)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg status "$status" ".repos.$repoId.steps[$stepNum].status = (\$status)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+  fi
+}
+
+function resetStepStatusesJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    local stepNum=0
+    jq --arg origin "$(gitOrigin)" ".repos.$(pwdRepoId).origin = (\$origin)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg status "unknown" ".repos.$(pwdRepoId).status = (\$status)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+    jq --arg path "${MICROCI_PWD}" ".repos.$(pwdRepoId).path = (\$path)" ${MICROCI_DB_JSON} \
+      > /tmp/$$.tmp && mv /tmp/$$.tmp ${MICROCI_DB_JSON}
+
+    rm -f /tmp/$$.json
+
+    yq -r .steps[].name "input.yml" |
+      while IFS= read -r stepName; do
+        updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
+        ((++stepNum))
+      done
+  fi
+}
+
+function setStepStatusOkJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "OK" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusFailJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "FAIL" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function setStepStatusSkipJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    updateStepStatusJson "$(pwdRepoId)" "${MICROCI_STEP_NUMBER}" "SKIP" "${MICROCI_STEP_NAME}"
+  fi
+}
+
+function reformatJson {
+  if [ -f "${MICROCI_DB_JSON}" ]; then
+    jq --sort-keys . ${MICROCI_DB_JSON} \
+      > /tmp/$$.json && cat /tmp/$$.json > ${MICROCI_DB_JSON}
+    rm -f /tmp/$$.json
+  fi
+}
+
+function assert_fail() {
+  # Print assert errors to stderr!
+  echo "assert failed: \"$*\"" >&2
+  _backtrace >&2
+
+  # And crash immediately.
+  kill -s USR1 ${TOP_PID}
+}
+
+function assert() {
+  if [ $# -ne 1 ]; then
+    assert_fail "assert called with wrong number of parameters!"
+  fi
+
+  if [ ! "$1" ]; then
+    assert_fail "$1"
+  fi
+}
+
+function assert_eq() {
+  if [ $# -ne 2 ]; then
+    assert_fail "assert_eq called with wrong number of parameters!"
+  fi
+
+  assert "${1} -eq ${2}"
+}
+
+function assert_function() {
+  if [ $# -ne 1 ]; then
+    assert_fail "assert_function called with wrong number of parameters!"
+  fi
+
+  local func=$1
+  assert "\"$(type -t ${func})\" == \"function\""
+}
+
+resetStepStatusesJson
+reformatJson
+
+MICROCI_STEP_NUMBER=0
+
+# Notification by Discord is not possible
+if microCI_should_pull_docker_image 'node:16'; then
+  echo 'Updating node:16 docker image...'
+  docker pull node:16 --quiet
+fi
+
+# Execute steps in the pipeline
+function main() {
+  date >> .microCI.log
+
+  step_install_dependencies
+  step_check_code
+  step_build
+
+  date >> .microCI.log
+}
+
+# Entry point
+main
+
+# Usage
+# -----
+#
+# To execute this workflow inside a terminal use the following command:
+# microCI | bash
+#
+# To save the workflow as a bash scritp just redirect the output to a file:
+# microCI > build.sh

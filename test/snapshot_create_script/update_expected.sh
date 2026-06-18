@@ -7,17 +7,21 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 
 for dir in */; do
+  echo "Scanning $dir..."
   [[ -f "$dir/input.yml" ]] || continue
-  [[ -f "$dir/expected.sh" ]] || continue
+  # [[ -f "$dir/expected.sh" ]] || continue
 
   test_name=${dir%/}
   case "$test_name" in
-    npm|beamer|docmd|doxygen|jfrog|minio)
-      echo "[create script] SKIP  $test_name"
-      continue
-      ;;
+  plugin_abc | plugin_xyz)
+    echo "[create script] SKIP  $test_name"
+    continue
+    ;;
   esac
 
-  ../../bin/microCI -i "$dir/input.yml" | shfmt -i 2 -ci -sr > "$dir/expected.sh"
+  pushd "$dir" >/dev/null
+  ../../../bin/microCI -i "input.yml" | shfmt -i 2 -ci -sr >"expected.sh"
+  popd >/dev/null
+
   echo "[create script] UPDATED  $test_name"
 done

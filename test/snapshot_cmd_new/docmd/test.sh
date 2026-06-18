@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-echo "[cmd new] SKIP  docmd"
+"$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/runner_helper.sh" "docmd" "snapshot_cmd_new/docmd/expected.yml"

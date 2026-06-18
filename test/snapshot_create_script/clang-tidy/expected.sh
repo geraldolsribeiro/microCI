@@ -272,7 +272,7 @@ function resetStepStatusesJson {
 
     rm -f /tmp/$$.json
 
-    yq -r .steps[].name "clang-tidy//input.yml" |
+    yq -r .steps[].name "input.yml" |
       while IFS= read -r stepName; do
         updateStepStatusJson "$(pwdRepoId)" "${stepNum}" "unknown" "${stepName}"
         ((++stepNum))

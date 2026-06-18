@@ -476,13 +476,14 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
   //{{{
 
   try {
-    spdlog::set_pattern("# MicroCI [%H:%M:%S %z] [%^%l%$] %v");
+    spdlog::set_pattern("echo '# MicroCI [%H:%M:%S %z] [%^%l%$] %v'; exit 1");
 
     argh::parser cmdl(argv, argh::parser::Mode::PREFER_PARAM_FOR_UNREG_OPTION);
 
     auto validOptions = commandLineValidOptions();
     for (const auto &flag : cmdl.flags()) {
-      const auto it = std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; });
+      const auto it =
+          std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; });
       if (it == validOptions.end()) {
         spdlog::error("Invalid command line option: -{}", flag);
         return 1;
@@ -490,7 +491,8 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     }
 
     for (const auto &param : cmdl.params()) {
-      const auto it = std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; });
+      const auto it =
+          std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; });
       if (it == validOptions.end()) {
         spdlog::error("Invalid command line option: -{} {}", param.first, param.second);
         return 1;

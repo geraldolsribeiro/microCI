@@ -4,26 +4,25 @@ steps:
       name: beamer
       output: output_filename.pdf
       source: # List of source files, use the number for ordering the sections
-        - 01_the_ci_cd_problem.md
+        - 00-introduction.md
+        - 01-body.md
+        - 02-conclusion.md
+        - 99-references.md
       lang: en-US # Presentation language: pt-BR, en-US, ...
       institute: Your Company Name
-      date: \today
-      title: microCI
-      subtitle: Portable, Auditable Automation Pipelines
+      date: April 1, 2023 # Presentation date. Can be \today for current date
+      title: Presentation Title
+      subtitle: Presentation Subtitle
       author:
         - Geraldo Ribeiro
-      aspectratio: 169
-      subject: microCI - Portable, Auditable Automation Pipelines
-      keywords: [microci, portable, auditable, pipeline]
+        - Other Author Name
+      # subject: Subject of presentation used in PDF property
+      # keywords: [keyword1, keyword2, keyword3, PDF] # list of keywords used for PDF properties
       # slide-level: 2          # use second level `##` to start a new slide
+      # aspectratio: 169        # use 16:9 aspect ratio
       # links-as-notes: true
       # natbib: true            # Use natbib format
       # bibliography: refs.bib  # Name of bibliography reference file
       # theme: STR
-      theme: "Madrid"
-      fonttheme: "professionalfonts" # FIXME
-      colortheme: "seahorse" # FIXME
       header-includes: # list of packages required by the presentation
         - \usepackage{tikz}
-        - \usepackage{booktabs}
-        - \usepackage{fontawesome5}

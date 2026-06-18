@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# set -x
 
 # Shared runner for shell-script snapshot tests.
 #
@@ -37,7 +38,8 @@ cp "$input_rel" "$workdir/input.yml"
 
 normalize() {
   # Keep snapshots stable by removing runtime-only paths.
-  sed -E 's#/tmp/tmp\.[^/]+#<TMPDIR>#g; s#<TMPDIR>/input\.yml#<INPUT>#g; s#snapshot_create_script/[^" ]+/input\.yml#<INPUT>#g; s#[A-Za-z0-9_-]+//input\.yml#<INPUT>#g'
+  sed -E 's#/tmp/tmp\.[^/]+/##g;'
+  # sed -E 's#/tmp/tmp\.[^/]+#<TMPDIR>#g; s#<TMPDIR>/input\.yml#<INPUT>#g; s#snapshot_create_script/[^" ]+/input\.yml#<INPUT>#g; s#[A-Za-z0-9_-]+//input\.yml#<INPUT>#g'
 }
 
 # Compare shell scripts structurally, not by whitespace or line wrapping.

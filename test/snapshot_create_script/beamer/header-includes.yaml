@@ -1,0 +1,13 @@
+---
+# Warning: this file is generated automatically!
+# Edit the .microCI.yml file if needed
+author:
+  - Geraldo Ribeiro
+keywords: [microci, portable, auditable, pipeline]
+fonttheme: professionalfonts
+colortheme: seahorse
+header-includes:
+  - \usepackage{tikz}
+  - \usepackage{booktabs}
+  - \usepackage{fontawesome5}
+...

@@ -1,0 +1,17 @@
+#   # doxygen plugin
+#   
+#{{{
+steps:
+  - name: "Build documentation with doxygen"
+    description: "Build documentation with doxygen"
+    docker: "intmain/microci_doxygen"
+    plugin:
+      name: doxygen
+      #doxyfile: ./Doxyfile     # Default
+      #output_dir: doxygen      # Default
+      #html:
+        #header: header.html    # Optional
+        #footer: footer.html    # Optional
+        #stylesheet: style.css  # Optional
+#}}}
+# vim: spell spelllang=en

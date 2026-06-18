@@ -5,14 +5,20 @@ docker: "node:16"
 steps:
   - name: "Install dependencies"
     description: "Step description"
-    bash: |
-      npm install
+    plugin:
+      name: npm
+      bash: |
+        npm install
   - name: "Check code"
-    bash: |
-      npm run lint --fix
+    plugin:
+      name: npm
+      bash: |
+        npm run lint --fix
   - name: "Build"
-    bash: |
-      npm run build
+    plugin:
+      name: npm
+      bash: |
+        npm run build
 #}}}
 
 # vim: spell spelllang=en

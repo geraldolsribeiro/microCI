@@ -1,0 +1,28 @@
+steps:
+  - name: "Extract documentation"
+    description: "Extract documentation from source code to a markdown file"
+    plugin:
+      name: "docmd"
+      toc: false          # Enable/Disable table of content
+      show_details: false # Enable/Disable html tag details
+      show_source: false  # Enable/Disable source filename print
+      show_banner: true   # Enable/Disable banner
+      items:
+        - [ 'yaml', 'new/bash.yml', 'docs/plugin_bash.md' ]
+        - [ 'yaml', 'new/skip.yml', 'docs/plugin_skip.md' ]
+        - [ 'c++',  'input_filename.cpp', 'output_filename_cpp.md' ]
+        # Available formats:
+        # `bash`
+        # `c++`
+        # `coffee`
+        # `conf`
+        # `grdb`
+        # `makefile`
+        # `nginx`
+        # `python`
+        # `ruby`
+        # `rust`
+        # `scss`
+        # `systemd`
+        # `vim`
+        # `yaml`

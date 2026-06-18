@@ -23,22 +23,25 @@ for dir in */; do
   test_name=${dir%/}
   # Skip fixtures that are not valid or not ready yet.
   # These are retained as placeholders to document planned coverage.
+  # npm | docmd | doxygen | jfrog | minio)
   case "$test_name" in
-    npm|beamer|docmd|doxygen|jfrog|minio)
-      echo -e "[create script] ${YELLOW}SKIP${RESET}  $test_name"
-      skip=$((skip + 1))
-      continue
-      ;;
+  npm | plugin_abc | plugin_xyz)
+    echo -e "[create script] ${YELLOW}SKIP${RESET}  $test_name"
+    skip=$((skip + 1))
+    continue
+    ;;
   esac
 
   # test.sh handles execution, normalization, and diff reporting.
-  if "$script_dir/$dir/test.sh" >/dev/null; then
+  pushd "$script_dir/$dir" >/dev/null
+  if "./test.sh" >/dev/null; then
     echo -e "[create script] ${GREEN}PASS${RESET}  $test_name"
     pass=$((pass + 1))
   else
     echo -e "[create script] ${RED}FAIL${RESET}  $test_name"
     fail=$((fail + 1))
   fi
+  popd >/dev/null
 done
 
 # Summary is intentionally compact for CI logs.
