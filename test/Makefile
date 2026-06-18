@@ -28,8 +28,7 @@ SHELL=bash
 %.test: % %.ref
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
-.PHONY: test snapshot_create_script_test snapshot_create_script_update snapshot_cmd_new_test runtime_test
-test: snapshot_create_script_test snapshot_cmd_new_test runtime_test
+test_old:
 	rm -f .env
 	rm -f .env.yml
 	rm -f test_npm.yml
@@ -86,15 +85,22 @@ test: snapshot_create_script_test snapshot_cmd_new_test runtime_test
 	rm -f .env.yml
 	#cat template.sh | bash
 
+.PHONY: test
+test: snapshot_create_script_test snapshot_cmd_new_test runtime_test
+
+.PHONY: snapshot_create_script_test
 snapshot_create_script_test:
 	./snapshot_create_script/test_all.sh
 
+.PHONY: snapshot_create_script_update
 snapshot_create_script_update:
 	./snapshot_create_script/update_expected.sh
 
+.PHONY: snapshot_cmd_new_test runtime_test
 snapshot_cmd_new_test:
 	./snapshot_cmd_new/test_all.sh
 
+.PHONY: runtime_test
 runtime_test:
 	./runtime/test_all.sh
 
@@ -118,10 +124,6 @@ runtime_test:
 test_run:
 	$(MAKE) -C quick_start_01/
 	$(MAKE) -C quick_start_02/
-	$(MAKE) -C test_bash_01/
-	$(MAKE) -C test_bash_02/
-	$(MAKE) -C test_bash_03/
-	$(MAKE) -C test_bash_04/
 	$(MAKE) -C new_cpp/
 
 .PHONY: clean

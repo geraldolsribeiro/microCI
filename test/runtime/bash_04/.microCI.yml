@@ -8,3 +8,5 @@ steps:
       bash: |
         apt update
         apt install -y libspdlog-dev
+        dpkg -l | grep libspdlog-dev > apt.txt
+        chown $(id -u):$(id -g) apt.txt
