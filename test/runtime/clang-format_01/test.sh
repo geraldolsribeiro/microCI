@@ -17,17 +17,23 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 test_name="$(basename "$script_dir")"
 
+create_bad_format_source_code() {
+  cat <<EOF >src.cpp
+struct Base { virtual void reimplementMe(int a) {} }; struct
+Derived:public         Base  { virtual  void reimplementMe(     int a       ) {     }};
+EOF
+}
+
 expect_microci_success() {
   microci_cmd='../../../bin/microCI | bash'
   "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
 }
 
 verify_runtime_output() {
-  # Replace this placeholder with plugin-specific assertions.
-  # Return 0 when the runtime output is acceptable.
-  echo "[runtime] FAIL  $test_name: runtime verification not implemented" >&2
-  return 1
+  diff --color --unified src.cpp src.ref
 }
+
+create_bad_format_source_code
 
 if ! expect_microci_success; then
   echo "[runtime] FAIL  $test_name"

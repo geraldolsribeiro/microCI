@@ -15,11 +15,10 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 test_name="$(basename "$script_dir")"
-self_name="$(basename "$script_dir")"
 
 expect_microci_success() {
   microci_cmd='../../../bin/microCI | bash'
-  "$script_dir/../runner_helper.sh" "bash_01" "$microci_cmd"
+  "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
 }
 
 verify_runtime_output() {
@@ -30,15 +29,15 @@ verify_runtime_output() {
 }
 
 if ! expect_microci_success; then
-  echo "[runtime] FAIL  bash_01"
+  echo "[runtime] FAIL  $test_name"
   exit 1
 fi
 
 # Top-level flow uses exit so the whole test script fails immediately when a
 # check fails.
 if ! verify_runtime_output; then
-  echo "[runtime] FAIL  bash_01"
+  echo "[runtime] FAIL  $test_name"
   exit 1
 fi
 
-echo "[runtime] PASS  bash_01"
+echo "[runtime] PASS  $test_name"

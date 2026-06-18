@@ -1,0 +1,8 @@
+steps:
+  - name: "Format C++ code with clang-format"
+    description: "Standardizes code formatting using rules"
+    run_as: user
+    plugin:
+      name: "clang-format"
+      source:
+        - "*.cpp"

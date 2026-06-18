@@ -13,12 +13,13 @@ set -euo pipefail
 # - run any additional checks if needed
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
+test_name="$(basename "$script_dir")"
 
 # Objective: fail using apt without network
 expect_microci_failure() {
   microci_cmd='../../../bin/microCI | bash'
-  if "$script_dir/../runner_helper.sh" "bash_03" "$microci_cmd"; then
-    echo "[runtime] FAIL  bash_03: microCI succeeded but a failure was expected" >&2
+  if "$script_dir/../runner_helper.sh" "test_name" "$microci_cmd"; then
+    echo "[runtime] FAIL  $test_name: microCI succeeded but a failure was expected" >&2
     return 1
   fi
   return 0
@@ -28,4 +29,4 @@ if ! expect_microci_failure; then
   exit 1
 fi
 
-echo "[runtime] PASS  bash_03"
+echo "[runtime] PASS  test_name"

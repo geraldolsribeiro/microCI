@@ -13,6 +13,7 @@ set -euo pipefail
 # - run any additional checks if needed
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
+test_name="$(basename "$script_dir")"
 
 expect_microci_success() {
   microci_cmd='../../../bin/microCI | bash'
