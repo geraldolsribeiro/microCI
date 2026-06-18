@@ -11,27 +11,32 @@ set -euo pipefail
 # - run microCI | bash using the local wrapper
 # - verify the runtime output in a dedicated helper function
 # - return from helpers, exit from top-level flow
+# - this is the default success-oriented skeleton for mermaid_01
 #
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 test_name="$(basename "$script_dir")"
-run_microci() {
+
+expect_microci_success() {
   microci_cmd='../../../bin/microCI | bash'
-  "$script_dir/../runner_helper.sh" "mermaid_01" "$microci_cmd" ;
+  "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
 }
 
-if ! run_microci; then
-  exit 1
-fi
-
 verify_runtime_output() {
-  echo "[runtime] FAIL  ${test_name}: verify_runtime_output not implemented" >&2
+  # Replace this placeholder with plugin-specific assertions.
+  # Return 0 when the runtime output is acceptable.
+  echo "[runtime] FAIL  $test_name: runtime verification not implemented" >&2
   return 1
 }
 
-if ! verify_runtime_output; then
-  echo "[runtime] FAIL  ${test_name}"
+if ! expect_microci_success; then
+  echo "[runtime] FAIL  $test_name"
   exit 1
 fi
 
-echo "[runtime] PASS  ${test_name}"
+if ! verify_runtime_output; then
+  echo "[runtime] FAIL  $test_name"
+  exit 1
+fi
+
+echo "[runtime] PASS  $test_name"

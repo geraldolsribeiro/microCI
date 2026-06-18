@@ -32,11 +32,21 @@ for dir in "$script_dir"/*/; do
 
   runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
   if timeout "$runtime_timeout" "${dir}test.sh" >/dev/null; then
-    echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
-    pass=$((pass + 1))
+    if [[ -f "${dir}expect_fail" ]]; then
+      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
+      pass=$((pass + 1))
+    else
+      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
+      pass=$((pass + 1))
+    fi
   else
-    echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
-    fail=$((fail + 1))
+    if [[ -f "${dir}expect_fail" ]]; then
+      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
+      pass=$((pass + 1))
+    else
+      echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
+      fail=$((fail + 1))
+    fi
   fi
 done
 

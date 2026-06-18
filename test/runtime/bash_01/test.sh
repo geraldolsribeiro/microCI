@@ -17,7 +17,7 @@ cd "$script_dir"
 test_name="$(basename "$script_dir")"
 self_name="$(basename "$script_dir")"
 
-run_microci() {
+expect_microci_success() {
   microci_cmd='../../../bin/microCI | bash'
   "$script_dir/../runner_helper.sh" "bash_01" "$microci_cmd"
 }
@@ -29,7 +29,7 @@ verify_runtime_output() {
   diff --color --unified file.txt file.ref
 }
 
-if ! run_microci; then
+if ! expect_microci_success; then
   echo "[runtime] FAIL  bash_01"
   exit 1
 fi
