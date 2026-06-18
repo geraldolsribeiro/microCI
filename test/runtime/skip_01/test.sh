@@ -17,7 +17,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 test_name="$(basename "$script_dir")"
 
-expect_microci_success() {
+run_microci() {
   microci_cmd='../../../bin/microCI | bash'
   "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
 }
@@ -29,7 +29,7 @@ verify_runtime_output() {
   return 1
 }
 
-if ! expect_microci_success; then
+if ! run_microci; then
   echo "[runtime] FAIL  $test_name"
   exit 1
 fi

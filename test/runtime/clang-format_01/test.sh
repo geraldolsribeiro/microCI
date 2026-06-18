@@ -24,7 +24,7 @@ Derived:public         Base  { virtual  void reimplementMe(     int a       ) { 
 EOF
 }
 
-expect_microci_success() {
+run_microci() {
   microci_cmd='../../../bin/microCI | bash'
   "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
 }
@@ -35,7 +35,7 @@ verify_runtime_output() {
 
 create_bad_format_source_code
 
-if ! expect_microci_success; then
+if ! run_microci; then
   echo "[runtime] FAIL  $test_name"
   exit 1
 fi
