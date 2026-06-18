@@ -3,9 +3,9 @@
 This suite validates the `microCI --new <plugin>` templates.
 
 Layout:
-- `snapshot_cmd_new/<plugin>/expected.yml` — canonical generated fixture
-- `snapshot_cmd_new/<plugin>/run.sh` — wrapper that calls the shared runner
-- `snapshot_cmd_new/snapshot_run.sh` — shared comparison helper
+- `test/snapshot_cmd_new/<plugin>/expected.yml` — canonical generated fixture
+- `test/snapshot_cmd_new/<plugin>/test.sh` — wrapper that calls the shared runner
+- `test/snapshot_cmd_new/runner_helper.sh` — shared comparison helper
 
 The test tree is auto-discovered, so adding a new plugin only requires adding a
 new directory under `test/snapshot_cmd_new/<plugin>/`.

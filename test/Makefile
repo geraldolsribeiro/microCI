@@ -87,13 +87,13 @@ test: snapshot_create_script_test snapshot_cmd_new_test
 	#cat template.sh | bash
 
 snapshot_create_script_test:
-	./snapshot_create_script/snapshot_test.sh
+	./snapshot_create_script/test_all.sh
 
 snapshot_create_script_update:
-	./snapshot_create_script/snapshot_update.sh
+	./snapshot_create_script/update_expected.sh
 
 snapshot_cmd_new_test:
-	./snapshot_cmd_new/snapshot_test.sh
+	./snapshot_cmd_new/test_all.sh
 
 #  1 05b1 C++ check with clang-tidy
 #  2 ec9f C++ check with cppcheck

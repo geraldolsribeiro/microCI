@@ -2,15 +2,15 @@
 set -euo pipefail
 
 # Regenerate `microCI --new <plugin>` fixtures in canonical YAML form.
-# This helper mirrors snapshot_create_script/snapshot_update.sh.
+# This helper mirrors snapshot_create_script/update_expected.sh.
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 for dir in "$script_dir"/*/; do
-  [[ -f "${dir}run.sh" ]] || continue
+  [[ -f "${dir}test.sh" ]] || continue
   test_name="$(basename "$dir")"
 
   if [[ -f "${dir}expected.yml" ]]; then
-    if output="$("${dir}run.sh" 2>&1)"; then
+    if output="$("${dir}test.sh" 2>&1)"; then
       if grep -q '\[cmd new\] SKIP' <<<"$output"; then
         echo "[cmd new] SKIP  $test_name"
       else

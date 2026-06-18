@@ -10,9 +10,11 @@ Decision:
 
 Execution chain:
 - `make -C test snapshot_create_script_test`
-- `test/snapshot_create_script/snapshot_test.sh`
-- `test/snapshot_create_script/<plugin>/run.sh`
-- `test/snapshot_create_script/snapshot_run.sh`
+- `make -C test snapshot_create_script_update`
+- `test/snapshot_create_script/test_all.sh`
+- `test/snapshot_create_script/<plugin>/test.sh`
+- `test/snapshot_create_script/runner_helper.sh`
+- `test/snapshot_create_script/update_expected.sh`
 
 Layout:
 - `input.yml` — fixture used to generate the script
