@@ -23,11 +23,10 @@ expect_microci_success() {
 }
 
 verify_runtime_output() {
-  # Replace this placeholder with plugin-specific assertions.
-  # Return 0 when the runtime output is acceptable.
-  echo "[runtime] FAIL  $test_name: runtime verification not implemented" >&2
-  return 1
+  diff --color --unified output.txt output.ref
 }
+
+rm -f output.txt
 
 if ! expect_microci_success; then
   echo "[runtime] FAIL  $test_name"

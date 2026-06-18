@@ -1,20 +1,28 @@
 steps:
-  - name: "Build static version of microCI"
+  - name: "Build C++ application using GCC"
     description: "Description of this step"
     plugin:
       name: cpp
       bash: |
-        # Use GCC compiler directly
-        gcc prog.c -o prog_c
         g++ prog.cpp -o prog_cpp
-        # Test
-        ./prog_c
-        ./prog_cpp
-        # Or build systems
-        make clean
-        # Use Clang compiler directly
-        clang-22 prog.c -o prog_c
+
+  - name: "Build C application using GCC"
+    description: "Description of this step"
+    plugin:
+      name: cpp
+      bash: |
+        gcc prog.c -o prog_c
+
+  - name: "Build C++ application using Clang"
+    description: "Description of this step"
+    plugin:
+      name: cpp
+      bash: |
         clang++-22 prog.cpp -o prog_cpp
-        ./prog_c
-        ./prog_cpp
-        make clean
+
+  - name: "Build C application using Clang"
+    description: "Description of this step"
+    plugin:
+      name: cpp
+      bash: |
+        clang-22 prog.c -o prog_c

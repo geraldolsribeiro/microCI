@@ -28,5 +28,8 @@ microci_*_amd64.changes
 microci_*_amd64.deb
 microci-*.x86_64.rpm
 test/quick_start_02/hello
-test/new_cpp/prog_c
-test/new_cpp/prog_cpp
+test/runtime/cpp_01/prog_c_clang
+test/runtime/cpp_01/prog_c_gcc
+test/runtime/cpp_01/prog_cpp_clang
+test/runtime/cpp_01/prog_cpp_gcc
+test/runtime/cpp_01/output.txt
