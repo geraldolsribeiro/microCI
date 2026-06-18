@@ -11,6 +11,11 @@ Layout:
 - `test/runtime/runner_helper.sh` — shared execution helper
 - optional plugin-specific output checks inside `test.sh`
 
+Pattern:
+- `test.sh` defines a `run_microci()` function for its own command line
+- `runner_helper.sh` runs that command and handles timeout cleanup
+- `custom_output_check()` contains the developer-defined assertions
+
 Convention:
 - each plugin may have more than one runtime test folder
 - use suffixes like `_01`, `_02`, ...
@@ -18,6 +23,10 @@ Convention:
 - each `test.sh` runs from its own folder
 - after that, the developer may add custom output assertions
 - the suite is scaffolded and currently skipped until concrete fixtures exist
+
+Skip policy:
+- runtime tests are skipped in `test_all.sh` by name pattern
+- current skipped prefixes: `beamer_`, `docmd_`, `doxygen_`, `jfrog_`, `minio_`, `npm_`, `mermaid_`, `pikchr_`, `vhdl-format_`
 
 Timeout control:
 - `runner_helper.sh` accepts an optional timeout argument

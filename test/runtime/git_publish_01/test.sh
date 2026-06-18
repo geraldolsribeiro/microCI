@@ -6,8 +6,12 @@ set -euo pipefail
 # Then run custom assertions (to be filled by the developer).
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
-runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
-if ! "$script_dir/../runner_helper.sh" "git_publish_01" "$runtime_timeout"; then
+run_microci() {
+  microci_cmd='../../../bin/microCI | bash'
+  "$script_dir/../runner_helper.sh" "git_publish_01" "$microci_cmd" ;
+}
+
+if ! run_microci; then
   exit 1
 fi
 

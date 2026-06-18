@@ -6,13 +6,24 @@ set -euo pipefail
 # Then run custom assertions (to be filled by the developer).
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
-runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
-if ! "$script_dir/../runner_helper.sh" "bash_01" "$runtime_timeout"; then
+
+run_microci() {
+  microci_cmd='../../../bin/microCI | bash'
+  "$script_dir/../runner_helper.sh" "bash_01" "$microci_cmd"
+}
+
+custom_output_check() {
+  diff --color --unified file.txt file.ref
+}
+
+if ! run_microci; then
+  echo "[runtime] FAIL  bash_01"
   exit 1
 fi
 
-custom_output_check() {
-  : # TODO: implement plugin-specific checks.
-}
+if ! custom_output_check; then
+  echo "[runtime] FAIL  bash_01"
+  exit 1
+fi
 
-custom_output_check
+echo "[runtime] PASS  bash_01"

@@ -17,10 +17,22 @@ for dir in "$script_dir"/*/; do
   [[ -f "${dir}test.sh" ]] || continue
   test_name="$(basename "$dir")"
 
-  # Runtime fixtures are scaffolded but intentionally skipped until each one
-  # has its own concrete success criteria.
-  echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
-  skip=$((skip + 1))
+  case "$test_name" in
+    beamer_*|docmd_*|doxygen_*|jfrog_*|minio_*|npm_*|mermaid_*|pikchr_*|vhdl-format_*)
+      echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
+      skip=$((skip + 1))
+      continue
+      ;;
+  esac
+
+  runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
+  if timeout "$runtime_timeout" "${dir}test.sh" >/dev/null; then
+    echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
+    pass=$((pass + 1))
+  else
+    echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
+    fail=$((fail + 1))
+  fi
 done
 
 echo "[runtime] summary  pass=$pass fail=$fail skip=$skip"
