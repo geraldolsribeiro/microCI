@@ -12,7 +12,7 @@ all: build
 
 .PHONY: build
 build:
-	microCI -D | bash
+	microCI -u | bash
 	microCI | bash
 
 .PHONY: test
