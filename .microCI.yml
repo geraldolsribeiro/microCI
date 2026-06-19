@@ -183,7 +183,8 @@ steps:
         apt update
         apt upgrade -y
         apt install -y xxd libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow zlib1g-dev
-        make -C docs
+        make -C docs clean
+        make -C docs all
         make -C src
         chown $(id -u):$(id -g) -Rv bin/microCI
 

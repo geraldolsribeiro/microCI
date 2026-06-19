@@ -4,6 +4,9 @@
 
 [![C/C++ CI](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/geraldolsribeiro/microCI/actions/workflows/c-cpp.yml)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/geraldolsribeiro/microCI/total)
+![GitHub Release Date](https://img.shields.io/github/release-date/geraldolsribeiro/microCI)
+![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/geraldolsribeiro/microCI)
+![GitHub Created At](https://img.shields.io/github/created-at/geraldolsribeiro/microCI)
 
 </div>
 
