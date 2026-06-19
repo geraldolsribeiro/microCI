@@ -14,44 +14,7 @@ pass=0
 fail=0
 skip=0
 results=()
-
-xml_escape() {
-  sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' -e "s/'/\&apos;/g"
-}
-
-add_result() {
-  results+=("$1|$2|$3|$4")
-}
-
-write_junit() {
-  local out="$1"
-  local testsuite_name="$2"
-  local total="${#results[@]}"
-  local failures=0
-  local skipped=0
-  local testcase
-
-  for testcase in "${results[@]}"; do
-    IFS='|' read -r _name status _time _message <<<"$testcase"
-    [[ "$status" == fail ]] && failures=$((failures + 1))
-    [[ "$status" == skip ]] && skipped=$((skipped + 1))
-  done
-
-  {
-    echo '<?xml version="1.0" encoding="UTF-8"?>'
-    echo "<testsuite name=\"$testsuite_name\" tests=\"$total\" failures=\"$failures\" skipped=\"$skipped\">"
-    for testcase in "${results[@]}"; do
-      IFS='|' read -r name status time message <<<"$testcase"
-      echo "  <testcase name=\"$(printf '%s' "$name" | xml_escape)\" time=\"$time\">"
-      case "$status" in
-        fail) echo "    <failure message=\"$(printf '%s' "$message" | xml_escape)\"/>" ;;
-        skip) echo "    <skipped/>" ;;
-      esac
-      echo "  </testcase>"
-    done
-    echo "</testsuite>"
-  } >"$out"
-}
+source "$script_dir/../test_helpers.sh"
 
 for dir in "$script_dir"/*/; do
   [[ -f "${dir}test.sh" ]] || continue
@@ -82,7 +45,7 @@ for dir in "$script_dir"/*/; do
     elapsed_s=$(awk -v ns="$elapsed_ns" 'BEGIN { printf "%.3f", ns / 1000000000 }')
     echo -e "[cmd new gen] ${RED}FAIL${RESET}  $test_name"
     fail=$((fail + 1))
-    add_result "$test_name" fail "$elapsed_s" "$(tail -n 20 "$output_file" | tr '\n' ' ' | sed 's/"/\\"/g')"
+    add_result "$test_name" fail "$elapsed_s" "$(capture_tail_message "$output_file")"
   fi
   rm -f "$output_file"
 done
