@@ -23,11 +23,11 @@ jobs:
 
     - name: 'Download headers'
       run: |
-        mkdir -p include/nlohmann
-        wget -P include https://raw.githubusercontent.com/adishavit/argh/master/argh.h
-        wget -P include https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
-        wget -P include https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
-        wget -P include/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+        mkdir -p include/3rd/nlohmann
+        wget -P include/3rd https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+        wget -P include/3rd https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        wget -P include/3rd https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
+        wget -P include/3rd/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
 
     - name: 'Build'
       run: make -C src clean all
