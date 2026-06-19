@@ -34,10 +34,10 @@
 #include <string_view>
 #include <vector>
 
-void drawConsoleBox(std::ostream& os, const std::string& title, const std::vector<std::string>& lines);
-void drawConsoleBox(const std::string& title, const std::vector<std::string>& lines);
-void errorConsoleBox(const std::vector<std::string>& lines);
-void criticalErrorConsoleBox(const std::vector<std::string>& lines);
-void infoConsoleBox(const std::vector<std::string>& lines);
-void debugConsoleBox(const std::vector<std::string>& lines);
+void drawConsoleBox(std::ostream &os, const std::string &title, const std::vector<std::string> &lines);
+void drawConsoleBox(const std::string &title, const std::vector<std::string> &lines);
+void errorConsoleBox(const std::vector<std::string> &lines);
+void criticalErrorConsoleBox(const std::vector<std::string> &lines);
+void infoConsoleBox(const std::vector<std::string> &lines);
+void debugConsoleBox(const std::vector<std::string> &lines);
 #endif

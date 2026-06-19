@@ -38,8 +38,12 @@ OS=$(uname -s)
   echo -e "{{BLUE}}┃                          ░░░▀░░░░░░░░░░░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                          ░░░░░░░░░░░░░░░░░                         ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                           microCI {{ VERSION }}                       ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃           Write your pipeline once. Execute it anywhere.           ┃{{CLEAR}}"
   echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                                                                    ┃{{CLEAR}}"
+  echo -e "{{BLUE}}┃                        https://microci.dev/                        ┃{{CLEAR}}"
   echo -e "{{BLUE}}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{{CLEAR}}"
+
   echo ""
   echo ""
 } | tee{{ APPEND_LOG_TEE_FLAG }} .microCI.log

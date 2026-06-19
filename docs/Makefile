@@ -29,3 +29,6 @@ GLOW_STYLE=dracula
 microCI_activity_diagram.puml: ../bin/microCI
 	../bin/microCI --input ../.microCI.yml --activity-diagram > $@
 
+.PHONY: clean
+clean:
+	touch *.md

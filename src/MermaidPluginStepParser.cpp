@@ -31,7 +31,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 

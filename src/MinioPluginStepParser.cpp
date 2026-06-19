@@ -30,7 +30,6 @@
 #include "MinioPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 
@@ -63,7 +62,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   for (const auto &envName : {"MICROCI_MINIO_URL", "MICROCI_MINIO_ACCESS_KEY", "MICROCI_MINIO_SECRET_KEY"}) {
     auto it = envs.find(EnvironmentVariable{.name = envName, .value = ""});
     if (it == envs.end()) {
-      spdlog::error("The environment variable called '{}' was not found", envName);
+      errorConsoleBox({fmt::format("The environment variable called '{}' was not found", envName)});
       // dumpEnvironmentVariables();
       invalidConfigurationDetected();
       return;

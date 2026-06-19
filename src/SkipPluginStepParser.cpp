@@ -30,7 +30,6 @@
 #include "SkipPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 

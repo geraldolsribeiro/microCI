@@ -30,7 +30,6 @@
 #include "GitDeployPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 

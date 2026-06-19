@@ -40,11 +40,13 @@
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 
+#include "ConsoleBox.hpp"
+
 namespace microci {
 
 using nlohmann::json;
 
-#define microCI_version "0.45.2"
+#define microCI_version "0.46.0"
 
 // ----------------------------------------------------------------------
 //

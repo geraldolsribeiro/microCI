@@ -27,16 +27,18 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include "MicroCI.hpp"
-
 #include <algorithm>
-#include <inja/inja.hpp>
+#include <fmt/core.h>
 #include <iostream>
 #include <pwd.h>
-#include <spdlog/spdlog.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "3rd/inja.hpp"
+
+//
+
+#include "MicroCI.hpp"
 #include "sh/MicroCI.hpp"
 #include "sh/NotifyDiscord.hpp"
 
@@ -87,11 +89,9 @@ auto MicroCI::List(const std::string &fileName) const -> std::string {
       }
     }
   } catch (const YAML::BadFile &e) {
-    spdlog::error("Failure loading the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    spdlog::error("Failure parsing the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 
   return ret;
@@ -169,11 +169,9 @@ stop
       }
     }
   } catch (const YAML::BadFile &e) {
-    spdlog::error("Failure loading the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    spdlog::error("Failure parsing the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 
   return ret;
@@ -248,11 +246,9 @@ void MicroCI::SetOnlyStepHash(const std::string &fileName, const std::string &hh
       throw std::invalid_argument(fmt::format("Invalid step hash: {}", hh));
     }
   } catch (const YAML::BadFile &e) {
-    spdlog::error("Failure loading the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    spdlog::error("Failure parsing the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 }
 
@@ -283,7 +279,7 @@ void MicroCI::LoadEnvironmentFromYamlFile(const std::string &fileName) {
   if (std::filesystem::exists(fileName)) {
     auto dotEnv = YAML::LoadFile(fileName);
     if (dotEnv.size() == 0) {
-      spdlog::error("The file {} was found but it has no valid configuration", fileName);
+      errorConsoleBox({fmt::format("The file {} was found but it has no valid configuration", fileName)});
       invalidConfigurationDetected();
       // return false;
     }
@@ -364,13 +360,11 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
     LoadEnvironmentFromEnvFile(".env");
 
   } catch (const YAML::BadFile &e) {
-    spdlog::error("Failure loading the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
     invalidConfigurationDetected();
     return false;
   } catch (const YAML::ParserException &e) {
-    spdlog::error("Failure parsing the file .microCI.yml");
-    spdlog::error(e.what());
+    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
     invalidConfigurationDetected();
     return false;
   }
@@ -478,10 +472,12 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
     return;
   } else {
     auto name = step["name"].as<std::string>();
-    spdlog::error("The plugin '{}' was not found at the step '{}'", pluginName, name);
+    std::vector<std::string> msgs;
+    msgs.push_back(fmt::format("The plugin '{}' was not found at the step '{}'", pluginName, name));
     for (const auto &p : mPluginParserMap) {
-      spdlog::warn("Plugin '{}'", p.first);
+      msgs.push_back(fmt::format("Plugin '{}'", p.first));
     }
+    errorConsoleBox(msgs);
     return;
   }
 }

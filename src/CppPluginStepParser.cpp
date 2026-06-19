@@ -30,7 +30,6 @@
 #include "CppPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 
@@ -54,7 +53,7 @@ void CppPluginStepParser::Parse(const YAML::Node &step) {
   } else if (step["plugin"]["sh"]) {
     cmdsStr = step["plugin"]["sh"].as<std::string>();
   } else {
-    spdlog::error("No 'bash' or 'sh' script defined in plugin configuration");
+    errorConsoleBox({fmt::format("No 'bash' or 'sh' script defined in plugin configuration")});
     invalidConfigurationDetected();
     throw std::invalid_argument("Script not found");
   }

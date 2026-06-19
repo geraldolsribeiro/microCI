@@ -30,7 +30,6 @@
 #include "DockerBuildPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 

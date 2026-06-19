@@ -30,7 +30,6 @@
 #include "FetchPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 

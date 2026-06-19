@@ -30,7 +30,6 @@
 #include "JFrogPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 
@@ -63,7 +62,7 @@ void JFrogPluginStepParser::Parse(const YAML::Node &step) {
   for (const auto &envName : {"JFROG_ACCESS_TOKEN", "JFROG_URL"}) {
     auto it = envs.find(EnvironmentVariable{.name = envName, .value = ""});
     if (it == envs.end()) {
-      spdlog::error("The environment variable called '{}' was not found", envName);
+      errorConsoleBox({fmt::format("The environment variable called '{}' was not found", envName)});
       invalidConfigurationDetected();
       return;
     } else {

@@ -165,13 +165,13 @@ steps:
     description: "Download project dependencies"
     plugin:
       name: "fetch"
-      target: include
+      target: include/3rd/
       items:
         - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         - url: https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
         - url: https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-          target: include/nlohmann
+          target: include/3rd/nlohmann # inja expects nlohmann/json.hpp
 
   - name: "Build microCI static version"
     docker: "intmain/microci_cpp_compiler:latest"

@@ -30,7 +30,6 @@
 #include "BeamerPluginStepParser.hpp"
 
 #include <fstream>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 
@@ -57,7 +56,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
   if (!inputMD.empty()) {
     data["INPUT_MD"] = inputMD;
   } else {
-    spdlog::error("It is mandatory to specify a list of input files");
+    criticalErrorConsoleBox({fmt::format("It is mandatory to specify a list of input files")});
     throw std::runtime_error("It is mandatory to specify a list of input files");
   }
 

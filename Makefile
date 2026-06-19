@@ -49,6 +49,3 @@ clean:
 .PHONY: publish
 publish:
 	bin/microCI --number 7,9,11 | bash
-	# microCI -N 7 | bash
-	# microCI -N 9 | bash
-	# microCI -N 11 | bash

@@ -30,7 +30,6 @@
 #include "PluginStepParser.hpp"
 
 #include <algorithm>
-#include <spdlog/spdlog.h>
 
 #include "MicroCI.hpp"
 

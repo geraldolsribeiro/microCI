@@ -27,8 +27,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include "ConsoleBox.hpp"
-
 #include <algorithm>
 
 namespace {
@@ -45,7 +43,7 @@ constexpr char kVertical[]    = "│";
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void draw_border(std::ostream& os, const std::string& left, const std::string& right, std::size_t width) {
+void draw_border(std::ostream &os, const std::string &left, const std::string &right, std::size_t width) {
   os << "echo \"" << left;
   for (std::size_t i = 0; i < width; ++i) {
     os << kHorizontal;
@@ -56,10 +54,10 @@ void draw_border(std::ostream& os, const std::string& left, const std::string& r
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-std::size_t display_width(const std::string& title, const std::vector<std::string>& lines) {
+std::size_t display_width(const std::string &title, const std::vector<std::string> &lines) {
   const auto line_width =
       std::max_element(lines.begin(), lines.end(),
-                       [](const std::string& lhs, const std::string& rhs) { return lhs.size() < rhs.size(); });
+                       [](const std::string &lhs, const std::string &rhs) { return lhs.size() < rhs.size(); });
   const auto max_line = line_width == lines.end() ? std::string{} : *line_width;
   return std::max(title.size(), max_line.size());
 }
@@ -69,7 +67,7 @@ std::size_t display_width(const std::string& title, const std::vector<std::strin
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void drawConsoleBox(std::ostream& os, const std::string& title, const std::vector<std::string>& lines) {
+void drawConsoleBox(std::ostream &os, const std::string &title, const std::vector<std::string> &lines) {
   const std::size_t inner_width = display_width(title, lines) + 4;
 
   draw_border(os, kTopLeft, kTopRight, inner_width);
@@ -81,7 +79,7 @@ void drawConsoleBox(std::ostream& os, const std::string& title, const std::vecto
 
   draw_border(os, kMiddleLeft, kMiddleRight, inner_width);
 
-  for (const auto& line : lines) {
+  for (const auto &line : lines) {
     const std::size_t padding = inner_width - line.size();
     os << "echo \"" << kVertical << ' ' << line << std::string(padding - 1, ' ') << kVertical << "\"\n";
   }
@@ -92,19 +90,19 @@ void drawConsoleBox(std::ostream& os, const std::string& title, const std::vecto
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void drawConsoleBox(const std::string& title, const std::vector<std::string>& lines) {
+void drawConsoleBox(const std::string &title, const std::vector<std::string> &lines) {
   drawConsoleBox(std::cout, title, lines);
 }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void errorConsoleBox(const std::vector<std::string>& lines) { drawConsoleBox("ERROR", lines); }
+void errorConsoleBox(const std::vector<std::string> &lines) { drawConsoleBox("ERROR", lines); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void criticalErrorConsoleBox(const std::vector<std::string>& lines) {
+void criticalErrorConsoleBox(const std::vector<std::string> &lines) {
   drawConsoleBox("ERROR", lines);
   std::cout << "# *** End of Execution ***\n";
   std::cout << "exit 1" << std::endl;
@@ -114,9 +112,9 @@ void criticalErrorConsoleBox(const std::vector<std::string>& lines) {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void infoConsoleBox(const std::vector<std::string>& lines) { drawConsoleBox("INFORMATION", lines); }
+void infoConsoleBox(const std::vector<std::string> &lines) { drawConsoleBox("INFORMATION", lines); }
 
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-void debugConsoleBox(const std::vector<std::string>& lines) { drawConsoleBox("DEBUG", lines); }
+void debugConsoleBox(const std::vector<std::string> &lines) { drawConsoleBox("DEBUG", lines); }

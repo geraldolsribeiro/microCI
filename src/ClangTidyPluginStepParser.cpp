@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
-#include <spdlog/spdlog.h>
 
 namespace microci {
 
@@ -71,7 +70,8 @@ void ClangTidyPluginStepParser::Parse(const YAML::Node &step) {
 
   if (step["plugin"]["system_include"] && step["plugin"]["system_include"].IsSequence()) {
     std::transform(step["plugin"]["system_include"].begin(), step["plugin"]["system_include"].end(),
-                   std::back_inserter(systemIncludeList), [](const auto &inc) { return inc.template as<std::string>(); });
+                   std::back_inserter(systemIncludeList),
+                   [](const auto &inc) { return inc.template as<std::string>(); });
   }
 
   if (step["plugin"]["source"] && step["plugin"]["source"].IsSequence()) {

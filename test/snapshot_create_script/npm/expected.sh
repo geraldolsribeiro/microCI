@@ -1,80 +1,92 @@
-echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Install dependencies''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
-echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Check code''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
-echo '# MicroCI [22:13:55 +04:00] [error] The plugin 'npm' was not found at the step 'Build''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'bash''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'beamer''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-format''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'clang-tidy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cpp''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'cppcheck''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docker_build''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'docmd''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'doxygen''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'fetch''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'flawfinder''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_deploy''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'git_publish''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'jfrog''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mermaid''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'minio''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'mkdocs_material''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pandoc''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'pikchr''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'plantuml''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'skip''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'template''
-echo '# MicroCI [22:13:55 +04:00] [warning] Plugin 'vhdl-format''
+echo "┌─────────────────────────────────────────────────────────────────────┐"
+echo "│                                ERROR                                │"
+echo "├─────────────────────────────────────────────────────────────────────┤"
+echo "│ The plugin 'npm' was not found at the step 'Install dependencies'   │"
+echo "│ Plugin 'bash'                                                       │"
+echo "│ Plugin 'beamer'                                                     │"
+echo "│ Plugin 'clang-format'                                               │"
+echo "│ Plugin 'clang-tidy'                                                 │"
+echo "│ Plugin 'cpp'                                                        │"
+echo "│ Plugin 'cppcheck'                                                   │"
+echo "│ Plugin 'docker_build'                                               │"
+echo "│ Plugin 'docmd'                                                      │"
+echo "│ Plugin 'doxygen'                                                    │"
+echo "│ Plugin 'fetch'                                                      │"
+echo "│ Plugin 'flawfinder'                                                 │"
+echo "│ Plugin 'git_deploy'                                                 │"
+echo "│ Plugin 'git_publish'                                                │"
+echo "│ Plugin 'jfrog'                                                      │"
+echo "│ Plugin 'mermaid'                                                    │"
+echo "│ Plugin 'minio'                                                      │"
+echo "│ Plugin 'mkdocs_material'                                            │"
+echo "│ Plugin 'pandoc'                                                     │"
+echo "│ Plugin 'pikchr'                                                     │"
+echo "│ Plugin 'plantuml'                                                   │"
+echo "│ Plugin 'skip'                                                       │"
+echo "│ Plugin 'template'                                                   │"
+echo "│ Plugin 'vhdl-format'                                                │"
+echo "└─────────────────────────────────────────────────────────────────────┘"
+echo "┌───────────────────────────────────────────────────────────┐"
+echo "│                           ERROR                           │"
+echo "├───────────────────────────────────────────────────────────┤"
+echo "│ The plugin 'npm' was not found at the step 'Check code'   │"
+echo "│ Plugin 'bash'                                             │"
+echo "│ Plugin 'beamer'                                           │"
+echo "│ Plugin 'clang-format'                                     │"
+echo "│ Plugin 'clang-tidy'                                       │"
+echo "│ Plugin 'cpp'                                              │"
+echo "│ Plugin 'cppcheck'                                         │"
+echo "│ Plugin 'docker_build'                                     │"
+echo "│ Plugin 'docmd'                                            │"
+echo "│ Plugin 'doxygen'                                          │"
+echo "│ Plugin 'fetch'                                            │"
+echo "│ Plugin 'flawfinder'                                       │"
+echo "│ Plugin 'git_deploy'                                       │"
+echo "│ Plugin 'git_publish'                                      │"
+echo "│ Plugin 'jfrog'                                            │"
+echo "│ Plugin 'mermaid'                                          │"
+echo "│ Plugin 'minio'                                            │"
+echo "│ Plugin 'mkdocs_material'                                  │"
+echo "│ Plugin 'pandoc'                                           │"
+echo "│ Plugin 'pikchr'                                           │"
+echo "│ Plugin 'plantuml'                                         │"
+echo "│ Plugin 'skip'                                             │"
+echo "│ Plugin 'template'                                         │"
+echo "│ Plugin 'vhdl-format'                                      │"
+echo "└───────────────────────────────────────────────────────────┘"
+echo "┌──────────────────────────────────────────────────────┐"
+echo "│                        ERROR                         │"
+echo "├──────────────────────────────────────────────────────┤"
+echo "│ The plugin 'npm' was not found at the step 'Build'   │"
+echo "│ Plugin 'bash'                                        │"
+echo "│ Plugin 'beamer'                                      │"
+echo "│ Plugin 'clang-format'                                │"
+echo "│ Plugin 'clang-tidy'                                  │"
+echo "│ Plugin 'cpp'                                         │"
+echo "│ Plugin 'cppcheck'                                    │"
+echo "│ Plugin 'docker_build'                                │"
+echo "│ Plugin 'docmd'                                       │"
+echo "│ Plugin 'doxygen'                                     │"
+echo "│ Plugin 'fetch'                                       │"
+echo "│ Plugin 'flawfinder'                                  │"
+echo "│ Plugin 'git_deploy'                                  │"
+echo "│ Plugin 'git_publish'                                 │"
+echo "│ Plugin 'jfrog'                                       │"
+echo "│ Plugin 'mermaid'                                     │"
+echo "│ Plugin 'minio'                                       │"
+echo "│ Plugin 'mkdocs_material'                             │"
+echo "│ Plugin 'pandoc'                                      │"
+echo "│ Plugin 'pikchr'                                      │"
+echo "│ Plugin 'plantuml'                                    │"
+echo "│ Plugin 'skip'                                        │"
+echo "│ Plugin 'template'                                    │"
+echo "│ Plugin 'vhdl-format'                                 │"
+echo "└──────────────────────────────────────────────────────┘"
 #!/bin/bash
 # ----------------------------------------------------------------------
 # DON'T EDIT THIS FILE!
 # ----------------------------------------------------------------------
-# This bash script was generated by microCI v0.45.2
+# This bash script was generated by microCI v0.46.0
 # based on the configuration files:
 # - .microCI.yml   Pipeline steps
 # - ~/.microCI.env Global environment variables, secrets, and other non-versioned information
@@ -108,9 +120,13 @@ OS=$(uname -s)
   echo -e "[0;34m┃                          ░░░█▀▀░▀▀▀░▀▀▀░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░▀░░░░░░░░░░░░░                         ┃[0m"
   echo -e "[0;34m┃                          ░░░░░░░░░░░░░░░░░                         ┃[0m"
-  echo -e "[0;34m┃                           microCI v0.45.2                          ┃[0m"
+  echo -e "[0;34m┃                           microCI v0.46.0                          ┃[0m"
+  echo -e "[0;34m┃           Write your pipeline once. Execute it anywhere.           ┃[0m"
   echo -e "[0;34m┃                                                                    ┃[0m"
+  echo -e "[0;34m┃                                                                    ┃[0m"
+  echo -e "[0;34m┃                        https://microci.dev/                        ┃[0m"
   echo -e "[0;34m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m"
+
   echo ""
   echo ""
 } | tee .microCI.log
