@@ -162,6 +162,9 @@ tidy:
 NEW_HPP=$(subst ../new/,../include/new/,$(addsuffix .hpp,$(basename $(wildcard ../new/*.*))))
 HELP_HPP=$(subst ../help/,../include/help/,$(addsuffix .hpp,$(basename $(wildcard ../help/*.txt))))
 
+UPX=upx --best
+# UPX=echo
+
 single_compilation_unit.cpp: \
 	$(NEW_HPP) \
 	$(HELP_HPP) \
@@ -191,7 +194,7 @@ else
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	$(Q)strip --strip-all $@
-	$(Q)upx --best $@
+	$(Q)$(UPX) $@
 endif
 
 .PHONY: clean
