@@ -11,7 +11,9 @@ theme:
   extra:
     homepage: https://microci.dev
   palette:
-    primary: black
+    # primary: black
+    primary: deep purple
+    accent: light blue
   features:
     - content.code.copy
 markdown_extensions:
