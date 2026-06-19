@@ -33,3 +33,6 @@ test/runtime/cpp_01/prog_c_gcc
 test/runtime/cpp_01/prog_cpp_clang
 test/runtime/cpp_01/prog_cpp_gcc
 test/runtime/cpp_01/output.txt
+test/snapshot_cmd_new/snapshot-cmd-new-junit.xml
+test/snapshot_create_script/snapshot-create-script-junit.xml
+test/runtime/runtime-junit.xml

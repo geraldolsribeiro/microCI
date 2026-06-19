@@ -16,3 +16,6 @@ Status convention:
 
 Run with:
 - `make -C test snapshot_cmd_new_test`
+
+JUnit output:
+- `test/snapshot_cmd_new/snapshot-cmd-new-junit.xml`

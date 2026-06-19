@@ -16,6 +16,9 @@ Execution chain:
 - `test/snapshot_create_script/runner_helper.sh`
 - `test/snapshot_create_script/update_expected.sh`
 
+JUnit output:
+- `test/snapshot_create_script/snapshot-create-script-junit.xml`
+
 Layout:
 - `input.yml` — fixture used to generate the script
 - `expected.sh` — golden shell output

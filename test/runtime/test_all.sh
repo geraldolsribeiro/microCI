@@ -15,6 +15,49 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 pass=0
 fail=0
 skip=0
+results=()
+
+xml_escape() {
+  sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' -e "s/'/\&apos;/g"
+}
+
+add_result() {
+  results+=("$1|$2|$3|$4")
+}
+
+write_junit() {
+  local out="$1"
+  local testsuite_name="$2"
+  local total="${#results[@]}"
+  local failures=0
+  local skipped=0
+  local testcase
+
+  for testcase in "${results[@]}"; do
+    IFS='|' read -r _name status _time _message <<<"$testcase"
+    [[ "$status" == fail ]] && failures=$((failures + 1))
+    [[ "$status" == skip ]] && skipped=$((skipped + 1))
+  done
+
+  {
+    echo '<?xml version="1.0" encoding="UTF-8"?>'
+    echo "<testsuite name=\"$testsuite_name\" tests=\"$total\" failures=\"$failures\" skipped=\"$skipped\">"
+    for testcase in "${results[@]}"; do
+      IFS='|' read -r name status time message <<<"$testcase"
+      echo "  <testcase name=\"$(printf '%s' "$name" | xml_escape)\" time=\"$time\">"
+      case "$status" in
+        fail)
+          echo "    <failure message=\"$(printf '%s' "$message" | xml_escape)\"/>"
+          ;;
+        skip)
+          echo "    <skipped/>"
+          ;;
+      esac
+      echo "  </testcase>"
+    done
+    echo "</testsuite>"
+  } >"$out"
+}
 
 for dir in "$script_dir"/*/; do
   [[ -f "${dir}test.sh" ]] || continue
@@ -26,29 +69,33 @@ for dir in "$script_dir"/*/; do
     # Future improvement: move this metadata next to each fixture.
     echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
     skip=$((skip + 1))
+    add_result "$test_name" skip 0 "fixture skipped by suite policy"
     continue
     ;;
   esac
 
+  start_ns=$(date +%s%N)
   runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
-  if timeout "$runtime_timeout" "${dir}test.sh" >/dev/null; then
-    if [[ -f "${dir}expect_fail" ]]; then
-      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
-      pass=$((pass + 1))
-    else
-      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
-      pass=$((pass + 1))
-    fi
+  output_file=$(mktemp)
+  if timeout "$runtime_timeout" "${dir}test.sh" >"$output_file" 2>&1; then
+    elapsed_ns=$(( $(date +%s%N) - start_ns ))
+    elapsed_s=$(awk -v ns="$elapsed_ns" 'BEGIN { printf "%.3f", ns / 1000000000 }')
+    echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
+    pass=$((pass + 1))
+    add_result "$test_name" pass "$elapsed_s" ""
   else
-    if [[ -f "${dir}expect_fail" ]]; then
-      echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
-      pass=$((pass + 1))
-    else
-      echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
-      fail=$((fail + 1))
-    fi
+    elapsed_ns=$(( $(date +%s%N) - start_ns ))
+    elapsed_s=$(awk -v ns="$elapsed_ns" 'BEGIN { printf "%.3f", ns / 1000000000 }')
+    echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
+    fail=$((fail + 1))
+    add_result "$test_name" fail "$elapsed_s" "$(tail -n 20 "$output_file" | tr '\n' ' ' | sed 's/"/\\"/g')"
   fi
+  rm -f "$output_file"
 done
 
+xml_report="$script_dir/runtime-junit.xml"
+write_junit "$xml_report" "runtime"
+
 echo "[runtime] summary  pass=$pass fail=$fail skip=$skip"
+echo "[runtime] junit    $xml_report"
 exit "$fail"

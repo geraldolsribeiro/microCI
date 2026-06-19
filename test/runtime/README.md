@@ -22,16 +22,15 @@ Convention:
 - each plugin may have more than one runtime test folder
 - use suffixes like `_01`, `_02`, ...
 - each `test.sh` runs from its own folder
-- tests that expect `microCI` to fail must declare that expectation explicitly (see `expect_fail`)
-- tests that expect success should fail immediately if `microCI | bash` fails or times out
+- failure-oriented tests should call `run_test_expect_failure`
+- success-oriented tests should call `run_test_expect_success`
 - after that, the developer may add custom output assertions
 - the suite is scaffolded and currently skipped until concrete fixtures exist
 
 Expected-failure policy:
-- place an `expect_fail` marker file in the test folder to mark failure-oriented tests
+- the helper function `run_test_expect_failure` makes the intent explicit in the script itself
 - `test_all.sh` reports `PASS` when the outcome matches the expectation (success or expected failure)
 - `test_all.sh` reports `FAIL` when the outcome does not match the expectation
-- future improvement: replace the marker file with a richer metadata file if needed
 
 Skip policy:
 - runtime tests are skipped in `test_all.sh` by name pattern
