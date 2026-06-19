@@ -179,8 +179,10 @@ single_compilation_unit.cpp: \
 	$(Q)echo "// clang-format off" >> $@
 	$(Q)find . -name "*.cpp" \
 		| grep -v $@ \
+		| grep -v .header.cpp \
 		| grep -v main.cpp \
-		| sed 's|\./\(.*\)|#include "\1" // NOLINT|' >> $@
+		| sed 's|\./\(.*\)|#include "\1" // NOLINT|' \
+		| sort >> $@
 	$(Q)echo '#include "main.cpp" // NOLINT' >> $@
 	$(Q)echo "// clang-format on" >> $@
 	$(Q)echo "Single compilation unit was generated"
