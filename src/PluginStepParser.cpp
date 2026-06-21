@@ -72,14 +72,19 @@ auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, co
 }
 
 // ----------------------------------------------------------------------
+// Priority of docker image used by pipeline step:
 //
+// 1. YAML docker property
+// 2. Plugin default
+// 3. Global default
 // ----------------------------------------------------------------------
-auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &image) const -> std::string {
+auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &overrideDefaultImage) const
+    -> std::string {
   std::string dockerImage = mMicroCI->DefaultDockerImage();
 
-  if (!image.empty()) {
-    dockerImage = image;
-    mMicroCI->AddDockerImage(image);
+  if (!overrideDefaultImage.empty()) {
+    dockerImage = overrideDefaultImage;
+    mMicroCI->AddDockerImage(overrideDefaultImage);
   }
 
   if (step["docker"]) {

@@ -62,6 +62,7 @@
 #include "PikchrPluginStepParser.hpp"
 #include "PlantumlPluginStepParser.hpp"
 #include "PluginStepParser.hpp"
+#include "RaspberryPicoPluginStepParser.hpp"
 #include "TemplatePluginStepParser.hpp"
 #include "VHDLFormatPluginStepParser.hpp"
 
@@ -92,6 +93,7 @@
 #include "new/pikchr.hpp"
 #include "new/plantuml.hpp"
 #include "new/poppler.hpp"
+#include "new/raspberry_pico.hpp"
 #include "new/skip.hpp"
 #include "new/template.hpp"
 #include "new/vhdl-format.hpp"
@@ -122,6 +124,7 @@
 #include "help/pandoc.hpp"
 #include "help/pikchr.hpp"
 #include "help/plantuml.hpp"
+// #include "help/raspberry_pico.hpp"
 // #include "help/poppler.hpp"
 #include "help/skip.hpp"
 // #include "help/template.hpp"
@@ -199,6 +202,7 @@ Options:
   -n,--new flawfinder      Create a C++ SAST step
   -n,--new docker_build    Create a local docker build step
   -n,--new template        Create a template step
+  -n,--new raspberry_pico  Create a embedded software build step - Raspberry Pico
 )";
 }
 
@@ -574,6 +578,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("docker_build", std::make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", std::make_shared<PandocPluginStepParser>(&uCI));
     uCI.RegisterPlugin("template", std::make_shared<TemplatePluginStepParser>(&uCI));
+    uCI.RegisterPlugin("raspberry_pico", std::make_shared<RaspberryPicoPluginStepParser>(&uCI));
 
     loadMicroCIEnviromentVariables(uCI, envp);
     loadGitlabEnvironmentVariables(uCI, envp);
@@ -612,6 +617,7 @@ sudo rm -f /usr/bin/microCI
     MICROCI_HELP(pikchr);
     MICROCI_HELP(plantuml);
     MICROCI_HELP(skip);
+    // MICROCI_HELP(raspberry_pico);
     // MICROCI_HELP(template);
     // MICROCI_HELP(vhdl_format);
 #undef MICROCI_HELP
@@ -733,6 +739,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true,  "docker_build",    ".microCI.yml",  yml, docker_build);
       MICROCI_TPL(true,  "pandoc",          ".microCI.yml",  yml, pandoc);
       MICROCI_TPL(true,  "template",        ".microCI.yml",  yml, template);
+      MICROCI_TPL(true,  "raspberry_pico",  ".microCI.yml",  yml, raspberry_pico);
       // clang-format on
 #undef MICROCI_TPL
 

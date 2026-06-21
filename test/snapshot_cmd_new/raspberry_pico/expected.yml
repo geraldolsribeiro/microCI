@@ -1,0 +1,10 @@
+steps:
+  - name: "Build C++ project"
+    docker: "intmain/microci_raspberry_pico:latest"
+    plugin:
+      name: raspberry_pico
+      board: pico2 # pico | pico_w | pico2 | pico2_w
+      bash: |
+        rm -rf build
+        cmake -S . -B build
+        cmake --build build

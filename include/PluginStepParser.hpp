@@ -66,7 +66,8 @@ class PluginStepParser {
 
   void copySshIfAvailable(const YAML::Node &step, const json &data);
 
-  [[nodiscard]] auto stepDockerImage(const YAML::Node &step, const std::string &image = "") const -> std::string;
+  [[nodiscard]] auto stepDockerImage(const YAML::Node &step, const std::string &overrideDefaultImage = "") const
+      -> std::string;
   [[nodiscard]] auto stepDockerWorkspace(const YAML::Node &step, const std::string &workspace = "") const
       -> std::string;
 
