@@ -124,7 +124,7 @@
 #include "help/pandoc.hpp"
 #include "help/pikchr.hpp"
 #include "help/plantuml.hpp"
-// #include "help/raspberry_pico.hpp"
+#include "help/raspberry_pico.hpp"
 // #include "help/poppler.hpp"
 #include "help/skip.hpp"
 // #include "help/template.hpp"
@@ -617,7 +617,7 @@ sudo rm -f /usr/bin/microCI
     MICROCI_HELP(pikchr);
     MICROCI_HELP(plantuml);
     MICROCI_HELP(skip);
-    // MICROCI_HELP(raspberry_pico);
+    MICROCI_HELP(raspberry_pico);
     // MICROCI_HELP(template);
     // MICROCI_HELP(vhdl_format);
 #undef MICROCI_HELP

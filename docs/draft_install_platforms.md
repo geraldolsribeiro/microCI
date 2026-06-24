@@ -12,8 +12,8 @@ sudo chmod 755 /usr/bin/microCI
 
 You can also install a packaged release:
 
-- Debian / Ubuntu: `.deb`
-- Fedora / openSUSE: `.rpm`
+* Debian / Ubuntu: `.deb`
+* Fedora / openSUSE: `.rpm`
 
 ## macOS
 

@@ -6,13 +6,13 @@ The `cpp` plugin runs C or C++ build commands from a **microCI** step. It is use
 
 ## Features
 
-- **Direct compiler execution**  
+* **Direct compiler execution**  
   Run `gcc`, `g++`, `clang-22`, or `clang++-22` commands exactly as you would on a shell. This is ideal for small projects, quick checks, and reproducible build steps.
 
-- **Build-system integration**  
+* **Build-system integration**  
   Use the same step to call `make` or other build tools when the project already has a build recipe. This keeps the pipeline simple while still supporting larger codebases.
 
-- **Portable pipeline step**  
+* **Portable pipeline step**  
   The build logic lives in `.microCI.yml`, so the same step can be executed locally or in CI with the same behavior.
 
 ## Setup & Configuration
@@ -59,7 +59,7 @@ steps:
 
 ## Notes
 
-- Use `gcc` for C sources and `g++` for C++ sources.
-- Use `clang-22` and `clang++-22` if you want to validate against Clang too.
-- Keep the step focused: compile, test, or package in one clear action.
-- For a full project build, combine `cpp` with your preferred build system inside `plugin.bash`.
+* Use `gcc` for C sources and `g++` for C++ sources.
+* Use `clang-22` and `clang++-22` if you want to validate against Clang too.
+* Keep the step focused: compile, test, or package in one clear action.
+* For a full project build, combine `cpp` with your preferred build system inside `plugin.bash`.

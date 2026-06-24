@@ -81,7 +81,7 @@ RUN set -eux; \
 WORKDIR /opt
 RUN git clone -b master --depth=1 https://github.com/raspberrypi/pico-sdk.git \
     && cd pico-sdk \
-    && git submodule update --init
+    && git submodule update --init --recursive
 
 # Set the mandatory environment variable for the build system
 ENV PICO_SDK_PATH=/opt/pico-sdk

@@ -41,6 +41,6 @@ This workflow is used in [`geraldolsribeiro/microCI-template-cpp`](https://githu
 
 ## Notes
 
-- Generate the pipeline with `microCI`, then execute it with `bash`.
-- Make sure the runner has SSH access if your pipeline pulls private repositories.
-- Upload any build artifacts you want to keep after the job finishes.
+* Generate the pipeline with `microCI`, then execute it with `bash`.
+* Make sure the runner has SSH access if your pipeline pulls private repositories.
+* Upload any build artifacts you want to keep after the job finishes.

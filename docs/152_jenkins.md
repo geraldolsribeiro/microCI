@@ -6,9 +6,9 @@ Document how to run microCI from Jenkins, including workspace checkout, binary d
 
 ## Suggested structure
 
-- job trigger
-- agent image or node
-- download microCI
-- prepare SSH keys and known hosts
-- run `microCI | bash`
-- archive artifacts
+* job trigger
+* agent image or node
+* download microCI
+* prepare SSH keys and known hosts
+* run `microCI | bash`
+* archive artifacts

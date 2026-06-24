@@ -56,5 +56,6 @@ Options:
   -n,--new flawfinder      Create a C++ SAST step
   -n,--new docker_build    Create a local docker build step
   -n,--new template        Create a template step
+  -n,--new raspberry_pico  Create a embedded software build step - Raspberry Pico
 
 ```

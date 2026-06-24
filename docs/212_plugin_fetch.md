@@ -8,22 +8,22 @@ Use this plugin when your workflow depends on external artifacts that are not co
 
 ## Features
 
-- **Download a single file from a URL**  
+* **Download a single file from a URL**  
   Retrieve raw files directly from HTTP(S) endpoints. Useful for vendoring headers or configuration files.
 
-- **Extract files from a Git archive**  
+* **Extract files from a Git archive**  
   Download a repository archive and extract only the required paths. Useful when you need a small subset of a large repository.
 
-- **Fetch from GitHub repositories**  
+* **Fetch from GitHub repositories**  
   Download source content from GitHub using a branch, tag, or offline archive. Useful for reproducible dependency retrieval.
 
-- **Support private repositories**  
+* **Support private repositories**  
   Authenticate with SSH keys or tokens when downloading protected content.
 
-- **Offline fallback support**  
+* **Offline fallback support**  
   Use a local archive when network access is unavailable. Useful for air-gapped or cached builds.
 
-- **Path filtering and globbing**  
+* **Path filtering and globbing**  
   Extract specific files using path patterns such as `include/*.h` or `lib/*.so`.
 
 ## Setup and configuration
@@ -54,10 +54,10 @@ Add a pipeline step in `.microCI.yml` and configure the `fetch` plugin under `pl
 
 ### Configuration notes
 
-- Use `ssh.copy_from` and `ssh.copy_to` when fetching from SSH-based Git repositories.
-- Use `token` for HTTPS-authenticated access to private repositories.
-- Use `offline` to support deterministic or disconnected builds.
-- Set `strip-components` when the archive contains nested directories you want to flatten.
+* Use `ssh.copy_from` and `ssh.copy_to` when fetching from SSH-based Git repositories.
+* Use `token` for HTTPS-authenticated access to private repositories.
+* Use `offline` to support deterministic or disconnected builds.
+* Set `strip-components` when the archive contains nested directories you want to flatten.
 
 ## Example
 
@@ -117,7 +117,7 @@ steps:
 
 ## Usage guidance
 
-- Prefer `url` for single-file dependencies.
-- Prefer `git_archive` when only a subset of repository files is needed.
-- Prefer `github` for concise GitHub-based dependency references.
-- Keep fetched artifacts minimal to reduce build time and improve supply-chain control.
+* Prefer `url` for single-file dependencies.
+* Prefer `git_archive` when only a subset of repository files is needed.
+* Prefer `github` for concise GitHub-based dependency references.
+* Keep fetched artifacts minimal to reduce build time and improve supply-chain control.

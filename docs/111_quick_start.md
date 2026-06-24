@@ -52,10 +52,10 @@ microCI | bash
 
 ## What this shows
 
-- write the pipeline in YAML format
-- save it as `.microCI.yml`
-- generate plain Bash
-- run each step in an isolated Docker container using the image you specify
-- keep the same idea across different tasks
+* write the pipeline in YAML format
+* save it as `.microCI.yml`
+* generate plain Bash
+* run each step in an isolated Docker container using the image you specify
+* keep the same idea across different tasks
 
 That is the microCI model: one definition, one script, many uses.

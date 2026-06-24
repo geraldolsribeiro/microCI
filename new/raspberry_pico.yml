@@ -1,5 +1,5 @@
 steps:
-  - name: "Build C++ project"
+  - name: "Build Raspberry Pi Pico firmware"
     docker: "intmain/microci_raspberry_pico:latest"
     plugin:
       name: raspberry_pico

@@ -24,5 +24,5 @@ steps:
 
 ## Notes
 
-- Useful for static sites and release deployments.
-- Separates repository history from the deployed files.
+* Useful for static sites and release deployments.
+* Separates repository history from the deployed files.

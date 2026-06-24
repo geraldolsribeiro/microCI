@@ -24,5 +24,5 @@ steps:
 
 ## Notes
 
-- Works well for generated sites and release artifacts.
-- Keeps publishing logic inside the same pipeline definition.
+* Works well for generated sites and release artifacts.
+* Keeps publishing logic inside the same pipeline definition.

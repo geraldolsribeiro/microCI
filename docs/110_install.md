@@ -6,10 +6,10 @@ microCI is designed to stay lightweight: one YAML pipeline, one generated Bash s
 
 microCI relies on a small set of standard tools:
 
-- `bash` — runs the generated pipeline script
-- `docker` — provides isolated execution environments for steps
-- `jq` — handles JSON data when pipelines need to inspect or transform structured output
-- `yq` — handles YAML data when pipelines need to read or update configuration files
+* `bash` — runs the generated pipeline script
+* `docker` — provides isolated execution environments for steps
+* `jq` — handles JSON data when pipelines need to inspect or transform structured output
+* `yq` — handles YAML data when pipelines need to read or update configuration files
 
 These tools are necessary because microCI generates Bash and expects a minimal runtime layer to execute portable steps consistently across machines.
 

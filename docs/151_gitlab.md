@@ -6,9 +6,9 @@ Document how to run microCI from GitLab CI/CD, including checkout, binary downlo
 
 ## Suggested structure
 
-- pipeline trigger
-- runner image
-- download microCI
-- prepare SSH keys and known hosts
-- run `microCI | bash`
-- collect artifacts
+* pipeline trigger
+* runner image
+* download microCI
+* prepare SSH keys and known hosts
+* run `microCI | bash`
+* collect artifacts
