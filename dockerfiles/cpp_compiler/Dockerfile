@@ -87,6 +87,9 @@ RUN set -eux; \
 RUN mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MANAGED.old \
   && PIP_NO_CACHE_DIR=1 pip install --no-cache-dir clang-html
 
+# https://github.com/geraldolsribeiro/microCI/issues/73
+RUN sed -i "44i\        bold = False" /usr/local/lib/python3.13/dist-packages/clang_html/clang_visualizer.py
+
 RUN set -eux; \
   echo "2025-07-22" > /dev/null \
   && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
