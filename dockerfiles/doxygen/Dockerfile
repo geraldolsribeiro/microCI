@@ -30,7 +30,7 @@
 FROM alpine:latest
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
-RUN echo "2025-02-21" \
+RUN echo "2026-06-28" \
   && apk add --no-cache \
     bash \
     plantuml \
@@ -40,6 +40,7 @@ RUN echo "2025-02-21" \
 # Make same path available on Debian and Alpine
 RUN mkdir -p /usr/share/plantuml/ && ln -sf /usr/share/java/plantuml.jar /usr/share/plantuml/plantuml.jar
 
-RUN wget https://github.com/plantuml/plantuml/releases/download/v1.2025.1/plantuml-mit-1.2025.1.jar -O /usr/share/java/plantuml.jar
+# Use same plantuml version as ../plantuml/Dockerfile
+RUN wget https://github.com/plantuml/plantuml/releases/download/v1.2026.6/plantuml-mit-1.2026.6.jar -O /usr/share/java/plantuml.jar
 
 CMD [ "/bin/echo", "microCI doxygen image" ]
