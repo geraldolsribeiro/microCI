@@ -7,6 +7,7 @@ steps:
       name: "fetch"
       items:
         - git_archive: https://github.com/lirantal/asciidoc-book-starter.git
+          tag: main
           files:
             - book
 
