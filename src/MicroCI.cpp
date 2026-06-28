@@ -508,13 +508,19 @@ auto MicroCI::DefaultDataTemplate() const -> json {
   data["MICROCI_STEP_SKIP"] = "no";
   data["MICROCI_YAML"]      = mYamlFilename;
 
-  data["BLUE"]    = "\033[0;34m";
-  data["YELLOW"]  = "\033[0;33m";
-  data["MAGENTA"] = "\033[0;35m";
-  data["RED"]     = "\033[0;31m";
-  data["GREEN"]   = "\033[0;32m";
-  data["CYAN"]    = "\033[0;36m";
-  data["CLEAR"]   = "\033[0m";
+  data["CLEAR"]          = "\033[0m";
+  data["BOLD"]           = "\033[1m";
+  data["ITALIC"]         = "\033[3m";
+  data["UNDERLINE"]      = "\033[4m";
+  data["STRIKETHROUGH"]  = "\033[9m";
+  data["RED"]            = "\033[0;31m";
+  data["GREEN"]          = "\033[0;32m";
+  data["YELLOW"]         = "\033[0;33m";
+  data["BLUE"]           = "\033[0;34m";
+  data["PURPLE"]         = "\033[0;35m";
+  data["CYAN"]           = "\033[0;36m";
+  data["PURPLE_BOLD"]    = "\033[1;35m";
+  data["PURPLE_INTENSE"] = "\033[0;95m";
 
   data["APPEND_LOG_TEE_FLAG"] = mAppendLog ? " -a" : "";
 
