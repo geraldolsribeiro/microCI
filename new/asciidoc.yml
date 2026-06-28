@@ -1,22 +1,24 @@
-#   # asciidoc plugin
+#   # AsciiDoc plugin
 #   
 #{{{
 steps:
-  - name: "Generate HTML from Asciidoc"
+  - name: "Generate HTML from AsciiDoc"
     description: "Description of this step"
     plugin:
       name: asciidoc
       output_format: html
       destination_dir: _book
+      output: my_book.html
       input:
         - book/index.adoc
 
-  - name: "Generate PDF from Asciidoc"
+  - name: "Generate PDF from AsciiDoc"
     description: "Description of this step"
     plugin:
       name: asciidoc
       output_format: pdf
       destination_dir: _book
+      output: my_book.pdf
       input:
         - book/index.adoc
 #}}}

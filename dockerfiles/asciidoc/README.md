@@ -10,26 +10,30 @@ Example:
 
 ```yaml
 steps:
-  - name: "Generate HTML from Asciidoc"
+  - name: "Generate HTML from AsciiDoc"
     description: "Description of this step"
+    docker: "intmain/microci_asciidoc:0.11.0"
     plugin:
       name: asciidoc
       output_format: html
       destination_dir: _book
+      output: index.html
       input:
         - book/index.adoc
 
-  - name: "Generate PDF from Asciidoc"
+  - name: "Generate PDF from AsciiDoc"
     description: "Description of this step"
+    docker: "intmain/microci_asciidoc:0.11.0"
     plugin:
       name: asciidoc
       output_format: pdf
       destination_dir: _book
+      output: index.pdf
       input:
         - book/index.adoc
 ```
 
-This example matches the structure used in `docs/238_plugin_asciidoc.md` and only adds the container image required for the packaged toolchain.
+`output` is relative to `destination_dir`.
 
 ## Related documentation
 

@@ -40,8 +40,13 @@ namespace microci {
 void AsciidocPluginStepParser::Parse(const YAML::Node &step) {
   auto inputList      = std::list<std::string>{};
   auto outputFormat   = std::string{"html"};
-  auto destinationDir = std::string{"."};
+  auto outputFile     = std::string{};
+  auto destinationDir = std::string{};
   auto basePath       = std::string{"."};
+
+  if (step["plugin"]["output"]) {
+    outputFile = step["plugin"]["output"].as<std::string>();
+  }
 
   if (step["plugin"]["output_format"]) {
     outputFormat = step["plugin"]["output_format"].as<std::string>();
@@ -66,6 +71,7 @@ void AsciidocPluginStepParser::Parse(const YAML::Node &step) {
   data["BASE_PATH"]        = basePath;
   data["OUTPUT_FORMAT"]    = outputFormat;
   data["DESTINATION_DIR"]  = destinationDir;
+  data["OUTPUT_FILE"]      = outputFile;
 
   auto envs = parseEnvs(step);
   beginFunction(data, envs);
@@ -92,9 +98,17 @@ void AsciidocPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << "        asciidoctor \\\n";
   }
 
-  mMicroCI->Script() << inja::render(R"(          --destination-dir {{DESTINATION_DIR}} \
+  if (not destinationDir.empty()) {
+    mMicroCI->Script() << inja::render(R"(          --destination-dir {{DESTINATION_DIR}} \
 )",
-                                     data);
+                                       data);
+  }
+
+  if (not outputFile.empty()) {
+    mMicroCI->Script() << inja::render(R"(          --out-file {{OUTPUT_FILE}} \
+)",
+                                       data);
+  }
 
   for (const auto &input : inputList) {
     mMicroCI->Script() << "          " << input << " \\\n";

@@ -17,6 +17,7 @@ steps:
       name: asciidoc
       output_format: html
       destination_dir: _book
+      output: my_book.html
       input:
         - book/index.adoc
 
@@ -26,6 +27,7 @@ steps:
       name: asciidoc
       output_format: pdf
       destination_dir: _book
+      output: my_book.pdf
       input:
         - book/index.adoc
 #}}}
