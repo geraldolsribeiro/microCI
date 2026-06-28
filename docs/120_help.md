@@ -37,6 +37,7 @@ Options:
   -n,--new bash            Create a command line step
   -n,--new cpp             Create a C++ command line build step
   -n,--new docmd           Create a documentation step
+  -n,--new asciidoc        Create a documentation step
   -n,--new mkdocs_material Create a documentation step
   -n,--new doxygen         Create a documentation step
   -n,--new pandoc          Create a document conversion step

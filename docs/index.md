@@ -50,6 +50,7 @@ Define automation in YAML. Generate plain Bash. Run the same pipeline anywhere.
 * [pikchr](235_plugin_pikchr.md)
 * [docmd](236_plugin_docmd.md)
 * [doxygen](237_plugin_doxygen.md)
+* [asciidoc](238_plugin_asciidoc.md)
 * [clang-format](240_plugin_clang-format.md)
 * [cpp](241_plugin_cpp.md)
 * [clang-tidy](242_plugin_clang-tidy.md)

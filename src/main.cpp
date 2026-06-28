@@ -43,6 +43,7 @@
 #include "inicpp.h"
 
 // Plugins
+#include "AsciidocPluginStepParser.hpp"
 #include "BashPluginStepParser.hpp"
 #include "BeamerPluginStepParser.hpp"
 #include "ClangFormatPluginStepParser.hpp"
@@ -67,6 +68,7 @@
 #include "VHDLFormatPluginStepParser.hpp"
 
 // Configuration templates
+#include "new/asciidoc.hpp"
 #include "new/bash.hpp"
 #include "new/beamer.hpp"
 #include "new/clang-format.hpp"
@@ -120,6 +122,7 @@
 #include "help/mkdocs_material.hpp"
 // #include "help/mkdocs_material_config.hpp"
 // #include "help/mkdocs_material_index.hpp"
+#include "help/asciidoc.hpp"
 #include "help/npm.hpp"
 #include "help/pandoc.hpp"
 #include "help/pikchr.hpp"
@@ -183,6 +186,7 @@ Options:
   -n,--new bash            Create a command line step
   -n,--new cpp             Create a C++ command line build step
   -n,--new docmd           Create a documentation step
+  -n,--new asciidoc        Create a documentation step
   -n,--new mkdocs_material Create a documentation step
   -n,--new doxygen         Create a documentation step
   -n,--new pandoc          Create a document conversion step
@@ -557,6 +561,7 @@ sudo rm -f /usr/bin/microCI
 
     uCI.RegisterPlugin("skip", std::make_shared<SkipPluginStepParser>(&uCI));
     uCI.RegisterPlugin("bash", std::make_shared<BashPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("asciidoc", std::make_shared<AsciidocPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docmd", std::make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("doxygen", std::make_shared<DoxygenPluginStepParser>(&uCI));
     uCI.RegisterPlugin("beamer", std::make_shared<BeamerPluginStepParser>(&uCI));
@@ -577,6 +582,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("flawfinder", std::make_shared<FlawfinderPluginStepParser>(&uCI));
     uCI.RegisterPlugin("docker_build", std::make_shared<DocmdPluginStepParser>(&uCI));
     uCI.RegisterPlugin("pandoc", std::make_shared<PandocPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("asciidoc", std::make_shared<AsciidocPluginStepParser>(&uCI));
     uCI.RegisterPlugin("template", std::make_shared<TemplatePluginStepParser>(&uCI));
     uCI.RegisterPlugin("raspberry_pico", std::make_shared<RaspberryPicoPluginStepParser>(&uCI));
 
@@ -613,6 +619,7 @@ sudo rm -f /usr/bin/microCI
     MICROCI_HELP(mkdocs_material);
     MICROCI_HELP(mkdocs_material);
     MICROCI_HELP(npm);
+    MICROCI_HELP(asciidoc);
     MICROCI_HELP(pandoc);
     MICROCI_HELP(pikchr);
     MICROCI_HELP(plantuml);
@@ -737,6 +744,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true,  "jfrog",           ".microCI.yml",  yml, jfrog);
       MICROCI_TPL(true,  "flawfinder",      ".microCI.yml",  yml, flawfinder);
       MICROCI_TPL(true,  "docker_build",    ".microCI.yml",  yml, docker_build);
+      MICROCI_TPL(true,  "asciidoc",        ".microCI.yml",  yml, asciidoc);
       MICROCI_TPL(true,  "pandoc",          ".microCI.yml",  yml, pandoc);
       MICROCI_TPL(true,  "template",        ".microCI.yml",  yml, template);
       MICROCI_TPL(true,  "raspberry_pico",  ".microCI.yml",  yml, raspberry_pico);
