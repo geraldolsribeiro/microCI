@@ -7,6 +7,10 @@ test_name="$(basename "$script_dir")"
 
 source ../../test_helpers.sh
 
+setup_test() {
+  rm -rf external
+}
+
 verify_runtime_output() {
   find external/ -type f >file.txt
   diff --color --unified file.txt file.ref

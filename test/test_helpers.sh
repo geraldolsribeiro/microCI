@@ -44,6 +44,15 @@ capture_tail_message() {
   tail -n 20 "$output_file" | tr '\n' ' ' | sed 's/"/\\"/g'
 }
 
+# Per-test wrappers may override these after sourcing this helper.
+setup_test() {
+  :
+}
+
+teardown_test() {
+  :
+}
+
 run_microci() {
   microci_cmd='../../../bin/microCI | bash'
   "$script_dir/../runner_helper.sh" "$test_name" "$microci_cmd"
@@ -51,24 +60,33 @@ run_microci() {
 
 # Runtime test helpers.
 run_test_expect_success() {
+  setup_test
+
   if ! run_microci >/dev/null; then
     echo "[runtime] FAIL  $test_name"
+    teardown_test
     exit 1
   fi
 
   if ! verify_runtime_output; then
     echo "[runtime] FAIL  $test_name"
+    teardown_test
     exit 1
   fi
 
   echo "[runtime] PASS  $test_name"
+  teardown_test
 }
 
 run_test_expect_failure() {
+  setup_test
+
   if run_microci >/dev/null; then
     echo "[runtime] FAIL  $test_name: microCI succeeded but a failure was expected" >&2
+    teardown_test
     exit 1
   fi
 
   echo "[runtime] PASS  $test_name"
+  teardown_test
 }
