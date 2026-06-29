@@ -1,0 +1,14 @@
+steps:
+  - name: "Download external files into the project"
+    description: "Retrieve build dependencies from external sources."
+    ssh: # Required for git_archive
+      copy_from: "${HOME}/.ssh" # Inject SSH keys into the Docker container's default user path
+    plugin:
+      name: "fetch"
+      target: external # Default location for fetched files; can be overridden by items/target
+      items:
+        - github: geraldolsribeiro/microCI master
+          target: external # Directory where files will be placed; overrides the default target
+          strip-components: 1 # Remove one leading directory level
+          files: # List of files to extract into the target directory
+            - test/help.txt # Final file will be /tmp/help.txt because one directory level was removed

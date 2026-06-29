@@ -105,16 +105,26 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
 //
 // ----------------------------------------------------------------------
 void FetchPluginStepParser::parseGithub(const YAML::Node &item, json &data) {
-  auto gitTag    = std::string{};
+  auto gitTagAlt = std::string{};
   auto gitRemote = std::string{};
+  auto files     = std::string{};
+  auto gitTag    = item["tag"].as<std::string>("master");
 
   std::stringstream ss(item["github"].as<std::string>());
   // - github: user/repo v.1.0.0
-  ss >> gitRemote >> gitTag;
+  ss >> gitRemote >> gitTagAlt;
+
+  if (not gitTagAlt.empty()) {
+    gitTag = gitTagAlt;
+  }
+
   data["GIT_TAG"] = gitTag;
+
+  auto repoName = gitRemote.substr(gitRemote.find_last_of('/') + 1);
 
   // URL examples
   // ============
+  // https://github.com/geraldolsribeiro/microCI/archive/master.tar.gz
   // https://github.com/User/repo/tarball/master
   // https://github.com/User/repo/archive/master.tar.gz
   // https://github.com/User/repo/archive/refs/tags/v0.1.2.tar.gz
@@ -132,10 +142,18 @@ void FetchPluginStepParser::parseGithub(const YAML::Node &item, json &data) {
     gitRemote = "file://" + item["offline"].as<std::string>();
   }
 
-  data["GIT_REMOTE"]       = gitRemote;
-  data["FILES"]            = "";  // All files
-  data["STRIP_COMPONENTS"] = " --strip-components=1";
-  // data["STRIP_COMPONENTS"] = "";
+  for (const auto &f : item["files"]) {
+    // Single quotes to avoid expansion
+    files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
+  }
+
+  data["GIT_REMOTE"] = gitRemote;
+  data["FILES"]      = files;  // empty means all files
+  if (item["strip-components"]) {
+    data["STRIP_COMPONENTS"] = " --strip-components=" + std::to_string(item["strip-components"].as<int>() + 1);
+  } else {
+    data["STRIP_COMPONENTS"] = " --strip-components=1";
+  }
 
   mMicroCI->Script() << inja::render(
       R"( \

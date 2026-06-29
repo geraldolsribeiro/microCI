@@ -23,7 +23,7 @@ for dir in "$script_dir"/*/; do
   test_name="$(basename "$dir")"
 
   case "$test_name" in
-  clang-tidy_* | cppcheck_* | fetch_* | flawfinder_* | git_deploy_* | git_publish_* | mkdocs_material_* | plantuml_* | skip_* | template_* | beamer_* | docmd_* | doxygen_* | jfrog_* | minio_* | npm_* | mermaid_* | pikchr_* | vhdl-format_*)
+  clang-tidy_* | cppcheck_* | flawfinder_* | git_deploy_* | git_publish_* | mkdocs_material_* | plantuml_* | skip_* | template_* | beamer_* | docmd_* | doxygen_* | jfrog_* | minio_* | npm_* | mermaid_* | pikchr_* | vhdl-format_*)
     # Placeholder skip list for fixtures that still need concrete assertions.
     # Future improvement: move this metadata next to each fixture.
     echo -e "[runtime] ${YELLOW}SKIP${RESET}  $test_name"
@@ -37,13 +37,13 @@ for dir in "$script_dir"/*/; do
   runtime_timeout="${RUNTIME_TIMEOUT:-120s}"
   output_file=$(mktemp)
   if timeout "$runtime_timeout" "${dir}test.sh" >"$output_file" 2>&1; then
-    elapsed_ns=$(( $(date +%s%N) - start_ns ))
+    elapsed_ns=$(($(date +%s%N) - start_ns))
     elapsed_s=$(awk -v ns="$elapsed_ns" 'BEGIN { printf "%.3f", ns / 1000000000 }')
     echo -e "[runtime] ${GREEN}PASS${RESET}  $test_name"
     pass=$((pass + 1))
     add_result "$test_name" pass "$elapsed_s" ""
   else
-    elapsed_ns=$(( $(date +%s%N) - start_ns ))
+    elapsed_ns=$(($(date +%s%N) - start_ns))
     elapsed_s=$(awk -v ns="$elapsed_ns" 'BEGIN { printf "%.3f", ns / 1000000000 }')
     echo -e "[runtime] ${RED}FAIL${RESET}  $test_name"
     fail=$((fail + 1))
