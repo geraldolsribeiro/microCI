@@ -401,6 +401,11 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
           SkipPluginStepParser skipPluginStepParser{this};
           skipPluginStepParser.Parse(step);
         } else {
+          // #79: Add option for temporarily skips execution of specific plugins
+          std::set<std::string> mTempSkip{"cppcheck", "clang-tidy", "doxygen"};
+          if (mTempSkip.count(step["plugin"]["name"].as<std::string>()) == 1) {
+            step["plugin"]["name"] = "skip";
+          }
           parsePluginStep(step);
         }
         stepNumber++;
