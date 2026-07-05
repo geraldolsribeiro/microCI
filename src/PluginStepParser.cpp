@@ -101,11 +101,17 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string
 auto PluginStepParser::parseDevices(const YAML::Node &step, const json &data) const -> json {
   auto data_              = data;
   data_["DOCKER_DEVICES"] = json::array();
+  data_["PRIVILEGED"]     = false;
 
   if (step["devices"] and step["devices"].IsSequence()) {
     std::transform(step["devices"].begin(), step["devices"].end(), std::back_inserter(data_["DOCKER_DEVICES"]),
                    [](const auto &dev) { return dev.template as<std::string>(); });
   }
+
+  if (step["privileged"] and step["privileged"].IsScalar()) {
+    data_["PRIVILEGED"] = step["privileged"].as<bool>();
+  }
+
   return data_;
 }
 
@@ -269,6 +275,14 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
                                        data);
     // remove newline, backslash, and space from last entry
     mMicroCI->Script().seekp(-3, mMicroCI->Script().cur);
+  }
+
+  if (data.count("PRIVILEGED")) {
+    if (data["PRIVILEGED"].get<bool>()) {
+      mMicroCI->Script() << inja::render(R"( \
+        --privileged)",
+                                         data);
+    }
   }
 
   mMicroCI->Script() << inja::render(R"( \

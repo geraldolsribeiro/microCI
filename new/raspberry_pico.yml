@@ -8,3 +8,18 @@ steps:
         rm -rf build
         cmake -S . -B build
         cmake --build build
+
+  - name: "Pico board Information"
+    docker: "intmain/microci_raspberry_pico:latest"
+    only: info
+    run_as: root
+    privileged: true
+    volumes:
+      - source: /dev/bus/usb
+        destination: /dev/bus/usb
+        mode: rw
+    plugin:
+      name: raspberry_pico
+      bash: |
+        /opt/picotool/picotool info > info.txt
+
