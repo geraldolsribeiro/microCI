@@ -36,3 +36,5 @@ test/runtime/cpp_01/output.txt
 test/snapshot_cmd_new/snapshot-cmd-new-junit.xml
 test/snapshot_create_script/snapshot-create-script-junit.xml
 test/runtime/runtime-junit.xml
+dockerfiles/raspberry_pico/test_01/build
+dockerfiles/raspberry_pico/test_02/build

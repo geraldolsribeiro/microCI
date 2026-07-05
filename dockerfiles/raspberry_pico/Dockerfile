@@ -90,9 +90,12 @@ RUN curl -L https://github.com/raspberrypi/pico-sdk-tools/releases/download/v2.2
   | tar -xzf -
 ENV picotool_DIR=/opt/picotool
 
+# 4. Update the system PATH variable so Bash can find it instantly
+ENV PATH="${PATH}:/opt/picotool"
+
 # Set workspace directory for your project source code
 WORKDIR /microci_workspace
 
-CMD [ "/bin/echo", "microCI C++ compiler" ]
+CMD [ "/bin/echo", "microCI Raspberry Pico" ]
 
 # vim: ft=dockerfile

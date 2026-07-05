@@ -1,0 +1,44 @@
+steps:
+  - name: "Build Raspberry Pi Pico firmware"
+    docker: "intmain/microci_raspberry_pico:latest"
+    plugin:
+      name: raspberry_pico
+      board: pico2_w # pico | pico_w | pico2 | pico2_w
+      bash: |
+        find /opt -name pico_sdk_import.cmake
+        find /opt -name cyw43_arch.h
+        find /opt -name lwipopts.h
+        rm -rf build
+        cmake -S . -B build
+        cmake --build build
+
+# docker run -it --privileged -v /dev/bus/usb:/dev/bus/usb intmain/microci_raspberry_pico:latest /opt/picotool/picotool info
+  - name: "Pico board Information"
+    docker: "intmain/microci_raspberry_pico:latest"
+    only: info
+    run_as: root
+    privileged: true
+    volumes:
+      - source: /dev/bus/usb
+        destination: /dev/bus/usb
+        mode: rw
+    plugin:
+      name: raspberry_pico
+      bash: |
+        /opt/picotool/picotool info | tee info.txt
+        chmod 666 info.txt
+
+  - name: "Load firmware"
+    docker: "intmain/microci_raspberry_pico:latest"
+    only: load
+    run_as: root
+    privileged: true
+    volumes:
+      - source: /dev/bus/usb
+        destination: /dev/bus/usb
+        mode: rw
+    plugin:
+      name: raspberry_pico
+      bash: |
+        /opt/picotool/picotool load -fx build/blink_simple.uf2
+
