@@ -1,6 +1,10 @@
 # ⚙️ Bash plugin
 
-<center>![Plugin common](images/microci-plugin_common.svg)</center>
+<div align="center" markdown="1">
+
+![Plugin common](images/microci-plugin_common.svg)
+
+</div>
 
 ## What it does
 

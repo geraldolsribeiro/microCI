@@ -19,7 +19,11 @@ To run only specific steps, use `-O/--only` for a single named step or `-N/--num
 
 ## Install
 
-<center>![Install](images/microci-install.svg)</center>
+<div align="center" markdown="1">
+
+![Install](images/microci-install.svg)</center>
+
+</div>
 
 ```bash
 curl -fsSL https://microci.dev/install.sh | bash
@@ -28,7 +32,11 @@ curl -fsSL https://microci.dev/install.sh | bash
 
 Keep the same workflow and refresh the binary:
 
-<center>![Update](images/microci-update.svg)</center>
+<div align="center" markdown="1">
+
+![Update](images/microci-update.svg)
+
+</div>
 
 ```bash
 microCI --update | bash
@@ -44,7 +52,11 @@ microCI --update-dev | bash
 
 Remove microCI from your system:
 
-<center>![Uninstall](images/microci-uninstall.svg)</center>
+<div align="center" markdown="1">
+
+![Uninstall](images/microci-uninstall.svg)
+
+</div>
 
 ```bash
 microCI --uninstall | bash
