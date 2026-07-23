@@ -300,25 +300,29 @@ void MicroCI::LoadEnvironmentFromEnvFile(const std::string &fileName) {
     std::ifstream envFile(fileName);
     std::string line;
     while (getline(envFile, line)) {
-      // Skip comments and short lines
-      if (line.size() < 3 or line[0] == '#') {
+      auto firstNonWhitespace = line.find_first_not_of(" \t\r\n");
+      if (firstNonWhitespace == std::string::npos or line[firstNonWhitespace] == '#') {
         continue;
       }
-      auto i = 0;
-      while (line.at(i) == ' ' or line.at(i) == '\t') {
-        ++i;
-        if (line[i] == '#') {
-          line = "";
-          break;
-        }
-      }
+
       auto eqPos = line.find_first_of("=");
-      if (eqPos != std::string::npos) {
-        EnvironmentVariable env;
-        env.name  = line.substr(0, eqPos);
-        env.value = line.substr(eqPos + 1);
-        mEnvs.insert(env);
+      if (eqPos == std::string::npos) {
+        continue;
       }
+
+      if (eqPos <= firstNonWhitespace) {
+        continue;
+      }
+
+      auto nameEnd = line.find_last_not_of(" \t\r\n", eqPos - 1);
+      if (nameEnd == std::string::npos or nameEnd < firstNonWhitespace) {
+        continue;
+      }
+
+      EnvironmentVariable env;
+      env.name  = line.substr(firstNonWhitespace, nameEnd - firstNonWhitespace + 1);
+      env.value = line.substr(eqPos + 1);
+      mEnvs.insert(env);
     }
   }
 }

@@ -1,0 +1,7 @@
+steps:
+  - name: "env parsing smoke"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "ok"
