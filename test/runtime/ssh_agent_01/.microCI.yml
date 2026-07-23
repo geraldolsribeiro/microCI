@@ -1,0 +1,8 @@
+steps:
+  - name: "ssh agent check"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        test -n "$SSH_AUTH_SOCK"
+        ssh-add -L

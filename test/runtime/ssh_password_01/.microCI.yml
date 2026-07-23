@@ -1,0 +1,7 @@
+steps:
+  - name: "ssh preflight"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "should not run"
