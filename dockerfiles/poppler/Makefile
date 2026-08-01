@@ -44,7 +44,7 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):latest pdftoppm -h
+	docker run --rm intmain/$(IMAGE_NAME):latest pdftoppm -h
 
 .PHONY: publish
 publish:: build

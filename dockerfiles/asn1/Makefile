@@ -45,9 +45,9 @@ build: update
 .PHONY: test
 test:
 	rm -rf test
-	docker run -it intmain/$(IMAGE_NAME):latest \
+	docker run --rm intmain/$(IMAGE_NAME):latest \
 		/opt/asn1scc/asn1scc --help || echo "OK --help exits with error :("
-	docker run -it \
+	docker run --rm \
 		--user $(shell id -u):$(shell id -g) \
 		--volume ${PWD}:/microci_workspace \
 		intmain/$(IMAGE_NAME):latest \

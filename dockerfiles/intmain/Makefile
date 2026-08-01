@@ -43,8 +43,8 @@ build: update
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test
-test:
-	docker run -it intmain/$(IMAGE_NAME):latest bash -lc 'g++ --version || true'
+test: build
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) g++ --version
 
 .PHONY: publish
 publish:: build

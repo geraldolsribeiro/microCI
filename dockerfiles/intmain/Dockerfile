@@ -29,6 +29,7 @@
 # SOFTWARE.
 
 FROM debian:bookworm-slim
+
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 # ADD https://github.com/sclevine/yj/releases/download/v5.1.0/yj-linux-amd64 /bin/yj
@@ -154,3 +155,5 @@ RUN gem install \
   html-proofer \
   mdl \
   syntax --no-document
+
+CMD ["bash"]

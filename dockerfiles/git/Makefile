@@ -43,13 +43,13 @@ build:
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 bash:
-	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) bash
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) bash
 
 .PHONY: test
 test:
-	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION)
-	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) git archive --format=tar --remote='https://github.com/geraldolsribeiro/microCI.git' HEAD 'README.md'
-	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION) git clone https://github.com/geraldolsribeiro/microCI.git /tmp/microCI
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION)
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) git archive --format=tar --remote='https://github.com/geraldolsribeiro/microCI.git' HEAD 'README.md'
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) git clone https://github.com/geraldolsribeiro/microCI.git /tmp/microCI
 
 .PHONY: publish
 publish:: build

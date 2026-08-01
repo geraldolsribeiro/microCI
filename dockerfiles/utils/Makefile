@@ -44,7 +44,7 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):latest yj -h
+	docker run --rm intmain/$(IMAGE_NAME):latest yj -h
 
 .PHONY: publish
 publish:: build

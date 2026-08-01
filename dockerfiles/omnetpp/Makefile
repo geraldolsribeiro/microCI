@@ -51,7 +51,7 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it --rm intmain/$(IMAGE_NAME):latest | grep -q "OMNET++" 
+	docker run --rm intmain/$(IMAGE_NAME):latest | grep -q "OMNET++" 
 
 .PHONY: bash
 bash:
