@@ -1,0 +1,265 @@
+### ----------------------------------------------------------------------
+### Copyright (C) 2017-2022 Geraldo Ribeiro <geraldo@intmain.io>
+### ----------------------------------------------------------------------
+
+GR_DEBIAN_PACKAGE_BASENAME=intmain-common-deps-dev
+GR_DEBIAN_PACKAGE_CUSTOMER_APP_ID=
+GR_DEBIAN_PACKAGE_DESCRIPTION=Ferramentas e bibliotecas de desenvolvimento
+GR_DEBIAN_PACKAGE_DEPENDS=
+GR_DEBIAN_PACKAGE_DEPENDS+=ack,
+GR_DEBIAN_PACKAGE_DEPENDS+=apt-utils,
+GR_DEBIAN_PACKAGE_DEPENDS+=boxes,
+GR_DEBIAN_PACKAGE_DEPENDS+=bat,
+GR_DEBIAN_PACKAGE_DEPENDS+=build-essential,
+GR_DEBIAN_PACKAGE_DEPENDS+=ccache,
+GR_DEBIAN_PACKAGE_DEPENDS+=cccc,
+GR_DEBIAN_PACKAGE_DEPENDS+=checkstyle,
+GR_DEBIAN_PACKAGE_DEPENDS+=clang,
+GR_DEBIAN_PACKAGE_DEPENDS+=clang-format,
+GR_DEBIAN_PACKAGE_DEPENDS+=cloc,
+GR_DEBIAN_PACKAGE_DEPENDS+=doctest-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=cmake,
+#GR_DEBIAN_PACKAGE_DEPENDS+=coffeescript, # usar versão npm
+GR_DEBIAN_PACKAGE_DEPENDS+=cppcheck,
+GR_DEBIAN_PACKAGE_DEPENDS+=cucumber,
+GR_DEBIAN_PACKAGE_DEPENDS+=curl,
+GR_DEBIAN_PACKAGE_DEPENDS+=detox,
+GR_DEBIAN_PACKAGE_DEPENDS+=dos2unix,
+GR_DEBIAN_PACKAGE_DEPENDS+=doxygen,
+GR_DEBIAN_PACKAGE_DEPENDS+=equivs,
+GR_DEBIAN_PACKAGE_DEPENDS+=expect,
+GR_DEBIAN_PACKAGE_DEPENDS+=flawfinder,
+GR_DEBIAN_PACKAGE_DEPENDS+=fonts-noto-color-emoji,
+
+# GrSE
+# GR_DEBIAN_PACKAGE_DEPENDS+=fluid,
+# GR_DEBIAN_PACKAGE_DEPENDS+=libfltk1.3-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libopenoffice-oodoc-perl,
+GR_DEBIAN_PACKAGE_DEPENDS+=libyaml-perl,
+
+# bnn
+GR_DEBIAN_PACKAGE_DEPENDS+=libopencv-dev,
+
+GR_DEBIAN_PACKAGE_DEPENDS+=g++,
+GR_DEBIAN_PACKAGE_DEPENDS+=yamllint,libyaml-cpp-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=gawk,
+GR_DEBIAN_PACKAGE_DEPENDS+=gcovr,
+GR_DEBIAN_PACKAGE_DEPENDS+=gifsicle,
+GR_DEBIAN_PACKAGE_DEPENDS+=git,
+GR_DEBIAN_PACKAGE_DEPENDS+=git-flow,
+GR_DEBIAN_PACKAGE_DEPENDS+=git-gui,
+# GR_DEBIAN_PACKAGE_DEPENDS+=g++-mingw-w64-i686,
+# GR_DEBIAN_PACKAGE_DEPENDS+=g++-mingw-w64-x86-64,
+GR_DEBIAN_PACKAGE_DEPENDS+=graphviz,
+GR_DEBIAN_PACKAGE_DEPENDS+=inkscape,
+GR_DEBIAN_PACKAGE_DEPENDS+=imagemagick,
+#GR_DEBIAN_PACKAGE_DEPENDS+=default-jre,
+GR_DEBIAN_PACKAGE_DEPENDS+=jpegoptim,
+
+# GrQrCode
+GR_DEBIAN_PACKAGE_DEPENDS+=libqrencode-dev,
+
+GR_DEBIAN_PACKAGE_DEPENDS+=libarchive-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libcrypto++-dev,
+#GR_DEBIAN_PACKAGE_DEPENDS+=libcurl4-openssl-dev,
+#GR_DEBIAN_PACKAGE_DEPENDS+=libcurlpp-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libev-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libxrender-dev,libxcursor-dev,libxfixes-dev,libxft-dev,libxinerama-dev,
+#GR_DEBIAN_PACKAGE_DEPENDS+=libfmt-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libfontconfig1-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libicu-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libidn11-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libidn2-0-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libjsoncpp-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libmarkdown2-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libmemcached-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libncurses5-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libpng++-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libpq-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=librocksdb-dev,rocksdb-tools,
+GR_DEBIAN_PACKAGE_DEPENDS+=librsvg2-bin,
+#GR_DEBIAN_PACKAGE_DEPENDS+=libspdlog-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libssl-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libswitch-perl,
+GR_DEBIAN_PACKAGE_DEPENDS+=libtclap-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libtiff5-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libzipios++-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=libzmq3-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=lintian,
+GR_DEBIAN_PACKAGE_DEPENDS+=make,
+# Sincronizar com a versão do node em debian.intmain.io versão compatível com o buster
+# FIXME: verificar atualização para bullseye
+# GR_DEBIAN_PACKAGE_DEPENDS+=nodejs (=16.7.0-1nodesource1),
+GR_DEBIAN_PACKAGE_DEPENDS+=nodejs,
+GR_DEBIAN_PACKAGE_DEPENDS+=npm,
+# Este pacote tem só até a versão bullseye
+# GR_DEBIAN_PACKAGE_DEPENDS+=python2,
+GR_DEBIAN_PACKAGE_DEPENDS+=python-is-python3,
+GR_DEBIAN_PACKAGE_DEPENDS+=optipng,
+GR_DEBIAN_PACKAGE_DEPENDS+=ranger,
+#GR_DEBIAN_PACKAGE_DEPENDS+=rats,
+GR_DEBIAN_PACKAGE_DEPENDS+=ruby,
+#GR_DEBIAN_PACKAGE_DEPENDS+=ruby2.5,
+#GR_DEBIAN_PACKAGE_DEPENDS+=ruby-compass,
+GR_DEBIAN_PACKAGE_DEPENDS+=ruby-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=shellcheck,
+GR_DEBIAN_PACKAGE_DEPENDS+=sloccount,
+GR_DEBIAN_PACKAGE_DEPENDS+=uuid-dev,
+GR_DEBIAN_PACKAGE_DEPENDS+=w3m,
+GR_DEBIAN_PACKAGE_DEPENDS+=webp,
+#GR_DEBIAN_PACKAGE_DEPENDS+=wine,
+#GR_DEBIAN_PACKAGE_DEPENDS+=wine64,
+GR_DEBIAN_PACKAGE_DEPENDS+=xmlstarlet,
+GR_DEBIAN_PACKAGE_DEPENDS+=xmlto,
+GR_DEBIAN_PACKAGE_DEPENDS+=xsltproc,
+GR_DEBIAN_PACKAGE_DEPENDS+=yui-compressor,
+
+GR_DEBIAN_PACKAGE_DEPENDS+=bash
+
+NPM_PACKAGE_DEPENDS+=http-server
+NPM_PACKAGE_DEPENDS+=sass
+NPM_PACKAGE_DEPENDS+=compass-sass-mixins
+NPM_PACKAGE_DEPENDS+=coffeescript
+NPM_PACKAGE_DEPENDS+=coffeescript-concat
+NPM_PACKAGE_DEPENDS+=css-combine
+NPM_PACKAGE_DEPENDS+=htmllint
+NPM_PACKAGE_DEPENDS+=htmllint-cli
+NPM_PACKAGE_DEPENDS+=js-beautify # html-beautify, css-beautify, js-beautify
+NPM_PACKAGE_DEPENDS+=js2coffee
+NPM_PACKAGE_DEPENDS+=jshint
+NPM_PACKAGE_DEPENDS+=@mryhryki/markdown-preview
+NPM_PACKAGE_DEPENDS+=svgo
+#NPM_PACKAGE_DEPENDS+=uglify-es # suporta ES6 mas tá abandonado, migrar para terser
+#NPM_PACKAGE_DEPENDS+=uglify-js # só suporta ES5
+NPM_PACKAGE_DEPENDS+=terser
+NPM_PACKAGE_DEPENDS+=vue-cli
+NPM_PACKAGE_DEPENDS+=web-push
+NPM_PACKAGE_DEPENDS+=yarn
+NPM_PACKAGE_DEPENDS+=codeceptjs
+NPM_PACKAGE_DEPENDS+=sass-migrator
+#NPM_PACKAGE_DEPENDS+=playwright@^1 # precisa ser instalado local
+
+#GEM_PACKAGE_DEPENDS+=selenium-phantomjs
+#GEM_PACKAGE_DEPENDS+=selenium-webdriver
+#GEM_PACKAGE_DEPENDS+=selenium-cucumber
+GEM_PACKAGE_DEPENDS+=cucumber
+GEM_PACKAGE_DEPENDS+=html-proofer
+GEM_PACKAGE_DEPENDS+=syntax
+# Markdown lint tool
+GEM_PACKAGE_DEPENDS+=mdl
+#GEM_PACKAGE_DEPENDS+=compass
+#GEM_PACKAGE_DEPENDS+=sass
+
+# brew list > brew.list
+BREW_PACKAGE_DEPENDS+=curl
+BREW_PACKAGE_DEPENDS+=png++
+BREW_PACKAGE_DEPENDS+=coffeescript
+BREW_PACKAGE_DEPENDS+=openssl
+BREW_PACKAGE_DEPENDS+=doxygen
+BREW_PACKAGE_DEPENDS+=graphviz
+BREW_PACKAGE_DEPENDS+=ack
+BREW_PACKAGE_DEPENDS+=ccache
+BREW_PACKAGE_DEPENDS+=cloc
+BREW_PACKAGE_DEPENDS+=cmake
+BREW_PACKAGE_DEPENDS+=ctags
+BREW_PACKAGE_DEPENDS+=curlpp
+BREW_PACKAGE_DEPENDS+=dialog
+BREW_PACKAGE_DEPENDS+=gawk
+BREW_PACKAGE_DEPENDS+=gcovr
+BREW_PACKAGE_DEPENDS+=git
+BREW_PACKAGE_DEPENDS+=gnupg
+BREW_PACKAGE_DEPENDS+=icu4c
+BREW_PACKAGE_DEPENDS+=lcov
+BREW_PACKAGE_DEPENDS+=ncdu
+BREW_PACKAGE_DEPENDS+=sloccount
+BREW_PACKAGE_DEPENDS+=rats
+BREW_PACKAGE_DEPENDS+=yuicompressor
+BREW_PACKAGE_DEPENDS+=ranger
+BREW_PACKAGE_DEPENDS+=hiredis
+BREW_PACKAGE_DEPENDS+=htop
+BREW_PACKAGE_DEPENDS+=clang-format
+BREW_PACKAGE_DEPENDS+=checkstyle
+BREW_PACKAGE_DEPENDS+=yarn
+BREW_PACKAGE_DEPENDS+=xmlto
+BREW_PACKAGE_DEPENDS+=libmemcached
+#BREW_PACKAGE_DEPENDS+=spdlog
+
+include /opt/intmain/dev/$(OS)/usr/share/Gr/scripts/Common/Makefile.include
+
+ifeq ($(OS),linux)
+# https://github.com/sameer49/selenium-cucumber-ruby/blob/master/doc/installation.md
+# https://github.com/andrewslotin/selenium-phantomjs/blob/master/README.md
+
+# não dá pra chamar apt dentro de apt
+#	echo "apt upgrade -y --allow-unauthenticated" >> $@
+#	echo "apt dist-upgrade -y --allow-unauthenticated" >> $@
+#	echo "apt install --reinstall -y nodejs" >> $@
+# echo "curl -sL https://deb.nodesource.com/setup_11.x | bash -" >> $@
+../package/postinst:
+	echo "#!/bin/bash" > $@
+	echo "### ----------------------------------------------------------------------" >> $@
+	echo "### Copyright (C) 2017-2025 Geraldo Ribeiro <geraldo@intmain.io>" >> $@
+	echo "### ----------------------------------------------------------------------" >> $@
+	echo "npm install -g npm@latest" >> $@
+	echo "npm install -g $(NPM_PACKAGE_DEPENDS)" >> $@
+	echo "gem update --system" >> $@
+	echo "gem install $(GEM_PACKAGE_DEPENDS) --no-document" >> $@
+	chmod 755 $@
+endif
+
+ifeq ($(OS),macos)
+# HIGH_SIERRA_FIX: Tive vários problemas quando atualizei para o high sierra
+# HIGH_SIERRA_FIX: https://www.dyclassroom.com/howto-mac/how-to-install-nodejs-and-npm-on-mac-using-homebrew
+# HIGH_SIERRA_FIX: https://stackoverflow.com/questions/33870520/npm-install-cannot-find-module-semver
+# HIGH_SIERRA_FIX: https://stackoverflow.com/questions/17038402/sass-compass-watch-error-cannot-load-compass
+# HIGH_SIERRA_FIX: gem uninstall sass
+# HIGH_SIERRA_FIX: e remover a 3.5.5 e deixar a 3.4.25
+../package/postinst:
+	echo "#!/bin/bash" > $@
+	echo "### ----------------------------------------------------------------------" >> $@
+	echo "### Copyright (C) 2017-2025 Geraldo Ribeiro <geraldo@intmain.io>" >> $@
+	echo "### ----------------------------------------------------------------------" >> $@
+	echo "/usr/local/bin/brew install $(BREW_PACKAGE_DEPENDS)" >> $@
+	echo "/usr/local/bin/brew install node" >> $@
+	echo "/usr/local/bin/brew link --overwrite node" >> $@
+	echo "/usr/local/bin/npm update -g" >> $@
+	echo "/usr/local/bin/npm install -g $(NPM_PACKAGE_DEPENDS)" >> $@
+	echo "/usr/bin/gem update --system" >> $@
+	echo "/usr/bin/gem install $(GEM_PACKAGE_DEPENDS) --no-document" >> $@
+	echo "exit 0" >> $@
+	chmod 755 $@
+
+# HIGH_SIERRA_FIX: 
+macos_fix_node:
+	sudo chown -R geraldo:admin /usr/local/share/systemtap/
+	sudo chown -R geraldo:admin /usr/local/lib/dtrace/
+	brew prune
+	sudo rm -rf /usr/local/lib/node_modules
+	sudo rm -rf ~/.npm
+	brew uninstall --force node
+	brew install node
+	brew link --overwrite node
+
+# HIGH_SIERRA_FIX: https://medium.com/@timmykko/using-openssl-library-with-macos-sierra-7807cfd47892
+macos_fix_openssl:
+	ln -s /usr/local/opt/openssl/include/openssl /usr/local/include
+
+macos_brew:
+	brew install $(BREW_PACKAGE_DEPENDS)
+
+macos_npm:
+	npm update -g
+	npm install -g $(NPM_PACKAGE_DEPENDS)
+
+macos_gem:
+	gem update --system
+	gem install $(GEM_PACKAGE_DEPENDS) --no-document
+
+endif
+
+all: ../package/postinst
+
+deps:
+
+clean:
+
