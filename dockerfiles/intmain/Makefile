@@ -45,6 +45,7 @@ build: update
 .PHONY: test
 test: build
 	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) g++ --version
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) grep "ci-user" /etc/passwd
 
 .PHONY: publish
 publish:: build

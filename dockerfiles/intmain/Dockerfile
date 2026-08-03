@@ -159,10 +159,12 @@ RUN gem install \
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   fakeroot \
   sudo \
+  openssh-client \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m -s /bin/bash user
-ENV HOME=/home/user
-USER user
+RUN useradd -m -s /bin/bash ci-user
+
+ENV HOME=/home/ci-user
+USER ci-user
 
 CMD ["bash"]
