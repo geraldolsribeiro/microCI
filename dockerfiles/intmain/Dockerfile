@@ -28,7 +28,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM debian:bookworm-slim
+FROM debian:stable-slim
 
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
@@ -41,8 +41,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   ack \
   apt-utils \
-  bat \
   bash \
+  bat \
   boxes \
   build-essential \
   ccache \
@@ -61,6 +61,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
   doxygen \
   equivs \
   expect \
+  fakeroot \
+  flatbuffers-compiler \
   flawfinder \
   fonts-noto-color-emoji \
   g++ \
@@ -78,7 +80,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
   libarchive-dev \
   libcrypto++-dev \
   libev-dev \
+  libflatbuffers-dev \
   libfontconfig1-dev \
+  libhiredis-dev \
   libicu-dev \
   libidn11-dev \
   libidn2-0-dev \
@@ -86,8 +90,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
   libmarkdown2-dev \
   libmemcached-dev \
   libncurses5-dev \
-  libopenoffice-oodoc-perl \
   libopencv-dev \
+  libopenoffice-oodoc-perl \
   libpng++-dev \
   libpq-dev \
   libqrencode-dev \
@@ -97,6 +101,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
   libswitch-perl \
   libtclap-dev \
   libtiff5-dev \
+  libtinyxml2-dev \
   libxcursor-dev \
   libxfixes-dev \
   libxft-dev \
@@ -110,23 +115,25 @@ RUN --mount=type=cache,target=/var/cache/apt \
   make \
   nodejs \
   npm \
+  openssh-client \
   optipng \
   plantuml \
   python-is-python3 \
   ranger \
+  rocksdb-tools \
   ruby \
   ruby-dev \
-  rocksdb-tools \
   shellcheck \
   sloccount \
+  sudo \
   uuid-dev \
   w3m \
   webp \
   xmlstarlet \
   xmlto \
   xsltproc \
-  yui-compressor \
   yamllint \
+  yui-compressor \
   && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g \
@@ -157,10 +164,14 @@ RUN gem install \
   syntax --no-document
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  fakeroot \
-  sudo \
-  openssh-client \
+  libicu76 \
+  debian-goodies \
+  dctrl-tools \
   && rm -rf /var/lib/apt/lists/*
+
+# From debian-goodies
+# dpigs -n 200 -H > dpigs.txt
+
 
 RUN useradd -m -s /bin/bash ci-user
 
