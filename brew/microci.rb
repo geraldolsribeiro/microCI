@@ -1,8 +1,8 @@
 class Microci < Formula
   desc "Minimalist continuous integration tool"
   homepage "https://microci.dev"
-  url "https://github.com/geraldolsribeiro/microCI/archive/refs/tags/v0.42.0.tar.gz"
-  sha256 "16fd7fd829578415a8cdaee50f5f2183fec6992e052b00e88741fdfd53645be1"
+  url "https://github.com/geraldolsribeiro/microCI/archive/refs/tags/v0.48.0.tar.gz"
+  sha256 "345ee38e7b01d07bc3b50e45cb41505c7682841a2d34fd627c72476efcaf87eb"
   license "MIT"
   head "https://github.com/geraldolsribeiro/microci.git", branch: "master"
 
@@ -11,7 +11,7 @@ class Microci < Formula
   depends_on "yaml-cpp"
 
   def install
-    system "make", "-C", "src", "CXXFLAGS=-std=c++17 -DFMT_HEADER_ONLY -DSPDLOG_FMT_EXTERNAL=1 -I../include/"
+    system "make", "-C", "src", "CXXFLAGS=-std=c++20 -DFMT_HEADER_ONLY -DSPDLOG_FMT_EXTERNAL=1 -I../include/ -I../include/3rd"
     bin.mkpath
     bin.install "bin/microCI"
   end
