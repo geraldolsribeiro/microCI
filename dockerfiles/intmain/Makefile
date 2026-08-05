@@ -27,8 +27,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.2
-IMAGE_NAME=microci_git
+VERSION=0.1
+IMAGE_NAME=microci_intmain
 
 .PHONY: all
 all: publish
@@ -38,18 +38,14 @@ update:
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
 .PHONY: build
-build:
-	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
+build: update
+	DOCKER_BUILDKIT=1 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
-bash:
-	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) bash
-
 .PHONY: test
-test:
-	docker run --rm intmain/$(IMAGE_NAME):$(VERSION)
-	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) git archive --format=tar --remote='https://github.com/geraldolsribeiro/microCI.git' HEAD 'README.md'
-	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) git clone https://github.com/geraldolsribeiro/microCI.git /tmp/microCI
+test: build
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) g++ --version
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) grep "ci-user" /etc/passwd
 
 .PHONY: publish
 publish:: build

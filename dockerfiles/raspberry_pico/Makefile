@@ -48,11 +48,11 @@ bash:
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-format --version
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy --version
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang --version
-		docker run -it intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION)
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-format --version
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-tidy --version
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang --version
+		docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 
 .PHONY: publish
 publish:: build

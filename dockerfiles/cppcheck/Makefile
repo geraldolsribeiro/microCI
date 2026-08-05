@@ -44,8 +44,8 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) cppcheck --help
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION)
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) cppcheck --help
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION)
 
 .PHONY: publish
 publish:: build

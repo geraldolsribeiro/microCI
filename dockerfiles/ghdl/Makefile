@@ -51,11 +51,11 @@ bash:
 
 .PHONY: test
 test:
-	docker run --rm -it intmain/$(IMAGE_NAME):$(VERSION)
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION)
 	docker run --rm \
 		--user $(shell id -u):$(shell id -g) \
 		--volume $(shell pwd):/microci_workspace \
-		-it intmain/$(IMAGE_NAME):$(VERSION) \
+		intmain/$(IMAGE_NAME):$(VERSION) \
 		ghdl -a --std=08 all08.vhdl
 
 .PHONY: publish

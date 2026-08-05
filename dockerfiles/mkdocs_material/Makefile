@@ -44,8 +44,8 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) mkdocs --help
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) python -c "import os; print(*os.environ['PATH'].split(os.pathsep), sep='\n')"
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) mkdocs --help
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) python -c "import os; print(*os.environ['PATH'].split(os.pathsep), sep='\n')"
 
 .PHONY: publish
 publish:: build

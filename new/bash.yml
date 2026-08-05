@@ -16,6 +16,10 @@ steps:
       ENV1: "value of the environment variable ENV1"
       ENV2: "value of the environment variable ENV2"
       # Tip: environment variables defined at .env or ~/.microCI.env are injected here during the execution
+    volumes:
+      - source: /tmp/myhost
+        destination: /tmp/mycontainer
+        mode: rw
     plugin:
       name: bash         # Required
       bash: |            # Required

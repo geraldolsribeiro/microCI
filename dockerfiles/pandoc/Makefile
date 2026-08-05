@@ -44,8 +44,8 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):latest --print-default-template=latex > default.latex
-	docker run -it intmain/$(IMAGE_NAME):latest --help
+	docker run --rm intmain/$(IMAGE_NAME):latest --print-default-template=latex > default.latex
+	docker run --rm intmain/$(IMAGE_NAME):latest --help
 
 .PHONY: publish
 publishi:: build

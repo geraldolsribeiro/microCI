@@ -44,8 +44,8 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):$(VERSION) plantuml -h
-	docker run -it --user $(shell id -u):$(shell id -g) -v${PWD}:/ws --workdir /ws intmain/$(IMAGE_NAME):$(VERSION) plantuml teste.pu
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) plantuml -h
+	docker run --rm --user $(shell id -u):$(shell id -g) -v${PWD}:/ws --workdir /ws intmain/$(IMAGE_NAME):$(VERSION) plantuml teste.pu
 
 .PHONY: publish
 publish:: build

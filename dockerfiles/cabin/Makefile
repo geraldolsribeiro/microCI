@@ -44,11 +44,11 @@ build: update
 
 .PHONY: test
 test:
-	docker run -it intmain/$(IMAGE_NAME):latest cabin -h
-	docker run -it intmain/$(IMAGE_NAME):latest pwd
-	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest rm -rf myproj
-	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest cabin new myproj
-	docker run -it --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest { cd myproj; cabin run; }
+	docker run --rm intmain/$(IMAGE_NAME):latest cabin -h
+	docker run --rm intmain/$(IMAGE_NAME):latest pwd
+	docker run --rm --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest rm -rf myproj
+	docker run --rm --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest cabin new myproj
+	docker run --rm --volume $(shell pwd):/microci_workspace intmain/$(IMAGE_NAME):latest { cd myproj; cabin run; }
 
 .PHONY: publish
 publish:: build
