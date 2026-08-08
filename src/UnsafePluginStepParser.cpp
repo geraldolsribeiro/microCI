@@ -58,34 +58,72 @@ void UnsafePluginStepParser::Parse(const YAML::Node &step) {
 
   auto ss = std::stringstream{cmdsStr};
   while (getline(ss, line, '\n')) {
-    // Don't escape "
-    // line = replaceAll(line, "\"", "\\\"");
-
     if (!line.empty() && line.at(0) != '#') {
       cmds.push_back(line);
     }
   }
 
-  for (const auto name : {"docker", "network", "volumes", "devices", "ssh"}) {
+  for (const auto name : {"docker", "network", "volumes", "run_as", "devices", "ssh"}) {
     if (step[name]) {
       throw std::invalid_argument(fmt::format("unsafe plugin does not support the '{}' field", name));
     }
   }
 
-  // auto volumes             = parseVolumes(step);
-  auto envs = parseEnvs(step);
-  // data                     = parseRunAs(step, data, "user");
-  // data                     = parseNetwork(step, data, "none");
-  // data                     = parseDevices(step, data);
-  // tie(data, volumes, envs) = parseSsh(step, data, volumes, envs);
-  //
+  auto envs                = parseEnvs(step);
   data["STEP_NAME"]        = stepName(step);
   data["STEP_DESCRIPTION"] = stepDescription(step, "Execute commands at bash shell");
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
   data["STEP_NAME_PREFIX"] = "🔴🔴🔴";
-  // data["DOCKER_IMAGE"]     = stepDockerImage(step);
-  //
-  mMicroCI->Script() << "# 🔴🔴🔴 UNSAFE STEP 🔴🔴🔴\n";
+
+  mMicroCI->Script() << "# 🔴🔴🔴 UNSAFE STEP BEGIN 🔴🔴🔴\n";
+
+  if (step["plugin"]["required"]) {
+    if (step["plugin"]["required"]["commands"] && step["plugin"]["required"]["commands"].IsSequence()) {
+      for (auto comm : step["plugin"]["required"]["commands"]) {
+        data["COMMAND"]          = comm.as<std::string>();
+        data["COMMAND_CENTERED"] = fmt::format("{:^52}", comm.as<std::string>());
+        mMicroCI->Script() << inja::render(R"(
+command -v {{ COMMAND }} &>/dev/null || {
+echo "┌──────────────────────────────────────────────────────┐"
+echo "│              UNSAFE COMMAND NOT FOUND                │"
+echo "├──────────────────────────────────────────────────────┤"
+echo "│ {{ COMMAND_CENTERED }} │"
+echo "└──────────────────────────────────────────────────────┘"
+exit 1; }
+)",
+                                           data);
+      }
+    }
+  }
+
+  if (step["plugin"]["required"]) {
+    if (step["plugin"]["required"]["files"] && step["plugin"]["required"]["files"].IsSequence()) {
+      for (auto comm : step["plugin"]["required"]["files"]) {
+        data["FILENAME"]          = comm.as<std::string>();
+        data["FILENAME_CENTERED"] = fmt::format("{:^52}", comm.as<std::string>());
+        mMicroCI->Script() << inja::render(R"(
+if [ ! -f {{ FILENAME }} ]; then
+  echo "┌──────────────────────────────────────────────────────┐"
+  echo "│              UNSAFE FILENAME NOT FOUND               │"
+  echo "├──────────────────────────────────────────────────────┤"
+  echo "│ {{ FILENAME_CENTERED }} │"
+  echo "└──────────────────────────────────────────────────────┘"
+exit 1
+fi
+)",
+                                           data);
+      }
+    }
+  }
+
+  // command -v jq &>/dev/null ||
+  //   {
+  //     echo -e "{{RED}}The utility jq was not found in the system{{CLEAR}}"
+  //     echo "{{RED}}Try: {{GREEN}}sudo apt install jq"
+  //     echo "{{RED}}Try: {{GREEN}}brew install jq"
+  //     exit 1
+  //   }
+
   beginFunction(data, envs);
   // prepareRunDocker(data, envs, volumes);
   //
@@ -113,7 +151,7 @@ void UnsafePluginStepParser::Parse(const YAML::Node &step) {
   for (auto cmd : cmds) {
     mMicroCI->Script() << fmt::format(" \\\n           && {} 2>&1", cmd);
   }
-  // mMicroCI->Script() << "\"\n";
   endFunction(data);
+  mMicroCI->Script() << "# 🔴🔴🔴 UNSAFE STEP END 🔴🔴🔴\n";
 }
 }  // namespace microci
