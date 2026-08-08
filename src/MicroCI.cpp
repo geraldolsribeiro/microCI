@@ -531,6 +531,8 @@ auto MicroCI::DefaultDataTemplate() const -> json {
   data["PURPLE_BOLD"]    = "\033[1;35m";
   data["PURPLE_INTENSE"] = "\033[0;95m";
 
+  data["STEP_NAME_PREFIX"] = "";
+
   data["APPEND_LOG_TEE_FLAG"] = mAppendLog ? " -a" : "";
 
 #ifdef __APPLE__

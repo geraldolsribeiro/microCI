@@ -211,7 +211,7 @@ rebuild: clean
 
 .PHONY: mac_deps
 mac_deps:
-	brew install spdlog yaml-cpp inja
+	brew install spdlog yaml-cpp inja glow
 
 .PHONY: debian_deps
 debian_deps:

@@ -74,19 +74,22 @@ auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, co
 // ----------------------------------------------------------------------
 // Priority of docker image used by pipeline step:
 //
-// 1. YAML docker property
+// 1. microCI.yml docker property
 // 2. Plugin default
 // 3. Global default
 // ----------------------------------------------------------------------
 auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &overrideDefaultImage) const
     -> std::string {
+  // 3 - Global default
   std::string dockerImage = mMicroCI->DefaultDockerImage();
 
+  // 2 - Plugin default
   if (!overrideDefaultImage.empty()) {
     dockerImage = overrideDefaultImage;
     mMicroCI->AddDockerImage(overrideDefaultImage);
   }
 
+  // 1 - microCI.yml
   if (step["docker"]) {
     dockerImage = step["docker"].as<std::string>();
   }
@@ -158,7 +161,7 @@ void PluginStepParser::beginFunction(const json &data, const std::set<Environmen
 # ----------------------------------------------------------------------
 function step_{{ FUNCTION_NAME }}() {
   local SECONDS=0
-  local MICROCI_STEP_NAME="{{ STEP_NAME }}"
+  local MICROCI_STEP_NAME="{{STEP_NAME_PREFIX}}{{ STEP_NAME }}"
   local MICROCI_STEP_DESCRIPTION="{{ STEP_DESCRIPTION }}"
   local MICROCI_GIT_ORIGIN=$( git config --get remote.origin.url || echo "GIT ORIGIN NOT FOUND" )
   local MICROCI_GIT_COMMIT_SHA=$( git rev-parse --short HEAD || echo "GIT COMMIT HASH NOT FOUND")
