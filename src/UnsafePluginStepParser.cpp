@@ -116,36 +116,7 @@ fi
     }
   }
 
-  // command -v jq &>/dev/null ||
-  //   {
-  //     echo -e "{{RED}}The utility jq was not found in the system{{CLEAR}}"
-  //     echo "{{RED}}Try: {{GREEN}}sudo apt install jq"
-  //     echo "{{RED}}Try: {{GREEN}}brew install jq"
-  //     exit 1
-  //   }
-
   beginFunction(data, envs);
-  // prepareRunDocker(data, envs, volumes);
-  //
-  // if (step["plugin"]["sh"]) {
-  //   mMicroCI->Script() << inja::render(R"( \
-  //       /bin/sh)",
-  //                                      data);
-  // } else if (step["plugin"]["bash"]) {
-  //   mMicroCI->Script() << inja::render(R"( \
-  //       /bin/bash)",
-  //                                      data);
-  // } else {
-  //   throw std::invalid_argument("No valid shell defined");
-  // }
-  //
-  // for (const auto &opt : opts) {
-  //   mMicroCI->Script() << " " << opt;
-  // }
-  //
-  // mMicroCI->Script() << inja::render(R"( -c "cd {{ WORKSPACE }})", data);
-  //
-  // copySshIfAvailable(step, data);
 
   mMicroCI->Script() << "           :";
   for (auto cmd : cmds) {
