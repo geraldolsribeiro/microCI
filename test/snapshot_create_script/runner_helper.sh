@@ -36,9 +36,25 @@ trap 'rm -rf "$workdir"' EXIT
 cp "$input_rel" "$workdir/input.yml"
 ../bin/microCI -i "$workdir/input.yml" >"$workdir/out.sh"
 
+# Adaptation #1:
+# The microCI version was replaced by v9.99.9
+#
+# Adaptation #2:
+# The way to generate random suffix is different from Linux to Mac:
+# --name microci_create_pdf_presentation_from_markdown_$(head -c 8 /proc/sys/kernel/random/uuid) \
+# --name microci_create_pdf_presentation_from_markdown_$(uuidgen | head -c 8) \
+# Using the Linux command in MacOS test
+#
+# Adaptation #3:
+# -    yq -r .steps[].name "input.yml" |
+# +    yq -r .steps[].name "/var/folders/53/24yxp1tx4rgcp5km73xrh0580000gn/T/tmp.q0B7SJLVse/input.yml" |
+
 normalize() {
   # Keep snapshots stable by removing runtime-only paths.
-  sed -E 's#/tmp/tmp\.[^/]+/##g;'
+  sed -E 's#/tmp/tmp\.[^/]+/##g;' |
+    sed -E "s/microCI v0.[0-9][0-9].[0-9]/microCI v9.99.9/" |
+    sed -E "s#uuidgen \\| head -c 8#head -c 8 /proc/sys/kernel/random/uuid#" |
+    sed -E "s#/var/folders/.*input.yml#input.yml#"
   # sed -E 's#/tmp/tmp\.[^/]+#<TMPDIR>#g; s#<TMPDIR>/input\.yml#<INPUT>#g; s#snapshot_create_script/[^" ]+/input\.yml#<INPUT>#g; s#[A-Za-z0-9_-]+//input\.yml#<INPUT>#g'
 }
 

@@ -331,9 +331,10 @@ rebuild: clean
 # ==============================================================================
 
 # MacOS dependency installation
+# coreutils provides timeout command used in tests
 .PHONY: mac_deps
 mac_deps:
-	brew install spdlog yaml-cpp inja glow upx # Install macOS dependencies
+	brew install spdlog yaml-cpp inja glow upx coreutils # Install macOS dependencies
 
 # Debian/Ubuntu dependency installation
 .PHONY: debian_deps

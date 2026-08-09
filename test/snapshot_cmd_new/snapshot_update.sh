@@ -5,6 +5,10 @@ set -euo pipefail
 # This helper mirrors snapshot_create_script/update_expected.yml.
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+rm -f ./mkdocs_material/mkdocs.yml
+rm -f ./mkdocs_material/docs/index.md
+rm -f ./clang-format/.clang-format
+
 for dir in "$script_dir"/*/; do
   [[ -f "${dir}test.sh" ]] || continue
   test_name="$(basename "$dir")"
