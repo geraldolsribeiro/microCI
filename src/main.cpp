@@ -38,9 +38,9 @@
 #include <set>
 #include <sstream>
 
+#include "3rd/argh.h"
+#include "3rd/inicpp.h"
 #include "ConsoleBox.hpp"
-#include "argh.h"
-#include "inicpp.h"
 
 // Plugins
 #include "AsciidocPluginStepParser.hpp"
@@ -65,6 +65,7 @@
 #include "PluginStepParser.hpp"
 #include "RaspberryPicoPluginStepParser.hpp"
 #include "TemplatePluginStepParser.hpp"
+#include "UnsafePluginStepParser.hpp"
 #include "VHDLFormatPluginStepParser.hpp"
 
 // Configuration templates
@@ -98,6 +99,7 @@
 #include "new/raspberry_pico.hpp"
 #include "new/skip.hpp"
 #include "new/template.hpp"
+#include "new/unsafe.hpp"
 #include "new/vhdl-format.hpp"
 
 // Help
@@ -105,6 +107,7 @@
 #include "help/beamer.hpp"
 #include "help/clang-format.hpp"
 #include "help/cpp.hpp"
+#include "help/unsafe.hpp"
 // #include "help/clang-format_config.hpp"
 #include "help/clang-tidy.hpp"
 #include "help/cppcheck.hpp"
@@ -207,6 +210,7 @@ Options:
   -n,--new docker_build    Create a local docker build step
   -n,--new template        Create a template step
   -n,--new raspberry_pico  Create a embedded software build step - Raspberry Pico
+  -n,--new unsafe          Create a command line step in host
 )";
 }
 
@@ -585,6 +589,7 @@ sudo rm -f /usr/bin/microCI
     uCI.RegisterPlugin("asciidoc", std::make_shared<AsciidocPluginStepParser>(&uCI));
     uCI.RegisterPlugin("template", std::make_shared<TemplatePluginStepParser>(&uCI));
     uCI.RegisterPlugin("raspberry_pico", std::make_shared<RaspberryPicoPluginStepParser>(&uCI));
+    uCI.RegisterPlugin("unsafe", std::make_shared<UnsafePluginStepParser>(&uCI));
 
     loadMicroCIEnviromentVariables(uCI, envp);
     loadGitlabEnvironmentVariables(uCI, envp);

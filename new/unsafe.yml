@@ -1,0 +1,22 @@
+#   # unsafe plugin
+#   
+#{{{
+steps:
+  - name: "Execute commands on host"
+    description: "Description of this step"
+    envs:                # Optional;
+      ENV1: "value of the environment variable ENV1"
+      ENV2: "value of the environment variable ENV2"
+      # Tip: environment variables defined at .env or ~/.microCI.env are injected here during the execution
+    plugin:
+      name: unsafe
+      required:
+        commands:
+          - hostname
+          - whoami
+        files:
+          - /etc/passwd
+      bash: |
+        hostname
+        whoami
+#}}}

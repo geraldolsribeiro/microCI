@@ -1,0 +1,16 @@
+steps:
+  - name: "Test unsafe script 01"
+    network: none
+    plugin:
+      name: unsafe
+      required:
+        commands:
+          - hostname
+          - whoami
+        files:
+          - /etc/passwd
+      bash: |
+        echo 'AAA' > file.txt
+        hostname >> file.txt
+        whoami >> file.txt
+        echo "BBB" >> file.txt

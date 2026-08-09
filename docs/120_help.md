@@ -58,5 +58,6 @@ Options:
   -n,--new docker_build    Create a local docker build step
   -n,--new template        Create a template step
   -n,--new raspberry_pico  Create a embedded software build step - Raspberry Pico
+  -n,--new unsafe          Create a command line step in host
 
 ```
