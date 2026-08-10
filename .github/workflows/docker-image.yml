@@ -2,10 +2,11 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches:
-      - master
+    # branches:
+    #   - master
     paths:
       - 'dockerfiles/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
