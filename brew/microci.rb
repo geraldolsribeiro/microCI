@@ -1,8 +1,8 @@
 class Microci < Formula
   desc "Minimalist continuous integration tool"
   homepage "https://microci.dev"
-  url "https://github.com/geraldolsribeiro/microCI/archive/refs/tags/v0.48.0.tar.gz"
-  sha256 "345ee38e7b01d07bc3b50e45cb41505c7682841a2d34fd627c72476efcaf87eb"
+  url "https://github.com/geraldolsribeiro/microCI/archive/refs/tags/v0.49.1.tar.gz"
+  sha256 "b8bf5c601d1b7d8c1058127c7ae1c33f80e5d680fa7062c505b9a66668def0c3"
   license "MIT"
   head "https://github.com/geraldolsribeiro/microci.git", branch: "master"
 
