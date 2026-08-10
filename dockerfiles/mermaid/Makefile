@@ -29,13 +29,14 @@
 
 VERSION=0.1
 IMAGE_NAME=microci_mermaid
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
 
 .PHONY: build
 build:
-	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test

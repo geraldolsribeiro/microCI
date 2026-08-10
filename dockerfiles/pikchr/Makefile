@@ -29,6 +29,7 @@
 
 VERSION=0.1
 IMAGE_NAME=microci_pikchr
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
@@ -45,7 +46,7 @@ update:
 
 .PHONY: build
 build: update
-	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test
