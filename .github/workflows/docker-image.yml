@@ -18,24 +18,24 @@ jobs:
       - id: set-matrix
         run: |
           matrix=$(python3 - <<'PY'
-import json, pathlib, re
-items = []
-for mf in sorted(pathlib.Path('dockerfiles').glob('*/Makefile')):
-    text = mf.read_text()
-    version = re.search(r'^VERSION\s*[:?+]?=\s*(.+)$', text, re.M)
-    image_name = re.search(r'^IMAGE_NAME\s*[:?+]?=\s*(.+)$', text, re.M)
-    platforms = re.search(r'^PLATFORMS\s*[:?+]?=\s*(.+)$', text, re.M)
-    dockerfile = mf.parent / 'Dockerfile'
-    if dockerfile.exists() and version and image_name and platforms:
-        items.append({
-            'context': str(mf.parent),
-            'version': version.group(1).strip(),
-            'image_name': image_name.group(1).strip(),
-            'platforms': platforms.group(1).strip(),
-        })
-print(json.dumps({'include': items}))
-PY
-)
+          import json, pathlib, re
+          items = []
+          for mf in sorted(pathlib.Path('dockerfiles').glob('*/Makefile')):
+              text = mf.read_text()
+              version = re.search(r'^VERSION\s*[:?+]?=\s*(.+)$', text, re.M)
+              image_name = re.search(r'^IMAGE_NAME\s*[:?+]?=\s*(.+)$', text, re.M)
+              platforms = re.search(r'^PLATFORMS\s*[:?+]?=\s*(.+)$', text, re.M)
+              dockerfile = mf.parent / 'Dockerfile'
+              if dockerfile.exists() and version and image_name and platforms:
+                  items.append({
+                      'context': str(mf.parent),
+                      'version': version.group(1).strip(),
+                      'image_name': image_name.group(1).strip(),
+                      'platforms': platforms.group(1).strip(),
+                  })
+          print(json.dumps({'include': items}))
+          PY
+          )
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   build-and-push:
