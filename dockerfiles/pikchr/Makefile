@@ -29,23 +29,18 @@
 
 VERSION=0.1
 IMAGE_NAME=microci_pikchr
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
 
 .PHONY: update
 update:
-	rm -rf pikchr_src
-	git clone https://github.com/geraldolsribeiro/pikchr.git pikchr_src
-	sed -i "s/^\(CFLAGS =.*\)/\1 -static/" pikchr_src/Makefile
-	make -C pikchr_src
-	cp pikchr_src/pikchr .
-	rm -rf pikchr_src
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
 .PHONY: build
 build: update
-	docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test

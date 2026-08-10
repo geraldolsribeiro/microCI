@@ -29,6 +29,7 @@
 
 VERSION=0.1.0
 IMAGE_NAME=microci_raspberry_pico
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
@@ -39,7 +40,7 @@ update:
 
 .PHONY: build
 build:
-	docker buildx build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
+	docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: bash

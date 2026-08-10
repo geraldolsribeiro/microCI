@@ -36,9 +36,12 @@ LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldols
 # ADD https://github.com/sclevine/yj/releases/latest/download/yj-linux-amd64 /bin/yj
 # RUN chmod 755 /bin/yj
 
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt/lists \
-    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+
+# RUN --mount=type=cache,target=/var/cache/apt \
+#     --mount=type=cache,target=/var/lib/apt/lists \
+
+RUN \
+  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   ack \
   apt-utils \
   bash \

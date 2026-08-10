@@ -1,0 +1,89 @@
+---
+name: Build and Push Docker Images
+
+on:
+  push:
+    # branches:
+    #   - master
+    paths:
+      - 'dockerfiles/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: |
+          matrix=$(python3 - <<'PY'
+          import json, pathlib, re
+          items = []
+          for mf in sorted(pathlib.Path('dockerfiles').glob('*/Makefile')):
+              text = mf.read_text()
+              version = re.search(r'^VERSION\s*[:?+]?=\s*(.+)$', text, re.M)
+              image_name = re.search(r'^IMAGE_NAME\s*[:?+]?=\s*(.+)$', text, re.M)
+              platforms = re.search(r'^PLATFORMS\s*[:?+]?=\s*(.+)$', text, re.M)
+              dockerfile = mf.parent / 'Dockerfile'
+              if dockerfile.exists() and version and image_name and platforms:
+                  items.append({
+                      'context': str(mf.parent),
+                      'version': version.group(1).strip(),
+                      'image_name': image_name.group(1).strip(),
+                      'platforms': platforms.group(1).strip(),
+                  })
+          print(json.dumps({'include': items}))
+          PY
+          )
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  build-and-push:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set image name
+        id: image
+        run: |
+          echo "image_name=intmain/${{ matrix.image_name }}" >> "$GITHUB_OUTPUT"
+          echo "version=${{ matrix.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.image_name }}
+          tags: |
+            type=raw,value=${{ steps.image.outputs.version }}
+            type=raw,value=latest
+
+      - name: Set up QEMU
+        if: contains(matrix.platforms, 'arm64')
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/Dockerfile
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

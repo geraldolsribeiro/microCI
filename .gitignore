@@ -39,3 +39,4 @@ test/runtime/runtime-junit.xml
 dockerfiles/raspberry_pico/test_01/build
 dockerfiles/raspberry_pico/test_02/build
 /test/runtime/bash_04/apt.txt.bak
+/dockerfiles/pikchr/pikchr_src

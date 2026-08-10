@@ -27,8 +27,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.1
+VERSION=0.2
 IMAGE_NAME=microci_intmain
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
@@ -39,7 +40,7 @@ update:
 
 .PHONY: build
 build: update
-	DOCKER_BUILDKIT=1 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
+	DOCKER_BUILDKIT=1 docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test

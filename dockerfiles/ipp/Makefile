@@ -29,10 +29,10 @@
 
 VERSION=0.1
 IMAGE_NAME=microci_ipp
+PLATFORMS=linux/amd64
 
 .PHONY: all
-all:
-#all: publish
+all: publish
 
 .PHONY: update
 update:
@@ -40,7 +40,7 @@ update:
 
 .PHONY: build
 build: update
-	docker build -t intmain/$(IMAGE_NAME):0.1 -f Dockerfile .
+	docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile .
 
 .PHONY: test
 test:

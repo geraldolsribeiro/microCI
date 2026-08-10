@@ -29,6 +29,7 @@
 
 VERSION=0.3.1
 IMAGE_NAME=microci_doxygen
+PLATFORMS=linux/amd64
 
 .PHONY: all
 all: publish
@@ -39,7 +40,7 @@ update:
 
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=0 docker build -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
+	DOCKER_BUILDKIT=0 docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 bash:

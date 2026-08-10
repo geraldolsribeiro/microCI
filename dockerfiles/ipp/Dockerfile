@@ -27,19 +27,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM python:slim-bullseye
+FROM python:slim-trixie
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 # https://www.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-using-package-managers/apt.html
 
-RUN apt-get update \
-  && apt-get install -y wget gpg \
-  && wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-  | gpg --dearmor \
-  | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null \
-  && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-  | tee /etc/apt/sources.list.d/oneAPI.list \
-  && apt-get update && apt-get install -y intel-oneapi-ipp-devel-2021.3.0 intel-oneapi-ipp-2021.3.0 \
-  && apt-get clean
+RUN set -eux; \
+  apt-get update; \
+  apt-get install -y --no-install-recommends ca-certificates wget gpg; \
+  wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+    | gpg --dearmor \
+    | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null; \
+  echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+    > /etc/apt/sources.list.d/oneAPI.list; \
+  dpkg --print-architecture | grep -qx amd64; \
+  apt-get update; \
+  apt-cache search '^intel-oneapi-ipp' | sed -n '1,20p'; \
+  apt-get install -y --no-install-recommends intel-oneapi-ipp-devel intel-oneapi-ipp; \
+  rm -rf /var/lib/apt/lists/*
 
 

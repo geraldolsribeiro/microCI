@@ -29,6 +29,7 @@
 
 VERSION=0.1
 IMAGE_NAME=microci_omnetpp
+PLATFORMS=linux/amd64
 
 skip:
 
@@ -46,7 +47,7 @@ update:
 
 .PHONY: build
 build: update
-	docker build --progress=plain --tag intmain/$(IMAGE_NAME):$(VERSION) --file Dockerfile .
+	docker buildx build --platform $(PLATFORMS) --load --progress=plain --tag intmain/$(IMAGE_NAME):$(VERSION) --file Dockerfile .
 	docker tag                          intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: test
