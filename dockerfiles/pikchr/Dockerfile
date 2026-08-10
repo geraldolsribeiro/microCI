@@ -27,12 +27,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM alpine:latest
+FROM alpine:latest AS builder
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
+RUN apk add --no-cache build-base git
+WORKDIR /src
+RUN git clone https://github.com/geraldolsribeiro/pikchr.git . \
+    && make CC=cc CFLAGS='-O2 -static' LDFLAGS='-static'
+
+FROM alpine:latest
 RUN apk add --no-cache rsvg-convert bash inkscape
 RUN mkdir -p /.config/inkscape && chmod 777 /.config/inkscape
-
+COPY --from=builder /src/pikchr /bin/pikchr
 WORKDIR /microci_workspace/
-COPY pikchr /bin/
 CMD ["bash"]

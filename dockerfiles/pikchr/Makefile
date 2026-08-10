@@ -36,12 +36,6 @@ all: publish
 
 .PHONY: update
 update:
-	rm -rf pikchr_src
-	git clone https://github.com/geraldolsribeiro/pikchr.git pikchr_src
-	sed -i "s/^\(CFLAGS =.*\)/\1 -static/" pikchr_src/Makefile
-	make -C pikchr_src
-	cp pikchr_src/pikchr .
-	rm -rf pikchr_src
 	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
 
 .PHONY: build
