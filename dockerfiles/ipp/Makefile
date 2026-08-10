@@ -32,8 +32,7 @@ IMAGE_NAME=microci_ipp
 PLATFORMS=linux/amd64
 
 .PHONY: all
-all:
-#all: publish
+all: publish
 
 .PHONY: update
 update:
