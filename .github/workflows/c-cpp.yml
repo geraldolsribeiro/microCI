@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    if: false
+    # if: false # Uncomment to disable
     runs-on: ubuntu-latest
     container:
       image: debian:trixie-slim
