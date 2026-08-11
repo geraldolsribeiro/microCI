@@ -27,7 +27,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM python:slim-bookworm
+FROM python:slim-trixie
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN PIP_NO_CACHE_DIR=1 pip3 install --no-cache --upgrade pip setuptools \
@@ -38,9 +38,13 @@ RUN PIP_NO_CACHE_DIR=1 pip3 install --no-cache --upgrade pip setuptools \
   mkdocs-mermaid2-plugin \
   mkdocs-static-i18n
 
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential python3-dev && rm -rf /var/lib/apt/lists/*
 RUN PIP_NO_CACHE_DIR=1 pip3 install mkdocs-with-pdf mkdocs-build-plantuml-plugin
 
-RUN apt-get update && apt-get install -y chromium-driver && apt-get clean
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends chromium chromium-driver; \
+    rm -rf /var/lib/apt/lists/*
 
 RUN PIP_NO_CACHE_DIR=1 pip3 install qrcode
 
