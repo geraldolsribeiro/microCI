@@ -27,16 +27,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-VERSION=0.3.0
+VERSION=0.2.1
 IMAGE_NAME=microci_pandoc
-PLATFORMS=linux/amd64,linux/arm64
+PLATFORMS=linux/amd64
+
 
 .PHONY: all
 all: publish
 
 .PHONY: update
 update:
-	docker pull $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
+	docker pull --platform linux/amd64 $(shell awk '/^FROM/ { print $$2; exit }' Dockerfile)
+	# There is no arm64 pandoc image, using amd64 for all
 
 .PHONY: build
 build: update
@@ -49,7 +51,7 @@ test:
 	docker run --rm intmain/$(IMAGE_NAME):latest --help
 
 .PHONY: publish
-publishi:: build
+publish: build
 	docker login
 	docker push intmain/$(IMAGE_NAME):$(VERSION)
 	docker push intmain/$(IMAGE_NAME):latest
