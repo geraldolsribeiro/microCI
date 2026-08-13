@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="snapshot_cmd_external" tests="3" failures="0" skipped="0">
+  <testcase name="argh" time="0.155">
+  </testcase>
+  <testcase name="doctest" time="0.137">
+  </testcase>
+  <testcase name="nlohmann_json" time="0.145">
+  </testcase>
+</testsuite>

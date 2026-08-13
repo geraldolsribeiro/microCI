@@ -29,7 +29,11 @@ SHELL=bash
 	diff $(word 1,$^) $(word 2,$^) > /dev/null || echo "ERROR $(word 1,$^)"
 
 .PHONY: test
-test: snapshot_create_script_test snapshot_cmd_new_test runtime_test
+test: \
+	snapshot_create_script_test \
+	snapshot_cmd_new_test \
+	snapshot_cmd_external_test \
+	runtime_test
 
 .PHONY: snapshot_create_script_test
 snapshot_create_script_test:
@@ -39,9 +43,13 @@ snapshot_create_script_test:
 snapshot_create_script_update:
 	./snapshot_create_script/update_expected.sh
 
-.PHONY: snapshot_cmd_new_test runtime_test
+.PHONY: snapshot_cmd_new_test
 snapshot_cmd_new_test:
 	./snapshot_cmd_new/test_all.sh
+
+.PHONY: snapshot_cmd_external_test
+snapshot_cmd_external_test:
+	./snapshot_cmd_external/test_all.sh
 
 .PHONY: runtime_test
 runtime_test:

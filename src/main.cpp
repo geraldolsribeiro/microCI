@@ -136,6 +136,11 @@
 // #include "help/template.hpp"
 // #include "help/vhdl-format.hpp"
 
+// External
+#include "external/argh.hpp"
+#include "external/doctest.hpp"
+#include "external/nlohmann_json.hpp"
+
 // main class
 #include "MicroCI.hpp"
 
@@ -147,6 +152,7 @@ auto commandLineValidOptions() -> std::set<std::string> {
       "a", "append-log",
       "c", "config",
       "D", "update-dev",
+      "e", "external",
       "h", "help",
       "H", "home",
       "i", "input",
@@ -155,8 +161,8 @@ auto commandLineValidOptions() -> std::set<std::string> {
       "N", "number",
       "O", "only",
       "T", "test-config",
-      "u", "update",
       "U", "update-db",
+      "u", "update",
       "V", "version",
       "x", "hash",
       "X", "uninstall",
@@ -222,6 +228,41 @@ struct TemplateFile {
 };
 
 using TemplateType = std::string;
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void mergeTemplateToFile(const std::string &yamlFileName, [[maybe_unused]] const TemplateType &type,
+                         const TemplateFile &tpl) {
+  auto fileName = tpl.fileName;
+  // Caso seja utilizado algum path diferente do default
+  if (fileName == ".microCI.yml") {
+    fileName = yamlFileName;
+  }
+
+  auto folderPos = fileName.find_last_of("/");
+  if (folderPos != std::string::npos) {
+    auto folderName = fileName.substr(0, folderPos);
+    debugConsoleBox({fmt::format("Creating folder '{}'", folderName)});
+    std::filesystem::create_directories(folderName);
+  }
+
+  if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
+    debugConsoleBox({fmt::format("File '{}' already exists", fileName)});
+    return;
+  } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
+    debugConsoleBox({fmt::format("The file '{}' was edited from the template", fileName)});
+    std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
+    step.erase(0, step.find("steps:") + 7);
+    std::ofstream out(fileName, std::ios_base::app);
+    out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
+    out << step;
+  } else {
+    debugConsoleBox({fmt::format("The file '{}' was created from the template", fileName)});
+    std::ofstream out(fileName);
+    out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
+  }
+}
 
 // ----------------------------------------------------------------------
 //
@@ -760,36 +801,7 @@ sudo rm -f /usr/bin/microCI
       for (const auto &[type, tpl] : templates) {
         if (newType == type) {
           isNewPluginFound = true;
-
-          auto fileName = tpl.fileName;
-
-          // Caso seja utilizado algum path diferente do default
-          if (fileName == ".microCI.yml") {
-            fileName = yamlFileName;
-          }
-
-          auto folderPos = fileName.find_last_of("/");
-          if (folderPos != std::string::npos) {
-            auto folderName = fileName.substr(0, folderPos);
-            debugConsoleBox({fmt::format("Creating folder '{}'", folderName)});
-            std::filesystem::create_directories(folderName);
-          }
-
-          if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            debugConsoleBox({fmt::format("File '{}' already exists", fileName)});
-            continue;
-          } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            debugConsoleBox({fmt::format("The file '{}' was edited from the template", fileName)});
-            std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
-            step.erase(0, step.find("steps:") + 7);
-            std::ofstream out(fileName, std::ios_base::app);
-            out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
-            out << step;
-          } else {
-            debugConsoleBox({fmt::format("The file '{}' was created from the template", fileName)});
-            std::ofstream out(fileName);
-            out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
-          }
+          mergeTemplateToFile(yamlFileName, type, tpl);
         }
       }
 
@@ -802,6 +814,43 @@ sudo rm -f /usr/bin/microCI
       msgs.push_back("Valid options for --new:");
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         msgs.push_back(fmt::format("microCI --new {}", it->first));
+      }
+      criticalErrorConsoleBox(msgs);
+      return 1;
+    }
+
+    auto external = std::string{};
+    if ((cmdl({"-e", "--external"}) >> external)) {
+      std::multimap<TemplateType, TemplateFile> templates;
+#define MICROCI_TPL(APPEND_IF_EXISTS, TYPE, FILE_NAME, FILE_EXTENSION, INCLUDE_VAR_NAME)              \
+  templates.insert(                                                                                   \
+      std::make_pair(TYPE, TemplateFile{FILE_NAME, ___external_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
+                                        ___external_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
+      // clang-format off
+      MICROCI_TPL(true, "doctest",       ".microCI.yml", yml, doctest);
+      MICROCI_TPL(true, "argh",          ".microCI.yml", yml, argh);
+      MICROCI_TPL(true, "nlohmann_json", ".microCI.yml", yml, nlohmann_json);
+      // clang-format on
+#undef MICROCI_TPL
+
+      bool isExternalFound = false;
+      for (const auto &[type, tpl] : templates) {
+        if (external == type) {
+          isExternalFound = true;
+          std::cout.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
+          mergeTemplateToFile(yamlFileName, type, tpl);
+        }
+      }
+      if (isExternalFound) {
+        return 0;  // All done
+      }
+
+      std::vector<std::string> msgs;
+      msgs.push_back(fmt::format("Invalid external: {}", external));
+      msgs.push_back("");
+      msgs.push_back("Valid options for --external:");
+      for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
+        msgs.push_back(fmt::format("microCI --external {}", it->first));
       }
       criticalErrorConsoleBox(msgs);
       return 1;
@@ -940,7 +989,6 @@ sudo rm -f /usr/bin/microCI
     }
 
     std::cout << uCI.ToString();
-
   } catch (std::invalid_argument &e) {
     criticalErrorConsoleBox({e.what()});
     return 1;

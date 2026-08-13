@@ -1,0 +1,11 @@
+steps:
+  - name: "Fetch doctest header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external/include
+      items:
+        - git_archive: https://github.com/doctest/doctest.git
+          files:
+            - doctest/doctest.h
+

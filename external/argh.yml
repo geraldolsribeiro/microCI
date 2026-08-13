@@ -1,0 +1,12 @@
+steps:
+  - name: "Fetch argh header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external/include
+      items:
+        - git_archive: https://github.com/nlohmann/json.git
+          strip-components: 1
+          files:
+            - single_include/nlohmann
+
