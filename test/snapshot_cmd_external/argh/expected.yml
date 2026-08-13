@@ -1,0 +1,10 @@
+steps:
+  - name: "Fetch argh header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external/include
+      items:
+        - git_archive: https://github.com/adishavit/argh.git
+          files:
+            - argh.h

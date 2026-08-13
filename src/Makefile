@@ -182,11 +182,12 @@ tidy:
 # directly into C++ headers as character arrays.
 #
 # Pattern matching creates:
-#   - new/*.yml → include/new/*.hpp (from YAML files)
-#   - new/*.md → include/new/*.hpp (from Markdown files)  
-#   - new/*.txt → include/new/*.hpp (from text files)
-#   - sh/*.sh → include/sh/*.hpp (from shell scripts)
-#   - 3rd/*   → include/3rd/*.hpp (third-party headers)
+#   - new/*.yml      → include/new/*.hpp (from YAML files)
+#   - new/*.md       → include/new/*.hpp (from Markdown files)
+#   - new/*.txt      → include/new/*.hpp (from text files)
+#   - sh/*.sh        → include/sh/*.hpp (from shell scripts)
+#   - 3rd/*          → include/3rd/*.hpp (third-party headers)
+#   - external/*.yml → include/external/*.hpp (third-party headers only libraries)
 
 ../include/new/%.hpp: ../new/%.yml
 	$(Q)echo "Creating $@ from $<..."
@@ -216,6 +217,15 @@ tidy:
 	$(Q)touch main.cpp
 
 ../include/help/%.hpp: ../help/%.txt
+	$(Q)echo "Creating $@..."
+	$(Q)cat .header.cpp > $@
+	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
+	$(Q)echo "// clang-format off" >> $@
+	$(Q)xxd -i $^ | sed "s/ 0x0a/\n\n\n  0x0a/g" >> $@
+	$(Q)echo "// clang-format on" >> $@
+	$(Q)touch main.cpp
+
+../include/external/%.hpp: ../external/%.yml
 	$(Q)echo "Creating $@..."
 	$(Q)cat .header.cpp > $@
 	$(Q)echo "// DON'T EDIT THIS FILE, INSTEAD UPDATE $^" >> $@
@@ -275,9 +285,9 @@ single_compilation_unit.cpp: \
 	$(wildcard ../include/*hpp) \
 	$(wildcard ../include/new/*hpp) \
 	$(wildcard ../include/sh/*hpp) \
-	Makefile \
-  ../include/3rd/beamercolorthemestr.sty.hpp \
-  ../include/3rd/str-logo.png.hpp
+	$(wildcard ../include/3rd/*hpp) \
+	$(wildcard ../include/external/*hpp) \
+	Makefile
 	$(Q)echo "// DON'T EDIT THIS FILE" > $@
 	$(Q)echo "// clang-format off" >> $@
 	$(Q)find . -name "*.cpp" \
