@@ -1,0 +1,12 @@
+  - name: "Fetch lyra header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external/include
+      items:
+        - git_archive: https://github.com/bfgroup/Lyra.git
+          tag: develop
+          strip-components: 1
+          files:
+            - include/lyra
+

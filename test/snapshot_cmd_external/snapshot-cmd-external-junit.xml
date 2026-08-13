@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="snapshot_cmd_external" tests="3" failures="0" skipped="0">
-  <testcase name="argh" time="1.985">
+<testsuite name="snapshot_cmd_external" tests="4" failures="0" skipped="0">
+  <testcase name="argh" time="2.964">
   </testcase>
-  <testcase name="doctest" time="2.172">
+  <testcase name="doctest" time="3.061">
   </testcase>
-  <testcase name="nlohmann_json" time="2.411">
+  <testcase name="lyra" time="0.567">
+  </testcase>
+  <testcase name="nlohmann_json" time="2.809">
   </testcase>
 </testsuite>

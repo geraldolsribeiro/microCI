@@ -139,6 +139,7 @@
 // External
 #include "external/argh.hpp"
 #include "external/doctest.hpp"
+#include "external/lyra.hpp"
 #include "external/nlohmann_json.hpp"
 
 // main class
@@ -811,7 +812,6 @@ sudo rm -f /usr/bin/microCI
       std::vector<std::string> msgs;
       msgs.push_back(fmt::format("Invalid plugin type: {}", newType));
       msgs.push_back("");
-      msgs.push_back("Valid options for --new:");
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         msgs.push_back(fmt::format("microCI --new {}", it->first));
       }
@@ -829,6 +829,7 @@ sudo rm -f /usr/bin/microCI
       // clang-format off
       MICROCI_TPL(true, "doctest",       ".microCI.yml", yml, doctest);
       MICROCI_TPL(true, "argh",          ".microCI.yml", yml, argh);
+      MICROCI_TPL(true, "lyra",          ".microCI.yml", yml, lyra);
       MICROCI_TPL(true, "nlohmann_json", ".microCI.yml", yml, nlohmann_json);
       // clang-format on
 #undef MICROCI_TPL
@@ -848,7 +849,6 @@ sudo rm -f /usr/bin/microCI
       std::vector<std::string> msgs;
       msgs.push_back(fmt::format("Invalid external: {}", external));
       msgs.push_back("");
-      msgs.push_back("Valid options for --external:");
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
         msgs.push_back(fmt::format("microCI --external {}", it->first));
       }

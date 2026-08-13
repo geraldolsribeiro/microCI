@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+"$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/runner_helper.sh" "lyra" "snapshot_cmd_external/lyra/expected.yml" "lyra.hpp"
