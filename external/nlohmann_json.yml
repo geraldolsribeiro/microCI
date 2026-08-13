@@ -1,11 +1,12 @@
 steps:
-  - name: "Fetch doctest header-only library"
+  - name: "Fetch nlohmann json header-only library"
     description: "Retrieve build dependencies from external sources."
     plugin:
       name: "fetch"
       target: external/include
       items:
-        - git_archive: https://github.com/doctest/doctest.git
+        - git_archive: https://github.com/nlohmann/json.git
+          strip-components: 1
           files:
-            - doctest/doctest.h
+            - single_include/nlohmann
 

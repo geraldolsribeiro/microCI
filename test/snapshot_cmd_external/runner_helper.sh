@@ -13,13 +13,14 @@ set -euo pipefail
 # This helper performs both sub-tests for a name:
 # - compare the generated `microCI --external` YAML against the name fixture
 # - compare the fixture against the canonical `../external/<name>.yml`
-if [[ $# -ne 2 ]]; then
-  echo "Usage: $0 <name> <expected.yml>" >&2
+if [[ $# -ne 3 ]]; then
+  echo "Usage: $0 <name> <expected.yml> <filename>" >&2
   exit 2
 fi
 
 name="$1"
 expected_rel="$2"
+filename="$3"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$script_dir/../.."
@@ -28,7 +29,14 @@ cd "$repo_root/test"
 # Sub-test 1: generated output vs fixture.
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
+
 (cd "$tmpdir" && "$repo_root/bin/microCI" --external "$name" >/dev/null)
+
+# Execute the step
+(cd "$tmpdir" && $repo_root/bin/microCI | bash)
+
+find "$tmpdir" -name "$filename"
+
 diff --color --unified "$expected_rel" "$tmpdir/.microCI.yml" >/dev/null
 
 # Sub-test 2: fixture vs canonical template.

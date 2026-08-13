@@ -47,6 +47,7 @@ for dir in "$script_dir"/*/; do
     fail=$((fail + 1))
     add_result "$test_name" fail "$elapsed_s" "$(capture_tail_message "$output_file")"
   fi
+  # cat "$output_file" # debug
   rm -f "$output_file"
 done
 
