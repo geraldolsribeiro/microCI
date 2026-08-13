@@ -1,13 +1,13 @@
 steps:
-  - name: "Fetch lyra header-only library"
+  - name: "Fetch spdlog header-only library"
     description: "Retrieve build dependencies from external sources."
     plugin:
       name: "fetch"
       target: external/include
       items:
-        - git_archive: https://github.com/bfgroup/Lyra.git
-          tag: develop
+        - git_archive: https://github.com/gabime/spdlog/archive/refs/tags/v1.17.0.tar.gz
+          tag: 1.17.0
           strip-components: 1
           files:
-            - include/lyra
+            - include/spdlog
 

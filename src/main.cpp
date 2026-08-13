@@ -141,6 +141,7 @@
 #include "external/doctest.hpp"
 #include "external/lyra.hpp"
 #include "external/nlohmann_json.hpp"
+#include "external/spdlog.hpp"
 
 // main class
 #include "MicroCI.hpp"
@@ -827,10 +828,11 @@ sudo rm -f /usr/bin/microCI
       std::make_pair(TYPE, TemplateFile{FILE_NAME, ___external_##INCLUDE_VAR_NAME##_##FILE_EXTENSION, \
                                         ___external_##INCLUDE_VAR_NAME##_##FILE_EXTENSION##_len, APPEND_IF_EXISTS}));
       // clang-format off
-      MICROCI_TPL(true, "doctest",       ".microCI.yml", yml, doctest);
       MICROCI_TPL(true, "argh",          ".microCI.yml", yml, argh);
+      MICROCI_TPL(true, "doctest",       ".microCI.yml", yml, doctest);
       MICROCI_TPL(true, "lyra",          ".microCI.yml", yml, lyra);
       MICROCI_TPL(true, "nlohmann_json", ".microCI.yml", yml, nlohmann_json);
+      MICROCI_TPL(true, "spdlog",        ".microCI.yml", yml, spdlog);
       // clang-format on
 #undef MICROCI_TPL
 
