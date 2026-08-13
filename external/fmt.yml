@@ -1,0 +1,13 @@
+steps:
+  - name: "Fetch fmt header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external/include
+      items:
+        - git_archive: https://github.com/fmtlib/fmt/archive/refs/tags/12.2.0.tar.gz
+          tag: 12.2.0
+          strip-components: 1
+          files:
+            - include/fmt
+
