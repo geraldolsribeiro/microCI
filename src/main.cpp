@@ -140,6 +140,7 @@
 #include "external/argh.hpp"
 #include "external/doctest.hpp"
 #include "external/fmt.hpp"
+#include "external/jwt-cpp.hpp"
 #include "external/lyra.hpp"
 #include "external/nlohmann_json.hpp"
 #include "external/spdlog.hpp"
@@ -832,6 +833,7 @@ sudo rm -f /usr/bin/microCI
       MICROCI_TPL(true, "argh",          ".microCI.yml", yml, argh);
       MICROCI_TPL(true, "doctest",       ".microCI.yml", yml, doctest);
       MICROCI_TPL(true, "fmt",           ".microCI.yml", yml, fmt);
+      MICROCI_TPL(true, "jwt-cpp",       ".microCI.yml", yml, jwt_cpp);
       MICROCI_TPL(true, "lyra",          ".microCI.yml", yml, lyra);
       MICROCI_TPL(true, "nlohmann_json", ".microCI.yml", yml, nlohmann_json);
       MICROCI_TPL(true, "spdlog",        ".microCI.yml", yml, spdlog);

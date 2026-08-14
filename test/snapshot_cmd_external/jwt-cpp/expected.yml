@@ -1,0 +1,11 @@
+steps:
+  - name: "Fetch jwt-cpp header-only library"
+    description: "Retrieve build dependencies from external sources."
+    plugin:
+      name: "fetch"
+      target: external
+      items:
+        - git_archive: https://github.com/Thalhammer/jwt-cpp.git
+          files:
+            - include
+
