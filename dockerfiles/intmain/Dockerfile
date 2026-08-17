@@ -166,10 +166,12 @@ RUN gem install \
   mdl \
   syntax --no-document
 
+# libpsl-dev is required for build curl
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  libicu76 \
-  debian-goodies \
   dctrl-tools \
+  debian-goodies \
+  libicu76 \
+  libpsl-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # From debian-goodies
