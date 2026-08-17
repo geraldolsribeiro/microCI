@@ -172,6 +172,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
   debian-goodies \
   libicu76 \
   libpsl-dev \
+  wget \
   && rm -rf /var/lib/apt/lists/*
 
 # From debian-goodies
