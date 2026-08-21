@@ -17,7 +17,7 @@ At runtime, the simplicity stays the same: `microCI | bash`.
 
 To run only specific steps, use `-O/--only` for a single named step or `-N/--number` with one or more comma-separated step numbers, such as `microCI --number 2,3,5`.
 
-## Install
+## Install microCI
 
 <div align="center" markdown="1">
 
@@ -28,6 +28,49 @@ To run only specific steps, use `-O/--only` for a single named step or `-N/--num
 ```bash
 curl -fsSL https://microci.dev/install.sh | bash
 ```
+
+## Install Docker Engine
+
+Docker is a core requirement for microCI. It provides isolated execution environments for all pipeline steps, ensuring consistency and reproducibility across different machines and operating systems.
+
+### Quick Installation
+
+The fastest way to install Docker Engine on most Linux distributions:
+
+```bash
+curl -fsSL https://get.docker.com | sh
+```
+
+This script automatically detects your Linux distribution and installs Docker Engine with all necessary dependencies.
+
+### Platform-Specific Installation
+
+For detailed installation instructions tailored to your operating system, visit the official Docker documentation:
+
+* **Linux**: [Install Docker Engine on Linux](https://docs.docker.com/engine/install/)
+* **macOS**: [Install Docker Desktop on Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
+* **Windows**: [Install Docker Desktop on Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+
+### Post-Installation Configuration (Linux)
+
+On Linux systems, Docker commands require elevated privileges by default. To use Docker as a non-root user:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+After running these commands, log out and log back in for the group changes to take effect.
+
+### Verify Installation
+
+Confirm that Docker is properly installed and accessible:
+
+```bash
+docker --version
+docker run hello-world
+```
+
 ## Update
 
 Keep the same workflow and refresh the binary:
@@ -61,4 +104,3 @@ Remove microCI from your system:
 ```bash
 microCI --uninstall | bash
 ```
-
