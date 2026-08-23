@@ -353,8 +353,9 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
           .name  = "GIT_SSH_COMMAND",
-          .value = fmt::format("ssh -i /.microCI_ssh/{} -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
-                               sshKeyFormat)};
+          .value = fmt::format(
+              "ssh -i /.microCI_ssh/{} -F /.microCI_ssh/config -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
+              sshKeyFormat)};
       envs_.insert(gitSshCommandEnv);
     }
 
