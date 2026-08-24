@@ -80,13 +80,17 @@ auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, co
 // ----------------------------------------------------------------------
 auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &overrideDefaultImage) const
     -> std::string {
+  bool isSkipPlugin = step["plugin"]["name"].as<std::string>() == "skip";
+
   // 3 - Global default
   std::string dockerImage = mMicroCI->DefaultDockerImage();
 
   // 2 - Plugin default
   if (!overrideDefaultImage.empty()) {
     dockerImage = overrideDefaultImage;
-    mMicroCI->AddDockerImage(overrideDefaultImage);
+    if (not isSkipPlugin) {     
+      mMicroCI->AddDockerImage(overrideDefaultImage);
+    }
   }
 
   // 1 - microCI.yml
@@ -94,7 +98,9 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string
     dockerImage = step["docker"].as<std::string>();
   }
 
-  mMicroCI->AddDockerImage(dockerImage);
+  if (not isSkipPlugin) {
+    mMicroCI->AddDockerImage(dockerImage);
+  }
   return dockerImage;
 }
 
