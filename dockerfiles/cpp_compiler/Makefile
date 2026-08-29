@@ -29,7 +29,8 @@
 
 VERSION=0.12.0
 IMAGE_NAME=microci_cpp_compiler
-PLATFORMS=linux/amd64,linux/arm64
+PLATFORMS=linux/amd64
+# PLATFORMS=linux/amd64,linux/arm64
 
 .PHONY: all
 all: publish
@@ -40,7 +41,7 @@ update:
 
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=0 docker buildx build --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
+	DOCKER_BUILDKIT=0 docker buildx build --progress=plain --platform $(PLATFORMS) --load -t intmain/$(IMAGE_NAME):$(VERSION) -f Dockerfile --network=host .
 	docker tag intmain/$(IMAGE_NAME):$(VERSION) intmain/$(IMAGE_NAME):latest
 
 .PHONY: bash
@@ -53,7 +54,7 @@ test:
 	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-format --version
 	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-tidy --version
 	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang --version
-		docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
+	docker run --rm intmain/$(IMAGE_NAME):$(VERSION) clang-tidy-html || echo OK
 
 .PHONY: publish
 publish:: build
