@@ -64,10 +64,11 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
                                      data);
   for (const auto &src : sourceList) {
     mMicroCI->Script() << fmt::format(R"( \
+        && echo 'clang-format {}' \
         && cat <(compgen -G '{}') \
           | )",
-                                      src);
-    mMicroCI->Script() << R"(xargs -I {} clang-format -i {} 2>&1 )";
+                                      src, src);
+    mMicroCI->Script() << R"(xargs -I {} clang-format -i {} 2>&1 || echo 'clang-format error' )";
   }
 
   mMicroCI->Script() << R"("
