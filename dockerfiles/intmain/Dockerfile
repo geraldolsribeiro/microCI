@@ -141,19 +141,20 @@ RUN \
 
 RUN npm install -g \
   @mryhryki/markdown-preview \
+  codeceptjs \
   coffeescript \
   coffeescript-concat \
-  codeceptjs \
   compass-sass-mixins \
   css-combine \
   htmllint \
   htmllint-cli \
   http-server \
-  js-beautify \
   js2coffee \
+  js-beautify \
   jshint \
   sass \
   sass-migrator \
+  snockets-cli \
   svgo \
   terser \
   vue-cli \
