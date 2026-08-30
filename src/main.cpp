@@ -221,6 +221,35 @@ Options:
   -n,--new template        Create a template step
   -n,--new raspberry_pico  Create a embedded software build step - Raspberry Pico
   -n,--new unsafe          Create a command line step in host
+
+Fetch external options
+  -e,--external argh
+    C++ Argh! A minimalist argument handler
+    https://github.com/adishavit/argh
+
+  -e,--external doctest
+    The fastest feature-rich C++11/14/17/20/23 single-header testing framework
+    https://github.com/doctest/doctest
+
+  -e,--external fmt
+    A modern formatting library
+    https://github.com/fmtlib/fmt
+
+  -e,--external jwt-cpp
+    A header only library for creating and validating json web tokens in c++
+    https://github.com/Thalhammer/jwt-cpp
+
+  -e,--external lyra
+    A simple to use, composable, command line parser for C++ 11 and beyond
+    https://github.com/bfgroup/Lyra
+
+  -e,--external nlohmann_json
+    JSON for Modern C++
+    https://github.com/nlohmann/json
+
+  -e,--external spdlog
+    Fast C++ logging library.
+    https://github.com/gabime/spdlog
 )";
 }
 
