@@ -48,8 +48,8 @@ void PluginStepParser::invalidConfigurationDetected() { mIsValid = false; }
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, const std::string &defaultValue) const
-    -> json {
+auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data,
+                                  const std::string &defaultValue) const -> json {
   auto data_      = data;
   data_["RUN_AS"] = defaultValue;
   if (step["run_as"]) {
@@ -61,8 +61,8 @@ auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, cons
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, const std::string &defaultValue) const
-    -> json {
+auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data,
+                                    const std::string &defaultValue) const -> json {
   auto data_              = data;
   data_["DOCKER_NETWORK"] = defaultValue;
   if (step["network"]) {
@@ -78,19 +78,16 @@ auto PluginStepParser::parseNetwork(const YAML::Node &step, const json &data, co
 // 2. Plugin default
 // 3. Global default
 // ----------------------------------------------------------------------
-auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string &overrideDefaultImage) const
-    -> std::string {
+auto PluginStepParser::stepDockerImage(const YAML::Node &step,
+                                       const std::string &overrideDefaultImage) const -> std::string {
   bool isSkipPlugin = step["plugin"]["name"].as<std::string>() == "skip";
 
   // 3 - Global default
   std::string dockerImage = mMicroCI->DefaultDockerImage();
 
   // 2 - Plugin default
-  if (!overrideDefaultImage.empty()) {
+  if (not overrideDefaultImage.empty()) {
     dockerImage = overrideDefaultImage;
-    if (not isSkipPlugin) {     
-      mMicroCI->AddDockerImage(overrideDefaultImage);
-    }
   }
 
   // 1 - microCI.yml
@@ -101,6 +98,7 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string
   if (not isSkipPlugin) {
     mMicroCI->AddDockerImage(dockerImage);
   }
+
   return dockerImage;
 }
 

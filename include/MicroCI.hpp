@@ -109,6 +109,8 @@ class MicroCI {
   [[nodiscard]] auto DefaultEnvs() const -> const std::set<EnvironmentVariable> &;
   void RegisterPlugin(const std::string &name, std::shared_ptr<microci::PluginStepParser> pluginStepParser);
 
+  void LoadLuaConfig();
+
  private:
   void initBash(const YAML::Node &CI);
   void parsePluginStep(const YAML::Node &step);

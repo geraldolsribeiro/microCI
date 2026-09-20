@@ -34,6 +34,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+// clang-format off
+#include "lua5.4/lua.hpp"
+#include "3rd/LuaBridge.h"
+// clang-format on
+
 #include "3rd/inja.hpp"
 
 //
@@ -58,6 +63,74 @@ MicroCI::MicroCI() : mDefaultDockerImage("debian:stable-slim"), mDefaultWorkspac
 // ----------------------------------------------------------------------
 MicroCI::~MicroCI() {
   // verificar se precisa deletar mPluginParserMap
+}
+
+// ----------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------
+void MicroCI::LoadLuaConfig() {
+  std::string filename{};  // ~/.config/microCI/microCI.lua
+
+  if (mAltHome.empty()) {
+    struct passwd *pw = getpwuid(getuid());
+    if (pw) {
+      filename = fmt::format("{}/.config/microCI/microCI.lua", pw->pw_dir);
+    }
+  } else {
+    filename = fmt::format("{}/.config/microCI/microCI.lua", mAltHome);
+  }
+
+  if (filename.empty()) {
+    return;
+  }
+
+  if (not std::filesystem::exists(filename)) {
+    fmt::print("# Debug: {} not found\n", filename);
+    return;
+  }
+  lua_State *L = luaL_newstate();
+  if (not L) {
+    std::cerr << "# Failed to initialize Lua interpreter state.\n";
+    return;  // Returns zeroed/empty structure
+  }
+
+  luaL_openlibs(L);  // Open base Lua standard libraries
+
+  if (luaL_dofile(L, filename.c_str()) != LUA_OK) {
+    std::cerr << "Error loading configuration file [" << filename << "]: " << lua_tostring(L, -1) << "\n";
+    std::cerr << "Using complete fallback system defaults.\n";
+
+    // Always clean up the state before leaving function
+    lua_close(L);
+    return;
+  }
+
+  {
+    luabridge::LuaRef config = luabridge::getGlobal(L, "config");
+    if (not config.isTable()) {
+      lua_close(L);
+      return;
+    }
+
+    if (not config["default_docker_images"].isNil()) {
+      luabridge::LuaRef default_docker_images = config["default_docker_images"];
+
+      for (luabridge::Iterator it(default_docker_images); !it.isNil(); ++it) {
+        luabridge::LuaRef key   = it.key();
+        luabridge::LuaRef value = it.value();
+        if (not key.isNil() and not value.isNil()) {
+          fmt::print("# Debug key: {} value: {}\n", key.tostring(), value.tostring());
+        }
+      }
+    }
+  }  // required to clean when LuaRef go out of scope
+
+  // result.title   = config["title"].valueOr(std::string("Default Engine Name"));
+  // result.version = config["version"].valueOr(1.0);
+  // result.width   = config["window"]["width"].valueOr(1280);
+  // result.height  = config["window"]["height"].valueOr(720);
+
+  lua_close(L);
 }
 
 // ----------------------------------------------------------------------

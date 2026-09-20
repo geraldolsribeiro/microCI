@@ -126,6 +126,7 @@ LDLIBS+= -lyaml-cpp    # YAML parsing library
 LDLIBS+= -lcrypto      # OpenSSL crypto library
 LDLIBS+= -lzstd        # Zstandard compression library
 LDLIBS+= -lz           # Standard zlib
+LDLIBS+= -llua5.4      # Lua
 
 # Mac ARM-specific settings
 # ==============================================================================
@@ -349,8 +350,8 @@ mac_deps:
 # Debian/Ubuntu dependency installation
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow
-
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow liblua5.4-dev
+ 
 # ==============================================================================
 # Section 14: Header-Only Library Setup
 # ==============================================================================

@@ -184,7 +184,7 @@ steps:
       bash: |
         apt update
         apt upgrade -y
-        apt install -y xxd libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow zlib1g-dev
+        apt install -y xxd libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow zlib1g-dev liblua5.4-dev
         make -C docs clean
         make -C docs all
         make -C src
