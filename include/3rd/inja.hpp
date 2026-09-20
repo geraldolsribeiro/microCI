@@ -25,6 +25,12 @@ SOFTWARE.
 #ifndef INCLUDE_INJA_INJA_HPP_
 #define INCLUDE_INJA_INJA_HPP_
 
+// Semantic version macros for dependency scanners (#341)
+#define INJA_VERSION_MAJOR 3
+#define INJA_VERSION_MINOR 5
+#define INJA_VERSION_PATCH 0
+
+
 // #include "json.hpp"
 #ifndef INCLUDE_INJA_JSON_HPP_
 #define INCLUDE_INJA_JSON_HPP_
@@ -633,7 +639,7 @@ class StatementNode : public AstNode {
 public:
   explicit StatementNode(size_t pos): AstNode(pos) {}
 
-  virtual void accept(NodeVisitor& v) const = 0;
+  void accept(NodeVisitor& v) const override = 0;
 };
 
 class ForStatementNode : public StatementNode {
@@ -644,7 +650,7 @@ public:
 
   explicit ForStatementNode(BlockNode* const parent, size_t pos): StatementNode(pos), parent(parent) {}
 
-  virtual void accept(NodeVisitor& v) const = 0;
+  void accept(NodeVisitor& v) const override = 0;
 };
 
 class ForArrayStatementNode : public ForStatementNode {
@@ -2473,7 +2479,11 @@ class Renderer : public NodeVisitor {
     } break;
     case Op::Modulo: {
       const auto args = get_arguments<2>(node);
-      make_result(args[0]->get<const json::number_integer_t>() % args[1]->get<const json::number_integer_t>());
+      const auto divisor = args[1]->get<const json::number_integer_t>();
+      if (divisor == 0) {
+        throw_renderer_error("modulo by zero", node);
+      }
+      make_result(args[0]->get<const json::number_integer_t>() % divisor);
     } break;
     case Op::AtId: {
       const auto container = get_arguments<1, 0, false>(node)[0];
@@ -2496,8 +2506,10 @@ class Renderer : public NodeVisitor {
     } break;
     case Op::Capitalize: {
       auto result = get_arguments<1>(node)[0]->get<json::string_t>();
-      result[0] = static_cast<char>(::toupper(result[0]));
-      std::transform(result.begin() + 1, result.end(), result.begin() + 1, [](char c) { return static_cast<char>(::tolower(c)); });
+      if (!result.empty()) {
+        result[0] = static_cast<char>(::toupper(result[0]));
+        std::transform(result.begin() + 1, result.end(), result.begin() + 1, [](char c) { return static_cast<char>(::tolower(c)); });
+      }
       make_result(std::move(result));
     } break;
     case Op::Default: {
@@ -2935,7 +2947,7 @@ public:
     return render(parse(input), data);
   }
 
-  std::string render(const Template& tmpl, const json& data) {
+  std::string render(const Template& tmpl, const json& data) const {
     std::stringstream os;
     render_to(os, tmpl, data);
     return os.str();
@@ -2972,7 +2984,7 @@ public:
     write(temp, data, filename_out);
   }
 
-  std::ostream& render_to(std::ostream& os, const Template& tmpl, const json& data) {
+  std::ostream& render_to(std::ostream& os, const Template& tmpl, const json& data) const {
     Renderer(render_config, template_storage, function_storage).render_to(os, tmpl, data);
     return os;
   }

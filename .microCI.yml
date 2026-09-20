@@ -167,6 +167,8 @@ steps:
       name: "fetch"
       target: include/3rd/
       items:
+        - url: https://raw.githubusercontent.com/kunitoki/LuaBridge3/master/Distribution/LuaBridge/LuaBridge.h
+          strip-components: 2
         - url: https://raw.githubusercontent.com/adishavit/argh/master/argh.h
         - url: https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         - url: https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
