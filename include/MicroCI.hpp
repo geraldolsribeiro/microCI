@@ -127,6 +127,7 @@ class MicroCI {
   std::string mDefaultDockerImage;
   std::string mDefaultWorkspace;
   std::stringstream mScript;
+  std::map<std::string, std::string> mDefaultPluginDockerImage;
   bool mIsValid   = true;
   bool mAppendLog = false;
 

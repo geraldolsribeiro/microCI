@@ -120,6 +120,7 @@ void MicroCI::LoadLuaConfig() {
         luabridge::LuaRef value = it.value();
         if (not key.isNil() and not value.isNil()) {
           fmt::print("# Debug key: {} value: {}\n", key.tostring(), value.tostring());
+          mDefaultPluginDockerImage[key.tostring()] = value.tostring();
         }
       }
     }
