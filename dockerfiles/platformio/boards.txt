@@ -1,0 +1,1774 @@
+
+Platform: [1mBonfire[0m
+================================================================================
+ID                  MCU    Frequency    Flash    RAM    Name
+------------------  -----  -----------  -------  -----  ----------------------------
+[36mbonfire-basic-dram[0m         62MHz        32KB     32MB   Bonfire Basic SOC, 32MB DRAM
+[36marty-axi-dram[0m              83MHz        32KB     256MB  Bonfire on Arty, 256MB DRAM
+
+Platform: [1maceinna_imu[0m
+================================================================================
+ID            MCU            Frequency    Flash    RAM    Name
+------------  -------------  -----------  -------  -----  ---------------------
+[36mLowCostRTK[0m    STM32F469NIH6  180MHz       1MB      384KB  Aceinna Low Cost RTK
+[36mOpenIMU335[0m    STM32F405RG    120MHz       1MB      128KB  Aceinna MTLT335
+[36mOpenIMU300[0m    STM32F405RG    120MHz       1MB      128KB  Aceinna OpenIMU 300
+[36mOpenIMU300ZA[0m  STM32F405RG    120MHz       1MB      128KB  Aceinna OpenIMU 300ZA
+[36mOpenIMU330[0m    STM32L431CB    80MHz        128KB    64KB   Aceinna OpenIMU 330
+[36mOpenRTK[0m       STM32F469IG    180MHz       1MB      384KB  Aceinna OpenIMU 330ZA
+[36mOpenRTK330L[0m   STM32F469IG    180MHz       1MB      384KB  Aceinna OpenRTK330L
+
+Platform: [1matmelavr[0m
+================================================================================
+ID                           MCU            Frequency    Flash     RAM     Name
+---------------------------  -------------  -----------  --------  ------  ------------------------------------------------
+[36mAT90CAN128[0m                   AT90CAN128     16MHz        128KB     4KB     AT90CAN128
+[36mAT90CAN32[0m                    AT90CAN32      16MHz        32KB      2KB     AT90CAN32
+[36mAT90CAN64[0m                    AT90CAN64      16MHz        64KB      4KB     AT90CAN64
+[36mATmega128[0m                    ATMEGA128      16MHz        128KB     4KB     ATmega128/A
+[36mATmega1280[0m                   ATMEGA1280     16MHz        128KB     8KB     ATmega1280
+[36mATmega1281[0m                   ATMEGA1281     16MHz        128KB     8KB     ATmega1281
+[36mATmega1284[0m                   ATMEGA1284     16MHz        128KB     16KB    ATmega1284
+[36mATmega1284P[0m                  ATMEGA1284P    16MHz        128KB     16KB    ATmega1284P
+[36mATmega16[0m                     ATMEGA16       16MHz        16KB      1KB     ATmega16
+[36mATmega162[0m                    ATMEGA162      16MHz        16KB      1KB     ATmega162
+[36mATmega164A[0m                   ATMEGA164A     16MHz        16KB      1KB     ATmega164A
+[36mATmega164P[0m                   ATMEGA164P     16MHz        16KB      1KB     ATmega164P/PA
+[36mATmega165[0m                    ATMEGA165A     16MHz        16KB      1KB     ATmega165/A
+[36mATmega165P[0m                   ATMEGA165P     16MHz        16KB      1KB     ATmega165P/PA
+[36mATmega168[0m                    ATMEGA168      16MHz        16KB      1KB     ATmega168/A
+[36mATmega168P[0m                   ATMEGA168P     16MHz        16KB      1KB     ATmega168P/PA
+[36mATmega168PB[0m                  ATMEGA168PB    16MHz        16KB      1KB     ATmega168PB
+[36mATmega169P[0m                   ATMEGA169P     16MHz        16KB      1KB     ATmega169/P/PA
+[36mATmega169A[0m                   ATMEGA169A     16MHz        16KB      1KB     ATmega169A
+[36mATmega2560[0m                   ATMEGA2560     16MHz        256KB     8KB     ATmega2560
+[36mATmega2561[0m                   ATMEGA2561     16MHz        256KB     8KB     ATmega2561
+[36mATmega32[0m                     ATMEGA32       16MHz        32KB      2KB     ATmega32
+[36mATmega324A[0m                   ATMEGA324A     16MHz        32KB      2KB     ATmega324A
+[36mATmega324P[0m                   ATMEGA324P     16MHz        32KB      2KB     ATmega324P
+[36mATmega324PA[0m                  ATMEGA324PA    16MHz        32KB      2KB     ATmega324PA
+[36mATmega324PB[0m                  ATMEGA324PB    16MHz        32KB      2KB     ATmega324PB
+[36mATmega325[0m                    ATMEGA325      16MHz        32KB      2KB     ATmega325/A
+[36mATmega3250[0m                   ATMEGA3250     16MHz        32KB      2KB     ATmega3250/A
+[36mATmega3250P[0m                  ATMEGA3250P    16MHz        32KB      2KB     ATmega3250P/PA
+[36mATmega325P[0m                   ATMEGA325P     16MHz        32KB      2KB     ATmega325P/PA
+[36mATmega328[0m                    ATMEGA328      16MHz        32KB      2KB     ATmega328
+[36mATmega328P[0m                   ATMEGA328P     16MHz        32KB      2KB     ATmega328P/PA
+[36mATmega328PB[0m                  ATMEGA328PB    16MHz        32KB      2KB     ATmega328PB
+[36mATmega329[0m                    ATMEGA329      16MHz        32KB      2KB     ATmega329/A
+[36mATmega3290[0m                   ATMEGA3290     16MHz        32KB      2KB     ATmega3290/A
+[36mATmega3290P[0m                  ATMEGA3290P    16MHz        32KB      2KB     ATmega3290P/PA
+[36mATmega329P[0m                   ATMEGA329P     16MHz        32KB      2KB     ATmega329P/PA
+[36mATmega48[0m                     ATMEGA48       16MHz        4KB       512B    ATmega48/A
+[36mATmega48P[0m                    ATMEGA48P      16MHz        4KB       512B    ATmega48P/PA
+[36mATmega48PB[0m                   ATMEGA48PB     16MHz        4KB       512B    ATmega48PB
+[36mATmega64[0m                     ATMEGA64       16MHz        64KB      4KB     ATmega64/A
+[36mATmega640[0m                    ATMEGA640      16MHz        64KB      8KB     ATmega640
+[36mATmega644A[0m                   ATMEGA644A     16MHz        64KB      4KB     ATmega644/A
+[36mATmega644P[0m                   ATMEGA644P     16MHz        64KB      4KB     ATmega644P/PA
+[36mATmega645[0m                    ATMEGA645      16MHz        64KB      4KB     ATmega645/A
+[36mATmega6450[0m                   ATMEGA6450     16MHz        64KB      4KB     ATmega6450/A
+[36mATmega6450P[0m                  ATMEGA6450P    16MHz        64KB      4KB     ATmega6450P
+[36mATmega645P[0m                   ATMEGA645P     16MHz        64KB      4KB     ATmega645P
+[36mATmega649[0m                    ATMEGA649      16MHz        64KB      4KB     ATmega649/A
+[36mATmega6490[0m                   ATMEGA6490     16MHz        64KB      4KB     ATmega6490/A
+[36mATmega6490P[0m                  ATMEGA6490P    16MHz        64KB      4KB     ATmega6490P
+[36mATmega649P[0m                   ATMEGA649P     16MHz        64KB      4KB     ATmega649P
+[36mATmega8[0m                      ATMEGA8        16MHz        8KB       1KB     ATmega8/A
+[36mATmega8515[0m                   ATMEGA8515     16MHz        8KB       512B    ATmega8515
+[36mATmega8535[0m                   ATMEGA8535     16MHz        8KB       512B    ATmega8535
+[36mATmega88[0m                     ATMEGA88       16MHz        8KB       1KB     ATmega88/A
+[36mATmega88P[0m                    ATMEGA88P      16MHz        8KB       1KB     ATmega88P/PA
+[36mATmega88PB[0m                   ATMEGA88PB     16MHz        8KB       1KB     ATmega88PB
+[36mattiny13[0m                     ATTINY13       9MHz         1KB       64B     ATtiny13
+[36mattiny13a[0m                    ATTINY13A      9MHz         1KB       64B     ATtiny13A
+[36mbluefruitmicro[0m               ATMEGA32U4     8MHz         28KB      2.50KB  Adafruit Bluefruit Micro
+[36mcircuitplay_classic[0m          ATMEGA32U4     8MHz         28KB      2.50KB  Adafruit Circuit Playground Classic
+[36mfeather328p[0m                  ATMEGA328P     8MHz         31.50KB   2KB     Adafruit Feather 328P
+[36mfeather32u4[0m                  ATMEGA32U4     8MHz         28KB      2.50KB  Adafruit Feather 32u4
+[36mflora8[0m                       ATMEGA32U4     8MHz         28KB      2.50KB  Adafruit Flora
+[36mgemma[0m                        ATTINY85       8MHz         8KB       512B    Adafruit Gemma
+[36mitsybitsy32u4_3V[0m             ATMEGA32U4     8MHz         28KB      2.50KB  Adafruit ItsyBitsy 3V/8MHz
+[36mitsybitsy32u4_5V[0m             ATMEGA32U4     16MHz        28KB      2.50KB  Adafruit ItsyBitsy 5V/16MHz
+[36mmetro[0m                        ATMEGA328P     16MHz        31.50KB   2KB     Adafruit Metro
+[36mprotrinket3ftdi[0m              ATMEGA328P     12MHz        28KB      2KB     Adafruit Pro Trinket 3V/12MHz (FTDI)
+[36mprotrinket3[0m                  ATMEGA328P     12MHz        28KB      2KB     Adafruit Pro Trinket 3V/12MHz (USB)
+[36mprotrinket5ftdi[0m              ATMEGA328P     16MHz        28KB      2KB     Adafruit Pro Trinket 5V/16MHz (FTDI)
+[36mprotrinket5[0m                  ATMEGA328P     16MHz        28KB      2KB     Adafruit Pro Trinket 5V/16MHz (USB)
+[36mtrinket3[0m                     ATTINY85       8MHz         8KB       512B    Adafruit Trinket 3V/8MHz
+[36mtrinket5[0m                     ATTINY85       16MHz        8KB       512B    Adafruit Trinket 5V/16MHz
+[36malorium_hinj[0m                 ATMEGA328P     16MHz        31.50KB   2KB     Alorium Hinj
+[36malorium_sno[0m                  ATMEGA328P     16MHz        31.50KB   2KB     Alorium Sno
+[36malorium_xlr8[0m                 ATMEGA328P     16MHz        31.50KB   2KB     Alorium XLR8
+[36maltair[0m                       ATMEGA256RFR2  16MHz        248KB     32KB    Altair
+[36mminiwireless[0m                 ATMEGA328P     16MHz        31.50KB   2KB     Anarduino MiniWireless
+[36marduboy[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  Arduboy
+[36marduboy_devkit[0m               ATMEGA32U4     16MHz        28KB      2.50KB  Arduboy DevKit
+[36mbtatmega168[0m                  ATMEGA168      16MHz        14KB      1KB     Arduino BT ATmega168
+[36mbtatmega328[0m                  ATMEGA328P     16MHz        28KB      2KB     Arduino BT ATmega328
+[36mdiecimilaatmega168[0m           ATMEGA168      16MHz        14KB      1KB     Arduino Duemilanove or Diecimila ATmega168
+[36mdiecimilaatmega328[0m           ATMEGA328P     16MHz        30KB      2KB     Arduino Duemilanove or Diecimila ATmega328
+[36mesplora[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Esplora
+[36methernet[0m                     ATMEGA328P     16MHz        31.50KB   2KB     Arduino Ethernet
+[36mfio[0m                          ATMEGA328P     8MHz         30KB      2KB     Arduino Fio
+[36mchiwawa[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Industrial 101
+[36mleonardo[0m                     ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Leonardo
+[36mleonardoeth[0m                  ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Leonardo ETH
+[36mlilypadatmega168[0m             ATMEGA168      8MHz         14KB      1KB     Arduino LilyPad ATmega168
+[36mlilypadatmega328[0m             ATMEGA328P     8MHz         30KB      2KB     Arduino LilyPad ATmega328
+[36mLilyPadUSB[0m                   ATMEGA32U4     8MHz         28KB      2.50KB  Arduino LilyPad USB
+[36mmegaADK[0m                      ATMEGA2560     16MHz        248KB     8KB     Arduino Mega ADK
+[36mmegaatmega1280[0m               ATMEGA1280     16MHz        124KB     8KB     Arduino Mega or Mega 2560 ATmega1280
+[36mmegaatmega2560[0m               ATMEGA2560     16MHz        248KB     8KB     Arduino Mega or Mega 2560 ATmega2560 (Mega 2560)
+[36mmicro[0m                        ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Micro
+[36mminiatmega168[0m                ATMEGA168      16MHz        14KB      1KB     Arduino Mini ATmega168
+[36mminiatmega328[0m                ATMEGA328P     16MHz        28KB      2KB     Arduino Mini ATmega328
+[36matmegangatmega168[0m            ATMEGA168      16MHz        14KB      1KB     Arduino NG or older ATmega168
+[36matmegangatmega8[0m              ATMEGA8        16MHz        7KB       1KB     Arduino NG or older ATmega8
+[36mnanoatmega168[0m                ATMEGA168      16MHz        14KB      1KB     Arduino Nano ATmega168
+[36mnanoatmega328[0m                ATMEGA328P     16MHz        30KB      2KB     Arduino Nano ATmega328
+[36mnanoatmega328new[0m             ATMEGA328P     16MHz        30KB      2KB     Arduino Nano ATmega328 (New Bootloader)
+[36mpro8MHzatmega168[0m             ATMEGA168      8MHz         14KB      1KB     Arduino Pro or Pro Mini ATmega168 (3.3V, 8 MHz)
+[36mpro16MHzatmega168[0m            ATMEGA168      16MHz        14KB      1KB     Arduino Pro or Pro Mini ATmega168 (5V, 16 MHz)
+[36mpro8MHzatmega328[0m             ATMEGA328P     8MHz         30KB      2KB     Arduino Pro or Pro Mini ATmega328 (3.3V, 8 MHz)
+[36mpro16MHzatmega328[0m            ATMEGA328P     16MHz        30KB      2KB     Arduino Pro or Pro Mini ATmega328 (5V, 16 MHz)
+[36mrobotControl[0m                 ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Robot Control
+[36mrobotMotor[0m                   ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Robot Motor
+[36muno[0m                          ATMEGA328P     16MHz        31.50KB   2KB     Arduino Uno
+[36muno_mini[0m                     ATMEGA328P     16MHz        31.50KB   2KB     Arduino Uno Mini
+[36myun[0m                          ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Yun
+[36myunmini[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  Arduino Yun Mini
+[36mat90pwm216[0m                   AT90PWM216     16MHz        16KB      1KB     Atmel AT90PWM216
+[36mat90pwm316[0m                   AT90PWM316     16MHz        16KB      1KB     Atmel AT90PWM316
+[36mzumbt328[0m                     ATMEGA328P     16MHz        28KB      2KB     BQ ZUM BT-328
+[36mraspduino[0m                    ATMEGA328P     16MHz        30KB      2KB     BitWizard Raspduino
+[36mcontrollino_maxi[0m             ATMEGA2560     16MHz        248KB     8KB     Controllino Maxi
+[36mcontrollino_maxi_automation[0m  ATMEGA2560     16MHz        248KB     8KB     Controllino Maxi Automation
+[36mcontrollino_mega[0m             ATMEGA2560     16MHz        248KB     8KB     Controllino Mega
+[36mcontrollino_mini[0m             ATMEGA328P     16MHz        31.50KB   2KB     Controllino Mini
+[36mdigispark-pro[0m                ATTINY167      16MHz        14.50KB   512B    Digispark Pro
+[36mdigispark-pro64[0m              ATTINY167      16MHz        14.50KB   512B    Digispark Pro (16 MHz) (64 byte buffer)
+[36mdigispark-pro32[0m              ATTINY167      16MHz        14.50KB   512B    Digispark Pro (32 byte buffer)
+[36mdigispark-tiny[0m               ATTINY85       16MHz        5.87KB    512B    Digispark USB
+[36mdwenguino[0m                    AT90USB646     16MHz        60KB      2KB     Dwenguino
+[36melektor_uno_r4[0m               ATMEGA328PB    16MHz        31.50KB   2KB     Elektor Uno R4
+[36mengduinov3[0m                   ATMEGA32U4     8MHz         28KB      2.50KB  Engduino 3
+[36mmayfly[0m                       ATMEGA1284P    8MHz         127KB     16KB    EnviroDIY Mayfly
+[36mfysetc_f6_13[0m                 ATMEGA2560     16MHz        252KB     8KB     FYSETC F6 V1.3
+[36mattiny1634[0m                   ATTINY1634     8MHz         16KB      1KB     Generic ATtiny1634
+[36mattiny167[0m                    ATTINY167      8MHz         16KB      512B    Generic ATtiny167
+[36mattiny2313[0m                   ATTINY2313     8MHz         2KB       128B    Generic ATtiny2313
+[36mattiny24[0m                     ATTINY24       8MHz         2KB       128B    Generic ATtiny24
+[36mattiny25[0m                     ATTINY25       8MHz         2KB       128B    Generic ATtiny25
+[36mattiny261[0m                    ATTINY261      8MHz         2KB       128B    Generic ATtiny261
+[36mattiny4313[0m                   ATTINY4313     8MHz         4KB       256B    Generic ATtiny4313
+[36mattiny43[0m                     ATTINY43U      8MHz         4KB       256B    Generic ATtiny43U
+[36mattiny44[0m                     ATTINY44       8MHz         4KB       256B    Generic ATtiny44
+[36mattiny441[0m                    ATTINY441      8MHz         4KB       256B    Generic ATtiny441
+[36mattiny45[0m                     ATTINY45       8MHz         4KB       256B    Generic ATtiny45
+[36mattiny461[0m                    ATTINY461      8MHz         4KB       256B    Generic ATtiny461
+[36mattiny48[0m                     ATTINY48       8MHz         4KB       256B    Generic ATtiny48
+[36mattiny828[0m                    ATTINY828      8MHz         8KB       512B    Generic ATtiny828
+[36mattiny84[0m                     ATTINY84       8MHz         8KB       512B    Generic ATtiny84
+[36mattiny841[0m                    ATTINY841      8MHz         8KB       512B    Generic ATtiny841
+[36mattiny85[0m                     ATTINY85       8MHz         8KB       512B    Generic ATtiny85
+[36mattiny861[0m                    ATTINY861      8MHz         8KB       512B    Generic ATtiny861
+[36mattiny87[0m                     ATTINY87       8MHz         8KB       512B    Generic ATtiny87
+[36mattiny88[0m                     ATTINY88       8MHz         8KB       512B    Generic ATtiny88
+[36mlightblue-bean[0m               ATMEGA328P     8MHz         31.50KB   2KB     LightBlue Bean
+[36mlightblue-beanplus[0m           ATMEGA328P     16MHz        31.50KB   2KB     LightBlue Bean+
+[36mlightup[0m                      ATMEGA32U4     8MHz         28KB      2.50KB  LightUp
+[36mone[0m                          ATMEGA32U4     16MHz        28KB      2.50KB  Linino One
+[36msmart7688[0m                    ATMEGA32U4     8MHz         28KB      2.50KB  LinkIt Smart 7688 Duo
+[36mlora32u4II[0m                   ATMEGA32U4     8MHz         28KB      2.50KB  LoRa32u4II (868-915MHz)
+[36mmightyhat[0m                    ATMEGA328P     16MHz        31KB      2KB     LowPowerLab MightyHat
+[36mmoteino[0m                      ATMEGA328P     16MHz        31.50KB   2KB     LowPowerLab Moteino
+[36mmoteino8mhz[0m                  ATMEGA328P     8MHz         31.50KB   2KB     LowPowerLab Moteino (8Mhz)
+[36mmoteinomega[0m                  ATMEGA1284P    16MHz        127KB     16KB    LowPowerLab MoteinoMEGA
+[36m168pa16m[0m                     ATMEGA168P     16MHz        15.50KB   1KB     Microduino Core (Atmega168PA@16M,5V)
+[36m168pa8m[0m                      ATMEGA168P     8MHz         15.50KB   1KB     Microduino Core (Atmega168PA@8M,3.3V)
+[36m328p16m[0m                      ATMEGA328P     16MHz        31.50KB   2KB     Microduino Core (Atmega328P@16M,5V)
+[36m328p8m[0m                       ATMEGA328P     8MHz         31.50KB   2KB     Microduino Core (Atmega328P@8M,3.3V)
+[36m32u416m[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  Microduino Core USB (ATmega32U4@16M,5V)
+[36m1284p16m[0m                     ATMEGA1284P    16MHz        127KB     16KB    Microduino Core+ (ATmega1284P@16M,5V)
+[36m1284p8m[0m                      ATMEGA1284P    8MHz         127KB     16KB    Microduino Core+ (ATmega1284P@8M,3.3V)
+[36m644pa16m[0m                     ATMEGA644P     16MHz        63KB      4KB     Microduino Core+ (Atmega644PA@16M,5V)
+[36m644pa8m[0m                      ATMEGA644P     8MHz         63KB      4KB     Microduino Core+ (Atmega644PA@8M,3.3V)
+[36memonpi[0m                       ATMEGA328P     16MHz        30KB      2KB     OpenEnergyMonitor emonPi
+[36mprusa_mm_control[0m             ATMEGA32U4     16MHz        28KB      2.50KB  Original Prusa i3 MK3 Multi Material 2.0 Upgrade
+[36mpanStampAVR[0m                  ATMEGA328P     8MHz         31.50KB   2KB     PanStamp AVR
+[36mpinoccio[0m                     ATMEGA256RFR2  16MHz        248KB     32KB    Pinoccio Scout
+[36ma-star32U4[0m                   ATMEGA32U4     16MHz        28KB      2.50KB  Pololu A-Star 32U4
+[36mprusa_rambo[0m                  ATMEGA2560     16MHz        252KB     8KB     Prusa RAMBo
+[36mquirkbot[0m                     ATMEGA32U4     8MHz         28KB      2.50KB  Quirkbot
+[36mblend[0m                        ATMEGA32U4     16MHz        28KB      2.50KB  RedBearLab Blend
+[36mblendmicro16[0m                 ATMEGA32U4     16MHz        28KB      2.50KB  RedBearLab Blend Micro 3.3V/16MHz (overclock)
+[36mblendmicro8[0m                  ATMEGA32U4     8MHz         28KB      2.50KB  RedBearLab Blend Micro 3.3V/8MHz
+[36mreprap_rambo[0m                 ATMEGA2560     16MHz        252KB     8KB     RepRap RAMBo
+[36msodaq_galora[0m                 ATMEGA1284P    8MHz         127KB     16KB    SODAQ GaLoRa
+[36msodaq_mbili[0m                  ATMEGA1284P    8MHz         127KB     16KB    SODAQ Mbili
+[36msodaq_moja[0m                   ATMEGA328P     8MHz         31.50KB   2KB     SODAQ Moja
+[36msodaq_ndogo[0m                  ATMEGA1284P    8MHz         127KB     16KB    SODAQ Ndogo
+[36msodaq_tatu[0m                   ATMEGA1284P    8MHz         127KB     16KB    SODAQ Tatu
+[36msanguino_atmega1284p[0m         ATMEGA1284P    16MHz        127KB     16KB    Sanguino ATmega1284p (16MHz)
+[36msanguino_atmega1284_8m[0m       ATMEGA1284P    8MHz         127KB     16KB    Sanguino ATmega1284p (8MHz)
+[36msanguino_atmega644[0m           ATMEGA644      16MHz        63KB      4KB     Sanguino ATmega644 or ATmega644A (16 MHz)
+[36msanguino_atmega644_8m[0m        ATMEGA644      8MHz         63KB      4KB     Sanguino ATmega644 or ATmega644A (8 MHz)
+[36msanguino_atmega644p[0m          ATMEGA644P     16MHz        63KB      4KB     Sanguino ATmega644P or ATmega644PA (16 MHz)
+[36msanguino_atmega644p_8m[0m       ATMEGA644P     8MHz         63KB      4KB     Sanguino ATmega644P or ATmega644PA (8 MHz)
+[36mseeeduino[0m                    ATMEGA328P     16MHz        31.50KB   2KB     Seeeduino
+[36msparkfun_satmega128rfa1[0m      ATMEGA128RFA1  16MHz        124KB     16KB    SparkFun ATmega128RFA1 Dev Board
+[36msparkfun_digitalsandbox[0m      ATMEGA328P     8MHz         31.50KB   2KB     SparkFun Digital Sandbox
+[36msparkfun_fiov3[0m               ATMEGA32U4     8MHz         28KB      2.50KB  SparkFun Fio V3 3.3V/8MHz
+[36msparkfun_makeymakey[0m          ATMEGA32U4     16MHz        28KB      2.50KB  SparkFun Makey Makey
+[36msparkfun_megapro8MHz[0m         ATMEGA2560     8MHz         252KB     8KB     SparkFun Mega Pro 3.3V/8MHz
+[36msparkfun_megapro16MHz[0m        ATMEGA2560     16MHz        248KB     8KB     SparkFun Mega Pro 5V/16MHz
+[36msparkfun_megamini[0m            ATMEGA2560     8MHz         252KB     8KB     SparkFun Mega Pro Mini 3.3V
+[36muview[0m                        ATMEGA328P     16MHz        31.50KB   2KB     SparkFun MicroView
+[36msparkfun_promicro8[0m           ATMEGA32U4     8MHz         28KB      2.50KB  SparkFun Pro Micro 3.3V/8MHz
+[36msparkfun_promicro16[0m          ATMEGA32U4     16MHz        28KB      2.50KB  SparkFun Pro Micro 5V/16MHz
+[36msparkfun_qduinomini[0m          ATMEGA32U4     8MHz         28KB      2.50KB  SparkFun Qduino Mini
+[36msparkfun_redboard[0m            ATMEGA328P     16MHz        31.50KB   2KB     SparkFun RedBoard
+[36msparkfun_serial7seg[0m          ATMEGA328P     8MHz         31.50KB   2KB     SparkFun Serial 7-Segment Display
+[36msleepypi[0m                     ATMEGA328P     8MHz         30KB      2KB     SpellFoundry Sleepy Pi 2
+[36mwhispernode[0m                  ATMEGA328P     16MHz        31.50KB   2KB     Talk2 Whisper Node
+[36mthe_things_uno[0m               ATMEGA32U4     16MHz        28KB      2.50KB  The Things Uno
+[36mtinyduino[0m                    ATMEGA328P     8MHz         30KB      2KB     TinyCircuits TinyDuino Processor Board
+[36mtinylily[0m                     ATMEGA328P     8MHz         30KB      2KB     TinyCircuits TinyLily Mini Processor
+[36musbasp[0m                       ATMEGA8        12MHz        8KB       1KB     USBasp stick
+[36mwildfirev2[0m                   ATMEGA1284P    16MHz        120.00KB  16KB    Wicked Device WildFire V2
+[36mwildfirev3[0m                   ATMEGA1284P    16MHz        127KB     16KB    Wicked Device WildFire V3
+[36mftduino[0m                      ATMEGA32U4     16MHz        28KB      2.50KB  ftDuino
+[36mbob3[0m                         ATMEGA88       8MHz         8KB       1KB     nicai-systems BOB3 coding bot
+[36mnibo2[0m                        ATMEGA128      16MHz        128KB     4KB     nicai-systems NIBO 2 robot
+[36mniboburger[0m                   ATMEGA16       15MHz        16KB      1KB     nicai-systems NIBO burger robot
+[36mniboburger_1284[0m              ATMEGA1284P    20MHz        128KB     16KB    nicai-systems NIBO burger robot with Tuning Kit
+[36mnibobee[0m                      ATMEGA16       15MHz        16KB      1KB     nicai-systems NIBObee robot
+[36mnibobee_1284[0m                 ATMEGA1284P    20MHz        128KB     16KB    nicai-systems NIBObee robot with Tuning Kit
+[36mardhat[0m                       ATMEGA328P     16MHz        31.50KB   2KB     ubIQio Ardhat
+
+Platform: [1matmelmegaavr[0m
+================================================================================
+ID                   MCU         Frequency    Flash    RAM    Name
+-------------------  ----------  -----------  -------  -----  ----------------------------
+[36mATmega1608[0m           ATMEGA1608  16MHz        16KB     2KB    ATmega1608
+[36mATmega1609[0m           ATMEGA1609  16MHz        16KB     2KB    ATmega1609
+[36mATmega3208[0m           ATMEGA3208  16MHz        32KB     4KB    ATmega3208
+[36mATmega3209[0m           ATMEGA3209  16MHz        32KB     4KB    ATmega3209
+[36mATmega4808[0m           ATMEGA4808  16MHz        48KB     6KB    ATmega4808
+[36mATmega4809[0m           ATMEGA4809  16MHz        48KB     6KB    ATmega4809
+[36mATmega808[0m            ATMEGA808   16MHz        8KB      1KB    ATmega808
+[36mATmega809[0m            ATMEGA809   16MHz        8KB      1KB    ATmega809
+[36mATtiny1604[0m           ATTINY1604  16MHz        16KB     1KB    ATtiny1604
+[36mATtiny1606[0m           ATTINY1606  16MHz        16KB     1KB    ATtiny1606
+[36mATtiny1607[0m           ATTINY1607  16MHz        16KB     1KB    ATtiny1607
+[36mATtiny1614[0m           ATTINY1614  16MHz        16KB     2KB    ATtiny1614
+[36mATtiny1616[0m           ATTINY1616  16MHz        16KB     2KB    ATtiny1616
+[36mATtiny1617[0m           ATTINY1617  16MHz        16KB     2KB    ATtiny1617
+[36mATtiny1624[0m           ATTINY1624  16MHz        16KB     2KB    ATtiny1624
+[36mATtiny1626[0m           ATTINY1626  16MHz        16KB     2KB    ATtiny1626
+[36mATtiny1627[0m           ATTINY1627  16MHz        16KB     2KB    ATtiny1627
+[36mATtiny202[0m            ATTINY202   16MHz        2KB      128B   ATtiny202
+[36mATtiny204[0m            ATTINY204   16MHz        2KB      128B   ATtiny204
+[36mATtiny212[0m            ATTINY212   16MHz        2KB      128B   ATtiny212
+[36mATtiny214[0m            ATTINY214   16MHz        2KB      128B   ATtiny214
+[36mATtiny3216[0m           ATTINY3216  16MHz        32KB     2KB    ATtiny3216
+[36mATtiny3217[0m           ATTINY3217  16MHz        32KB     2KB    ATtiny3217
+[36mATtiny3224[0m           ATTINY3224  16MHz        32KB     3KB    ATtiny3224
+[36mATtiny3226[0m           ATTINY3226  16MHz        32KB     3KB    ATtiny3226
+[36mATtiny3227[0m           ATTINY3227  16MHz        32KB     3KB    ATtiny3227
+[36mATtiny402[0m            ATTINY402   16MHz        4KB      256B   ATtiny402
+[36mATtiny404[0m            ATTINY404   16MHz        4KB      256B   ATtiny404
+[36mATtiny406[0m            ATTINY406   16MHz        4KB      256B   ATtiny406
+[36mATtiny412[0m            ATTINY412   16MHz        4KB      256B   ATtiny412
+[36mATtiny414[0m            ATTINY414   16MHz        4KB      256B   ATtiny414
+[36mATtiny416[0m            ATTINY416   16MHz        4KB      256B   ATtiny416
+[36mxplained_nano_416[0m    ATTINY416   20MHz        4KB      256B   ATtiny416 Xplained Nano
+[36mATtiny417[0m            ATTINY417   16MHz        4KB      256B   ATtiny417
+[36mATtiny424[0m            ATTINY424   16MHz        4KB      512B   ATtiny424
+[36mATtiny426[0m            ATTINY426   16MHz        4KB      512B   ATtiny426
+[36mATtiny427[0m            ATTINY427   16MHz        4KB      512B   ATtiny427
+[36mATtiny804[0m            ATTINY804   16MHz        8KB      512B   ATtiny804
+[36mATtiny806[0m            ATTINY806   16MHz        8KB      512B   ATtiny806
+[36mATtiny807[0m            ATTINY807   16MHz        8KB      512B   ATtiny807
+[36mATtiny814[0m            ATTINY814   16MHz        8KB      512B   ATtiny814
+[36mATtiny816[0m            ATTINY816   16MHz        8KB      512B   ATtiny816
+[36mATtiny817[0m            ATTINY817   16MHz        8KB      512B   ATtiny817
+[36mATtiny824[0m            ATTINY824   16MHz        8KB      1KB    ATtiny824
+[36mATtiny826[0m            ATTINY826   16MHz        8KB      1KB    ATtiny826
+[36mATtiny827[0m            ATTINY827   16MHz        8KB      1KB    ATtiny827
+[36mavr_iot_wg[0m           ATMEGA4808  16MHz        48KB     6KB    AVR-IoT WG Development Board
+[36mAVR128DA28[0m           AVR128DA28  24MHz        128KB    16KB   AVR128DA28
+[36mAVR128DA32[0m           AVR128DA32  24MHz        128KB    16KB   AVR128DA32
+[36mAVR128DA48[0m           AVR128DA48  24MHz        128KB    16KB   AVR128DA48
+[36mAVR128DA64[0m           AVR128DA64  24MHz        128KB    16KB   AVR128DA64
+[36mAVR128DB28[0m           AVR128DB28  24MHz        128KB    16KB   AVR128DB28
+[36mAVR128DB32[0m           AVR128DB32  24MHz        128KB    16KB   AVR128DB32
+[36mAVR128DB48[0m           AVR128DB48  24MHz        128KB    16KB   AVR128DB48
+[36mAVR128DB64[0m           AVR128DB64  24MHz        128KB    16KB   AVR128DB64
+[36mAVR32DA28[0m            AVR32DA28   24MHz        32KB     4KB    AVR32DA28
+[36mAVR32DA32[0m            AVR32DA32   24MHz        32KB     4KB    AVR32DA32
+[36mAVR32DA48[0m            AVR32DA48   24MHz        32KB     4KB    AVR32DA48
+[36mAVR32DB28[0m            AVR32DB28   24MHz        32KB     4KB    AVR32DB28
+[36mAVR32DB32[0m            AVR32DB32   24MHz        32KB     4KB    AVR32DB32
+[36mAVR32DB48[0m            AVR32DB48   24MHz        32KB     4KB    AVR32DB48
+[36mAVR64DA28[0m            AVR64DA28   24MHz        64KB     8KB    AVR64DA28
+[36mAVR64DA32[0m            AVR64DA32   24MHz        64KB     8KB    AVR64DA32
+[36mAVR64DA48[0m            AVR64DA48   24MHz        64KB     8KB    AVR64DA48
+[36mAVR64DA64[0m            AVR64DA64   24MHz        64KB     8KB    AVR64DA64
+[36mAVR64DB28[0m            AVR64DB28   24MHz        64KB     8KB    AVR64DB28
+[36mAVR64DB32[0m            AVR64DB32   24MHz        64KB     8KB    AVR64DB32
+[36mAVR64DB48[0m            AVR64DB48   24MHz        64KB     8KB    AVR64DB48
+[36mAVR64DB64[0m            AVR64DB64   24MHz        64KB     8KB    AVR64DB64
+[36mAVR64DD14[0m            AVR64DD14   24MHz        64KB     8KB    AVR64DD14
+[36mAVR64DD20[0m            AVR64DD20   24MHz        64KB     8KB    AVR64DD20
+[36mAVR64DD28[0m            AVR64DD28   24MHz        64KB     8KB    AVR64DD28
+[36mAVR64DD32[0m            AVR64DD32   24MHz        64KB     8KB    AVR64DD32
+[36mnano_every[0m           ATMEGA4809  16MHz        47.50KB  6KB    Arduino Nano Every
+[36muno_wifi_rev2[0m        ATMEGA4809  16MHz        47.50KB  6KB    Arduino Uno WiFi Rev2
+[36mcuriosity_nano_4809[0m  ATMEGA4809  16MHz        48KB     6KB    Curiosity Nano ATmega4809
+[36mcuriosity_nano_da[0m    AVR128DA48  24MHz        128KB    16KB   Curiosity Nano AVR128DA48
+[36mcuriosity_nano_db[0m    AVR128DB48  24MHz        128KB    16KB   Curiosity Nano AVR128DB48
+[36mxplained_pro_4809[0m    ATMEGA4809  16MHz        48KB     6KB    Xplained Pro ATmega4809
+
+Platform: [1matmelsam[0m
+================================================================================
+ID                             MCU          Frequency    Flash    RAM    Name
+-----------------------------  -----------  -----------  -------  -----  ---------------------------------------
+[36madafruit_blm_badge[0m             SAMD21E18A   48MHz        256KB    32KB   Adafruit BLM Badge
+[36madafruit_circuitplayground_m0[0m  SAMD21G18A   48MHz        256KB    32KB   Adafruit Circuit Playground Express
+[36madafruit_crickit_m0[0m            SAMD21G18A   48MHz        256KB    32KB   Adafruit Crickit M0
+[36madafruit_feather_m0[0m            SAMD21G18A   48MHz        256KB    32KB   Adafruit Feather M0
+[36madafruit_feather_m0_express[0m    SAMD21G18A   48MHz        256KB    32KB   Adafruit Feather M0 Express
+[36madafruit_feather_m4_can[0m        SAME51J19A   120MHz       496KB    192KB  Adafruit Feather M4 CAN
+[36madafruit_feather_m4[0m            SAMD51J19A   120MHz       512KB    192KB  Adafruit Feather M4 Express
+[36madafruit_gemma_m0[0m              SAMD21E18A   48MHz        256KB    32KB   Adafruit Gemma M0
+[36madafruit_grandcentral_m4[0m       SAMD51P20A   120MHz       1MB      256KB  Adafruit Grand Central M4
+[36madafruit_hallowing[0m             SAMD21G18A   48MHz        256KB    32KB   Adafruit Hallowing M0
+[36madafruit_hallowing_m4[0m          SAMD51J19A   120MHz       496KB    192KB  Adafruit Hallowing M4
+[36madafruit_itsybitsy_m0[0m          SAMD21G18A   48MHz        256KB    32KB   Adafruit ItsyBitsy M0
+[36madafruit_itsybitsy_m4[0m          SAMD51G19A   120MHz       512KB    192KB  Adafruit ItsyBitsy M4
+[36madafruit_monster_m4sk[0m          SAMD51G19A   120MHz       496KB    192KB  Adafruit MONSTER M4SK
+[36madafruit_matrix_portal_m4[0m      SAMD51J19A   120MHz       496KB    192KB  Adafruit Matrix Portal M4
+[36madafruit_metro_m0[0m              SAMD21G18A   48MHz        256KB    32KB   Adafruit Metro M0 Expresss
+[36madafruit_metro_m4[0m              SAMD51J19A   120MHz       512KB    192KB  Adafruit Metro M4
+[36madafruit_metro_m4_airliftlite[0m  SAMD51J19A   120MHz       512KB    192KB  Adafruit Metro M4 AirLift Lite
+[36madafruit_neokeytrinkey_m0[0m      SAMD21E18A   48MHz        256KB    32KB   Adafruit NeoKey Trinkey
+[36madafruit_neotrinkey_m0[0m         SAMD21E18A   48MHz        256KB    32KB   Adafruit NeoPixel Trinkey
+[36madafruit_proxlighttrinkey_m0[0m   SAMD21E18A   48MHz        256KB    32KB   Adafruit ProxLight Trinkey
+[36madafruit_pygamer_advance_m4[0m    SAMD51J20A   120MHz       1MB      256KB  Adafruit PyGamer Advance M4
+[36madafruit_pygamer_m4[0m            SAMD51J19A   120MHz       512KB    192KB  Adafruit PyGamer M4 Express
+[36madafruit_pyportal_m4[0m           SAMD51J20A   120MHz       1MB      256KB  Adafruit PyPortal M4
+[36madafruit_pyportal_m4_titano[0m    SAMD51J20A   120MHz       1MB      256KB  Adafruit PyPortal M4 Titano
+[36madafruit_qt_py_m0[0m              SAMD21E18A   48MHz        256KB    32KB   Adafruit QT Py M0
+[36madafruit_rotarytrinkey_m0[0m      SAMD21E18A   48MHz        256KB    32KB   Adafruit Rotary Trinkey
+[36madafruit_slidetrinkey_m0[0m       SAMD21E18A   48MHz        256KB    32KB   Adafruit Slide Trinkey
+[36madafruit_trellis_m4[0m            SAMD51J19A   120MHz       512KB    192KB  Adafruit Trellis M4
+[36madafruit_trinket_m0[0m            SAMD21E18A   48MHz        256KB    32KB   Adafruit Trinket M0
+[36madafruit_pirkey[0m                SAMD21E18A   48MHz        256KB    32KB   Adafruit pIRkey
+[36madafruit_pybadge_airlift_m4[0m    SAMD51J20A   120MHz       1008KB   192KB  Adafruit pyBadge AirLift M4
+[36madafruit_pybadge_m4[0m            SAMD51J19A   120MHz       512KB    192KB  Adafruit pyBadge M4 Express
+[36mdue[0m                            AT91SAM3X8E  84MHz        512KB    96KB   Arduino Due (Programming Port)
+[36mdueUSB[0m                         AT91SAM3X8E  84MHz        512KB    96KB   Arduino Due (USB Native Port)
+[36mmzeroUSB[0m                       SAMD21G18A   48MHz        256KB    32KB   Arduino M0
+[36mmzeroproUSB[0m                    SAMD21G18A   48MHz        256KB    32KB   Arduino M0 Pro (Native USB Port)
+[36mmzeropro[0m                       SAMD21G18A   48MHz        256KB    32KB   Arduino M0 Pro (Programming/Debug Port)
+[36mmkrfox1200[0m                     SAMD21G18A   48MHz        256KB    32KB   Arduino MKR FOX 1200
+[36mmkrgsm1400[0m                     SAMD21G18A   48MHz        256KB    32KB   Arduino MKR GSM 1400
+[36mmkrnb1500[0m                      SAMD21G18A   48MHz        256KB    32KB   Arduino MKR NB 1500
+[36mmkrwan1300[0m                     SAMD21G18A   48MHz        256KB    32KB   Arduino MKR WAN 1300
+[36mmkrwan1310[0m                     SAMD21G18A   48MHz        256KB    32KB   Arduino MKR WAN 1310
+[36mmkrwifi1010[0m                    SAMD21G18A   48MHz        256KB    32KB   Arduino MKR WiFi 1010
+[36mmkr1000USB[0m                     SAMD21G18A   48MHz        256KB    32KB   Arduino MKR1000
+[36mmkrzero[0m                        SAMD21G18A   48MHz        256KB    32KB   Arduino MKRZERO
+[36mtian[0m                           SAMD21G18A   48MHz        256KB    32KB   Arduino Tian
+[36mzero[0m                           SAMD21G18A   48MHz        256KB    32KB   Arduino Zero (Programming/Debug Port)
+[36mzeroUSB[0m                        SAMD21G18A   48MHz        256KB    32KB   Arduino Zero (USB Native Port)
+[36msamr21_xpro[0m                    SAMR21G18A   48MHz        256KB    32KB   Atmel ATSAMR21-XPRO
+[36msamd21g18a[0m                     SAMD21G18A   48MHz        256KB    32KB   Atmel ATSAMW25-XPRO
+[36msamc21_xpro[0m                    SAMC21J18A   48MHz        256KB    32KB   Atmel SAMC21-XPRO
+[36msamd21_xpro[0m                    SAMD21J18A   48MHz        256KB    32KB   Atmel SAMD21-XPRO
+[36mdigix[0m                          AT91SAM3X8E  84MHz        512KB    96KB   Digistump DigiX
+[36mcurrent_ranger[0m                 SAMD21G18A   48MHz        256KB    32KB   LowPowerLab CurrentRanger
+[36mmkrvidor4000[0m                   SAMD21G18A   48MHz        256KB    32KB   MKR Vidor 4000
+[36mminitronics20[0m                  SAMD21J18A   48MHz        256KB    32KB   Minitronics v2.0
+[36mmoteino_zero[0m                   SAMD21G18A   48MHz        256KB    32KB   Moteino M0
+[36mnano_33_iot[0m                    SAMD21G18A   48MHz        256KB    32KB   NANO 33 IoT
+[36msodaq_autonomo[0m                 SAMD21J18A   48MHz        256KB    32KB   SODAQ Autonomo
+[36msodaq_explorer[0m                 SAMD21J18A   48MHz        256KB    32KB   SODAQ ExpLoRer
+[36msodaq_one[0m                      SAMD21G18A   48MHz        256KB    32KB   SODAQ ONE
+[36msodaq_sara[0m                     SAMD21J18A   48MHz        256KB    32KB   SODAQ SARA
+[36msodaq_sff[0m                      SAMD21G18A   48MHz        256KB    32KB   SODAQ SFF
+[36msainSmartDue[0m                   AT91SAM3X8E  84MHz        512KB    96KB   SainSmart Due (Programming Port)
+[36msainSmartDueUSB[0m                AT91SAM3X8E  84MHz        512KB    96KB   SainSmart Due (USB Native Port)
+[36mseeed_femto[0m                    SAMD21G18A   48MHz        256KB    32KB   Seeeduino Femto M0
+[36mseeeduino_lorawan[0m              SAMD21G18A   48MHz        256KB    32KB   Seeeduino LoRaWAN
+[36mseeed_wio_lite_mg126[0m           SAMD21G18A   48MHz        256KB    32KB   Seeeduino Wio Lite MG126
+[36mseeed_wio_terminal[0m             SAMD51P19A   120MHz       496KB    192KB  Seeeduino Wio Terminal
+[36mseeed_xiao[0m                     SAMD21G18A   48MHz        256KB    32KB   Seeeduino XIAO
+[36mseeed_zero[0m                     SAMD21G18A   48MHz        256KB    32KB   Seeeduino Zero
+[36msparkfun_samd21_9dof[0m           SAMD21G18A   48MHz        256KB    32KB   SparkFun 9DoF Razor IMU M0
+[36msparkfun_qwiic_micro_samd21e[0m   SAMD21E18A   48MHz        256KB    32KB   SparkFun Qwiic Micro
+[36msparkfun_redboard_turbo[0m        SAMD21G18A   48MHz        256KB    32KB   SparkFun RedBoard Turbo
+[36msparkfun_samd21_dev_usb[0m        SAMD21G18A   48MHz        256KB    32KB   SparkFun SAMD21 Dev Breakout
+[36msparkfun_samd21_mini_usb[0m       SAMD21G18A   48MHz        256KB    32KB   SparkFun SAMD21 Mini Breakout
+[36msparkfun_samd21_proRF[0m          SAMD21G18A   48MHz        256KB    32KB   SparkFun SAMD21 Pro RF
+[36msparkfun_samd51_micromod[0m       SAMD51J20A   120MHz       496KB    192KB  SparkFun SAMD51 MicroMod
+[36msparkfun_samd51_thing_plus[0m     SAMD51J20A   120MHz       496KB    192KB  SparkFun SAMD51 Thing Plus
+[36mtuinozero96[0m                    SAMD21G18A   48MHz        256KB    32KB   Tuino 096
+
+Platform: [1mazadi[0m
+================================================================================
+ID          MCU    Frequency    Flash    RAM    Name
+----------  -----  -----------  -------  -----  -----------
+[36martix7-35t[0m  AM130  9MHz         0B       128KB  Artix-7 35T
+
+Platform: [1mchipsalliance[0m
+================================================================================
+ID              MCU    Frequency    Flash    RAM     Name
+--------------  -----  -----------  -------  ------  -------------------------
+[36mswervolf_nexys[0m         320MHz       16MB     1.16MB  RVfpga: Digilent Nexys A7
+
+Platform: [1mespressif32[0m
+================================================================================
+ID                                   MCU      Frequency    Flash    RAM     Name
+-----------------------------------  -------  -----------  -------  ------  ----------------------------------------------------
+[36m4d_systems_esp32s3_gen4_r8n16[0m        ESP32S3  240MHz       16MB     320KB   4D Systems GEN4-ESP32 16MB (ESP32S3-R8N16)
+[36mesp32cam[0m                             ESP32    240MHz       4MB      320KB   AI Thinker ESP32-CAM
+[36malksesp32[0m                            ESP32    240MHz       4MB      320KB   ALKS ESP32
+[36maz-delivery-devkit-v4[0m                ESP32    240MHz       4MB      520KB   AZ-Delivery ESP-32 Dev Kit C V4
+[36mfeatheresp32[0m                         ESP32    240MHz       4MB      320KB   Adafruit ESP32 Feather
+[36mfeatheresp32-s2[0m                      ESP32S2  240MHz       4MB      320KB   Adafruit ESP32-S2 Feather Development Board
+[36madafruit_feather_esp32_v2[0m            ESP32    240MHz       8MB      320KB   Adafruit Feather ESP32 V2
+[36madafruit_feather_esp32s2[0m             ESP32S2  240MHz       4MB      320KB   Adafruit Feather ESP32-S2
+[36madafruit_feather_esp32s2_reversetft[0m  ESP32S2  240MHz       4MB      320KB   Adafruit Feather ESP32-S2 Reverse TFT
+[36madafruit_feather_esp32s2_tft[0m         ESP32S2  240MHz       4MB      320KB   Adafruit Feather ESP32-S2 TFT
+[36madafruit_feather_esp32s3[0m             ESP32S3  240MHz       4MB      320KB   Adafruit Feather ESP32-S3 2MB PSRAM
+[36madafruit_feather_esp32s3_nopsram[0m     ESP32S3  240MHz       8MB      320KB   Adafruit Feather ESP32-S3 No PSRAM
+[36madafruit_feather_esp32s3_reversetft[0m  ESP32S3  240MHz       4MB      320KB   Adafruit Feather ESP32-S3 Reverse TFT
+[36madafruit_feather_esp32s3_tft[0m         ESP32S3  240MHz       4MB      320KB   Adafruit Feather ESP32-S3 TFT
+[36madafruit_funhouse_esp32s2[0m            ESP32S2  240MHz       4MB      320KB   Adafruit FunHouse
+[36madafruit_itsybitsy_esp32[0m             ESP32    240MHz       8MB      320KB   Adafruit ItsyBitsy ESP32
+[36madafruit_magtag29_esp32s2[0m            ESP32S2  240MHz       4MB      320KB   Adafruit MagTag 2.9
+[36madafruit_matrixportal_esp32s3[0m        ESP32S3  240MHz       8MB      320KB   Adafruit MatrixPortal ESP32-S3
+[36madafruit_metro_esp32s2[0m               ESP32S2  240MHz       4MB      320KB   Adafruit Metro ESP32-S2
+[36madafruit_metro_esp32s3[0m               ESP32S3  240MHz       16MB     320KB   Adafruit Metro ESP32-S3
+[36madafruit_qtpy_esp32[0m                  ESP32    240MHz       8MB      320KB   Adafruit QT Py ESP32
+[36madafruit_qtpy_esp32c3[0m                ESP32C3  160MHz       4MB      320KB   Adafruit QT Py ESP32-C3
+[36madafruit_qtpy_esp32s2[0m                ESP32S2  240MHz       4MB      320KB   Adafruit QT Py ESP32-S2
+[36madafruit_qtpy_esp32s3_n4r2[0m           ESP32S3  240MHz       4MB      320KB   Adafruit QT Py ESP32-S3 (4M Flash 2M PSRAM)
+[36madafruit_qtpy_esp32s3_nopsram[0m        ESP32S3  240MHz       8MB      320KB   Adafruit QT Py ESP32-S3 No PSRAM
+[36madafruit_qualia_s3_rgb666[0m            ESP32S3  240MHz       16MB     320KB   Adafruit Qualia ESP32-S3 RGB666
+[36madafruit_camera_esp32s3[0m              ESP32S3  240MHz       4MB      320KB   Adafruit pyCamera S3
+[36mesp32-c3-m1i-kit[0m                     ESP32C3  160MHz       4MB      320KB   Ai-Thinker ESP-C3-M1-I-Kit
+[36mnodemcu-32s2[0m                         ESP32S2  240MHz       4MB      320KB   Ai-Thinker NodeMCU-32S2 (ESP-12K)
+[36mairm2m_core_esp32c3[0m                  ESP32C3  160MHz       4MB      320KB   AirM2M CORE ESP32C3
+[36mespea32[0m                              ESP32    240MHz       4MB      320KB   April Brother ESPea32
+[36marduino_nano_esp32[0m                   ESP32S3  240MHz       16MB     320KB   Arduino Nano ESP32
+[36matd147_s3[0m                            ESP32S3  240MHz       8MB      320KB   ArtronShop ATD1.47-S3
+[36mioxesp32[0m                             ESP32    240MHz       4MB      320KB   ArtronShop IOXESP32
+[36mioxesp32ps[0m                           ESP32    240MHz       4MB      320KB   ArtronShop IOXESP32PS
+[36maventen_s3_sync[0m                      ESP32S3  240MHz       16MB     320KB   Aventen S3 Sync
+[36mbpi-bit[0m                              ESP32    160MHz       4MB      320KB   BPI-Bit
+[36mbpi_leaf_s3[0m                          ESP32S3  240MHz       8MB      320KB   BPI-Leaf-S3
+[36mwifiduino32[0m                          ESP32    240MHz       4MB      320KB   Blinker WiFiduino32
+[36mwifiduino32s3[0m                        ESP32S3  240MHz       8MB      320KB   Blinker WiFiduino32S3
+[36mwifiduino32c3[0m                        ESP32C3  160MHz       4MB      320KB   Blinker WiFiduinoV2 (ESP32-C3)
+[36mcnrs_aw2eth[0m                          ESP32    240MHz       4MB      320KB   CNRS AW2ETH
+[36mconnaxio_espoir[0m                      ESP32    240MHz       4MB      320KB   Connaxio's Espoir
+[36mcytron_maker_feather_aiot_s3[0m         ESP32S3  240MHz       8MB      320KB   Cytron Maker Feather AIoT S3
+[36md-duino-32[0m                           ESP32    240MHz       4MB      320KB   D-duino-32
+[36mdfrobot_beetle_esp32c3[0m               ESP32C3  160MHz       4MB      320KB   DFRobot Beetle ESP32-C3
+[36mdfrobot_firebeetle2_esp32e[0m           ESP32    240MHz       4MB      320KB   DFRobot Firebeetle 2 ESP32-E
+[36mdfrobot_firebeetle2_esp32s3[0m          ESP32S3  240MHz       4MB      320KB   DFRobot Firebeetle 2 ESP32-S3
+[36mdfrobot_romeo_esp32s3[0m                ESP32S3  240MHz       16MB     320KB   DFRobot Romeo ESP32-S3
+[36mesp32doit-devkit-v1[0m                  ESP32    240MHz       4MB      320KB   DOIT ESP32 DEVKIT V1
+[36mesp32doit-espduino[0m                   ESP32    240MHz       4MB      320KB   DOIT ESPduino32
+[36mdeneyapkart[0m                          ESP32    240MHz       4MB      320KB   Deneyap Kart
+[36mdeneyapkart1A[0m                        ESP32    240MHz       4MB      320KB   Deneyap Kart 1A
+[36mdeneyapkart1Av2[0m                      ESP32S3  240MHz       4MB      320KB   Deneyap Kart 1A v2
+[36mdeneyapkartg[0m                         ESP32C3  160MHz       4MB      320KB   Deneyap Kart G
+[36mdeneyapmini[0m                          ESP32S2  240MHz       4MB      320KB   Deneyap Mini
+[36mdeneyapminiv2[0m                        ESP32S2  240MHz       4MB      320KB   Deneyap Mini v2
+[36mdenky_d4[0m                             ESP32    240MHz       8MB      320KB   Denky D4 (PICO-V3-02)
+[36mdenky32[0m                              ESP32    240MHz       4MB      320KB   Denky32 (WROOM32)
+[36mminimain_esp32s2[0m                     ESP32S2  240MHz       4MB      320KB   Department of Alchemy MiniMain ESP32-S2
+[36mpocket_32[0m                            ESP32    240MHz       4MB      320KB   Dongsen Tech Pocket 32
+[36mfm-devkit[0m                            ESP32    240MHz       4MB      320KB   ESP32 FM DevKit
+[36mpico32[0m                               ESP32    240MHz       4MB      320KB   ESP32 Pico Kit
+[36mesp32s3_powerfeather[0m                 ESP32S3  240MHz       8MB      320KB   ESP32-S3 PowerFeather
+[36mesp32s3camlcd[0m                        ESP32S3  240MHz       8MB      320KB   ESP32S3 CAM LCD
+[36mesp32vn-iot-uno[0m                      ESP32    240MHz       4MB      320KB   ESP32vn IoT Uno
+[36mespectro32[0m                           ESP32    240MHz       4MB      320KB   ESPectro32
+[36mespino32[0m                             ESP32    240MHz       4MB      320KB   ESPino32
+[36metboard[0m                              ESP32    240MHz       4MB      320KB   ETBoard
+[36mesp320[0m                               ESP32    240MHz       4MB      320KB   Electronic SweetPeas ESP320
+[36matmegazero_esp32s2[0m                   ESP32S2  240MHz       16MB     320KB   EspinalLab ATMegaZero ESP32-S2
+[36mesp-wrover-kit[0m                       ESP32    240MHz       4MB      320KB   Espressif ESP-WROVER-KIT
+[36mesp32dev[0m                             ESP32    240MHz       4MB      320KB   Espressif ESP32 Dev Module
+[36mesp32-c3-devkitc-02[0m                  ESP32C3  160MHz       4MB      320KB   Espressif ESP32-C3-DevKitC-02
+[36mesp32-c3-devkitm-1[0m                   ESP32C3  160MHz       4MB      320KB   Espressif ESP32-C3-DevKitM-1
+[36mesp32-c6-devkitc-1[0m                   ESP32C6  160MHz       8MB      320KB   Espressif ESP32-C6-DevKitC-1
+[36mesp32-c6-devkitm-1[0m                   ESP32C6  160MHz       4MB      320KB   Espressif ESP32-C6-DevKitM-1
+[36mesp32-pico-devkitm-2[0m                 ESP32    240MHz       8MB      320KB   Espressif ESP32-PICO-DevKitM-2
+[36mesp32-s2-kaluga-1[0m                    ESP32S2  240MHz       4MB      320KB   Espressif ESP32-S2-Kaluga-1 Kit
+[36mesp32-s2-saola-1[0m                     ESP32S2  240MHz       4MB      320KB   Espressif ESP32-S2-Saola-1
+[36mesp32s3box[0m                           ESP32S3  240MHz       16MB     320KB   Espressif ESP32-S3-Box
+[36mesp32-s3-devkitc-1[0m                   ESP32S3  240MHz       8MB      320KB   Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+[36mesp32-s3-devkitm-1[0m                   ESP32S3  240MHz       8MB      320KB   Espressif ESP32-S3-DevKitM-1
+[36mesp32s3usbotg[0m                        ESP32S3  240MHz       8MB      320KB   Espressif ESP32-S3-USB-OTG
+[36mfirebeetle32[0m                         ESP32    240MHz       16MB     520KB   FireBeetle-ESP32
+[36mpiranha_esp32[0m                        ESP32    240MHz       4MB      320KB   Fishino Piranha ESP-32
+[36mfranzininho_wifi_esp32s2[0m             ESP32S2  240MHz       4MB      320KB   Franzininho WiFi
+[36mesp32-s2-franzininho[0m                 ESP32S2  240MHz       4MB      320KB   Franzininho WiFi Board
+[36mfranzininho_wifi_msc_esp32s2[0m         ESP32S2  240MHz       4MB      320KB   Franzininho WiFi MSC
+[36mfreenove_esp32_s3_wroom[0m              ESP32S3  240MHz       8MB      320KB   Freenove ESP32-S3 WROOM N8R8 (8MB Flash / 8MB PSRAM)
+[36mfreenove_esp32_wrover[0m                ESP32    240MHz       4MB      320KB   Freenove ESP32-Wrover
+[36mfrogboard[0m                            ESP32    240MHz       4MB      320KB   Frog Board ESP32
+[36mhoneylemon[0m                           ESP32    240MHz       4MB      320KB   HONEYLemon
+[36mheltec_wifi_kit_32[0m                   ESP32    240MHz       4MB      320KB   Heltec WiFi Kit 32
+[36mheltec_wifi_kit_32_v2[0m                ESP32    240MHz       8MB      320KB   Heltec WiFi Kit 32 (V2)
+[36mheltec_wifi_kit_32_V3[0m                ESP32S3  240MHz       8MB      320KB   Heltec WiFi Kit 32 (V3)
+[36mheltec_wifi_lora_32[0m                  ESP32    240MHz       4MB      320KB   Heltec WiFi LoRa 32
+[36mheltec_wifi_lora_32_V2[0m               ESP32    240MHz       8MB      320KB   Heltec WiFi LoRa 32 (V2)
+[36mheltec_wifi_lora_32_V3[0m               ESP32S3  240MHz       8MB      320KB   Heltec WiFi LoRa 32 (V3)
+[36mheltec_wireless_stick[0m                ESP32    240MHz       8MB      320KB   Heltec Wireless Stick
+[36mheltec_wireless_stick_lite[0m           ESP32    240MHz       4MB      320KB   Heltec Wireless Stick Lite
+[36mhornbill32dev[0m                        ESP32    240MHz       4MB      320KB   Hornbill ESP32 Dev
+[36mhornbill32minima[0m                     ESP32    240MHz       4MB      320KB   Hornbill ESP32 Minima
+[36minex_openkb[0m                          ESP32    240MHz       4MB      320KB   INEX OpenKB
+[36mimbrios-logsens-v1p1[0m                 ESP32    240MHz       4MB      320KB   Imbrios LogSens V1P1
+[36mintorobot[0m                            ESP32    240MHz       4MB      320KB   IntoRobot Fig
+[36miotaap_magnolia[0m                      ESP32    240MHz       4MB      320KB   IoTaaP Magnolia
+[36mkits-edu[0m                             ESP32    240MHz       4MB      320KB   KITS ESP32 EDU
+[36mnebulas3[0m                             ESP32S3  240MHz       4MB      320KB   Kinetic Dynamics Nebula S3
+[36msensesiot_weizen[0m                     ESP32    240MHz       4MB      320KB   LOGISENSES Senses Weizen
+[36mlabplus_mpython[0m                      ESP32    240MHz       4MB      320KB   Labplus mPython
+[36mlilka_v2[0m                             ESP32S3  240MHz       16MB     320KB   Lilka v2
+[36mlilygo-t-display[0m                     ESP32    240MHz       4MB      320KB   LilyGo T-Display
+[36mlilygo-t-display-s3[0m                  ESP32S3  240MHz       16MB     320KB   LilyGo T-Display-S3
+[36mlilygo-t3-s3[0m                         ESP32S3  240MHz       4MB      320KB   LilyGo T3-S3
+[36mlionbit[0m                              ESP32    240MHz       4MB      320KB   Lion:Bit Dev Board
+[36mlionbits3[0m                            ESP32S3  240MHz       4MB      320KB   Lion:Bit S3 STEM Dev Board
+[36mm5stack-atoms3[0m                       ESP32S3  240MHz       8MB      320KB   M5Stack AtomS3
+[36mm5stack-core-esp32[0m                   ESP32    240MHz       4MB      320KB   M5Stack Core ESP32
+[36mm5stack-core-esp32-16M[0m               ESP32    240MHz       16MB     520KB   M5Stack Core ESP32 16M
+[36mm5stack-core2[0m                        ESP32    240MHz       16MB     4.31MB  M5Stack Core2
+[36mm5stack-cores3[0m                       ESP32S3  240MHz       16MB     320KB   M5Stack CoreS3
+[36mm5stack-fire[0m                         ESP32    240MHz       16MB     4.31MB  M5Stack FIRE
+[36mm5stack-grey[0m                         ESP32    240MHz       16MB     520KB   M5Stack GREY ESP32
+[36mm5stack-stamps3[0m                      ESP32S3  240MHz       8MB      320KB   M5Stack StampS3
+[36mm5stack-station[0m                      ESP32    240MHz       16MB     4.31MB  M5Stack Station
+[36mm5stack-timer-cam[0m                    ESP32    240MHz       4MB      320KB   M5Stack Timer CAM
+[36mm5stack-atom[0m                         ESP32    240MHz       4MB      320KB   M5Stack-ATOM
+[36mm5stack-coreink[0m                      ESP32    240MHz       4MB      320KB   M5Stack-Core Ink
+[36mm5stamp-pico[0m                         ESP32    240MHz       4MB      320KB   M5Stamp-Pico
+[36mm5stick-c[0m                            ESP32    240MHz       4MB      320KB   M5Stick-C
+[36mmgbot-iotik32a[0m                       ESP32    240MHz       4MB      320KB   MGBOT IOTIK 32A
+[36mmgbot-iotik32b[0m                       ESP32    240MHz       4MB      320KB   MGBOT IOTIK 32B
+[36mmhetesp32devkit[0m                      ESP32    240MHz       4MB      320KB   MH ET LIVE ESP32DevKIT
+[36mmhetesp32minikit[0m                     ESP32    240MHz       4MB      320KB   MH ET LIVE ESP32MiniKit
+[36mmagicbit[0m                             ESP32    240MHz       4MB      320KB   MagicBit
+[36mkb32-ft[0m                              ESP32    240MHz       4MB      320KB   MakerAsia KB32-FT
+[36mnano32[0m                               ESP32    240MHz       4MB      320KB   MakerAsia Nano32
+[36mmicroduino-core-esp32[0m                ESP32    240MHz       4MB      320KB   Microduino Core ESP32
+[36mmotorgo_mini_1[0m                       ESP32S3  240MHz       4MB      320KB   MotorGo Mini 1 (ESP32-S3)
+[36mredpill_esp32s3[0m                      ESP32S3  240MHz       8MB      320KB   Munich Labs RedPill ESP32-S3
+[36mnamino_arancio[0m                       ESP32S3  240MHz       4MB      320KB   Namino Arancio
+[36mnamino_rosso[0m                         ESP32S3  240MHz       4MB      320KB   Namino Rosso
+[36mnode32s[0m                              ESP32    240MHz       4MB      320KB   Node32s
+[36mnodemcu-32s[0m                          ESP32    240MHz       4MB      320KB   NodeMCU-32S
+[36mquantum[0m                              ESP32    240MHz       16MB     320KB   Noduino Quantum
+[36modroid_esp32[0m                         ESP32    240MHz       16MB     320KB   ODROID-GO
+[36mesp32-devkitlipo[0m                     ESP32    240MHz       4MB      320KB   OLIMEX ESP32-DevKit-LiPo
+[36mesp32-evb[0m                            ESP32    240MHz       4MB      320KB   OLIMEX ESP32-EVB
+[36mesp32-gateway[0m                        ESP32    240MHz       4MB      320KB   OLIMEX ESP32-GATEWAY
+[36mesp32-pro[0m                            ESP32    240MHz       4MB      320KB   OLIMEX ESP32-PRO
+[36mesp32-poe[0m                            ESP32    240MHz       4MB      320KB   OLIMEX ESP32-PoE
+[36mesp32-poe-iso[0m                        ESP32    240MHz       4MB      320KB   OLIMEX ESP32-PoE-ISO
+[36moroca_edubot[0m                         ESP32    240MHz       4MB      320KB   OROCA EduBot
+[36monehorse32dev[0m                        ESP32    240MHz       4MB      320KB   Onehorse ESP32 Dev Module
+[36mhealthypi4[0m                           ESP32    240MHz       4MB      320KB   ProtoCentral HealthyPi 4
+[36mpycom_gpy[0m                            ESP32    240MHz       4MB      320KB   Pycom GPy
+[36mlopy[0m                                 ESP32    240MHz       4MB      320KB   Pycom LoPy
+[36mlopy4[0m                                ESP32    240MHz       4MB      1.25MB  Pycom LoPy4
+[36mwipy3[0m                                ESP32    240MHz       4MB      1.25MB  Pycom WiPy3
+[36mqchip[0m                                ESP32    240MHz       4MB      320KB   Qchip
+[36mrymcu-esp32-c3-devkitm-1[0m             ESP32C3  160MHz       4MB      320KB   RYMCU ESP32-C3-DevKitM-1
+[36mrymcu-esp32-devkitc[0m                  ESP32    240MHz       4MB      320KB   RYMCU ESP32-DevKitC
+[36mrymcu-esp32-s3-devkitc-1[0m             ESP32S3  240MHz       8MB      320KB   RYMCU ESP32-S3-DevKitC-1-N8R2 (8 MB QD, 2 MB PSRAM)
+[36mroboheart_hercules[0m                   ESP32    240MHz       4MB      320KB   RoboHeart Hercules
+[36ms_odi_ultra[0m                          ESP32    240MHz       4MB      320KB   S.ODI Ultra v1
+[36msg-o_airMon[0m                          ESP32    240MHz       4MB      320KB   SG-O AirMon
+[36mwatchy[0m                               ESP32    240MHz       4MB      320KB   SQFMI Watchy v2.0
+[36medgebox-esp-100[0m                      ESP32S3  240MHz       16MB     320KB   Seeed Studio Edgebox-ESP-100
+[36mseeed_xiao_esp32c3[0m                   ESP32C3  160MHz       4MB      320KB   Seeed Studio XIAO ESP32C3
+[36mseeed_xiao_esp32c6[0m                   ESP32C6  160MHz       4MB      320KB   Seeed Studio XIAO ESP32C6
+[36mseeed_xiao_esp32s3[0m                   ESP32S3  240MHz       8MB      320KB   Seeed Studio XIAO ESP32S3
+[36mwesp32[0m                               ESP32    240MHz       4MB      320KB   Silicognition wESP32
+[36mbee_data_logger[0m                      ESP32S3  240MHz       8MB      320KB   Smart Bee Data Logger
+[36mbee_motion[0m                           ESP32S2  240MHz       4MB      320KB   Smart Bee Motion
+[36mbee_motion_mini[0m                      ESP32C3  160MHz       4MB      320KB   Smart Bee Motion Mini
+[36mbee_motion_s3[0m                        ESP32S3  240MHz       8MB      320KB   Smart Bee Motion S3
+[36mbee_s3[0m                               ESP32S3  240MHz       8MB      320KB   Smart Bee S3
+[36msparkfun_esp32_iot_redboard[0m          ESP32    240MHz       4MB      320KB   SparkFun ESP32 IoT RedBoard
+[36msparkfun_esp32micromod[0m               ESP32    240MHz       4MB      320KB   SparkFun ESP32 MicroMod
+[36mesp32thing[0m                           ESP32    240MHz       4MB      320KB   SparkFun ESP32 Thing
+[36mesp32thing_plus[0m                      ESP32    240MHz       16MB     320KB   SparkFun ESP32 Thing Plus
+[36msparkfun_esp32s2_thing_plus_c[0m        ESP32    240MHz       16MB     320KB   SparkFun ESP32 Thing Plus C
+[36msparkfun_esp32s2_thing_plus[0m          ESP32S2  240MHz       4MB      320KB   SparkFun ESP32-S2 Thing Plus
+[36msparkfun_lora_gateway_1-channel[0m      ESP32    240MHz       4MB      320KB   SparkFun LoRa Gateway 1-Channel
+[36mdpu_esp32[0m                            ESP32    240MHz       8MB      320KB   TAMC DPU ESP32
+[36mtamc_termod_s3[0m                       ESP32S3  240MHz       8MB      320KB   TAMC Termod S3
+[36mttgo-lora32-v1[0m                       ESP32    240MHz       4MB      320KB   TTGO LoRa32-OLED V1
+[36mttgo-lora32-v2[0m                       ESP32    240MHz       4MB      320KB   TTGO LoRa32-OLED V2
+[36mttgo-lora32-v21[0m                      ESP32    240MHz       4MB      320KB   TTGO LoRa32-OLED v2.1.6
+[36mttgo-t-beam[0m                          ESP32    240MHz       4MB      1.25MB  TTGO T-Beam
+[36mttgo-t-oi-plus[0m                       ESP32C3  160MHz       4MB      320KB   TTGO T-OI PLUS RISC-V ESP32-C3
+[36mttgo-t-watch[0m                         ESP32    240MHz       16MB     320KB   TTGO T-Watch
+[36mttgo-t1[0m                              ESP32    240MHz       4MB      320KB   TTGO T1
+[36mttgo-t7-v13-mini32[0m                   ESP32    240MHz       4MB      1.25MB  TTGO T7 V1.3 Mini32
+[36mttgo-t7-v14-mini32[0m                   ESP32    240MHz       4MB      1.25MB  TTGO T7 V1.4 Mini32
+[36mtrueverit-iot-driver[0m                 ESP32    240MHz       4MB      320KB   Trueverit ESP32 Universal IoT Driver
+[36mtrueverit-iot-driver-mk2[0m             ESP32    240MHz       4MB      320KB   Trueverit ESP32 Universal IoT Driver MK II
+[36mtrueverit-iot-driver-mk3[0m             ESP32    240MHz       4MB      320KB   Trueverit ESP32 Universal IoT Driver MK III
+[36mturta_iot_node[0m                       ESP32    240MHz       4MB      320KB   Turta IoT Node
+[36mum_feathers2[0m                         ESP32S2  240MHz       16MB     320KB   Unexpected Maker FeatherS2
+[36mum_feathers2_neo[0m                     ESP32S2  240MHz       4MB      320KB   Unexpected Maker FeatherS2 Neo
+[36mum_feathers3[0m                         ESP32S3  240MHz       16MB     320KB   Unexpected Maker FeatherS3
+[36mum_nanos3[0m                            ESP32S3  240MHz       8MB      320KB   Unexpected Maker NanoS3
+[36mum_pros3[0m                             ESP32S3  240MHz       16MB     320KB   Unexpected Maker PROS3
+[36mum_rmp[0m                               ESP32S2  240MHz       4MB      320KB   Unexpected Maker RMP
+[36mtinypico[0m                             ESP32    240MHz       4MB      320KB   Unexpected Maker TinyPICO
+[36mum_tinys2[0m                            ESP32S2  240MHz       4MB      320KB   Unexpected Maker TinyS2
+[36mum_tinys3[0m                            ESP32S3  240MHz       8MB      320KB   Unexpected Maker TinyS3
+[36mvaltrack_v4_mfw_esp32_c3[0m             ESP32C3  160MHz       4MB      320KB   Valetron Systems VALTRACK-V4MVF
+[36mvaltrack_v4_vts_esp32_c3[0m             ESP32C3  160MHz       4MB      320KB   Valetron Systems VALTRACK-V4VTS
+[36mvintlabs-devkit-v1[0m                   ESP32    240MHz       4MB      320KB   VintLabs ESP32 Devkit
+[36mwemos_d1_mini32[0m                      ESP32    240MHz       4MB      320KB   WEMOS D1 MINI ESP32
+[36mwemos_d1_uno32[0m                       ESP32    240MHz       4MB      320KB   WEMOS D1 R32
+[36mlolin_c3_mini[0m                        ESP32C3  160MHz       4MB      320KB   WEMOS LOLIN C3 Mini
+[36mlolin_d32[0m                            ESP32    240MHz       4MB      320KB   WEMOS LOLIN D32
+[36mlolin_d32_pro[0m                        ESP32    240MHz       4MB      320KB   WEMOS LOLIN D32 PRO
+[36mlolin_s2_mini[0m                        ESP32S2  240MHz       4MB      320KB   WEMOS LOLIN S2 Mini
+[36mlolin_s2_pico[0m                        ESP32S2  240MHz       4MB      320KB   WEMOS LOLIN S2 PICO
+[36mlolin_s3[0m                             ESP32S3  240MHz       16MB     320KB   WEMOS LOLIN S3
+[36mlolin_s3_mini[0m                        ESP32S3  240MHz       4MB      320KB   WEMOS LOLIN S3 Mini
+[36mlolin_s3_pro[0m                         ESP32S3  240MHz       16MB     320KB   WEMOS LOLIN S3 PRO
+[36mlolin32[0m                              ESP32    240MHz       4MB      320KB   WEMOS LOLIN32
+[36mlolin32_lite[0m                         ESP32    240MHz       4MB      320KB   WEMOS LOLIN32 Lite
+[36mweactstudio_esp32c3coreboard[0m         ESP32C3  160MHz       384KB    400KB   WeAct Studio ESP32C3CoreBoard
+[36mwemosbat[0m                             ESP32    240MHz       4MB      320KB   WeMos WiFi and Bluetooth Battery
+[36mwidora-air[0m                           ESP32    240MHz       16MB     320KB   Widora AIR
+[36mwt32-eth01[0m                           ESP32    240MHz       4MB      320KB   Wireless-Tag WT32-ETH01 Ethernet Module
+[36mxinabox_cw02[0m                         ESP32    240MHz       4MB      320KB   XinaBox CW02
+[36mnscreen-32[0m                           ESP32    240MHz       16MB     320KB   YeaCreate NSCREEN-32
+[36mcezerio_dev_esp32c6[0m                  ESP32C6  160MHz       4MB      320KB   cezerio dev ESP32C6
+[36mcezerio_mini_dev_esp32c6[0m             ESP32C6  160MHz       4MB      320KB   cezerio mini dev ESP32C6
+[36mmicros2[0m                              ESP32S2  240MHz       16MB     320KB   microS2
+[36miotbusio[0m                             ESP32    240MHz       4MB      320KB   oddWires IoT-Bus Io
+[36miotbusproteus[0m                        ESP32    240MHz       4MB      320KB   oddWires IoT-Bus Proteus
+[36msensebox_mcu_esp32s2[0m                 ESP32S2  240MHz       4MB      320KB   senseBox MCU-S2 ESP32-S2
+[36mnina_w10[0m                             ESP32    240MHz       2MB      320KB   u-blox NINA-W10 series
+[36mupesy_wroom[0m                          ESP32    240MHz       4MB      320KB   uPesy ESP32 Wroom DevKit
+[36mupesy_wrover[0m                         ESP32    240MHz       4MB      320KB   uPesy ESP32 Wrover DevKit
+[36munphone7[0m                             ESP32    240MHz       4MB      320KB   unPhone 7
+[36munphone8[0m                             ESP32S3  240MHz       7.94MB   2.31MB  unPhone 8
+[36munphone9[0m                             ESP32S3  240MHz       7.94MB   8.31MB  unPhone 9
+
+Platform: [1mespressif8266[0m
+================================================================================
+ID                 MCU      Frequency    Flash    RAM    Name
+-----------------  -------  -----------  -------  -----  -------------------------------------
+[36mgen4iod[0m            ESP8266  80MHz        512KB    80KB   4D Systems gen4 IoD Range
+[36mhuzzah[0m             ESP8266  80MHz        4MB      80KB   Adafruit HUZZAH ESP8266
+[36moak[0m                ESP8266  80MHz        4MB      80KB   DigiStump Oak
+[36mespmxdevkit[0m        ESP8266  80MHz        1MB      80KB   ESP-Mx DevKit (ESP8285)
+[36mespduino[0m           ESP8266  80MHz        4MB      80KB   ESPDuino (ESP-13 Module)
+[36mespectro[0m           ESP8266  80MHz        4MB      80KB   ESPectro Core
+[36mespino[0m             ESP8266  80MHz        4MB      80KB   ESPino
+[36mespresso_lite_v1[0m   ESP8266  80MHz        4MB      80KB   ESPresso Lite 1.0
+[36mespresso_lite_v2[0m   ESP8266  80MHz        4MB      80KB   ESPresso Lite 2.0
+[36mesp_wroom_02[0m       ESP8266  80MHz        2MB      80KB   Espressif ESP-WROOM-02
+[36mesp12e[0m             ESP8266  80MHz        4MB      80KB   Espressif ESP8266 ESP-12E
+[36mesp01_1m[0m           ESP8266  80MHz        1MB      80KB   Espressif Generic ESP8266 ESP-01 1M
+[36mesp01[0m              ESP8266  80MHz        512KB    80KB   Espressif Generic ESP8266 ESP-01 512k
+[36mesp07[0m              ESP8266  80MHz        1MB      80KB   Espressif Generic ESP8266 ESP-07 1MB
+[36mesp07s[0m             ESP8266  80MHz        4MB      80KB   Espressif Generic ESP8266 ESP-07S
+[36mesp8285[0m            ESP8266  80MHz        1MB      80KB   Generic ESP8285 Module
+[36mheltec_wifi_kit_8[0m  ESP8266  80MHz        4MB      80KB   Heltec Wifi kit 8
+[36minventone[0m          ESP8266  80MHz        4MB      80KB   Invent One
+[36magruminolemon[0m      ESP8266  80MHz        2MB      80KB   Lifely Agrumino Lemon v4
+[36mnodemcu[0m            ESP8266  80MHz        4MB      80KB   NodeMCU 0.9 (ESP-12 Module)
+[36mnodemcuv2[0m          ESP8266  80MHz        4MB      80KB   NodeMCU 1.0 (ESP-12E Module)
+[36mmodwifi[0m            ESP8266  80MHz        2MB      80KB   Olimex MOD-WIFI-ESP8266(-DEV)
+[36mphoenix_v1[0m         ESP8266  80MHz        4MB      80KB   Phoenix 1.0
+[36mphoenix_v2[0m         ESP8266  80MHz        4MB      80KB   Phoenix 2.0
+[36meduinowifi[0m         ESP8266  80MHz        4MB      80KB   Schirmilabs Eduino WiFi
+[36msonoff_basic[0m       ESP8266  80MHz        1MB      80KB   Sonoff Basic
+[36msonoff_s20[0m         ESP8266  80MHz        1MB      80KB   Sonoff S20
+[36msonoff_sv[0m          ESP8266  80MHz        1MB      80KB   Sonoff SV
+[36msonoff_th[0m          ESP8266  80MHz        1MB      80KB   Sonoff TH
+[36msparkfunBlynk[0m      ESP8266  80MHz        4MB      80KB   SparkFun Blynk Board
+[36mthing[0m              ESP8266  80MHz        512KB    80KB   SparkFun ESP8266 Thing
+[36mthingdev[0m           ESP8266  80MHz        512KB    80KB   SparkFun ESP8266 Thing Dev
+[36mesp210[0m             ESP8266  80MHz        4MB      80KB   SweetPea ESP-210
+[36mespinotee[0m          ESP8266  80MHz        4MB      80KB   ThaiEasyElec ESPino
+[36md1[0m                 ESP8266  80MHz        4MB      80KB   WEMOS D1 R1
+[36md1_wroom_02[0m        ESP8266  80MHz        2MB      80KB   WeMos D1 ESP-WROOM-02
+[36md1_mini[0m            ESP8266  80MHz        4MB      80KB   WeMos D1 R2 and mini
+[36md1_mini_lite[0m       ESP8266  80MHz        1MB      80KB   WeMos D1 mini Lite
+[36md1_mini_pro[0m        ESP8266  80MHz        16MB     80KB   WeMos D1 mini Pro
+[36mwifi_slot[0m          ESP8266  80MHz        4MB      80KB   WiFi Slot
+[36mwifiduino[0m          ESP8266  80MHz        4MB      80KB   WiFiduino
+[36mwifinfo[0m            ESP8266  80MHz        1MB      80KB   WifInfo
+[36mwio_link[0m           ESP8266  80MHz        4MB      80KB   Wio Link
+[36mwio_node[0m           ESP8266  80MHz        4MB      80KB   Wio Node
+[36mxinabox_cw01[0m       ESP8266  80MHz        4MB      80KB   XinaBox CW01
+
+Platform: [1mfreescalekinetis[0m
+================================================================================
+ID                MCU             Frequency    Flash    RAM    Name
+----------------  --------------  -----------  -------  -----  -------------------------------
+[36mIBMEthernetKit[0m    MK64FN1M0VLL12  120MHz       1MB      256KB  Ethernet IoT Starter Kit
+[36mfrdm_k22f[0m         MK22FN512VLH12  120MHz       512KB    128KB  Freescale Kinetis FRDM-K22F
+[36mfrdm_k64f[0m         MK64FN1M0VLL12  120MHz       1MB      256KB  Freescale Kinetis FRDM-K64F
+[36mfrdm_k66f[0m         MK66FN2M0VMD18  180MHz       2MB      256KB  Freescale Kinetis FRDM-K66F
+[36mfrdm_k82f[0m         MK82FN256VLL15  150MHz       256KB    256KB  Freescale Kinetis FRDM-K82F
+[36mfrdm_kl25z[0m        MKL25Z128VLK4   48MHz        128KB    16KB   Freescale Kinetis FRDM-KL25Z
+[36mfrdm_kl43z[0m        MKL43Z256VLH4   48MHz        256KB    32KB   Freescale Kinetis FRDM-KL43Z
+[36mfrdm_kl46z[0m        MKL46Z256VLL4   48MHz        256KB    32KB   Freescale Kinetis FRDM-KL46Z
+[36mfrdm_kw24d[0m        MKW24D512       50MHz        512KB    64KB   Freescale Kinetis FRDM-KW24D512
+[36mfrdm_kw41z[0m        MKW41Z512VHT4   48MHz        512KB    128KB  Freescale Kinetis FRDM-KW41Z
+[36mhexiwear[0m          MK64FN1M0VDC12  120MHz       1MB      256KB  Hexiwear
+[36msegger_ip_switch[0m  MK66FN2M0VMD18  180MHz       2MB      256KB  SEGGER IP Switch Board
+
+Platform: [1mheltec-cubecell[0m
+================================================================================
+ID                             MCU      Frequency    Flash    RAM    Name
+-----------------------------  -------  -----------  -------  -----  ------------------------------------------------
+[36mcubecell_capsule_solar_sensor[0m  ASR6051  48MHz        128KB    16KB   Heltec CubeCell Capsule Solar Sensor (HTCC-AC02)
+[36mcubecell_node[0m                  ASR6502  48MHz        128KB    16KB   Heltec CubeCell-1/2AA Node (HTCC-AB02A)
+[36mcubecell_board[0m                 ASR6501  48MHz        128KB    16KB   Heltec CubeCell-Board (HTCC-AB01)
+[36mcubecell_board_pro[0m             ASR6601  48MHz        224KB    224KB  Heltec CubeCell-Board PRO (HTCC-AB03)
+[36mcubecell_board_plus[0m            ASR6502  48MHz        128KB    16KB   Heltec CubeCell-Board Plus (HTCC-AB02)
+[36mcubecell_board_v2[0m              ASR6501  48MHz        128KB    16KB   Heltec CubeCell-Board-V2 (HTCC-AB01-V2)
+[36mcubecell_capsule[0m               ASR6501  48MHz        128KB    16KB   Heltec CubeCell-Capsule (HTCC-AC01)
+[36mcubecell_gps[0m                   ASR6502  48MHz        128KB    16KB   Heltec CubeCell-GPS (HTCC-AB02S)
+[36mcubecell_module[0m                ASR6501  48MHz        128KB    16KB   Heltec CubeCell-Module (HTCC-AM01)
+[36mcubecell_module_plus[0m           ASR6502  48MHz        128KB    16KB   Heltec CubeCell-Module Plus (HTCC-AM02)
+[36mcubecell_module_v2[0m             ASR6501  48MHz        128KB    16KB   Heltec CubeCell-Module-V2 (HTCC-AM01-V2)
+
+Platform: [1minfineonxmc[0m
+================================================================================
+ID                   MCU      Frequency    Flash    RAM     Name
+-------------------  -------  -----------  -------  ------  --------------------
+[36mxmc1100_boot_kit[0m     XMC1100  32MHz        64KB     16KB    XMC1100 Boot Kit
+[36mxmc1100_h_bridge2go[0m  XMC1100  32MHz        64KB     16KB    XMC1100 H-Bridge 2Go
+[36mxmc1100_xmc2go[0m       XMC1100  32MHz        64KB     16KB    XMC1100 XMC2Go
+[36mxmc1300_boot_kit[0m     XMC1300  32MHz        64KB     16KB    XMC1300 Boot Kit
+[36mxmc1300_sense2gol[0m    XMC1300  32MHz        32KB     16KB    XMC1300 Sense2GoL
+[36mxmc1400_boot_kit[0m     XMC1400  48MHz        1.95MB   16KB    XMC1400 Boot Kit
+[36mxmc4200_distance2go[0m  XMC4200  80MHz        256KB    40KB    XMC4200 Distance2Go
+[36mxmc4700_relax_kit[0m    XMC4700  144MHz       2.00MB   1.95MB  XMC4700 Relax Kit
+
+Platform: [1mintel_arc32[0m
+================================================================================
+ID          MCU      Frequency    Flash    RAM    Name
+----------  -------  -----------  -------  -----  -------------------
+[36mgenuino101[0m  ARCV2EM  32MHz        152KB    80KB   Arduino/Genuino 101
+
+Platform: [1mintel_mcs51[0m
+================================================================================
+ID              MCU             Frequency    Flash    RAM     Name
+--------------  --------------  -----------  -------  ------  ----------------------
+[36mCH559[0m           CH559           12MHz        64KB     6.25KB  CH559
+[36mGeneric8051[0m     8051            11MHz        4KB      128B    Generic 8051
+[36mGeneric8052[0m     8052            11MHz        8KB      256B    Generic 8052
+[36mAT89S51[0m         AT89S51         11MHz        4KB      128B    Generic AT89S51
+[36mAT89S52[0m         AT89S52         11MHz        8KB      256B    Generic AT89S52
+[36mIAP12C5A62S2[0m    IAP12C5A62S2    11MHz        62KB     1.25KB  Generic IAP12C5A62S2
+[36mIAP15F106[0m       IAP15F106       11MHz        6KB      128B    Generic IAP15F106
+[36mIAP15F206A[0m      IAP15F206A      11MHz        6KB      256B    Generic IAP15F206A
+[36mIAP15F2K61S[0m     IAP15F2K61S     11MHz        61KB     2KB     Generic IAP15F2K61S
+[36mIAP15F2K61S2[0m    IAP15F2K61S2    11MHz        61KB     2KB     Generic IAP15F2K61S2
+[36mIAP15F413AD[0m     IAP15F413AD     11MHz        13KB     512B    Generic IAP15F413AD
+[36mIAP15W105[0m       IAP15W105       11MHz        5KB      128B    Generic IAP15W105
+[36mIAP15W1K29S[0m     IAP15W1K29S     11MHz        29KB     1KB     Generic IAP15W1K29S
+[36mIAP15W205S[0m      IAP15W205S      11MHz        5KB      256B    Generic IAP15W205S
+[36mIAP15W413AS[0m     IAP15W413AS     11MHz        13KB     512B    Generic IAP15W413AS
+[36mIAP15W413S[0m      IAP15W413S      11MHz        13KB     512B    Generic IAP15W413S
+[36mIAP15W4K58S4[0m    IAP15W4K58S4    11MHz        58KB     4KB     Generic IAP15W4K58S4
+[36mIAP15W4K61S4[0m    IAP15W4K61S4    11MHz        61KB     4KB     Generic IAP15W4K61S4
+[36mIAP15W4K63S4[0m    IAP15W4K63S4    11MHz        63.50KB  4KB     Generic IAP15W4K63S4
+[36mIRC15F107W[0m      IRC15F107W      11MHz        6KB      128B    Generic IRC15F107W
+[36mIRC15F2K63S2[0m    IRC15F2K63S2    11MHz        63.50KB  2KB     Generic IRC15F2K63S2
+[36mIRC15W107[0m       IRC15W107       11MHz        7KB      128B    Generic IRC15W107
+[36mIRC15W1K31S[0m     IRC15W1K31S     11MHz        31.50KB  1KB     Generic IRC15W1K31S
+[36mIRC15W207S[0m      IRC15W207S      11MHz        7.50KB   256B    Generic IRC15W207S
+[36mIRC15W415AS[0m     IRC15W415AS     11MHz        15.50KB  512B    Generic IRC15W415AS
+[36mIRC15W415S[0m      IRC15W415S      11MHz        15.50KB  512B    Generic IRC15W415S
+[36mML51BB9AE[0m       ML51BB9AE       24MHz        16KB     1.25KB  Generic ML51BB9AE
+[36mML51DB9AE[0m       ML51DB9AE       24MHz        16KB     1.25KB  Generic ML51DB9AE
+[36mML51EB9AE[0m       ML51EB9AE       24MHz        16KB     1.25KB  Generic ML51EB9AE
+[36mML51EC0AE[0m       ML51EC0AE       24MHz        32KB     2.25KB  Generic ML51EC0AE
+[36mML51FB9AE[0m       ML51FB9AE       24MHz        16KB     1.25KB  Generic ML51FB9AE
+[36mML51LD1AE[0m       ML51LD1AE       24MHz        64KB     4.25KB  Generic ML51LD1AE
+[36mML51OB9AE[0m       ML51OB9AE       24MHz        16KB     1.25KB  Generic ML51OB9AE
+[36mML51PB9AE[0m       ML51PB9AE       24MHz        16KB     2.25KB  Generic ML51PB9AE
+[36mML51PC0AE[0m       ML51PC0AE       24MHz        32KB     2.25KB  Generic ML51PC0AE
+[36mML51SD1AE[0m       ML51SD1AE       24MHz        64KB     4.25KB  Generic ML51SD1AE
+[36mML51TB9AE[0m       ML51TB9AE       24MHz        16KB     1.25KB  Generic ML51TB9AE
+[36mML51TC0AE[0m       ML51TC0AE       24MHz        32KB     2.25KB  Generic ML51TC0AE
+[36mML51TC1AE[0m       ML51TC1AE       24MHz        32KB     2.25KB  Generic ML51TC1AE
+[36mML51TD1AE[0m       ML51TD1AE       24MHz        64KB     4.25KB  Generic ML51TD1AE
+[36mML51UB9AE[0m       ML51UB9AE       24MHz        16KB     2.25KB  Generic ML51UB9AE
+[36mML51UC0AE[0m       ML51UC0AE       24MHz        32KB     2.25KB  Generic ML51UC0AE
+[36mML51XB9AE[0m       ML51XB9AE       24MHz        16KB     1.25KB  Generic ML51XB9AE
+[36mML54LD1AE[0m       ML54LD1AE       24MHz        64KB     4.25KB  Generic ML54LD1AE
+[36mML54MD1AE[0m       ML54MD1AE       24MHz        64KB     4.25KB  Generic ML54MD1AE
+[36mML54SD1AE[0m       ML54SD1AE       24MHz        64KB     4.25KB  Generic ML54SD1AE
+[36mML56LD1AE[0m       ML56LD1AE       24MHz        64KB     4.25KB  Generic ML56LD1AE
+[36mML56MD1AE[0m       ML56MD1AE       24MHz        64KB     4.25KB  Generic ML56MD1AE
+[36mML56SD1AE[0m       ML56SD1AE       24MHz        64KB     4.25KB  Generic ML56SD1AE
+[36mMS51BA9AE[0m       MS51BA9AE       16MHz        8KB      1.25KB  Generic MS51BA9AE
+[36mMS51DA9AE[0m       MS51DA9AE       16MHz        8KB      1.25KB  Generic MS51DA9AE
+[36mMS51EC0AE[0m       MS51EC0AE       16MHz        32KB     2.25KB  Generic MS51EC0AE
+[36mMS51FB9AE[0m       MS51FB9AE       16MHz        16KB     1.25KB  Generic MS51FB9AE
+[36mMS51FC0AE[0m       MS51FC0AE       16MHz        32KB     2.25KB  Generic MS51FC0AE
+[36mMS51IA9AE[0m       MS51IA9AE       16MHz        8KB      1.25KB  Generic MS51IA9AE
+[36mMS51PC0AE[0m       MS51PC0AE       16MHz        32KB     2.25KB  Generic MS51PC0AE
+[36mMS51TC0AE[0m       MS51TC0AE       16MHz        32KB     2.25KB  Generic MS51TC0AE
+[36mMS51XB9AE[0m       MS51XB9AE       16MHz        16KB     1.25KB  Generic MS51XB9AE
+[36mMS51XB9BE[0m       MS51XB9BE       16MHz        16KB     1.25KB  Generic MS51XB9BE
+[36mMS51XC0BE[0m       MS51XC0BE       16MHz        32KB     2.25KB  Generic MS51XC0BE
+[36mN76E003[0m         N76E003         16MHz        18KB     1KB     Generic N76E003
+[36mN76E616[0m         N76E616         11MHz        18KB     512B    Generic N76E616
+[36mN76E885[0m         N76E885         22MHz        18KB     512B    Generic N76E885
+[36mN78E055[0m         N78E055         22MHz        16KB     1.25KB  Generic N78E055
+[36mN78E059[0m         N78E059         22MHz        32KB     1.25KB  Generic N78E059
+[36mN78E366[0m         N78E366         22MHz        64KB     1.25KB  Generic N78E366
+[36mN78E517[0m         N78E517         22MHz        64KB     1.25KB  Generic N78E517
+[36mN79E352[0m         N79E352         22MHz        8KB      256B    Generic N79E352
+[36mN79E715[0m         N79E715         22MHz        16KB     512B    Generic N79E715
+[36mN79E813[0m         N79E813         22MHz        4KB      512B    Generic N79E813
+[36mN79E8132[0m        N79E8132        22MHz        4KB      512B    Generic N79E8132
+[36mN79E814[0m         N79E814         22MHz        8KB      512B    Generic N79E814
+[36mN79E815[0m         N79E815         22MHz        16KB     512B    Generic N79E815
+[36mN79E822[0m         N79E822         6MHz         2KB      256B    Generic N79E822
+[36mN79E823[0m         N79E823         6MHz         4KB      256B    Generic N79E823
+[36mN79E824[0m         N79E824         6MHz         8KB      256B    Generic N79E824
+[36mN79E825[0m         N79E825         6MHz         16KB     256B    Generic N79E825
+[36mN79E843[0m         N79E843         22MHz        4KB      512B    Generic N79E843
+[36mN79E8432[0m        N79E8432        22MHz        4KB      512B    Generic N79E8432
+[36mN79E844[0m         N79E844         22MHz        8KB      512B    Generic N79E844
+[36mN79E845[0m         N79E845         22MHz        16KB     512B    Generic N79E845
+[36mN79E854[0m         N79E854         22MHz        8KB      512B    Generic N79E854
+[36mN79E855[0m         N79E855         22MHz        16KB     512B    Generic N79E855
+[36mN79E875[0m         N79E875         22MHz        16KB     512B    Generic N79E875
+[36mSTC12C5A08S2[0m    STC12C5A08S2    11MHz        8KB      1.25KB  Generic STC12C5A08S2
+[36mSTC12C5A16S2[0m    STC12C5A16S2    11MHz        16KB     1.25KB  Generic STC12C5A16S2
+[36mSTC12C5A32S2[0m    STC12C5A32S2    11MHz        32KB     1.25KB  Generic STC12C5A32S2
+[36mSTC12C5A40S2[0m    STC12C5A40S2    11MHz        40KB     1.25KB  Generic STC12C5A40S2
+[36mSTC12C5A48S2[0m    STC12C5A48S2    11MHz        48KB     1.25KB  Generic STC12C5A48S2
+[36mSTC12C5A52S2[0m    STC12C5A52S2    11MHz        52KB     1.25KB  Generic STC12C5A52S2
+[36mSTC12C5A56S2[0m    STC12C5A56S2    11MHz        56KB     1.25KB  Generic STC12C5A56S2
+[36mSTC12C5A60S2[0m    STC12C5A60S2    11MHz        59.71KB  1.25KB  Generic STC12C5A60S2
+[36mSTC15F100[0m       STC15F100       11MHz        512B     128B    Generic STC15F100
+[36mSTC15F100W[0m      STC15F100W      11MHz        512B     128B    Generic STC15F100W
+[36mSTC15F101[0m       STC15F101       11MHz        1KB      128B    Generic STC15F101
+[36mSTC15F101E[0m      STC15F101E      11MHz        1KB      128B    Generic STC15F101E
+[36mSTC15F101W[0m      STC15F101W      11MHz        1KB      128B    Generic STC15F101W
+[36mSTC15F102[0m       STC15F102       11MHz        2KB      128B    Generic STC15F102
+[36mSTC15F102E[0m      STC15F102E      11MHz        2KB      128B    Generic STC15F102E
+[36mSTC15F102W[0m      STC15F102W      11MHz        2KB      128B    Generic STC15F102W
+[36mSTC15F103[0m       STC15F103       11MHz        3KB      128B    Generic STC15F103
+[36mSTC15F103E[0m      STC15F103E      11MHz        3KB      128B    Generic STC15F103E
+[36mSTC15F103W[0m      STC15F103W      11MHz        3KB      128B    Generic STC15F103W
+[36mSTC15F104[0m       STC15F104       11MHz        4KB      128B    Generic STC15F104
+[36mSTC15F104E[0m      STC15F104E      11MHz        4KB      128B    Generic STC15F104E
+[36mSTC15F104W[0m      STC15F104W      11MHz        4KB      128B    Generic STC15F104W
+[36mSTC15F105[0m       STC15F105       11MHz        5KB      128B    Generic STC15F105
+[36mSTC15F105E[0m      STC15F105E      11MHz        5KB      128B    Generic STC15F105E
+[36mSTC15F105W[0m      STC15F105W      11MHz        5KB      128B    Generic STC15F105W
+[36mSTC15F201A[0m      STC15F201A      11MHz        1KB      256B    Generic STC15F201A
+[36mSTC15F201EA[0m     STC15F201EA     11MHz        1KB      256B    Generic STC15F201EA
+[36mSTC15F202A[0m      STC15F202A      11MHz        2KB      256B    Generic STC15F202A
+[36mSTC15F202EA[0m     STC15F202EA     11MHz        2KB      256B    Generic STC15F202EA
+[36mSTC15F203A[0m      STC15F203A      11MHz        3KB      256B    Generic STC15F203A
+[36mSTC15F203EA[0m     STC15F203EA     11MHz        3KB      256B    Generic STC15F203EA
+[36mSTC15F204A[0m      STC15F204A      11MHz        4KB      256B    Generic STC15F204A
+[36mSTC15F204EA[0m     STC15F204EA     11MHz        4KB      256B    Generic STC15F204EA
+[36mSTC15F205A[0m      STC15F205A      11MHz        5KB      256B    Generic STC15F205A
+[36mSTC15F205EA[0m     STC15F205EA     11MHz        5KB      256B    Generic STC15F205EA
+[36mSTC15F2K08S2[0m    STC15F2K08S2    11MHz        8KB      2KB     Generic STC15F2K08S2
+[36mSTC15F2K16S2[0m    STC15F2K16S2    11MHz        16KB     2KB     Generic STC15F2K16S2
+[36mSTC15F2K24AS[0m    STC15F2K24AS    11MHz        24KB     2KB     Generic STC15F2K24AS
+[36mSTC15F2K24S2[0m    STC15F2K24S2    11MHz        24KB     2KB     Generic STC15F2K24S2
+[36mSTC15F2K32S2[0m    STC15F2K32S2    11MHz        32KB     2KB     Generic STC15F2K32S2
+[36mSTC15F2K40S2[0m    STC15F2K40S2    11MHz        40KB     2KB     Generic STC15F2K40S2
+[36mSTC15F2K48S2[0m    STC15F2K48S2    11MHz        48KB     2KB     Generic STC15F2K48S2
+[36mSTC15F2K52S2[0m    STC15F2K52S2    6MHz         52KB     2KB     Generic STC15F2K52S2
+[36mSTC15F2K56S2[0m    STC15F2K56S2    11MHz        56KB     2KB     Generic STC15F2K56S2
+[36mSTC15F2K60S2[0m    STC15F2K60S2    11MHz        60KB     2KB     Generic STC15F2K60S2
+[36mSTC15F408AD[0m     STC15F408AD     11MHz        8KB      512B    Generic STC15F408AD
+[36mSTC15W100[0m       STC15W100       11MHz        512B     128B    Generic STC15W100
+[36mSTC15W101[0m       STC15W101       11MHz        1KB      128B    Generic STC15W101
+[36mSTC15W102[0m       STC15W102       11MHz        2KB      128B    Generic STC15W102
+[36mSTC15W103[0m       STC15W103       11MHz        3KB      128B    Generic STC15W103
+[36mSTC15W104[0m       STC15W104       11MHz        4KB      128B    Generic STC15W104
+[36mSTC15W1K16S[0m     STC15W1K16S     11MHz        16KB     1KB     Generic STC15W1K16S
+[36mSTC15W1K20S[0m     STC15W1K20S     11MHz        20KB     1KB     Generic STC15W1K20S
+[36mSTC15W1K24S[0m     STC15W1K24S     11MHz        24KB     1KB     Generic STC15W1K24S
+[36mSTC15W201S[0m      STC15W201S      11MHz        1KB      256B    Generic STC15W201S
+[36mSTC15W202S[0m      STC15W202S      11MHz        2KB      256B    Generic STC15W202S
+[36mSTC15W203S[0m      STC15W203S      11MHz        3KB      256B    Generic STC15W203S
+[36mSTC15W204S[0m      STC15W204S      11MHz        4KB      256B    Generic STC15W204S
+[36mSTC15W401AS[0m     STC15W401AS     11MHz        1KB      512B    Generic STC15W401AS
+[36mSTC15W402AS[0m     STC15W402AS     11MHz        2KB      512B    Generic STC15W402AS
+[36mSTC15W404AS[0m     STC15W404AS     11MHz        4KB      512B    Generic STC15W404AS
+[36mSTC15W404S[0m      STC15W404S      11MHz        4KB      512B    Generic STC15W404S
+[36mSTC15W408AS[0m     STC15W408AS     11MHz        8KB      512B    Generic STC15W408AS
+[36mSTC15W408S[0m      STC15W408S      11MHz        8KB      512B    Generic STC15W408S
+[36mSTC15W410S[0m      STC15W410S      11MHz        10KB     512B    Generic STC15W410S
+[36mSTC15W4K16S4[0m    STC15W4K16S4    11MHz        16KB     4KB     Generic STC15W4K16S4
+[36mSTC15W4K32S4[0m    STC15W4K32S4    11MHz        32KB     4KB     Generic STC15W4K32S4
+[36mSTC15W4K40S4[0m    STC15W4K40S4    11MHz        40KB     4KB     Generic STC15W4K40S4
+[36mSTC15W4K48S4[0m    STC15W4K48S4    11MHz        48KB     4KB     Generic STC15W4K48S4
+[36mSTC15W4K56S4[0m    STC15W4K56S4    11MHz        56KB     4KB     Generic STC15W4K56S4
+[36mSTC89C516RD+[0m    STC89C516RD+    11MHz        64KB     1.25KB  Generic STC89C516RD+
+[36mSTC89C51RC[0m      STC89C51RC      11MHz        4KB      512B    Generic STC89C51RC
+[36mSTC89C52RC[0m      STC89C52RC      11MHz        8KB      512B    Generic STC89C52RC
+[36mSTC89C53RC[0m      STC89C53RC      11MHz        13KB     512B    Generic STC89C53RC
+[36mSTC89C54RD+[0m     STC89C54RD+     11MHz        16KB     1.25KB  Generic STC89C54RD+
+[36mSTC89C58RD+[0m     STC89C58RD+     11MHz        32KB     1.25KB  Generic STC89C58RD+
+[36mSTC8A4K16S2A12[0m  STC8A4K16S2A12  11MHz        16KB     4.25KB  Generic STC8A4K16S2A12
+[36mSTC8A4K32S2A12[0m  STC8A4K32S2A12  11MHz        32KB     4.25KB  Generic STC8A4K32S2A12
+[36mSTC8A4K60S2A12[0m  STC8A4K60S2A12  11MHz        60KB     4.25KB  Generic STC8A4K60S2A12
+[36mSTC8A4K64S2A12[0m  STC8A4K64S2A12  11MHz        64KB     4.25KB  Generic STC8A4K64S2A12
+[36mSTC8A8K16D4[0m     STC8A8K16D4     11MHz        16KB     8.25KB  Generic STC8A8K16D4
+[36mSTC8A8K16S4A12[0m  STC8A8K16S4A12  11MHz        16KB     8.25KB  Generic STC8A8K16S4A12
+[36mSTC8A8K32D4[0m     STC8A8K32D4     11MHz        32KB     8.25KB  Generic STC8A8K32D4
+[36mSTC8A8K32S4A12[0m  STC8A8K32S4A12  11MHz        32KB     8.25KB  Generic STC8A8K32S4A12
+[36mSTC8A8K60D4[0m     STC8A8K60D4     11MHz        60KB     8.25KB  Generic STC8A8K60D4
+[36mSTC8A8K60S4A12[0m  STC8A8K60S4A12  11MHz        60KB     8.25KB  Generic STC8A8K60S4A12
+[36mSTC8A8K64D4[0m     STC8A8K64D4     11MHz        64KB     8.25KB  Generic STC8A8K64D4
+[36mSTC8A8K64S4A12[0m  STC8A8K64S4A12  11MHz        64KB     8.25KB  Generic STC8A8K64S4A12
+[36mSTC8C1K08[0m       STC8C1K08       11MHz        8KB      1.25KB  Generic STC8C1K08
+[36mSTC8C1K12[0m       STC8C1K12       11MHz        12KB     1.25KB  Generic STC8C1K12
+[36mSTC8C2K16S2[0m     STC8C2K16S2     11MHz        16KB     2.25KB  Generic STC8C2K16S2
+[36mSTC8C2K16S4[0m     STC8C2K16S4     11MHz        16KB     2.25KB  Generic STC8C2K16S4
+[36mSTC8C2K32S2[0m     STC8C2K32S2     11MHz        32KB     2.25KB  Generic STC8C2K32S2
+[36mSTC8C2K32S4[0m     STC8C2K32S4     11MHz        32KB     2.25KB  Generic STC8C2K32S4
+[36mSTC8C2K60S2[0m     STC8C2K60S2     11MHz        60KB     2.25KB  Generic STC8C2K60S2
+[36mSTC8C2K60S4[0m     STC8C2K60S4     11MHz        60KB     2.25KB  Generic STC8C2K60S4
+[36mSTC8C2K64S2[0m     STC8C2K64S2     11MHz        64KB     2.25KB  Generic STC8C2K64S2
+[36mSTC8C2K64S4[0m     STC8C2K64S4     11MHz        64KB     2.25KB  Generic STC8C2K64S4
+[36mSTC8F1K08[0m       STC8F1K08       11MHz        8KB      1.25KB  Generic STC8F1K08
+[36mSTC8F1K08S[0m      STC8F1K08S      11MHz        8KB      1.25KB  Generic STC8F1K08S
+[36mSTC8F1K08S2[0m     STC8F1K08S2     11MHz        8KB      1.25KB  Generic STC8F1K08S2
+[36mSTC8F1K08S2A10[0m  STC8F1K08S2A10  11MHz        8KB      1.25KB  Generic STC8F1K08S2A10
+[36mSTC8F1K17[0m       STC8F1K17       11MHz        17KB     1.25KB  Generic STC8F1K17
+[36mSTC8F1K17S2[0m     STC8F1K17S2     11MHz        17KB     1.25KB  Generic STC8F1K17S2
+[36mSTC8F2K08S2[0m     STC8F2K08S2     11MHz        8KB      2.25KB  Generic STC8F2K08S2
+[36mSTC8F2K16S2[0m     STC8F2K16S2     11MHz        16KB     2.25KB  Generic STC8F2K16S2
+[36mSTC8F2K16S4[0m     STC8F2K16S4     11MHz        16KB     2.25KB  Generic STC8F2K16S4
+[36mSTC8F2K32S2[0m     STC8F2K32S2     11MHz        32KB     2.25KB  Generic STC8F2K32S2
+[36mSTC8F2K32S4[0m     STC8F2K32S4     11MHz        32KB     2.25KB  Generic STC8F2K32S4
+[36mSTC8F2K60S2[0m     STC8F2K60S2     11MHz        60KB     2.25KB  Generic STC8F2K60S2
+[36mSTC8F2K60S4[0m     STC8F2K60S4     11MHz        60KB     2.25KB  Generic STC8F2K60S4
+[36mSTC8F2K64S2[0m     STC8F2K64S2     11MHz        64KB     2.25KB  Generic STC8F2K64S2
+[36mSTC8F2K64S4[0m     STC8F2K64S4     11MHz        64KB     2.25KB  Generic STC8F2K64S4
+[36mSTC8G1K08[0m       STC8G1K08       11MHz        8KB      1.25KB  Generic STC8G1K08
+[36mSTC8G1K08A[0m      STC8G1K08A      11MHz        8KB      1.25KB  Generic STC8G1K08A
+[36mSTC8G1K08T[0m      STC8G1K08T      11MHz        8KB      1.25KB  Generic STC8G1K08T
+[36mSTC8G1K12[0m       STC8G1K12       11MHz        12KB     1.25KB  Generic STC8G1K12
+[36mSTC8G1K12A[0m      STC8G1K12A      11MHz        12KB     1.25KB  Generic STC8G1K12A
+[36mSTC8G1K17[0m       STC8G1K17       11MHz        17KB     1.25KB  Generic STC8G1K17
+[36mSTC8G1K17A[0m      STC8G1K17A      11MHz        17KB     1.25KB  Generic STC8G1K17A
+[36mSTC8G1K17T[0m      STC8G1K17T      11MHz        17KB     1.25KB  Generic STC8G1K17T
+[36mSTC8G2K16S2[0m     STC8G2K16S2     11MHz        16KB     2.25KB  Generic STC8G2K16S2
+[36mSTC8G2K16S4[0m     STC8G2K16S4     11MHz        16KB     2.25KB  Generic STC8G2K16S4
+[36mSTC8G2K32S2[0m     STC8G2K32S2     11MHz        32KB     2.25KB  Generic STC8G2K32S2
+[36mSTC8G2K32S4[0m     STC8G2K32S4     11MHz        32KB     2.25KB  Generic STC8G2K32S4
+[36mSTC8G2K60S2[0m     STC8G2K60S2     11MHz        60KB     2.25KB  Generic STC8G2K60S2
+[36mSTC8G2K60S4[0m     STC8G2K60S4     11MHz        60KB     2.25KB  Generic STC8G2K60S4
+[36mSTC8G2K64S2[0m     STC8G2K64S2     11MHz        64KB     2.25KB  Generic STC8G2K64S2
+[36mSTC8G2K64S4[0m     STC8G2K64S4     11MHz        64KB     2.25KB  Generic STC8G2K64S4
+[36mSTC8H04[0m         STC8H04         11MHz        4KB      256B    Generic STC8H04
+[36mSTC8H04A10[0m      STC8H04A10      11MHz        4KB      256B    Generic STC8H04A10
+[36mSTC8H1K08[0m       STC8H1K08       11MHz        8KB      1.25KB  Generic STC8H1K08
+[36mSTC8H1K08S2[0m     STC8H1K08S2     11MHz        8KB      1.25KB  Generic STC8H1K08S2
+[36mSTC8H1K08S2A10[0m  STC8H1K08S2A10  11MHz        8KB      1.25KB  Generic STC8H1K08S2A10
+[36mSTC8H1K12[0m       STC8H1K12       11MHz        12KB     1.25KB  Generic STC8H1K12
+[36mSTC8H1K16[0m       STC8H1K16       11MHz        16KB     1.25KB  Generic STC8H1K16
+[36mSTC8H1K16S2[0m     STC8H1K16S2     11MHz        16KB     1.25KB  Generic STC8H1K16S2
+[36mSTC8H1K16S2A10[0m  STC8H1K16S2A10  11MHz        16KB     1.25KB  Generic STC8H1K16S2A10
+[36mSTC8H1K17[0m       STC8H1K17       11MHz        17KB     1.25KB  Generic STC8H1K17
+[36mSTC8H1K24[0m       STC8H1K24       11MHz        24KB     1.25KB  Generic STC8H1K24
+[36mSTC8H1K28[0m       STC8H1K28       11MHz        28KB     1.25KB  Generic STC8H1K28
+[36mSTC8H1K32S2[0m     STC8H1K32S2     11MHz        32KB     1.25KB  Generic STC8H1K32S2
+[36mSTC8H1K32S2A10[0m  STC8H1K32S2A10  11MHz        32KB     1.25KB  Generic STC8H1K32S2A10
+[36mSTC8H1K33[0m       STC8H1K33       11MHz        33KB     1.25KB  Generic STC8H1K33
+[36mSTC8H1K64S2A10[0m  STC8H1K64S2A10  11MHz        32KB     1.25KB  Generic STC8H1K64S2A10
+[36mSTC8H2K32T[0m      STC8H2K32T      11MHz        32KB     2.25KB  Generic STC8H2K32T
+[36mSTC8H2K48T[0m      STC8H2K48T      11MHz        48KB     2.25KB  Generic STC8H2K48T
+[36mSTC8H2K60T[0m      STC8H2K60T      11MHz        60KB     2.25KB  Generic STC8H2K60T
+[36mSTC8H2K64T[0m      STC8H2K64T      11MHz        64KB     2.25KB  Generic STC8H2K64T
+[36mSTC8H3K32S2[0m     STC8H3K32S2     11MHz        32KB     3.25KB  Generic STC8H3K32S2
+[36mSTC8H3K32S4[0m     STC8H3K32S4     11MHz        32KB     3.25KB  Generic STC8H3K32S4
+[36mSTC8H3K48S2[0m     STC8H3K48S2     11MHz        32KB     3.25KB  Generic STC8H3K48S2
+[36mSTC8H3K48S4[0m     STC8H3K48S4     11MHz        48KB     3.25KB  Generic STC8H3K48S4
+[36mSTC8H3K60S2[0m     STC8H3K60S2     11MHz        60KB     3.25KB  Generic STC8H3K60S2
+[36mSTC8H3K60S4[0m     STC8H3K60S4     11MHz        60KB     3.25KB  Generic STC8H3K60S4
+[36mSTC8H3K64S2[0m     STC8H3K64S2     11MHz        64KB     3.25KB  Generic STC8H3K64S2
+[36mSTC8H3K64S4[0m     STC8H3K64S4     11MHz        64KB     3.25KB  Generic STC8H3K64S4
+[36mSTC8H4K32LCD[0m    STC8H4K32LCD    11MHz        32KB     4.25KB  Generic STC8H4K32LCD
+[36mSTC8H4K32TLCD[0m   STC8H4K32TLCD   11MHz        32KB     4.25KB  Generic STC8H4K32TLCD
+[36mSTC8H4K32TLR[0m    STC8H4K32TLR    11MHz        32KB     4.25KB  Generic STC8H4K32TLR
+[36mSTC8H4K48LCD[0m    STC8H4K48LCD    11MHz        48KB     4.25KB  Generic STC8H4K48LCD
+[36mSTC8H4K48TLCD[0m   STC8H4K48TLCD   11MHz        48KB     4.25KB  Generic STC8H4K48TLCD
+[36mSTC8H4K48TLR[0m    STC8H4K48TLR    11MHz        48KB     4.25KB  Generic STC8H4K48TLR
+[36mSTC8H4K60LCD[0m    STC8H4K60LCD    11MHz        60KB     4.25KB  Generic STC8H4K60LCD
+[36mSTC8H4K60TLCD[0m   STC8H4K60TLCD   11MHz        60KB     4.25KB  Generic STC8H4K60TLCD
+[36mSTC8H4K60TLR[0m    STC8H4K60TLR    11MHz        60KB     4.25KB  Generic STC8H4K60TLR
+[36mSTC8H4K64LCD[0m    STC8H4K64LCD    11MHz        64KB     4.25KB  Generic STC8H4K64LCD
+[36mSTC8H4K64TLCD[0m   STC8H4K64TLCD   11MHz        64KB     4.25KB  Generic STC8H4K64TLCD
+[36mSTC8H4K64TLR[0m    STC8H4K64TLR    11MHz        64KB     4.25KB  Generic STC8H4K64TLR
+[36mSTC8H8K32U[0m      STC8H8K32U      11MHz        32KB     8.25KB  Generic STC8H8K32U
+[36mSTC8H8K48U[0m      STC8H8K48U      11MHz        48KB     8.25KB  Generic STC8H8K48U
+[36mSTC8H8K60U[0m      STC8H8K60U      11MHz        60KB     8.25KB  Generic STC8H8K60U
+[36mSTC8H8K64U[0m      STC8H8K64U      11MHz        64KB     8.25KB  Generic STC8H8K64U
+[36mW79E2051[0m        W79E2051        22MHz        2KB      256B    Generic W79E2051
+[36mW79E4051[0m        W79E4051        22MHz        4KB      256B    Generic W79E4051
+[36mW79E632[0m         W79E632         11MHz        64KB     1.25KB  Generic W79E632
+[36mW79E633[0m         W79E633         22MHz        64KB     1.25KB  Generic W79E633
+[36mW79E658[0m         W79E658         22MHz        64KB     1.25KB  Generic W79E658
+[36mW79E659[0m         W79E659         22MHz        32KB     1.25KB  Generic W79E659
+[36mW79E8213[0m        W79E8213        20MHz        4KB      128B    Generic W79E8213
+
+Platform: [1mk1921vk[0m
+================================================================================
+ID                     MCU         Frequency    Flash    RAM    Name
+---------------------  ----------  -----------  -------  -----  ---------------------
+[36mgeneric_K1921VK01T[0m     K1921VK01T  100MHz       1MB      192KB  Generic K1921VK01T
+[36mgeneric_K1921VK035[0m     K1921VK035  100MHz       64KB     16KB   Generic K1921VK035
+[36mvostok_mega_vn01t[0m      K1921VK01T  100MHz       1MB      192KB  Vostok MEGA-VN01T
+[36mvostok_uno_vn035[0m       K1921VK035  100MHz       64KB     16KB   Vostok UNO-VN035
+[36mvostok_uno_vn035_revC[0m  K1921VK035  100MHz       64KB     16KB   Vostok UNO-VN035-revC
+[36mkfdl441546[0m             K1921VK01T  100MHz       1MB      192KB  kfdl441546
+
+Platform: [1mkendryte210[0m
+================================================================================
+ID                    MCU    Frequency    Flash    RAM    Name
+--------------------  -----  -----------  -------  -----  ------------------------
+[36msipeed-maix-bit[0m       K210   400MHz       16MB     6MB    Sipeed MAIX BiT
+[36msipeed-maix-bit-mic[0m   K210   400MHz       16MB     6MB    Sipeed MAIX BiT with Mic
+[36msipeed-maix-go[0m        K210   400MHz       16MB     6MB    Sipeed MAIX GO
+[36msipeed-maix-one-dock[0m  K210   400MHz       16MB     6MB    Sipeed MAIX ONE DOCK
+[36msipeed-maixduino[0m      K210   400MHz       16MB     6MB    Sipeed MAIXDUINO
+[36msipeed-MF1[0m            K210   400MHz       16MB     6MB    Sipeed MF1 MF1
+
+Platform: [1mlattice_ice40[0m
+================================================================================
+ID        MCU               Frequency    Flash    RAM    Name
+--------  ----------------  -----------  -------  -----  ------------------------------------
+[36micezum[0m    ICE40-HX1K-TQ144  12MHz        32KB     32KB   IceZUM Alhambra FPGA
+[36micestick[0m  ICE40-HX1K-TQ144  12MHz        32KB     32KB   Lattice iCEstick FPGA Evaluation Kit
+
+Platform: [1mlgt8f[0m
+================================================================================
+ID                       MCU         Frequency    Flash    RAM    Name
+-----------------------  ----------  -----------  -------  -----  -----------------------
+[36mlgt8f328d[0m                ATMEGA328P  32MHz        29KB     2KB    LGT8F328D
+[36mlgt8f328ds20[0m             ATMEGA328P  32MHz        29KB     2KB    LGT8F328D-SSOP20
+[36mLGT8F328P[0m                ATMEGA328P  32MHz        29KB     2KB    LGT8F328P
+[36mlgt8f328p-LQFP48[0m         ATMEGA328P  32MHz        29KB     2KB    LGT8F328P-LQFP48
+[36mLGT8F328P-SSOP20[0m         ATMEGA328P  32MHz        29KB     2KB    LGT8F328P-SSOP20
+[36mlgt8f328ps20[0m             ATMEGA328P  32MHz        29KB     2KB    LGT8F328P-SSOP20
+[36mlgt8f328p-wemos-TTGO-XI[0m  ATMEGA328P  32MHz        29KB     2KB    LGT8F328P-wemos-TTGO-XI
+
+Platform: [1mlibretiny[0m
+================================================================================
+ID                           MCU        Frequency    Flash    RAM    Name
+---------------------------  ---------  -----------  -------  -----  ------------------------------
+[36mafw121t[0m                      RTL8710BX  62MHz        468KB    256KB  AFW121T
+[36mbw12[0m                         RTL8710BX  62MHz        468KB    256KB  BW12
+[36mbw15[0m                         RTL8720CF  100MHz       992KB    256KB  BW15
+[36mcb1s[0m                         BK7231N    120MHz       1.03MB   256KB  CB1S Wi-Fi Module
+[36mcb2l[0m                         BK7231N    120MHz       1.03MB   256KB  CB2L Wi-Fi Module
+[36mcb2s[0m                         BK7231N    120MHz       1.03MB   256KB  CB2S Wi-Fi Module
+[36mcb3l[0m                         BK7231N    120MHz       1.03MB   256KB  CB3L Wi-Fi Module
+[36mcb3s[0m                         BK7231N    120MHz       1.03MB   256KB  CB3S Wi-Fi Module
+[36mcb3se[0m                        BK7231N    120MHz       1.03MB   256KB  CB3SE Wi-Fi Module
+[36mcblc5[0m                        BK7231N    120MHz       1.03MB   256KB  CBLC5 Wi-Fi Module
+[36mcbu[0m                          BK7231N    120MHz       1.03MB   256KB  CBU Wi-Fi Module
+[36mcr3l[0m                         RTL8720CM  100MHz       1.67MB   256KB  CR3L Wi-Fi Module
+[36mgeneric-bk7231n-qfn32[0m        BK7231N    120MHz       1.03MB   256KB  Generic - BK7231N
+[36mgeneric-bk7231n-qfn32-tuya[0m   BK7231N    120MHz       1.03MB   256KB  Generic - BK7231N (Tuya)
+[36mgeneric-bk7231t-qfn32-tuya[0m   BK7231T    120MHz       1.03MB   256KB  Generic - BK7231T (Tuya)
+[36mgeneric-bk7238[0m               BK7238     120MHz       1.03MB   256KB  Generic - BK7238
+[36mgeneric-bk7238-tuya[0m          BK7238     120MHz       1.03MB   256KB  Generic - BK7238 (Tuya T1)
+[36mgeneric-bk7252[0m               BK7252     180MHz       1.62MB   512KB  Generic - BK7252
+[36mgeneric-ln882h[0m               LN882HK    160MHz       1.17MB   295KB  Generic - LN882H
+[36mgeneric-ln882h-tuya[0m          LN882HK    160MHz       1.17MB   295KB  Generic - LN882H (Tuya)
+[36mgeneric-rtl8710bn-2mb-468k[0m   RTL8710BN  125MHz       468KB    256KB  Generic - RTL8710BN (2M/468k)
+[36mgeneric-rtl8710bn-2mb-788k[0m   RTL8710BN  125MHz       788KB    256KB  Generic - RTL8710BN (2M/788k)
+[36mgeneric-rtl8710bx-4mb-980k[0m   RTL8710BX  62MHz        980KB    256KB  Generic - RTL8710BX (4M/980k)
+[36mgeneric-rtl8720cf-2mb-896k[0m   RTL8720CF  100MHz       896KB    256KB  Generic - RTL8720CF (2M/896k)
+[36mgeneric-rtl8720cf-2mb-992k[0m   RTL8720CF  100MHz       992KB    256KB  Generic - RTL8720CF (2M/992k)
+[36mgeneric-rtl8720cm-4mb-1712k[0m  RTL8720CM  100MHz       1.67MB   256KB  Generic - RTL8720CM (4M/1712k)
+[36mln-02[0m                        LN882HK    160MHz       1.17MB   295KB  LN-02 Wi-Fi/BLE Module
+[36mln-cb3s-v1.0[0m                 LN882HK    160MHz       1.17MB   295KB  LN-CB3S V1.0
+[36mlsc-lma35[0m                    BK7231N    120MHz       1.03MB   256KB  LSC LMA35 BK7231N
+[36mlsc-lma35-t[0m                  BK7231T    120MHz       1.03MB   256KB  LSC LMA35 BK7231T
+[36mxh-wb3s[0m                      BK7238     120MHz       1.03MB   256KB  NiceMCU XH-WB3S
+[36mt1-2s[0m                        BK7238     120MHz       1.03MB   256KB  T1-2S Wi-Fi Module
+[36mt1-3s[0m                        BK7238     120MHz       1.03MB   256KB  T1-3S Wi-Fi Module
+[36mt1-m[0m                         BK7238     120MHz       1.03MB   256KB  T1-M Wi-Fi Module
+[36mt1-u[0m                         BK7238     120MHz       1.03MB   256KB  T1-U Wi-Fi Module
+[36mt102-v1.1[0m                    RTL8710BN  125MHz       788KB    256KB  T102_V1.1
+[36mt103-v1.0[0m                    RTL8710BX  62MHz        788KB    256KB  T103_V1.0
+[36mt112-v1.1[0m                    RTL8710BN  125MHz       788KB    256KB  T112_V1.1
+[36mwa2[0m                          BK7231Q    120MHz       1.03MB   256KB  WA2 Wi-Fi Module
+[36mwb02a[0m                        LN882HK    160MHz       1.17MB   295KB  WB02A Wi-Fi/BLE Module
+[36mwb1s[0m                         BK7231T    120MHz       1.03MB   256KB  WB1S Wi-Fi Module
+[36mwb2l[0m                         BK7231T    120MHz       1.03MB   256KB  WB2L Wi-Fi Module
+[36mwb2l-m1[0m                      BK7231N    120MHz       1.03MB   256KB  WB2L_M1 Wi-Fi Module
+[36mwb2s[0m                         BK7231T    120MHz       1.03MB   256KB  WB2S Wi-Fi Module
+[36mwb3l[0m                         BK7231T    120MHz       1.03MB   256KB  WB3L Wi-Fi Module
+[36mwb3s[0m                         BK7231T    120MHz       1.03MB   256KB  WB3S Wi-Fi Module
+[36mwblc5[0m                        BK7231T    120MHz       1.03MB   256KB  WBLC5 Wi-Fi Module
+[36mwbr1[0m                         RTL8720CF  100MHz       896KB    256KB  WBR1 Wi-Fi Module
+[36mwbr3[0m                         RTL8720CF  100MHz       896KB    256KB  WBR3 Wi-Fi Module
+[36mwbru[0m                         RTL8720CF  100MHz       896KB    256KB  WBRU Wi-Fi Module
+[36mwl2h-u[0m                       LN882HK    160MHz       1.17MB   295KB  WL2H-U Wi-Fi/BLE Module
+[36mwl2s[0m                         LN882HK    160MHz       1.17MB   295KB  WL2S Wi-Fi/BLE Module
+[36mwr1[0m                          RTL8710BN  125MHz       788KB    256KB  WR1 Wi-Fi Module
+[36mwr1e[0m                         RTL8710BN  125MHz       788KB    256KB  WR1E Wi-Fi Module
+[36mwr2[0m                          RTL8710BN  125MHz       788KB    256KB  WR2 Wi-Fi Module
+[36mwr2e[0m                         RTL8710BN  125MHz       788KB    256KB  WR2E Wi-Fi Module
+[36mwr2l[0m                         RTL8710BX  62MHz        788KB    256KB  WR2L Wi-Fi Module
+[36mwr2le[0m                        RTL8710BX  62MHz        788KB    256KB  WR2LE Wi-Fi Module
+[36mwr3[0m                          RTL8710BN  125MHz       788KB    256KB  WR3 Wi-Fi Module
+[36mwr3e[0m                         RTL8710BN  125MHz       788KB    256KB  WR3E Wi-Fi Module
+[36mwr3l[0m                         RTL8710BX  62MHz        788KB    256KB  WR3L Wi-Fi Module
+[36mwr3le[0m                        RTL8710BX  62MHz        788KB    256KB  WR3LE Wi-Fi Module
+[36mwr3n[0m                         RTL8710BN  125MHz       788KB    256KB  WR3N Wi-Fi Module
+
+Platform: [1mlinux_arm[0m
+================================================================================
+ID                MCU      Frequency    Flash    RAM    Name
+----------------  -------  -----------  -------  -----  ----------------------
+[36mraspberrypi_1b[0m    BCM2835  700MHz       512MB    512MB  Raspberry Pi 1 Model B
+[36mraspberrypi_2b[0m    BCM2836  900MHz       1GB      1GB    Raspberry Pi 2 Model B
+[36mraspberrypi_3b[0m    BCM2837  1200MHz      1GB      1GB    Raspberry Pi 3 Model B
+[36mraspberrypi_zero[0m  BCM2835  1000MHz      512MB    512MB  Raspberry Pi Zero
+
+Platform: [1mlogicrom[0m
+================================================================================
+ID              MCU      Frequency    Flash    RAM     Name
+--------------  -------  -----------  -------  ------  -------------------------------
+[36ma9[0m              RDA8955  178MHz       576KB    1016KB  AI-Thinker A9 GSM Module
+[36ma9g[0m             RDA8955  178MHz       576KB    1016KB  AI-Thinker A9G GSM Module
+[36ml610[0m            RDA8910  500MHz       1MB      512KB   Fibocom L610 LTE Cat.1 Module
+[36mm590[0m            RDA8955  178MHz       576KB    1016KB  Neoway M590 GSM Module
+[36mn58[0m             RDA8910  500MHz       1MB      512KB   Neoway N58 LTE Cat.1 Module
+[36mn716[0m            RDA8910  500MHz       1MB      512KB   Neoway N716 LTE Cat.1 Module
+[36mquectelbc20[0m     MT2625   78MHz        200KB    96KB    Quectel BC20
+[36mec100n[0m          ASR1603  416MHz       1MB      512KB   Quectel EC100N LTE Cat.1 Module
+[36mec100s[0m          ASR1601  416MHz       1MB      512KB   Quectel EC100S LTE Cat.1 Module
+[36mec100y[0m          ASR1601  416MHz       1MB      512KB   Quectel EC100Y LTE Cat.1 Module
+[36mec200n[0m          ASR1603  416MHz       512KB    512KB   Quectel EC200N LTE Cat.1 Module
+[36mec200s[0m          ASR1601  416MHz       1MB      512KB   Quectel EC200S LTE Cat.1 Module
+[36mec200u[0m          RDA8910  500MHz       1MB      512KB   Quectel EC200U LTE Cat.1 Module
+[36mec600n[0m          ASR1603  416MHz       1MB      512KB   Quectel EC600N LTE Cat.1 Module
+[36mec600s[0m          ASR1601  416MHz       1MB      512KB   Quectel EC600S LTE Cat.1 Module
+[36mec600u[0m          RDA8910  500MHz       1MB      512KB   Quectel EC600U LTE Cat.1 Module
+[36meg912y[0m          ASR1603  416MHz       512KB    512KB   Quectel EG912Y LTE Cat.1 Module
+[36meg915n[0m          ASR1603  416MHz       1MB      512KB   Quectel EG915N LTE Cat.1 Module
+[36meg915u[0m          RDA8910  500MHz       1MB      512KB   Quectel EG915U LTE Cat.1 Module
+[36mquectelm56[0m      MT6261   260MHz       256KB    94KB    Quectel M56
+[36mquectelm66[0m      MT6261   260MHz       256KB    94KB    Quectel M66
+[36mquectelmc20[0m     MT2503   260MHz       256KB    94KB    Quectel MC20
+[36mquectelmc20u[0m    MT2503   260MHz       256KB    94KB    Quectel MC20UCB
+[36mmc25[0m            RDA8955  178MHz       576KB    1016KB  Quectel MC25 GSM Module
+[36mquectelmc60[0m     MT2503   260MHz       256KB    94KB    Quectel MC60
+[36mmc65[0m            RDA8955  178MHz       576KB    1016KB  Quectel MC65 GSM Module
+[36ma7670[0m           ASR1601  416MHz       1MB      512KB   SIMCOM A7670X LTE Cat.1 Module
+[36msim868[0m          MT2503   260MHz       256KB    94KB    SIMCOM SIM868 GSM Module
+[36mlogicrom_spark[0m  RDA8910  500MHz       1MB      512KB   logicrom Spark LTE-G (EC200U)
+
+Platform: [1mmaxim32[0m
+================================================================================
+ID            MCU           Frequency    Flash    RAM    Name
+------------  ------------  -----------  -------  -----  --------------------------------------------------------
+[36mmax32620fthr[0m  MAX32620FTHR  96MHz        2MB      256KB  MAX32620FTHR
+[36mmax32625mbed[0m  MAX32625      96MHz        512KB    160KB  MAX32625MBED
+[36mmax32625pico[0m  MAX32625      96MHz        512KB    160KB  MAX32625PICO
+[36mmax32600mbed[0m  MAX32600      24MHz        256KB    32KB   Maxim ARM mbed Enabled Development Platform for MAX32600
+[36mmax32620hsp[0m   MAX32620      96MHz        2MB      256KB  Maxim Health Sensor Platform
+[36mmax32630fthr[0m  MAX32630      96MHz        2MB      512KB  Maxim MAX32630FTHR Application Platform
+[36mmaxwsnenv[0m     MAX32610      24MHz        256KB    32KB   Maxim Wireless Sensor Node Demonstrator
+[36msdt32620b[0m     MAX32620IWG   96MHz        2MB      256KB  SDT32620B
+[36msdt32625b[0m     MAX32625ITK   96MHz        512KB    160KB  SDT32625B
+
+Platform: [1mmicrochippic32[0m
+================================================================================
+ID                         MCU             Frequency    Flash    RAM    Name
+-------------------------  --------------  -----------  -------  -----  --------------------------------
+[36mpicadillo_35t[0m              32MX795F512L    80MHz        508KB    128KB  4D Systems PICadillo 35T
+[36mdsmini[0m                     32MX150F128C    40MHz        120KB    32KB   DataStation Mini
+[36mcerebot32mx4[0m               32MX460F512L    80MHz        508KB    32KB   Digilent Cerebot 32MX4
+[36mcerebot32mx7[0m               32MX795F512L    80MHz        508KB    128KB  Digilent Cerebot 32MX7
+[36mopenscope[0m                  32MZ2048EFG124  200MHz       1.98MB   512KB  Digilent OpenScope
+[36mchipkit_cmod[0m               32MX150F128D    40MHz        124KB    32KB   Digilent chipKIT Cmod
+[36mchipkit_dp32[0m               32MX250F128B    40MHz        120KB    32KB   Digilent chipKIT DP32
+[36mmega_pic32[0m                 32MX795F512L    80MHz        508KB    128KB  Digilent chipKIT MAX32
+[36mchipkit_mx3[0m                32MX320F128H    80MHz        124KB    16KB   Digilent chipKIT MX3
+[36mchipkit_pro_mx4[0m            32MX460F512L    80MHz        508KB    32KB   Digilent chipKIT Pro MX4
+[36mchipkit_pro_mx7[0m            32MX795F512L    80MHz        508KB    128KB  Digilent chipKIT Pro MX7
+[36muno_pic32[0m                  32MX320F128H    80MHz        124KB    16KB   Digilent chipKIT UNO32
+[36mchipkit_wf32[0m               32MX695F512L    80MHz        508KB    128KB  Digilent chipKIT WF32
+[36mchipkit_wifire[0m             32MZ2048ECG100  200MHz       1.98MB   512KB  Digilent chipKIT WiFire
+[36mchipkit_uc32[0m               32MX340F512H    80MHz        508KB    32KB   Digilent chipKIT uC32
+[36mchipkit_pi[0m                 32MX250F128B    40MHz        120KB    32KB   Element14 chipKIT Pi
+[36mfubarino_mini[0m              32MX250F128D    48MHz        120KB    32KB   Fubarino Mini
+[36mfubarino_sd[0m                32MX795F512H    80MHz        508KB    128KB  Fubarino SD (1.5)
+[36mhelvepic32[0m                 32MX250F128B    48MHz        120KB    32KB   HelvePic32
+[36mhelvepic32_breadboardside[0m  32MX250F128B    48MHz        120KB    32KB   HelvePic32
+[36mhelvepic32_smd[0m             32MX250F128D    48MHz        120KB    32KB   HelvePic32
+[36mhelvepic32_mx270[0m           32MX270F256B    48MHz        244KB    62KB   HelvePic32 MX270
+[36mhelvepic32_robot[0m           32MX270F256D    48MHz        244KB    62KB   HelvePic32 Robot
+[36mhelvepic32_smd_mx270[0m       32MX270F256D    48MHz        244KB    62KB   HelvePic32 SMD MX270
+[36mclicker2[0m                   32MX460F512L    80MHz        508KB    32KB   MikroElektronika Clicker 2
+[36mflipnclickmz[0m               32MZ2048EFH100  252MHz       1.98MB   512KB  MikroElektronika Flip N Click MZ
+[36mfubarino_mini_20[0m           32MX270F256D    48MHz        240KB    62KB   Mini 2.0
+[36mpinguino32[0m                 32MX440F256H    80MHz        252KB    32KB   Olimex PIC32-PINGUINO
+[36mopenbci[0m                    32MX250F128B    40MHz        120KB    32KB   OpenBCI 32bit
+[36musbono_pic32[0m               32MX440F512H    80MHz        508KB    32KB   PONTECH UAV100
+[36mcui32[0m                      32MX440F512H    80MHz        508KB    32KB   Pic32 CUI32-Development Stick
+[36mnofire[0m                     32MZ2048EFG100  200MHz       1.98MB   512KB  Pontech NoFire
+[36mquick240_usb[0m               32MX795F512L    80MHz        508KB    128KB  Pontech Quick240
+[36mrgb_station[0m                32MX270F256D    48MHz        240KB    62KB   RGB Station
+[36mcui32stem[0m                  32MX795F512H    80MHz        508KB    128KB  SeeedStudio CUI32stem
+[36mubw32_mx460[0m                32MX460F512L    80MHz        508KB    32KB   UBW32 MX460
+[36mubw32_mx795[0m                32MX795F512L    80MHz        508KB    128KB  UBW32 MX795
+[36mlenny[0m                      32MX270F256D    40MHz        120KB    32KB   chipKIT Lenny
+[36mchipkit_wifire_revc[0m        32MZ2048EFG100  200MHz       1.98MB   512KB  chipKIT WiFire rev. C
+
+Platform: [1mnordicnrf51[0m
+================================================================================
+ID                 MCU       Frequency    Flash    RAM    Name
+-----------------  --------  -----------  -------  -----  -----------------------------------------
+[36mbbcmicrobit[0m        NRF51822  16MHz        256KB    16KB   BBC micro:bit
+[36mbluz_dk[0m            NRF51822  32MHz        256KB    32KB   BluzDK
+[36mcalliope_mini[0m      NRF51822  16MHz        256KB    16KB   Calliope mini
+[36mnrf51_beacon[0m       NRF51822  32MHz        256KB    32KB   Nordic Beacon Kit (PCA20006)
+[36mnrf51_dongle[0m       NRF51822  32MHz        256KB    32KB   Nordic nRF51 Dongle (PCA10031)
+[36mnrf51_dk[0m           NRF51822  32MHz        256KB    32KB   Nordic nRF51X22 Development Kit(PCA1000X)
+[36moshchip[0m            NRF51822  32MHz        256KB    32KB   OSHChip
+[36mredBearLabBLENano[0m  NRF51822  16MHz        256KB    32KB   RedBearLab BLE Nano 1.5
+[36mredBearLab[0m         NRF51822  16MHz        256KB    16KB   RedBearLab nRF51822
+[36mseeedTinyBLE[0m       NRF51822  16MHz        256KB    16KB   Seeed Tiny BLE
+[36mSinobit[0m            NRF51822  32MHz        256KB    32KB   Sino:Bit
+[36mvbluno51[0m           NRF51822  16MHz        128KB    32KB   VNG VBLUNO51
+[36mwaveshare_ble400[0m   NRF51822  32MHz        256KB    32KB   Waveshare BLE400
+[36mng_beacon[0m          NRF51822  16MHz        256KB    32KB   ng-beacon
+
+Platform: [1mnordicnrf52[0m
+================================================================================
+ID                               MCU       Frequency    Flash     RAM      Name
+-------------------------------  --------  -----------  --------  -------  -----------------------------------------
+[36m96b_nitrogen[0m                     NRF52832  64MHz        512KB     64KB     96Boards Nitrogen
+[36madafruit_feather_nrf52832[0m        NRF52832  64MHz        512KB     64KB     Adafruit Bluefruit nRF52832 Feather
+[36madafruit_clue_nrf52840[0m           NRF52840  64MHz        796KB     243KB    Adafruit CLUE nRF52840
+[36madafruit_feather_nrf52840_sense[0m  NRF52840  64MHz        796KB     243KB    Adafruit Feather Bluefruit Sense
+[36madafruit_feather_nrf52840[0m        NRF52840  64MHz        796KB     243KB    Adafruit Feather nRF52840 Express
+[36madafruit_ledglasses_nrf52840[0m     NRF52840  64MHz        796KB     232KB    Adafruit LED Glasses Driver nRF52840
+[36mnano33ble[0m                        NRF52840  64MHz        960KB     256KB    Arduino Nano 33 BLE
+[36mnicla_sense_me[0m                   NRF52832  64MHz        515.25KB  62.78KB  Arduino Nicla Sense ME
+[36mbbcmicrobit_v2[0m                   NRF52833  64MHz        512KB     128KB    BBC micro:bit V2
+[36mlaird_bl652_dvk[0m                  NRF52832  64MHz        512KB     64KB     BL652 Development Kit
+[36mlaird_bl653_dvk[0m                  NRF52833  64MHz        512KB     128KB    BL653 Development Kit
+[36mlaird_bl654_dvk[0m                  NRF52840  64MHz        1MB       256KB    BL654 Development Kit
+[36mbluey[0m                            NRF52832  64MHz        512KB     64KB     Bluey nRF52832 IoT
+[36mcalliopemini_v3[0m                  NRF52833  64MHz        512KB     128KB    Calliope Mini v3
+[36madafruit_cplaynrf52840[0m           NRF52840  64MHz        796KB     243KB    Circuit Playground Bluefruit
+[36mdelta_dfbm_nq620[0m                 NRF52832  64MHz        512KB     64KB     Delta DFBM-NQ620
+[36melectronut_blip[0m                  NRF52840  64MHz        1MB       256KB    ElectronutLabs Blip
+[36melectronut_papyr[0m                 NRF52840  64MHz        1MB       256KB    ElectronutLabs Papyr
+[36mholyiot_yj16019[0m                  NRF52832  64MHz        512KB     64KB     Holyiot YJ-16019
+[36madafruit_itsybitsy_nrf52840[0m      NRF52840  64MHz        796KB     243KB    ItsyBitsy nRF52840 Express
+[36mlaird_pinnacle_100_dvk[0m           NRF52840  64MHz        1MB       256KB    Laird Connectivity Pinnacle 100 DVK
+[36mnrf52832_mdk[0m                     NRF52832  64MHz        512KB     64KB     Makerdiary nRF52832-MDK
+[36mnrf52840_mdk[0m                     NRF52840  64MHz        1MB       256KB    Makerdiary nRF52840-MDK
+[36madafruit_metro_nrf52840[0m          NRF52840  64MHz        796KB     243KB    Metro nRF52840 Express
+[36mthingy_52[0m                        NRF52832  64MHz        512KB     64KB     Nordic Thingy:52 (nRF52-PCA20020)
+[36mnrf52_dk[0m                         NRF52832  64MHz        512KB     64KB     Nordic nRF52-DK
+[36mnrf52833_dk[0m                      NRF52833  64MHz        512KB     128KB    Nordic nRF52833-DK
+[36mnrf52840_dk[0m                      NRF52840  64MHz        1MB       256KB    Nordic nRF52840-DK
+[36mnrf52840_dk_adafruit[0m             NRF52840  64MHz        796KB     243KB    Nordic nRF52840-DK (Adafruit BSP)
+[36mreel_board[0m                       NRF52840  64MHz        1MB       256KB    PHYTEC reel board
+[36mreel_board_v2[0m                    NRF52840  64MHz        1MB       256KB    PHYTEC reel board v2
+[36mparticle_argon[0m                   NRF52840  64MHz        796KB     243KB    Particle Argon
+[36mparticle_boron[0m                   NRF52840  64MHz        796KB     243KB    Particle Boron
+[36mparticle_xenon[0m                   NRF52840  64MHz        796KB     243KB    Particle Xenon
+[36mraytac_mdbt50q_rx[0m                NRF52840  64MHz        796KB     243KB    Raytac MDBT50Q-RX Dongle
+[36mredbear_blenano2[0m                 NRF52832  64MHz        512KB     64KB     RedBearLab BLE Nano 2
+[36mredbear_blend2[0m                   NRF52832  64MHz        512KB     64KB     RedBearLab Blend 2
+[36mruuvitag[0m                         NRF52832  64MHz        512KB     64KB     Ruuvi Tag
+[36msdt52832b[0m                        NRF52832  64MHz        512KB     64KB     SDT52832B
+[36mstct_nrf52_minidev[0m               NRF52832  64MHz        512KB     64KB     Taida Century nRF52 mini board
+[36mvbluno52[0m                         NRF52832  64MHz        512KB     64KB     VNG VBLUno52
+[36mdwm1001_dev[0m                      NRF52832  64MHz        512KB     64KB     decaWave DWM1001 Module Development Board
+[36mhackaBLE[0m                         NRF52832  64MHz        512KB     64KB     hackaBLE
+[36mublox_bmd345eval_nrf52840[0m        NRF52840  64MHz        1MB       256KB    u-blox BMD-345-EVAL
+[36mublox_evk_nina_b1[0m                NRF52832  64MHz        512KB     64KB     u-blox EVK-NINA-B1
+
+Platform: [1mnuclei[0m
+================================================================================
+ID                      MCU            Frequency    Flash    RAM    Name
+----------------------  -------------  -----------  -------  -----  --------------------------
+[36mgd32vf103v_eval[0m         GD32VF103VBT6  108MHz       128KB    32KB   GD32VF103V Evaluation Kit
+[36mgd32vf103v_rvstar[0m       GD32VF103VBT6  108MHz       128KB    32KB   GD32VF103V RVStar Kit
+[36mhbird_eval[0m              HUMMINGBIRD    5MHz         64KB     64KB   HummingBird Evaluation Kit
+[36mgd32vf103c_longan_nano[0m  GD32VF103CBT6  108MHz       128KB    32KB   Sipeed Longan Nano
+
+Platform: [1mnxpimxrt[0m
+================================================================================
+ID              MCU              Frequency    Flash    RAM    Name
+--------------  ---------------  -----------  -------  -----  ------------------------------
+[36mmimxrt1010_evk[0m  MIMXRT1011DAE5A  500MHz       64KB     128KB  NXP i.MX RT1010 Evaluation Kit
+[36mmimxrt1015_evk[0m  MIMXRT1015DAF5A  500MHz       96KB     128KB  NXP i.MX RT1015 Evaluation Kit
+[36mmimxrt1020_evk[0m  MIMXRT1021DAG5A  500MHz       8MB      32MB   NXP i.MX RT1020 Evaluation Kit
+[36mmimxrt1050_evk[0m  MIMXRT1052DVL6B  600MHz       8MB      32MB   NXP i.MX RT1050 Evaluation Kit
+[36mmimxrt1060_evk[0m  MIMXRT1062DVL6A  600MHz       8MB      32MB   NXP i.MX RT1060 Evaluation Kit
+[36mmimxrt1064_evk[0m  MIMXRT1064DVL6A  600MHz       8MB      32MB   NXP i.MX RT1064 Evaluation Kit
+
+Platform: [1mnxplpc[0m
+================================================================================
+ID               MCU               Frequency    Flash    RAM    Name
+---------------  ----------------  -----------  -------  -----  -------------------
+[36mlpc11u68[0m         LPC11U68          50MHz        256KB    36KB   LPCXpresso11U68
+[36mlpc54114[0m         LPC54114J256BD64  100MHz       256KB    192KB  NXP LPCXpresso54114
+[36mlpc546xx[0m         LPC54608ET512     180MHz       512KB    200KB  NXP LPCXpresso54608
+[36mlpcxpresso55s16[0m  LPC55S16          150MHz       256KB    96KB   NXP LPCXpresso55S16
+[36mlpc1768[0m          LPC1768           96MHz        512KB    64KB   NXP mbed LPC1768
+[36mseeedArchPro[0m     LPC1768           96MHz        512KB    64KB   Seeed Arch Pro
+
+Platform: [1mopenhw[0m
+================================================================================
+ID        MCU    Frequency    Flash    RAM     Name
+--------  -----  -----------  -------  ------  -----------------
+[36mnexys_a7[0m         320MHz       16MB     1.16MB  Digilent Nexys A7
+
+Platform: [1mraspberrypi[0m
+================================================================================
+ID                 MCU     Frequency    Flash    RAM    Name
+-----------------  ------  -----------  -------  -----  ---------------------------
+[36mnanorp2040connect[0m  RP2040  133MHz       2MB      264KB  Arduino Nano RP2040 Connect
+[36mpico[0m               RP2040  133MHz       2MB      264KB  Raspberry Pi Pico
+
+Platform: [1mrenesas-ra[0m
+================================================================================
+ID             MCU            Frequency    Flash    RAM       Name
+-------------  -------------  -----------  -------  --------  ---------------------
+[36mnano_r4[0m        RA4M1          48MHz        256KB    32KB      Arduino Nano R4
+[36mportenta_c33[0m   R7FA6M5BH2CBG  200MHz       2MB      511.35KB  Arduino Portenta C33
+[36muno_r4_minima[0m  RA4M1          48MHz        256KB    32KB      Arduino Uno R4 Minima
+[36muno_r4_wifi[0m    RA4M1          48MHz        256KB    32KB      Arduino Uno R4 WiFi
+
+Platform: [1mriscv_gap[0m
+================================================================================
+ID       MCU    Frequency    Flash    RAM    Name
+-------  -----  -----------  -------  -----  ------------
+[36mgapuino[0m  GAP8   250MHz       64MB     8MB    GAPuino GAP8
+
+Platform: [1mshakti[0m
+================================================================================
+ID           MCU      Frequency    Flash    RAM    Name
+-----------  -------  -----------  -------  -----  ----------------------------------------------------
+[36martix7_35t[0m   E-CLASS  50MHz        0B       128KB  Artix-7 35T Arty FPGA Evaluation Kit
+[36martix7_100t[0m  C-CLASS  50MHz        0B       128MB  Arty A7-100: Artix-7 FPGA Development Board
+[36mparashu[0m      E-CLASS  50MHz        0B       128KB  Parashu on Artix-7 100T Arty FPGA Evaluation Kit
+[36mpinaka[0m       E-CLASS  50MHz        0B       128KB  Pinaka on Artix-7 35T Arty FPGA Evaluation Kit
+[36mvajra[0m        C-CLASS  50MHz        0B       128MB  Vajra on Arty A7-100: Artix-7 FPGA Development Board
+
+Platform: [1msifive[0m
+================================================================================
+ID                     MCU    Frequency    Flash    RAM    Name
+---------------------  -----  -----------  -------  -----  -------------------------
+[36me310-arty[0m              FE310  450MHz       16MB     256MB  Arty FPGA Dev Kit
+[36mhifive-unleashed[0m       FU540  1500MHz      32MB     8GB    HiFive Unleashed
+[36mhifive1[0m                FE310  320MHz       16MB     16KB   HiFive1
+[36mhifive1-revb[0m           FE310  320MHz       16MB     16KB   HiFive1 Rev B
+[36msparkfun_redboard_v[0m    FE310  320MHz       16MB     16KB   SparkFun RED-V RedBoard
+[36msparkfun_thing_plus_v[0m  FE310  320MHz       16MB     16KB   SparkFun RED-V Thing Plus
+
+Platform: [1msiliconlabsefm32[0m
+================================================================================
+ID                 MCU                      Frequency    Flash    RAM    Name
+-----------------  -----------------------  -----------  -------  -----  -------------------------------------------------
+[36mefm32gg_stk3700[0m    EFM32GG990F1024          48MHz        1MB      128KB  EFM32GG-STK3700 Giant Gecko
+[36mefm32wg_stk3800[0m    EFM32WG990F256           48MHz        256KB    32KB   EFM32WG-STK3800 Wonder Gecko
+[36mefm32hg_stk3400[0m    EFM32HG322F64            25MHz        64KB     8KB    SLSTK3400A USB-enabled Happy Gecko
+[36mefm32gg11_stk3701[0m  EFM32GG11B820F2048GL192  48MHz        2MB      512KB  SLSTK3701A Giant Gecko S1
+[36mtb_sense_12[0m        EFR32MG12P432F1024       40MHz        1MB      256KB  Thunderboard Sense 2 Sensor-to-Cloud Advanced IoT
+
+Platform: [1mststm32[0m
+================================================================================
+ID                           MCU             Frequency    Flash     RAM       Name
+---------------------------  --------------  -----------  --------  --------  -------------------------------------------------------
+[36m1bitsy_stm32f415rgt[0m          STM32F415RGT    168MHz       1MB       128KB     1Bitsy
+[36mdisco_f412zg[0m                 STM32F412ZGT6   100MHz       1MB       256KB     32F412GDISCOVERY
+[36mdisco_f723ie[0m                 STM32F723IEK6   216MHz       512KB     192KB     32F723EDISCOVERY
+[36marmed_v1[0m                     STM32F407VET6   168MHz       512KB     128KB     3D Printer Controller
+[36mrumba32_f446ve[0m               STM32F446RET6   180MHz       512KB     128KB     3D Printer control board
+[36mremram_v1[0m                    STM32F765VIT6   216MHz       2MB       512KB     3D printer controller
+[36mst3dp001_eval[0m                STM32F401VET6   84MHz        512KB     96KB      3DP001V1 Evaluation board for 3D printer
+[36mb96b_argonkey[0m                STM32F412CG     100MHz       1MB       256KB     96Boards Argonkey (STEVAL-MKI187V1)
+[36mb96b_f446ve[0m                  STM32F446VET6   168MHz       512KB     128KB     96Boards B96B-F446VE
+[36mb96b_aerocore2[0m               STM32F427VIT6   168MHz       1.99MB    256KB     96Boards Neonkey
+[36mb96b_neonkey[0m                 STM32F411CE     100MHz       512KB     128KB     96Boards Neonkey
+[36macsip_s76s[0m                   STM32L073RZ     32MHz        192KB     20KB      ACSIP S76S
+[36madafruit_feather_f405[0m        STM32F405RGT6   168MHz       1MB       128KB     Adafruit Feather STM32F405
+[36mafroflight_f103cb[0m            STM32F103CBT6   72MHz        128KB     20KB      AfroFlight Rev5 (8MHz)
+[36mgiga_r1_m4[0m                   STM32H747XIH6   480MHz       1MB       287.35KB  Arduino Giga R1 (M4 core)
+[36mgiga_r1_m7[0m                   STM32H747XIH6   480MHz       768KB     511.35KB  Arduino Giga R1 (M7 core)
+[36mnicla_vision[0m                 STM32H747XIH6   480MHz       768KB     511.35KB  Arduino Nicla Vision
+[36mnicla_vision_m4[0m              STM32H747XIH6   480MHz       1MB       287.35KB  Arduino Nicla Vision (M4 core)
+[36mopta[0m                         STM32H747XIH6   480MHz       768KB     511.35KB  Arduino Opta
+[36mopta_m4[0m                      STM32H747XIH6   480MHz       1MB       287.35KB  Arduino Opta (M4 core)
+[36mportenta_h7_m4[0m               STM32H747XIH6   480MHz       1MB       287.35KB  Arduino Portenta H7 (M4 core)
+[36mportenta_h7_m7[0m               STM32H747XIH6   480MHz       768KB     511.35KB  Arduino Portenta H7 (M7 core)
+[36marmstrap_eagle1024[0m           STM32F417VGT6   168MHz       1MB       192KB     Armstrap Eagle 1024
+[36marmstrap_eagle2048[0m           STM32F427VIT6   168MHz       1.99MB    256KB     Armstrap Eagle 2048
+[36marmstrap_eagle512[0m            STM32F407VET6   168MHz       512KB     128KB     Armstrap Eagle 512
+[36mbtt_ebb42_v1_1[0m               STM32G0B1RET6   64MHz        128KB     144KB     Big Tree Tech EBB42 V1.1
+[36mblack_f407ve[0m                 STM32F407VET6   168MHz       512KB     128KB     Black STM32F407VE
+[36mblack_f407vg[0m                 STM32F407VGT6   168MHz       512KB     128KB     Black STM32F407VG
+[36mblack_f407ze[0m                 STM32F407ZET6   168MHz       512KB     128KB     Black STM32F407ZE
+[36mblack_f407zg[0m                 STM32F407ZGT6   168MHz       1MB       128KB     Black STM32F407ZG
+[36mblackpill_f103c8[0m             STM32F103C8T6   72MHz        64KB      20KB      BlackPill F103C8
+[36mblackpill_f103c8_128[0m         STM32F103C8T6   72MHz        128KB     20KB      BlackPill F103C8 (128k)
+[36mrobotdyn_blackpill_f303cc[0m    STM32F303CCT6   72MHz        256KB     40KB      BlackPill F303CC
+[36mblue_f407ve_mini[0m             STM32F407VET6   168MHz       512KB     128KB     Blue STM32F407VE Mini
+[36mbluepill_f103c6[0m              STM32F103C6T6   72MHz        32KB      10KB      BluePill F103C6
+[36mbluepill_f103c8[0m              STM32F103C8T6   72MHz        64KB      20KB      BluePill F103C8
+[36mbluepill_f103c8_128k[0m         STM32F103C8T6   72MHz        128KB     20KB      BluePill F103C8 (128k)
+[36mblues_cygnet[0m                 STM32L433CCT6   80MHz        256KB     64KB      Blues Cygnet
+[36mblues_swan_r5[0m                STM32L4R5ZIY6   120MHz       2MB       640KB     Blues Swan R5
+[36mbw_swan_r5[0m                   STM32L4R5ZIY6   120MHz       2MB       640KB     BluesWireless Swan R5
+[36mcicada_l082cz[0m                STM32L082CZY6   32MHz        192KB     20KB      Cicada-L082CZ
+[36mcoreboard_f401rc[0m             STM32F401RCT6   84MHz        256KB     64KB      Core board F401RCT6
+[36mcricket_l082cz[0m               STM32L082CZY6   32MHz        192KB     20KB      Cricket-L082CZ
+[36mdemo_f030f4[0m                  STM32F030F4P6   48MHz        16KB      4KB       Demo F030F4
+[36mdevebox_h743vitx[0m             STM32H743VIT6   480MHz       2MB       512KB     DevEBox H743VITX
+[36mdevebox_h750vbtx[0m             STM32H750VBT6   480MHz       512KB     128KB     DevEBox H750VBTX
+[36mebyte_e77_dev[0m                STM32WLE5CC     48MHz        256KB     64KB      Ebyte E77 Dev Board
+[36meconode_l082cz[0m               STM32L082CZY6   32MHz        192KB     20KB      Econode-L082CZ
+[36melectrosmith_daisy[0m           STM32H750IBK6   400MHz       128KB     512KB     Electrosmith Daisy
+[36melectrosmith_daisy_patch_sm[0m  STM32H750IBK6   400MHz       128KB     512KB     Electrosmith Daisy Patch SM
+[36melectrosmith_daisy_petal_sm[0m  STM32H750IBK6   400MHz       128KB     512KB     Electrosmith Daisy Petal SM
+[36melektor_f072cb[0m               STM32F072C8T6   48MHz        128KB     16KB      Elektor LoRa Node Core F072C8 (128 kB)
+[36melektor_f072c8[0m               STM32F072C8T6   48MHz        64KB      16KB      Elektor LoRa Node Core F072C8 (64 kB)
+[36melmo_f411re[0m                  STM32F411RET6   100MHz       512KB     128KB     Espotel LoRa Module
+[36mdiymore_f407vgt[0m              STM32F407VGT6   168MHz       1MB       128KB     F407VG
+[36mfk407m1[0m                      STM32F407VET6   168MHz       512KB     128KB     FK407M1
+[36mfysetc_s6[0m                    STM32F446VET6   168MHz       512KB     128KB     FYSETC S6
+[36mgnat_l082cz[0m                  STM32L082CZY6   32MHz        192KB     20KB      Gnat-L082CZ
+[36mgrasshopper_l082cz[0m           STM32L082CZY6   32MHz        192KB     20KB      Grasshopper-L082CZ
+[36mrhombio_l476dmw1k[0m            STM32L476VGT6   80MHz        1MB       128KB     L476DMW1K
+[36mleafony_ap03[0m                 STM32L452RET6   80MHz        512KB     160KB     Leafony Systems AP03
+[36mlilygo_t3_stm32_v1[0m           STM32WLE5CCU7   48MHz        256KB     64KB      LilyGo T3-STM32
+[36mmalyanm200_f070cb[0m            STM32F070CBT6   48MHz        120KB     14.81KB   M200 V2
+[36mmalyanm300_f070cb[0m            STM32F070CBT6   48MHz        120KB     14.81KB   M300
+[36mmkr_sharky[0m                   STM32WB55CG     64MHz        512KB     192KB     MKR Sharky
+[36mmts_dragonfly_f411re[0m         STM32F411RET6   100MHz       512KB     128KB     MTS Dragonfly
+[36mmalyanm200_f103cb[0m            STM32F103CBT6   72MHz        120KB     20KB      Malyan M200 V1
+[36mmaple[0m                        STM32F103RBT6   72MHz        108KB     17KB      Maple
+[36mmaple_ret6[0m                   STM32F103RET6   72MHz        256KB     48KB      Maple (RET6)
+[36mmaple_mini_b20[0m               STM32F103CBT6   72MHz        120KB     20KB      Maple Mini Bootloader 2.0
+[36mmaple_mini_origin[0m            STM32F103CBT6   72MHz        108KB     20KB      Maple Mini Original
+[36mmbed_connect_odin[0m            STM32F439ZIY6   168MHz       2MB       256KB     Mbed Connect Cloud
+[36mmicroduino32_flash[0m           STM32F103CBT6   72MHz        105.47KB  20KB      Microduino Core STM32 to Flash
+[36mmxchip_az3166[0m                STM32F412ZGT6   100MHz       1MB       256KB     Microsoft Azure IoT Development Kit (MXChip AZ3166)
+[36mmts_mdot_f405rg[0m              STM32F411RET6   100MHz       512KB     128KB     MultiTech mDot
+[36mmts_mdot_f411re[0m              STM32F411RET6   100MHz       512KB     128KB     MultiTech mDot F411
+[36mxdot_l151cc[0m                  STM32L151CCU6   32MHz        256KB     32KB      MultiTech xDot
+[36mnetduino2plus[0m                STM32F405RGT6   168MHz       1MB       128KB     N2+
+[36mmote_l152rc[0m                  STM32L152RC     32MHz        256KB     32KB      NAMote72
+[36mnucleo_g070rb[0m                STM32G070RBT6   64MHz        128KB     36KB      Nucleo G070RB
+[36mnucleo_g071rb[0m                STM32G071RBT6   64MHz        128KB     36KB      Nucleo G071RB
+[36mnucleo_g431kb[0m                STM32G431KBT6   170MHz       128KB     32KB      Nucleo G431KB
+[36mnucleo_g431rb[0m                STM32G431RBT6   170MHz       128KB     32KB      Nucleo G431RB
+[36mnucleo_g474re[0m                STM32G474RET6   170MHz       512KB     128KB     Nucleo G474RE
+[36mnucleo_g491re[0m                STM32G491RET6   170MHz       512KB     112KB     Nucleo G491RE
+[36molimexino[0m                    STM32F103RBT6   72MHz        128KB     20KB      OLIMEXINO-STM32
+[36molimexino_stm32f3[0m            STM32F303RCT6   72MHz        256KB     40KB      Olimex OLIMEXINO-STM32F3
+[36molimex_f103[0m                  STM32F103RBT6   72MHz        128KB     20KB      Olimex STM32-H103
+[36molimex_p405[0m                  STM32F405RGT6   168MHz       1MB       128KB     Olimex STM32-P405
+[36mnucleo_wb55rg_p[0m              STM32WB55RG     64MHz        512KB     192KB     P-Nucleo WB55RG
+[36mpybstick26_duino[0m             STM32F072RB     48MHz        128KB     16KB      PYBSTICK26 Duino
+[36mpybstick26_pro[0m               STM32F412RE     100MHz       512KB     256KB     PYBStick 26 Pro
+[36mpybstick26_lite[0m              STM32F401CEU6   84MHz        512KB     96KB      PYBStick Lite 26
+[36mpybstick26_std[0m               STM32F411CEU6   100MHz       512KB     128KB     PYBStick Standard 26
+[36mpiconomix_px_her0[0m            STM32L072RB     32MHz        128KB     20KB      Piconomix PX-HER0
+[36mprntr_v2[0m                     STM32F407VET6   168MHz       512KB     128KB     PrntrBoard V2
+[36mrak811_tracker[0m               STM32L151RBT6   32MHz        128KB     16KB      RAK811 LoRa Tracker
+[36mrak811_tracker_32[0m            STM32L151RBT6   32MHz        128KB     32KB      RAK811 LoRa Tracker
+[36mrhf76_052[0m                    STM32L051C8T6   32MHz        64KB      8KB       RHF76 052
+[36mrymcu_nebulapi_f103ve[0m        STM32F103VET6   72MHz        512KB     64KB      RYMCU Nebula Pi F103VE (64k RAM. 512k Flash)
+[36mrymcu_f407ve[0m                 STM32F407VET6   168MHz       502.23KB  128KB     RYMCU STM32F407VE (192k RAM. 512k Flash)
+[36mcloud_jam[0m                    STM32F401RET6   84MHz        512KB     96KB      RushUp Cloud-JAM
+[36mcloud_jam_l4[0m                 STM32L476RGT6   80MHz        1MB       128KB     RushUp Cloud-JAM L4
+[36mdisco_f334c8[0m                 STM32F334C8T6   72MHz        64KB      12KB      ST 32F3348DISCOVERY
+[36mdisco_f401vc[0m                 STM32F401VCT6   84MHz        256KB     64KB      ST 32F401CDISCOVERY
+[36mdisco_f411ve[0m                 STM32F411VET6   100MHz       512KB     128KB     ST 32F411EDISCOVERY
+[36mdisco_f413zh[0m                 STM32F413ZHT6   100MHz       1.50MB    320KB     ST 32F413HDISCOVERY
+[36mdisco_f429zi[0m                 STM32F429ZIT6   180MHz       2MB       256KB     ST 32F429IDISCOVERY
+[36mdisco_f469ni[0m                 STM32F469NIH6   180MHz       2MB       384KB     ST 32F469IDISCOVERY
+[36mdisco_f746ng[0m                 STM32F746NGH6   216MHz       1MB       320KB     ST 32F746GDISCOVERY
+[36mdisco_f769ni[0m                 STM32F769NIH6   216MHz       2MB       512KB     ST 32F769IDISCOVERY
+[36mdisco_l053c8[0m                 STM32L053C8T6   32MHz        64KB      8KB       ST 32L0538DISCOVERY
+[36mdisco_l100rc[0m                 STM32L100RCT6   32MHz        256KB     16KB      ST 32L100DISCOVERY
+[36mdisco_l476vg[0m                 STM32L476VGT6   80MHz        1MB       128KB     ST 32L476GDISCOVERY
+[36mdisco_l496ag[0m                 STM32L496AGI6   80MHz        1MB       320KB     ST 32L496GDISCOVERY
+[36mdisco_b_g431b_esc1[0m           STM32G431CBU6   170MHz       128KB     32KB      ST B-G431B-ESC1 Discovery
+[36mdisco_l475vg_iot01a[0m          STM32L475VGT6   80MHz        1MB       96KB      ST B-L475E-IOT01A Discovery kit
+[36mdisco_b_u585i_iot02a[0m         STM32U585AII6Q  160MHz       2MB       256KB     ST B-U585I-IOT02A Discovery
+[36mdisco_l072cz_lrwan1[0m          STM32L072CZ     32MHz        192KB     20KB      ST DISCO-L072CZ-LRWAN1
+[36mdisco_f072rb[0m                 STM32F072RBT6   48MHz        128KB     16KB      ST Discovery F072RB
+[36mnucleo_g031k8[0m                STM32G031K8     64MHz        64KB      8KB       ST NUCLEO-G031K8
+[36mnucleo_f030r8[0m                STM32F030R8T6   48MHz        64KB      8KB       ST Nucleo F030R8
+[36mnucleo_f031k6[0m                STM32F031K6T6   48MHz        32KB      4KB       ST Nucleo F031K6
+[36mnucleo_f042k6[0m                STM32F042K6T6   48MHz        32KB      6KB       ST Nucleo F042K6
+[36mnucleo_f070rb[0m                STM32F070RBT6   48MHz        128KB     16KB      ST Nucleo F070RB
+[36mnucleo_f072rb[0m                STM32F072RBT6   48MHz        128KB     16KB      ST Nucleo F072RB
+[36mnucleo_f091rc[0m                STM32F091RCT6   48MHz        256KB     32KB      ST Nucleo F091RC
+[36mnucleo_f103rb[0m                STM32F103RBT6   72MHz        128KB     20KB      ST Nucleo F103RB
+[36mnucleo_f207zg[0m                STM32F207ZGT6   120MHz       1MB       128KB     ST Nucleo F207ZG
+[36mnucleo_f302r8[0m                STM32F302R8T6   72MHz        64KB      16KB      ST Nucleo F302R8
+[36mnucleo_f303k8[0m                STM32F303K8T6   72MHz        64KB      12KB      ST Nucleo F303K8
+[36mnucleo_f303re[0m                STM32F303RET6   72MHz        512KB     64KB      ST Nucleo F303RE
+[36mnucleo_f303ze[0m                STM32F303ZET6   72MHz        512KB     64KB      ST Nucleo F303ZE
+[36mnucleo_f334r8[0m                STM32F334R8T6   72MHz        64KB      16KB      ST Nucleo F334R8
+[36mnucleo_f401re[0m                STM32F401RET6   84MHz        512KB     96KB      ST Nucleo F401RE
+[36mnucleo_f410rb[0m                STM32F410RBT6   100MHz       128KB     32KB      ST Nucleo F410RB
+[36mnucleo_f411re[0m                STM32F411RET6   100MHz       512KB     128KB     ST Nucleo F411RE
+[36mnucleo_f412zg[0m                STM32F412ZGT6   100MHz       1MB       256KB     ST Nucleo F412ZG
+[36mnucleo_f413zh[0m                STM32F413ZHT6   100MHz       1.50MB    320KB     ST Nucleo F413ZH
+[36mnucleo_f429zi[0m                STM32F429ZIT6   180MHz       2MB       192KB     ST Nucleo F429ZI
+[36mnucleo_f439zi[0m                STM32F439ZIT6   180MHz       2MB       192KB     ST Nucleo F439ZI
+[36mnucleo_f446re[0m                STM32F446RET6   180MHz       512KB     128KB     ST Nucleo F446RE
+[36mnucleo_f446ze[0m                STM32F446ZET6   180MHz       512KB     128KB     ST Nucleo F446ZE
+[36mnucleo_f722ze[0m                STM32F722ZET6   216MHz       512KB     256KB     ST Nucleo F722ZE
+[36mnucleo_f746zg[0m                STM32F746ZGT6   216MHz       1MB       320KB     ST Nucleo F746ZG
+[36mnucleo_f756zg[0m                STM32F756ZG     216MHz       1MB       320KB     ST Nucleo F756ZG
+[36mnucleo_f767zi[0m                STM32F767ZIT6   216MHz       2MB       512KB     ST Nucleo F767ZI
+[36mnucleo_g0b1re[0m                STM32G0B1RET6   64MHz        512KB     144KB     ST Nucleo G0B1RE
+[36mnucleo_h563zi[0m                STM32H563ZIT6U  250MHz       2MB       640KB     ST Nucleo H563ZI
+[36mnucleo_h723zg[0m                STM32H723ZGT6   550MHz       1MB       320KB     ST Nucleo H723ZG
+[36mnucleo_h743zi[0m                STM32H743ZIT6   400MHz       2MB       512KB     ST Nucleo H743ZI
+[36mnucleo_h745zi_q[0m              STM32H745ZIT6   480MHz       1MB       512KB     ST Nucleo H745ZI-Q
+[36mnucleo_h753zi[0m                STM32H753ZIT6   400MHz       2MB       512KB     ST Nucleo H753ZI
+[36mnucleo_l010rb[0m                STM32L010RBT6   32MHz        128KB     20KB      ST Nucleo L010RB
+[36mnucleo_l011k4[0m                STM32L011K4T6   32MHz        16KB      2KB       ST Nucleo L011K4
+[36mnucleo_l031k6[0m                STM32L031K6T6   32MHz        32KB      8KB       ST Nucleo L031K6
+[36mnucleo_l053r8[0m                STM32L053R8T6   32MHz        64KB      8KB       ST Nucleo L053R8
+[36mnucleo_l073rz[0m                STM32L073RZ     32MHz        192KB     20KB      ST Nucleo L073RZ
+[36mnucleo_l152re[0m                STM32L152RET6   32MHz        512KB     80KB      ST Nucleo L152RE
+[36mnucleo_l412kb[0m                STM32L412KBU6   80MHz        128KB     40KB      ST Nucleo L412KB
+[36mnucleo_l412rb_p[0m              STM32L412RBT6P  80MHz        128KB     40KB      ST Nucleo L412RB-P
+[36mnucleo_l432kc[0m                STM32L432KCU6   80MHz        256KB     64KB      ST Nucleo L432KC
+[36mnucleo_l433rc_p[0m              STM32L433RC     80MHz        256KB     64KB      ST Nucleo L433RC-P
+[36mnucleo_l452re[0m                STM32L452RET6   80MHz        512KB     160KB     ST Nucleo L452RE
+[36mnucleo_l476rg[0m                STM32L476RGT6   80MHz        1MB       96KB      ST Nucleo L476RG
+[36mnucleo_l486rg[0m                STM32L486RGT6   80MHz        1MB       128KB     ST Nucleo L486RG
+[36mnucleo_l496zg[0m                STM32L496ZGT6   80MHz        1MB       320KB     ST Nucleo L496ZG
+[36mnucleo_l496zg_p[0m              STM32L496ZGT6P  80MHz        1MB       320KB     ST Nucleo L496ZG-P
+[36mnucleo_l4r5zi[0m                STM32L4R5ZIT6   120MHz       2MB       640KB     ST Nucleo L4R5ZI
+[36mnucleo_l552ze_q[0m              STM32L552ZET6   80MHz        512KB     192KB     ST Nucleo L552ZE-Q
+[36mnucleo_u575zi_q[0m              STM32U575ZIT6Q  160MHz       2MB       768KB     ST Nucleo U575ZI-Q
+[36mnucleo_wl55jc[0m                STM32WL55JC     48MHz        256KB     64KB      ST Nucleo WL55JC
+[36mdisco_f030r8[0m                 STM32F030R8T6   48MHz        64KB      8KB       ST STM32F0308DISCOVERY
+[36mdisco_f051r8[0m                 STM32F051R8T6   48MHz        64KB      8KB       ST STM32F0DISCOVERY
+[36mdisco_f303vc[0m                 STM32F303VCT6   72MHz        256KB     40KB      ST STM32F3DISCOVERY
+[36mdisco_f407vg[0m                 STM32F407VGT6   168MHz       1MB       128KB     ST STM32F4DISCOVERY
+[36mdisco_g031j6[0m                 STM32G031J6     64MHz        32KB      8KB       ST STM32G0316-DISCO
+[36mdisco_g071rb[0m                 STM32G071RBT6   64MHz        128KB     36KB      ST STM32G071B Discovery
+[36meval_l073z[0m                   STM32L073VZT6   32MHz        192KB     20KB      ST STM32L073Z-EVAL
+[36mdisco_l4s5i_iot01a[0m           STM32L4S5VIT6   80MHz        2MB       640KB     ST STM32L4+ Discovery kit IoT node
+[36mdisco_l152rb[0m                 STM32L152RBT6   32MHz        128KB     16KB      ST STM32LDISCOVERY
+[36mdisco_f100rb[0m                 STM32F100RBT6   24MHz        128KB     8KB       ST STM32VLDISCOVERY
+[36msilica_sensor_node[0m           STM32L476JG     80MHz        1MB       128KB     ST Sensor Node
+[36msteval_fcu001v1[0m              STM32F401CCU6   84MHz        256KB     64KB      STEVAL-FCU001V1 Flight controller unit evaluation board
+[36molimex_e407[0m                  STM32F407ZGT6   168MHz       1MB       128KB     STM32-E407
+[36molimex_h407[0m                  STM32F407ZGT6   168MHz       1MB       128KB     STM32-H407
+[36meval_f107vc[0m                  STM32F107VCT6   72MHz        256KB     64KB      STM3210C-EVAL
+[36meval_f373vc[0m                  STM32F373VCT6   72MHz        256KB     32KB      STM32373C-EVAL
+[36meval_f072vb[0m                  STM32F072VBT6   48MHz        128KB     16KB      STM32F072-EVAL
+[36mgenericSTM32F103C4[0m           STM32F103C4T6   72MHz        16KB      6KB       STM32F103C4 (6k RAM. 16k Flash)
+[36mgenericSTM32F103C6[0m           STM32F103C6T6   72MHz        32KB      10KB      STM32F103C6 (10k RAM. 32k Flash)
+[36mgenericSTM32F103C8[0m           STM32F103C8T6   72MHz        64KB      20KB      STM32F103C8 (20k RAM. 64k Flash)
+[36mgenericSTM32F103CB[0m           STM32F103CBT6   72MHz        128KB     20KB      STM32F103CB (20k RAM. 128k Flash)
+[36mgenericSTM32F103R4[0m           STM32F103R4T6   72MHz        16KB      6KB       STM32F103R4 (6k RAM. 16k Flash)
+[36mgenericSTM32F103R6[0m           STM32F103R6T6   72MHz        32KB      10KB      STM32F103R6 (10k RAM. 32k Flash)
+[36mgenericSTM32F103R8[0m           STM32F103R8T6   72MHz        64KB      20KB      STM32F103R8 (20k RAM. 64 Flash)
+[36mgenericSTM32F103RB[0m           STM32F103RBT6   72MHz        128KB     20KB      STM32F103RB (20k RAM. 128k Flash)
+[36mgenericSTM32F103RC[0m           STM32F103RCT6   72MHz        256KB     48KB      STM32F103RC (48k RAM. 256k Flash)
+[36mgenericSTM32F103RD[0m           STM32F103RDT6   72MHz        384KB     64KB      STM32F103RD (64k RAM. 384k Flash)
+[36mgenericSTM32F103RE[0m           STM32F103RET6   72MHz        512KB     64KB      STM32F103RE (64k RAM. 512k Flash)
+[36mgenericSTM32F103RF[0m           STM32F103RFT6   72MHz        768KB     96KB      STM32F103RF (96k RAM. 768k Flash)
+[36mgenericSTM32F103RG[0m           STM32F103RGT6   72MHz        1MB       96KB      STM32F103RG (96k RAM. 1024k Flash)
+[36mgenericSTM32F103T4[0m           STM32F103T4U6   72MHz        16KB      6KB       STM32F103T4 (6k RAM. 16k Flash)
+[36mgenericSTM32F103T6[0m           STM32F103T6U6   72MHz        32KB      10KB      STM32F103T6 (10k RAM. 32k Flash)
+[36mgenericSTM32F103T8[0m           STM32F103T8U6   72MHz        64KB      20KB      STM32F103T8 (20k RAM. 64k Flash)
+[36mgenericSTM32F103TB[0m           STM32F103TBU6   72MHz        128KB     20KB      STM32F103TB (20k RAM. 128k Flash)
+[36mgenericSTM32F103V8[0m           STM32F103V8T6   72MHz        64KB      20KB      STM32F103V8 (20k RAM. 64k Flash)
+[36mgenericSTM32F103VB[0m           STM32F103VBT6   72MHz        128KB     20KB      STM32F103VB (20k RAM. 128k Flash)
+[36mgenericSTM32F103VC[0m           STM32F103VCT6   72MHz        256KB     48KB      STM32F103VC (48k RAM. 256k Flash)
+[36mgenericSTM32F103VD[0m           STM32F103VDT6   72MHz        384KB     64KB      STM32F103VD (64k RAM. 384k Flash)
+[36mgenericSTM32F103VE[0m           STM32F103VET6   72MHz        512KB     64KB      STM32F103VE (64k RAM. 512k Flash)
+[36mgenericSTM32F103VF[0m           STM32F103VFT6   72MHz        768KB     96KB      STM32F103VF (96k RAM. 768k Flash)
+[36mgenericSTM32F103VG[0m           STM32F103VGT6   72MHz        1MB       96KB      STM32F103VG (96k RAM. 1024k Flash)
+[36mgenericSTM32F103ZC[0m           STM32F103ZCT6   72MHz        256KB     48KB      STM32F103ZC (48k RAM. 256k Flash)
+[36mgenericSTM32F103ZD[0m           STM32F103ZDT6   72MHz        384KB     64KB      STM32F103ZD (64k RAM. 384k Flash)
+[36mgenericSTM32F103ZE[0m           STM32F103ZET6   72MHz        512KB     64KB      STM32F103ZE (64k RAM. 512k Flash)
+[36mgenericSTM32F103ZF[0m           STM32F103ZFT6   72MHz        768KB     96KB      STM32F103ZF (96k RAM. 768k Flash)
+[36mgenericSTM32F103ZG[0m           STM32F103ZGT6   72MHz        1MB       96KB      STM32F103ZG (96k RAM. 1024k Flash)
+[36mgenericSTM32F303CB[0m           STM32F303CBT6   72MHz        128KB     32KB      STM32F303CB (32k RAM. 128k Flash)
+[36mgenericSTM32F373RC[0m           STM32F373RCT6   72MHz        256KB     32KB      STM32F373RC (32k RAM. 256k Flash)
+[36mgenericSTM32F401CB[0m           STM32F401CBU6   84MHz        128KB     64KB      STM32F401CB (64k RAM. 128k Flash)
+[36mgenericSTM32F401CC[0m           STM32F401CCU6   84MHz        256KB     64KB      STM32F401CC (64k RAM. 256k Flash)
+[36mgenericSTM32F401CD[0m           STM32F401CDU6   84MHz        384KB     96KB      STM32F401CD (96k RAM. 384k Flash)
+[36mgenericSTM32F401CE[0m           STM32F401CEU6   84MHz        512KB     96KB      STM32F401CE (96k RAM. 512k Flash)
+[36mgenericSTM32F401RB[0m           STM32F401RBT6   84MHz        128KB     64KB      STM32F401RB (64k RAM. 128k Flash)
+[36mgenericSTM32F401RC[0m           STM32F401RCT6   84MHz        256KB     64KB      STM32F401RC (64k RAM. 256k Flash)
+[36mgenericSTM32F401RD[0m           STM32F401RDT6   84MHz        384KB     96KB      STM32F401RD (96k RAM. 384k Flash)
+[36mgenericSTM32F401RE[0m           STM32F401RET6   84MHz        512KB     96KB      STM32F401RE (96k RAM. 512k Flash)
+[36mgenericSTM32F405RG[0m           STM32F405RGT6   168MHz       1MB       128KB     STM32F405RG (128k RAM. 1024k Flash)
+[36mgenericSTM32F407IGT6[0m         STM32F407IGT6   168MHz       1MB       128KB     STM32F407IG (192k RAM. 1024k Flash)
+[36mgenericSTM32F407VET6[0m         STM32F407VET6   168MHz       502.23KB  128KB     STM32F407VE (192k RAM. 512k Flash)
+[36mgenericSTM32F407VGT6[0m         STM32F407VGT6   168MHz       1MB       128KB     STM32F407VG (128k RAM. 1024k Flash)
+[36mgenericSTM32F410C8[0m           STM32F410C8T6   100MHz       64KB      32KB      STM32F410C8 (32k RAM. 64k Flash)
+[36mgenericSTM32F410CB[0m           STM32F410CBT6   100MHz       128KB     32KB      STM32F410CB (32k RAM. 128k Flash)
+[36mgenericSTM32F410R8[0m           STM32F410R8T6   100MHz       64KB      32KB      STM32F410R8 (32k RAM. 64k Flash)
+[36mgenericSTM32F410RB[0m           STM32F410RBT6   100MHz       128KB     32KB      STM32F410RB (32k RAM. 128k Flash)
+[36mgenericSTM32F411CC[0m           STM32F411CCU6   100MHz       256KB     128KB     STM32F411CC (128k RAM. 256k Flash)
+[36mgenericSTM32F411CE[0m           STM32F411CEU6   100MHz       512KB     128KB     STM32F411CE (128k RAM. 512k Flash)
+[36mgenericSTM32F411RC[0m           STM32F411RCT6   100MHz       256KB     128KB     STM32F411RC (128k RAM. 256k Flash)
+[36mgenericSTM32F411RE[0m           STM32F411RET6   100MHz       512KB     128KB     STM32F411RE (128k RAM. 512k Flash)
+[36mgenericSTM32F412CE[0m           STM32F412CEU6   100MHz       512KB     256KB     STM32F412CE (256k RAM. 512k Flash)
+[36mgenericSTM32F412CG[0m           STM32F412CGU6   100MHz       1MB       256KB     STM32F412CG (256k RAM. 1024k Flash)
+[36mgenericSTM32F412RE[0m           STM32F412RET6   100MHz       512KB     256KB     STM32F412RE (256k RAM. 512k Flash)
+[36mgenericSTM32F412RG[0m           STM32F412RGT6   100MHz       1MB       256KB     STM32F412RG (256k RAM. 1024k Flash)
+[36mgenericSTM32F413CG[0m           STM32F413CGU6   100MHz       1MB       320KB     STM32F413CG (320k RAM. 1024k Flash)
+[36mgenericSTM32F413CH[0m           STM32F413CHU6   100MHz       1.50MB    320KB     STM32F413CH (320k RAM. 1536k Flash)
+[36mgenericSTM32F413RG[0m           STM32F413RGT6   100MHz       1MB       320KB     STM32F413RG (320k RAM. 1024k Flash)
+[36mgenericSTM32F413RH[0m           STM32F413RHT6   100MHz       1.50MB    320KB     STM32F413RH (320k RAM. 1536k Flash)
+[36mgenericSTM32F415RG[0m           STM32F415RGT6   168MHz       1MB       128KB     STM32F415RG (128k RAM. 1024k Flash)
+[36mgenericSTM32F417VE[0m           STM32F417VET6   168MHz       512KB     128KB     STM32F417VE (128k RAM. 512k Flash)
+[36mgenericSTM32F417VG[0m           STM32F417VGT6   168MHz       1MB       128KB     STM32F417VG (128k RAM. 1024k Flash)
+[36mgenericSTM32F423CH[0m           STM32F423CHU6   100MHz       1.50MB    320KB     STM32F423CH (320k RAM. 1536k Flash)
+[36mgenericSTM32F423RH[0m           STM32F423RHT6   100MHz       1.50MB    320KB     STM32F423RH (320k RAM. 1536k Flash)
+[36mgenericSTM32F446RC[0m           STM32F446RCT6   180MHz       256KB     128KB     STM32F446RC (128k RAM. 256k Flash)
+[36mgenericSTM32F446RE[0m           STM32F446RET6   180MHz       512KB     128KB     STM32F446RE (128k RAM. 512k Flash)
+[36mstm32f4stamp[0m                 STM32F405RGT6   168MHz       1MB       128KB     STM32F4Stamp F405
+[36mdisco_f750n8[0m                 STM32F750N8H6   216MHz       64KB      340KB     STM32F7508-DK
+[36mgenericSTM32G431CB[0m           STM32G431CBU6   170MHz       128KB     32KB      STM32G431CB (32k RAM. 128k Flash)
+[36mdisco_h735ig[0m                 STM32H735IGK6   550MHz       1MB       432KB     STM32H735G-DK Discovery kit
+[36mdisco_h747xi[0m                 STM32H747XIH6   400MHz       2MB       512KB     STM32H747I-DISCO
+[36mgenericSTM32H750VB[0m           STM32H750VBT6   480MHz       128KB     512KB     STM32H750VBT6 (1024k RAM. 128k Flash)
+[36mstorm32_v1_31_rc[0m             STM32F103RCT6   72MHz        256KB     48KB      STorM32 BGC v1.31 RC
+[36mseeedArchMax[0m                 STM32F407VET6   168MHz       512KB     192KB     Seeed Arch Max
+[36mwio_3g[0m                       STM32F439VI     180MHz       2MB       256KB     Seeed Wio 3G
+[36mlora_e5_dev_board[0m            STM32WLE5JC     48MHz        256KB     64KB      SeeedStudio LoRa E5 Dev Board
+[36mlora_e5_mini[0m                 STM32WLE5JC     48MHz        256KB     64KB      SeeedStudio LoRa-E5 mini
+[36msteval_mksboxv1[0m              STM32L4R9ZI     120MHz       2MB       640KB     SensorTile.box
+[36magafia_sg0[0m                   STM32G071RBT6   64MHz        128KB     36KB      Sigma IC AGAFIA SG0
+[36msparkfun_micromod_f405[0m       STM32F405RGT6   168MHz       1MB       128KB     SparkFun MicroMod STM32F405
+[36msparky_v1[0m                    STM32F303CCT6   72MHz        256KB     40KB      Sparky V1 F303
+[36mthunder_pack[0m                 STM32L072KZ     32MHz        192KB     20KB      ThunderPack v1.0
+[36mthunder_pack_f411[0m            STM32F411CEU6   100MHz       512KB     128KB     ThunderPack v1.1+
+[36mhy_tinystm103tb[0m              STM32F103TBU6   72MHz        128KB     20KB      Tiny STM103T
+[36mvake_v1[0m                      STM32F446RET6   180MHz       512KB     128KB     VAkE v1.0
+[36mvccgnd_f103zet6[0m              STM32F103ZET6   72MHz        512KB     64KB      VCCGND F103ZET6 Mini
+[36mvccgnd_f407zg_mini[0m           STM32F407ZGT6   168MHz       1MB       128KB     VCCGND F407ZGT6 Mini
+[36mwe_oceanus1_ev[0m               STM32WLE5CCU6   48MHz        256KB     64KB      WE Oceanus-I EV
+[36mwe_oceanus1[0m                  STM32WLE5CCU6   48MHz        256KB     64KB      WE Oceanus-I Module
+[36mwaveshare_open103z[0m           STM32F103ZET6   72MHz        512KB     64KB      Waveshare Open103Z
+[36mblackpill_f401cc[0m             STM32F401CCU6   84MHz        256KB     64KB      WeAct Studio BlackPill V2.0 (STM32F401CC)
+[36mblackpill_f411ce[0m             STM32F411CEU6   100MHz       512KB     128KB     WeAct Studio BlackPill V2.0 (STM32F411CE)
+[36mblackpill_f401ce[0m             STM32F401CEU6   84MHz        512KB     96KB      WeAct Studio BlackPill V3.0 (STM32F401CE)
+[36mweact_mini_h743vitx[0m          STM32H743VIT6   480MHz       2MB       512KB     WeAct Studio MiniSTM32H743VITX
+[36mweact_mini_h750vbtx[0m          STM32H750VBT6   480MHz       512KB     128KB     WeAct Studio MiniSTM32H750VBTX
+[36mweact_g474ceu6[0m               STM32G474CEU6   170MHz       512KB     128KB     WeAct Studio STM32G474 CoreBoard
+[36mwraith32_v1[0m                  STM32F051K6     48MHz        32KB      7.75KB    Wraith V1 ESC
+[36msakuraio_evb_01[0m              STM32F411RET6   100MHz       1MB       128KB     sakura.io Evaluation Board
+[36mublox_c030_n211[0m              STM32F437VG     180MHz       1MB       256KB     u-blox C030-N211 IoT Starter Kit
+[36mublox_c030_r410m[0m             STM32F437VG     180MHz       1MB       256KB     u-blox C030-R410M IoT
+[36mublox_c030_u201[0m              STM32F437VG     180MHz       1MB       256KB     u-blox C030-U201 IoT Starter Kit
+[36mublox_evk_odin_w2[0m            STM32F439ZIY6   168MHz       2MB       256KB     u-blox EVK-ODIN-W2
+[36mmtb_ublox_odin_w2[0m            STM32F439ZIY6   168MHz       2MB       256KB     u-blox ODIN-W2
+
+Platform: [1mststm8[0m
+================================================================================
+ID              MCU           Frequency    Flash    RAM    Name
+--------------  ------------  -----------  -------  -----  ------------------------------
+[36mnucleo_8s207k8[0m  STM8S207K8T6  16MHz        64KB     6KB    NUCLEO-8S207K8
+[36mnucleo_8s208rb[0m  STM8S208RBT6  16MHz        128KB    6KB    NUCLEO-8S208RB
+[36mstm8sdisco[0m      STM8S105C6T6  16MHz        32KB     2KB    ST STM8S-DISCOVERY
+[36mstm8s003f3[0m      STM8S003F3P6  16MHz        8KB      1KB    ST STM8S003F3 chip
+[36mstm8sblue[0m       STM8S103F3P6  16MHz        8KB      1KB    ST STM8S103F3 Breakout Board
+[36mstm8sblack[0m      STM8S105K4T6  16MHz        16KB     2KB    ST STM8S105K4T6 Breakout Board
+[36mmb208[0m           STM8S208MBT6  16MHz        128KB    6KB    sduino MB (STM8S208MBT6B)
+[36ms8uno[0m           STM8S105K6T6  16MHz        32KB     2KB    sduino UNO (STM8S105K6)
+
+Platform: [1mteensy[0m
+================================================================================
+ID         MCU          Frequency    Flash    RAM       Name
+---------  -----------  -----------  -------  --------  ------------------------
+[36mteensymm[0m   IMXRT1062    600MHz       7.75MB   512KB     SparkFun MicroMod Teensy
+[36mteensy2[0m    ATMEGA32U4   16MHz        31.50KB  2.50KB    Teensy 2.0
+[36mteensy30[0m   MK20DX128    48MHz        128KB    16KB      Teensy 3.0
+[36mteensy31[0m   MK20DX256    72MHz        256KB    64KB      Teensy 3.1 / 3.2
+[36mteensy35[0m   MK64FX512    120MHz       512KB    255.99KB  Teensy 3.5
+[36mteensy36[0m   MK66FX1M0    180MHz       1MB      256KB     Teensy 3.6
+[36mteensy40[0m   IMXRT1062    600MHz       1.94MB   512KB     Teensy 4.0
+[36mteensy41[0m   IMXRT1062    600MHz       7.75MB   512KB     Teensy 4.1
+[36mteensylc[0m   MKL26Z64     48MHz        62KB     8KB       Teensy LC
+[36mteensy2pp[0m  AT90USB1286  16MHz        127KB    8KB       Teensy++ 2.0
+
+Platform: [1mtimsp430[0m
+================================================================================
+ID              MCU           Frequency    Flash    RAM    Name
+--------------  ------------  -----------  -------  -----  ----------------------------------------
+[36mlpmsp430fr5739[0m  MSP430FR5739  16MHz        15.37KB  1KB    TI FraunchPad MSP-EXP430FR5739LP
+[36mlpmsp430f5529[0m   MSP430F5529   25MHz        47KB     8KB    TI LaunchPad MSP-EXP430F5529LP
+[36mlpmsp430fr2311[0m  MSP430FR2311  16MHz        3.75KB   1KB    TI LaunchPad MSP-EXP430FR2311LP
+[36mlpmsp430fr2355[0m  MSP430FR2355  16MHz        32KB     4KB    TI LaunchPad MSP-EXP430FR2355LP
+[36mlpmsp430fr2433[0m  MSP430FR2433  8MHz         15KB     4KB    TI LaunchPad MSP-EXP430FR2433LP
+[36mlpmsp430fr2476[0m  MSP430FR2476  16MHz        64KB     8KB    TI LaunchPad MSP-EXP430FR2476LP
+[36mlpmsp430fr4133[0m  MSP430FR4133  8MHz         15KB     2KB    TI LaunchPad MSP-EXP430FR4133LP
+[36mlpmsp430fr5969[0m  MSP430FR5969  8MHz         47KB     2KB    TI LaunchPad MSP-EXP430FR5969LP
+[36mlpmsp430fr5994[0m  MSP430FR5994  16MHz        256KB    4KB    TI LaunchPad MSP-EXP430FR5994LP
+[36mlpmsp430fr6989[0m  MSP430FR6989  8MHz         47KB     2KB    TI LaunchPad MSP-EXP430FR6989LP
+[36mlpmsp430g2231[0m   MSP430G2231   1MHz         2KB      256B   TI LaunchPad MSP-EXP430G2 w/ MSP430G2231
+[36mlpmsp430g2452[0m   MSP430G2452   16MHz        8KB      256B   TI LaunchPad MSP-EXP430G2 w/ MSP430G2452
+[36mlpmsp430g2553[0m   MSP430G2553   16MHz        16KB     512B   TI LaunchPad MSP-EXP430G2553LP
+
+Platform: [1mtimsp432[0m
+================================================================================
+ID             MCU        Frequency    Flash    RAM    Name
+-------------  ---------  -----------  -------  -----  ----------------------------
+[36mlpmsp432p401r[0m  CORTEX-M4  48MHz        256KB    64KB   TI LaunchPad MSP‑EXP432P401R
+
+Platform: [1mtitiva[0m
+================================================================================
+ID               MCU              Frequency    Flash    RAM    Name
+---------------  ---------------  -----------  -------  -----  -------------------------------------------
+[36mlplm4f120h5qr[0m    LPLM4F120H5QR    80MHz        256KB    32KB   TI LaunchPad (Stellaris) w/ lm4f120 (80MHz)
+[36mlptm4c123gh6pm[0m   LPTM4C123GH6PM   80MHz        256KB    32KB   TI LaunchPad (Tiva C) w/ tm4c123 (80MHz)
+[36mlptm4c1294ncpdt[0m  LPTM4C1294NCPDT  120MHz       1MB      256KB  TI LaunchPad (Tiva C) w/ tm4c129 (120MHz)

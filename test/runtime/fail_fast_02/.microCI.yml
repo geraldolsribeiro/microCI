@@ -1,0 +1,32 @@
+steps:
+  - name: "step 1"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "1" >> steps.log
+  - name: "step 2"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "2" >> steps.log
+  - name: "step 3"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "3" >> steps.log
+        false
+  - name: "step 4"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "4" >> steps.log
+  - name: "step 5"
+    docker: "debian:stable-slim"
+    plugin:
+      name: bash
+      bash: |
+        echo "5" >> steps.log

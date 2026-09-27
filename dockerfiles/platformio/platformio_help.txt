@@ -1,0 +1,27 @@
+Usage: platformio [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version          Show the version and exit.
+  -c, --caller TEXT  Caller ID (service)
+  --no-ansi          Do not print ANSI control characters
+  -h, --help         Show this message and exit.
+
+Commands:
+  access    Manage resource access
+  account   Manage PlatformIO account
+  boards    Board Explorer
+  check     Static Code Analysis
+  ci        Continuous Integration
+  debug     Unified Debugger
+  device    Device manager & Serial/Socket monitor
+  home      GUI to manage PlatformIO
+  org       Manage organizations
+  pkg       Unified Package Manager
+  project   Project Manager
+  remote    Remote Development
+  run       Run project targets (build, upload, clean, etc.)
+  settings  Manage system settings
+  system    Miscellaneous system commands
+  team      Manage organization teams
+  test      Unit Testing
+  upgrade   Upgrade PlatformIO Core to the latest version

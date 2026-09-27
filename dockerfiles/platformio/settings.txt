@@ -1,0 +1,10 @@
+Name                          Current value [Default]                    Description
+----------------------------  -----------------------------------------  --------------------------------------------------------------------
+[36mcheck_platformio_interval[0m     999 [[33m7[0m]                                    Check for the new PlatformIO Core interval (days)
+[36mcheck_prune_system_threshold[0m  1024                                       Check for pruning unnecessary data threshold (megabytes)
+[36menable_cache[0m                  No [[33mYes[0m]                                   Enable caching for HTTP API requests
+[36menable_proxy_strict_ssl[0m       Yes                                        Verify the proxy server certificate against the list of supplied CAs
+[36menable_telemetry[0m              No [[33mYes[0m]                                   Telemetry service <https://bit.ly/pio-telemetry> (Yes/No)
+[36mforce_verbose[0m                 Yes [[33mNo[0m]                                   Force verbose output when processing environments
+[36mprojects_dir[0m                  /microci_workspace                         Default location for PlatformIO projects (PlatformIO Home)
+                              [[33m/home/pio/Documents/PlatformIO/Projects[0m]
