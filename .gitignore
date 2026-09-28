@@ -6,6 +6,12 @@ docs/diagrams/*.png
 .microCI.dbg
 .microCI.log
 site
+
+# ManimGL animation environment and generated media
+/manim/.venv/
+/manim/media/
+/manim/__pycache__/
+/manim/*.pyc
 src/.cache
 src/NOTES.md
 src/single_compilation_unit.cpp
@@ -40,3 +46,5 @@ dockerfiles/raspberry_pico/test_01/build
 dockerfiles/raspberry_pico/test_02/build
 /test/runtime/bash_04/apt.txt.bak
 /dockerfiles/pikchr/pikchr_src
+manim/videos
+manim/latex_cache

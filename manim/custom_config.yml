@@ -1,0 +1,4 @@
+window:
+  enabled: True
+  full_screen: False
+  size: (960, 540)

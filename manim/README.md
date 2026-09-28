@@ -66,43 +66,69 @@ A ManimGL scene is a class derived from `Scene`. Its `construct` method defines 
 - `self.wait(...)` to pause the scene
 - `self.add(...)` to display an object immediately
 
-## Render an animation
+## The microCI presentation
 
-With the virtual environment active, render a scene using:
+`microCI.py` contains a roughly 60-second presentation split into these scenes:
+
+1. `Title` — what microCI is
+2. `Problem` — vendor lock-in
+3. `HowItWorks` — YAML to Bash
+4. `Benefits` — portability, auditability, and reproducibility
+5. `Usage` — how to run a pipeline
+6. `Closing` — the main takeaway
+
+## Render and preview
+
+The `Makefile` provides repeatable commands. First activate the environment:
 
 ```bash
-manimgl presentation.py Introduction
+source .venv/bin/activate
 ```
 
-For a faster preview, use low quality:
+Check the setup and Python syntax:
 
 ```bash
-manimgl presentation.py Introduction -w
+make test
 ```
 
-The rendered video is written under `media/videos/`. Open the generated file to review the result.
-
-Useful options can be listed with:
+Show every scene at low quality in a window (press `Esc` after each scene to continue):
 
 ```bash
+make preview
+```
+
+Preview one scene in a 960x540 window:
+
+```bash
+make preview-title
+make preview-how
+make preview-usage
+```
+
+Available individual targets are `preview-title`, `preview-problem`, `preview-how`, `preview-benefits`, `preview-usage`, and `preview-closing`. Individual previews remain open for inspection; press `Esc` to close them. Preview targets do not write MP4 files; use `make render` to create videos.
+
+Render the complete presentation at the default quality:
+
+```bash
+make render
+```
+
+`make` is an alias for the full render. Remove generated media with `make clean`.
+
+For direct ManimGL usage:
+
+```bash
+manimgl microCI.py Title -w -l
 manimgl --help
 ```
 
 ## Presentation workflow
 
-1. Add one scene class per presentation section.
-2. Preview scenes at low quality while developing.
-3. Keep text and visuals readable at the target resolution.
-4. Render the final scenes at the desired quality.
-5. Review the generated videos in `media/videos/` before assembling the presentation.
-
-Example with multiple scenes:
-
-```bash
-manimgl presentation.py Introduction
-manimgl presentation.py Results
-manimgl presentation.py Conclusion
-```
+1. Edit or add a scene class in `microCI.py`.
+2. Run `make test` to check syntax.
+3. Use the matching `make preview-*` target while developing.
+4. Review the generated video in `media/videos/`.
+5. Run `make render` for the complete presentation.
 
 ## Troubleshooting
 
