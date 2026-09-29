@@ -160,7 +160,7 @@ WINDOWS_LIBDIR ?=
 # against the UCRT and must be linked through their import libraries.
 WINDOWS_CXXFLAGS = -I../include/ -I../include/3rd/ -Wall -Wextra -Wpedantic -Werror -Os -std=c++20 -D_WIN32
 WINDOWS_LDFLAGS = $(LDFLAGS) $(if $(WINDOWS_LIBDIR),-L$(WINDOWS_LIBDIR),)
-WINDOWS_LDLIBS = $(LDLIBS) -lws2_32 -lcrypt32
+WINDOWS_LDLIBS = $(LDLIBS) -lws2_32 -lcrypt32 -lstdc++
 
 .PHONY: windows
 windows: ../bin/microCI.exe
@@ -374,7 +374,7 @@ mac_deps:
 # Debian/Ubuntu dependency installation
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow g++-mingw-w64-x86-64
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow alien g++-mingw-w64-x86-64
 
 # ==============================================================================
 # Section 14: Header-Only Library Setup
