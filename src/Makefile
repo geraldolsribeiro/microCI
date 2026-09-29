@@ -158,7 +158,7 @@ WINDOWS_STRIP ?= x86_64-w64-mingw32-strip
 WINDOWS_LIBDIR ?=
 # Do not reuse the Linux -static linker options: MSYS2 libraries are built
 # against the UCRT and must be linked through their import libraries.
-WINDOWS_CXXFLAGS = -I../include/ -I../include/3rd/ -Wall -Wextra -Wpedantic -Werror -Os -std=c++20 -D_WIN32 -static-libgcc -static-libstdc++
+WINDOWS_CXXFLAGS = -I../include/ -I../include/3rd/ -Wall -Wextra -Wpedantic -Werror -Os -std=c++20 -D_WIN32
 WINDOWS_LDFLAGS = $(LDFLAGS) $(if $(WINDOWS_LIBDIR),-L$(WINDOWS_LIBDIR),)
 WINDOWS_LDLIBS = $(LDLIBS) -lws2_32 -lcrypt32
 
