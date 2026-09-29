@@ -7,7 +7,7 @@ on:
     #   - master
     paths:
       - 'dockerfiles/**'
-      - '.github/workflows/**'
+      - '.github/workflows/docker-image.yml'
   workflow_dispatch:
 
 jobs:
