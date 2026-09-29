@@ -374,7 +374,7 @@ mac_deps:
 # Debian/Ubuntu dependency installation
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow alien g++-mingw-w64-x86-64
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow alien
 
 # ==============================================================================
 # Section 14: Header-Only Library Setup
