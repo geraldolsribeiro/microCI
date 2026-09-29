@@ -58,6 +58,7 @@ jobs:
         update: true
         install: >-
           make
+          xxd
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-yaml-cpp
           mingw-w64-ucrt-x86_64-openssl
