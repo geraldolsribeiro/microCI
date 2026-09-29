@@ -184,7 +184,7 @@ function step_{{ FUNCTION_NAME }}() {
 )",
                                      data);
   for (auto env : envs) {
-    mMicroCI->Script() << fmt::format("  local {}=\"{}\"\n", env.name, env.value);
+    mMicroCI->Script() << std::format("  local {}=\"{}\"\n", env.name, env.value);
   }
 
   mMicroCI->Script() << inja::render(R"(
@@ -305,13 +305,13 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
                                      data);
 
   for (auto &env : envs) {
-    mMicroCI->Script() << fmt::format(R"( \
+    mMicroCI->Script() << std::format(R"( \
         --env {}="{}")",
                                       env.name, env.value);
   }
 
   for (const auto &vol : volumes) {
-    mMicroCI->Script() << fmt::format(R"( \
+    mMicroCI->Script() << std::format(R"( \
         --volume "{}":"{}":{})",
                                       vol.source, vol.destination, vol.mode);
   }
@@ -359,7 +359,7 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
     } else {
       auto gitSshCommandEnv = EnvironmentVariable{
           .name  = "GIT_SSH_COMMAND",
-          .value = fmt::format(
+          .value = std::format(
               "ssh -i /.microCI_ssh/{} -F /.microCI_ssh/config -o UserKnownHostsFile=/.microCI_ssh/known_hosts",
               sshKeyFormat)};
       envs_.insert(gitSshCommandEnv);

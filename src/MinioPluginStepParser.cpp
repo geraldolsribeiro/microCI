@@ -62,7 +62,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
   for (const auto &envName : {"MICROCI_MINIO_URL", "MICROCI_MINIO_ACCESS_KEY", "MICROCI_MINIO_SECRET_KEY"}) {
     auto it = envs.find(EnvironmentVariable{.name = envName, .value = ""});
     if (it == envs.end()) {
-      errorConsoleBox({fmt::format("The environment variable called '{}' was not found", envName)});
+      errorConsoleBox({std::format("The environment variable called '{}' was not found", envName)});
       // dumpEnvironmentVariables();
       invalidConfigurationDetected();
       return;
@@ -86,7 +86,7 @@ void MinioPluginStepParser::Parse(const YAML::Node &step) {
         && mc alias set microci {{MICROCI_MINIO_URL}} {{MICROCI_MINIO_ACCESS_KEY}} {{MICROCI_MINIO_SECRET_KEY}} --api S3v4)",
                                      data);
   for (auto cmd : cmds) {
-    mMicroCI->Script() << fmt::format(" \\\n           && {} 2>&1", cmd);
+    mMicroCI->Script() << std::format(" \\\n           && {} 2>&1", cmd);
   }
   mMicroCI->Script() << R"("
 )";

@@ -51,7 +51,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   } else if (step["plugin"]["sh"]) {
     cmdsStr = step["plugin"]["sh"].as<std::string>();
   } else {
-    errorConsoleBox({fmt::format("No 'bash' or 'sh' script defined in plugin configuration")});
+    errorConsoleBox({std::format("No 'bash' or 'sh' script defined in plugin configuration")});
     invalidConfigurationDetected();
     throw std::invalid_argument("Script not found");
   }
@@ -107,7 +107,7 @@ void BashPluginStepParser::Parse(const YAML::Node &step) {
   copySshIfAvailable(step, data);
 
   for (auto cmd : cmds) {
-    mMicroCI->Script() << fmt::format(" \\\n           && {} 2>&1", cmd);
+    mMicroCI->Script() << std::format(" \\\n           && {} 2>&1", cmd);
   }
   mMicroCI->Script() << "\"\n";
   endFunction(data);

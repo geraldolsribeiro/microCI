@@ -28,7 +28,7 @@
 // IN THE SOFTWARE.
 
 #include <algorithm>
-#include <fmt/core.h>
+#include <format>
 #include <iostream>
 #include <pwd.h>
 #include <sys/types.h>
@@ -85,13 +85,13 @@ auto MicroCI::List(const std::string &fileName) const -> std::string {
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<std::string>();
         auto hhh  = std::hash<std::string>{}(name) & 0xffff;
-        ret += fmt::format("{:>2} {:04x} {}\n", number++, hhh, name);
+        ret += std::format("{:>2} {:04x} {}\n", number++, hhh, name);
       }
     }
   } catch (const YAML::BadFile &e) {
-    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 
   return ret;
@@ -135,9 +135,9 @@ stop
             description = step["description"].as<std::string>();
           }
 
-          ret += fmt::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
-          ret += fmt::format("floating note left: {}\n", plugin);
-          ret += fmt::format("floating note right: {}\n\n", description);
+          ret += std::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
+          ret += std::format("floating note left: {}\n", plugin);
+          ret += std::format("floating note right: {}\n\n", description);
         }
       }
       ret += "}\n";
@@ -160,18 +160,18 @@ stop
 
           ret += beginDiagram;
           ret += "partition \"Alternative flow\" {\n";
-          ret += fmt::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
-          ret += fmt::format("floating note left: {}\n", plugin);
-          ret += fmt::format("floating note right: {}\n\n", description);
+          ret += std::format(":{}; {}\n", step["name"].as<std::string>(), stereotype);
+          ret += std::format("floating note left: {}\n", plugin);
+          ret += std::format("floating note right: {}\n\n", description);
           ret += "}\n";
           ret += endDiagram;
         }
       }
     }
   } catch (const YAML::BadFile &e) {
-    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 
   return ret;
@@ -236,19 +236,19 @@ void MicroCI::SetOnlyStepHash(const std::string &fileName, const std::string &hh
       mOnlyStepNumbers.clear();
       for (auto step : CI["steps"]) {
         auto name = step["name"].as<std::string>();
-        auto hhi  = fmt::format("{:04x}", std::hash<std::string>{}(name) & 0xffff);
+        auto hhi  = std::format("{:04x}", std::hash<std::string>{}(name) & 0xffff);
         if (hh == hhi) {
           mOnlyStepNumbers.insert(number);
           return;
         }
         number++;
       }
-      throw std::invalid_argument(fmt::format("Invalid step hash: {}", hh));
+      throw std::invalid_argument(std::format("Invalid step hash: {}", hh));
     }
   } catch (const YAML::BadFile &e) {
-    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure loading the file .microCI.yml"), e.what()});
   } catch (const YAML::ParserException &e) {
-    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure parsing the file .microCI.yml"), e.what()});
   }
 }
 
@@ -279,7 +279,7 @@ void MicroCI::LoadEnvironmentFromYamlFile(const std::string &fileName) {
   if (std::filesystem::exists(fileName)) {
     auto dotEnv = YAML::LoadFile(fileName);
     if (dotEnv.size() == 0) {
-      errorConsoleBox({fmt::format("The file {} was found but it has no valid configuration", fileName)});
+      errorConsoleBox({std::format("The file {} was found but it has no valid configuration", fileName)});
       invalidConfigurationDetected();
       // return false;
     }
@@ -340,11 +340,11 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
     if (mAltHome.empty()) {
       struct passwd *pw = getpwuid(getuid());
       if (pw) {
-        auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", pw->pw_dir);
+        auto globalEnvironmentFilename = std::format("{}/.microCI.env", pw->pw_dir);
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
       }
     } else {
-      auto globalEnvironmentFilename = fmt::format("{}/.microCI.env", mAltHome);
+      auto globalEnvironmentFilename = std::format("{}/.microCI.env", mAltHome);
       LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
     }
 
@@ -364,11 +364,11 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
     LoadEnvironmentFromEnvFile(".env");
 
   } catch (const YAML::BadFile &e) {
-    errorConsoleBox({fmt::format("Failure loading the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure loading the file .microCI.yml"), e.what()});
     invalidConfigurationDetected();
     return false;
   } catch (const YAML::ParserException &e) {
-    errorConsoleBox({fmt::format("Failure parsing the file .microCI.yml"), e.what()});
+    errorConsoleBox({std::format("Failure parsing the file .microCI.yml"), e.what()});
     invalidConfigurationDetected();
     return false;
   }
@@ -384,7 +384,7 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
     // FIXME: Check whether it exists
     for (auto step : CI["steps"]) {
       if (!step["plugin"] or !step["plugin"]["name"]) {
-        throw std::invalid_argument(fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
+        throw std::invalid_argument(std::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
       }
       if (step["only"] and step["only"].as<std::string>() == mOnlyStep) {
         parsePluginStep(step);
@@ -399,7 +399,7 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
       for (auto step : CI["steps"]) {
         if (!step["plugin"] or !step["plugin"]["name"]) {
           throw std::invalid_argument(
-              fmt::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
+              std::format("Plugin not defined at the step '{}'", step["name"].as<std::string>()));
         }
         if (step["only"]) {
           SkipPluginStepParser skipPluginStepParser{this};
@@ -421,9 +421,9 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
 
       if (mDockerImages.size()) {
         for (const auto &dockerImage : mDockerImages) {
-          mScript << fmt::format("  if microCI_should_pull_docker_image '{}'; then\n", dockerImage);
-          mScript << fmt::format("    echo 'Updating {} docker image...'\n", dockerImage);
-          mScript << fmt::format("    docker pull {} --quiet\n", dockerImage);
+          mScript << std::format("  if microCI_should_pull_docker_image '{}'; then\n", dockerImage);
+          mScript << std::format("    echo 'Updating {} docker image...'\n", dockerImage);
+          mScript << std::format("    docker pull {} --quiet\n", dockerImage);
           mScript << "  fi\n";
         }
       }
@@ -482,9 +482,9 @@ void MicroCI::parsePluginStep(const YAML::Node &step) {
   } else {
     auto name = step["name"].as<std::string>();
     std::vector<std::string> msgs;
-    msgs.push_back(fmt::format("The plugin '{}' was not found at the step '{}'", pluginName, name));
+    msgs.push_back(std::format("The plugin '{}' was not found at the step '{}'", pluginName, name));
     for (const auto &p : mPluginParserMap) {
-      msgs.push_back(fmt::format("Plugin '{}'", p.first));
+      msgs.push_back(std::format("Plugin '{}'", p.first));
     }
     errorConsoleBox(msgs);
     return;
@@ -509,7 +509,7 @@ auto MicroCI::DefaultEnvs() const -> const std::set<EnvironmentVariable> & { ret
 // ----------------------------------------------------------------------
 auto MicroCI::DefaultDataTemplate() const -> json {
   json data;
-  data["VERSION"]           = fmt::format("v{}       ", microCI_version).substr(0, 10);
+  data["VERSION"]           = std::format("v{}       ", microCI_version).substr(0, 10);
   data["WORKSPACE"]         = mDefaultWorkspace;
   data["DOCKER_NETWORK"]    = "none";
   data["DOCKER_IMAGE"]      = mDefaultDockerImage;

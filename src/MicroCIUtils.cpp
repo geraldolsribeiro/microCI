@@ -27,7 +27,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <fmt/core.h>
+#include <format>
 #include <string>
 
 namespace microci {
@@ -38,7 +38,7 @@ using std::string;
 //
 // ----------------------------------------------------------------------
 auto banner() -> std::string {
-  return fmt::format(R"(
+  return std::format(R"(
 
 
                            ░░░░░░░░░░░░░░░░░
@@ -56,7 +56,7 @@ auto banner() -> std::string {
 // ----------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------
-auto version() -> std::string { return fmt::format("v{}", microCI_version); }
+auto version() -> std::string { return std::format("v{}", microCI_version); }
 
 // ----------------------------------------------------------------------
 //
@@ -104,7 +104,7 @@ auto sanitizeName(const std::string &name) -> std::string {
 // ----------------------------------------------------------------------
 auto stepRequiredValue(const YAML::Node &step, const std::string &var) -> std::string {
   if (!step[var]) {
-    throw std::invalid_argument(fmt::format("Field {} not found in step", var));
+    throw std::invalid_argument(std::format("Field {} not found in step", var));
   }
   return step[var].as<std::string>();
 }

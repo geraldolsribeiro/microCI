@@ -66,7 +66,7 @@ void PikchrPluginStepParser::Parse(const YAML::Node &step) {
   // auto config = step["plugin"]["config"].as<std::string>("");
 
   if (validTypes.count(type) == 0) {
-    throw std::invalid_argument(fmt::format("Invalid type! {}", type));
+    throw std::invalid_argument(std::format("Invalid type! {}", type));
   }
   data["TYPE"] = type;
 
