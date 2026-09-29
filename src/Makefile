@@ -32,8 +32,13 @@
 # ==============================================================================
 #
 # This Makefile builds the microCI tool with the following features:
-# - Cross-platform compilation (Linux/macOS)
+# - Cross-platform compilation (Linux/macOS/Windows)
 # - ARM64 and x86_64 support
+#
+# Windows cross compilation:
+#   make windows
+#   make windows WINDOWS_CXX=x86_64-w64-mingw32-g++ \
+#        WINDOWS_LIBDIR=/path/to/mingw-libraries
 # - Dead code elimination for minimal binaries
 # - Single compilation unit generation from multiple source files
 # - Embedded asset compilation (YAML, markdown, shell scripts as binary)
@@ -142,7 +147,27 @@ endif
 # The 'all' target is the default build target that produces ../bin/microCI.
 
 .PHONY: all
-all: ../bin/microCI  # Default target - builds the microCI executable 
+all: ../bin/microCI  # Default target - builds the microCI executable
+
+# Build a native Windows x86_64 (PE/COFF) executable from Linux or macOS.
+# The third-party libraries must be available for the MinGW target.  Set
+# WINDOWS_LIBDIR when they are installed outside the compiler's default search
+# path (for example, when using a vcpkg MinGW triplet).
+WINDOWS_CXX ?= x86_64-w64-mingw32-g++
+WINDOWS_STRIP ?= x86_64-w64-mingw32-strip
+WINDOWS_LIBDIR ?=
+WINDOWS_CXXFLAGS = $(CXXFLAGS) -D_WIN32 -static-libgcc -static-libstdc++
+WINDOWS_LDFLAGS = $(LDFLAGS) $(if $(WINDOWS_LIBDIR),-L$(WINDOWS_LIBDIR),)
+WINDOWS_LDLIBS = $(LDLIBS) -lws2_32 -lcrypt32
+
+.PHONY: windows
+windows: ../bin/microCI.exe
+
+../bin/microCI.exe: single_compilation_unit.cpp
+	$(Q)mkdir -p ../bin/
+	$(Q)$(WINDOWS_CXX) $(WINDOWS_CXXFLAGS) $(WINDOWS_LDFLAGS) $^ -o $@ $(WINDOWS_LDLIBS)
+	$(Q)$(WINDOWS_STRIP) --strip-all $@
+
 
 .PHONY: diagram
 diagram:
@@ -325,7 +350,7 @@ endif
 
 .PHONY: clean
 clean:
-	$(Q)$(RM) ../bin/microCI  # Remove built binary
+	$(Q)$(RM) ../bin/microCI ../bin/microCI.exe  # Remove built binaries
 	# Clear timestamps to force regeneration
 	$(Q)touch ../new/*.yml
 	$(Q)touch ../docs/*.md
@@ -347,7 +372,7 @@ mac_deps:
 # Debian/Ubuntu dependency installation
 .PHONY: debian_deps
 debian_deps:
-	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow
+	sudo apt install libyaml-cpp-dev libspdlog-dev libssl-dev libzstd-dev upx-ucl equivs devscripts git-buildpackage glow g++-mingw-w64-x86-64
 
 # ==============================================================================
 # Section 14: Header-Only Library Setup

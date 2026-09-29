@@ -16,56 +16,83 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-
-    - name: 'Install dependencies'
+    - name: Install dependencies
       run: |
         apt-get update
-        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev upx equivs alien glow make g++ wget git
-
-    - name: 'Download headers'
+        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev upx equivs devscripts git-buildpackage glow make g++ wget git
+    - name: Download headers
       run: |
         mkdir -p include/3rd/nlohmann
         wget -P include/3rd https://raw.githubusercontent.com/adishavit/argh/master/argh.h
         wget -P include/3rd https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
         wget -P include/3rd https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
         wget -P include/3rd/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-
-    - name: 'Build'
+    - name: Build
       run: make -C src clean all
-
-    - name: 'Debian/RHEL'
+    - name: Debian/RHEL
       run: make deb rpm
-
-    - name: 'Upload Artifact Binary'
-      uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v5
       with:
-        name: 'microCI'
+        name: microCI-linux
         path: bin/microCI
-        retention-days: 30
-
-    - name: 'Upload Artifact Debian Package'
-      uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v5
       with:
-        name: 'package-deb'
+        name: package-deb
         path: ./microci_*.deb
-        retention-days: 30
-
-    - name: 'Upload Artifact RHEL Package'
-      uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v5
       with:
-        name: 'package-rpm'
+        name: package-rpm
         path: ./microci-*.x86_64.rpm
-        retention-days: 30
 
-    - name: 'Pre-Release'
-      uses: "marvinpinto/action-automatic-releases@latest"
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v5
+    - name: Build Windows x64 binary
+      uses: msys2/setup-msys2@v2
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
+        msystem: UCRT64
+        update: true
+        install: >-
+          make
+          mingw-w64-ucrt-x86_64-gcc
+          mingw-w64-ucrt-x86_64-yaml-cpp
+          mingw-w64-ucrt-x86_64-openssl
+          mingw-w64-ucrt-x86_64-zstd
+          mingw-w64-ucrt-x86_64-zlib
+          mingw-w64-ucrt-x86_64-spdlog
+    - name: Download headers
+      run: |
+        mkdir -p include/3rd/nlohmann
+        curl -L https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o include/3rd/argh.h
+        curl -L https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp -o include/3rd/inja.hpp
+        curl -L https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -o include/3rd/inicpp.h
+        curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o include/3rd/nlohmann/json.hpp
+    - name: Compile
+      run: make -C src windows WINDOWS_CXX=g++ WINDOWS_STRIP=strip
+    - uses: actions/upload-artifact@v5
+      with:
+        name: microCI-windows
+        path: bin/microCI.exe
+
+  release:
+    if: github.event_name == 'push'
+    needs: [build, windows]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v5
+    - uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: latest
         prerelease: true
-        title: "Development Build"
+        title: Development Build
         files: |
-          bin/microCI
-          microci_*.deb
-          microci-*.x86_64.rpm
+          microCI-linux/microCI
+          microCI-windows/microCI.exe
+          package-deb/microci_*.deb
+          package-rpm/microci-*.x86_64.rpm
           LICENSE
