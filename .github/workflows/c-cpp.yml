@@ -58,7 +58,8 @@ jobs:
         update: true
         install: >-
           make
-          xxd
+          # MSYS2 does not provide an xxd package directly; xxd is included with vim.
+          vim
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-yaml-cpp
           mingw-w64-ucrt-x86_64-openssl
