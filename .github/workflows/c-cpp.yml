@@ -56,9 +56,9 @@ jobs:
       with:
         msystem: UCRT64
         update: true
+        # MSYS2 does not provide an xxd package directly; xxd is included with vim.
         install: >-
           make
-          # MSYS2 does not provide an xxd package directly; xxd is included with vim.
           vim
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-yaml-cpp
