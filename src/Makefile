@@ -70,8 +70,6 @@ endif
 # Section 2: Compiler Flags (CXXFLAGS)
 # ==============================================================================
 
-CXXFLAGS+= -DFMT_HEADER_ONLY           # Use header-only fmt library
-CXXFLAGS+= -DSPDLOG_FMT_EXTERNAL=1     # Link fmt externally instead of embedded
 
 # Include directories for headers
 CXXFLAGS+= -I../include/                # Project header directory

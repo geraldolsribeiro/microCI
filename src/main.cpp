@@ -276,22 +276,22 @@ void mergeTemplateToFile(const std::string &yamlFileName, [[maybe_unused]] const
   auto folderPos = fileName.find_last_of("/");
   if (folderPos != std::string::npos) {
     auto folderName = fileName.substr(0, folderPos);
-    debugConsoleBox({fmt::format("Creating folder '{}'", folderName)});
+    debugConsoleBox({std::format("Creating folder '{}'", folderName)});
     std::filesystem::create_directories(folderName);
   }
 
   if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
-    debugConsoleBox({fmt::format("File '{}' already exists", fileName)});
+    debugConsoleBox({std::format("File '{}' already exists", fileName)});
     return;
   } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
-    debugConsoleBox({fmt::format("The file '{}' was edited from the template", fileName)});
+    debugConsoleBox({std::format("The file '{}' was edited from the template", fileName)});
     std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
     step.erase(0, step.find("steps:") + 7);
     std::ofstream out(fileName, std::ios_base::app);
     out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR RECIPE ---\n";
     out << step;
   } else {
-    debugConsoleBox({fmt::format("The file '{}' was created from the template", fileName)});
+    debugConsoleBox({std::format("The file '{}' was created from the template", fileName)});
     std::ofstream out(fileName);
     out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
   }
@@ -589,7 +589,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
       const auto it =
           std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == flag; });
       if (it == validOptions.end()) {
-        criticalErrorConsoleBox({fmt::format("Invalid command line option: -{}", flag)});
+        criticalErrorConsoleBox({std::format("Invalid command line option: -{}", flag)});
         return 1;
       }
     }
@@ -598,7 +598,7 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
       const auto it =
           std::find_if(validOptions.begin(), validOptions.end(), [&](const auto &opt) { return opt == param.first; });
       if (it == validOptions.end()) {
-        criticalErrorConsoleBox({fmt::format("Invalid command line option: -{} {}", param.first, param.second)});
+        criticalErrorConsoleBox({std::format("Invalid command line option: -{} {}", param.first, param.second)});
         return 1;
       }
     }
@@ -753,22 +753,22 @@ sudo rm -f /usr/bin/microCI
           auto folderPos = fileName.find_last_of("/");
           if (folderPos != std::string::npos) {
             auto folderName = fileName.substr(0, folderPos);
-            debugConsoleBox({fmt::format("Creating folder '{}'", folderName)});
+            debugConsoleBox({std::format("Creating folder '{}'", folderName)});
             std::filesystem::create_directories(folderName);
           }
 
           if (!tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            debugConsoleBox({fmt::format("File '{}' already exists", fileName)});
+            debugConsoleBox({std::format("File '{}' already exists", fileName)});
             continue;
           } else if (tpl.appendIfExists and std::filesystem::exists(fileName)) {
-            debugConsoleBox({fmt::format("The file '{}' was edited from the template", fileName)});
+            debugConsoleBox({std::format("The file '{}' was edited from the template", fileName)});
             std::string step{reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize};
             step.erase(0, step.find("steps:") + 7);
             out.open(fileName, std::ios_base::app);
             out << "\n# --- PLEASE MERGE THE CONTENT BELOW TO YOUR CONFIG ---\n";
             out << step;
           } else {
-            debugConsoleBox({fmt::format("The config file '{}' was created from the template", fileName)});
+            debugConsoleBox({std::format("The config file '{}' was created from the template", fileName)});
             out.open(fileName);
             out.write(reinterpret_cast<char *>(tpl.fileContent), tpl.fileSize);
           }
@@ -779,9 +779,9 @@ sudo rm -f /usr/bin/microCI
       }
 
       std::vector<std::string> msgs;
-      msgs.push_back(fmt::format("Invalid config type: {}", newConfig));
+      msgs.push_back(std::format("Invalid config type: {}", newConfig));
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        msgs.push_back(fmt::format("Use: microCI --config {}", it->first));
+        msgs.push_back(std::format("Use: microCI --config {}", it->first));
       }
       criticalErrorConsoleBox(msgs);
       return -1;
@@ -842,10 +842,10 @@ sudo rm -f /usr/bin/microCI
         return 0;  // All done
       }
       std::vector<std::string> msgs;
-      msgs.push_back(fmt::format("Invalid plugin type: {}", newType));
+      msgs.push_back(std::format("Invalid plugin type: {}", newType));
       msgs.push_back("");
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        msgs.push_back(fmt::format("microCI --new {}", it->first));
+        msgs.push_back(std::format("microCI --new {}", it->first));
       }
       criticalErrorConsoleBox(msgs);
       return 1;
@@ -882,17 +882,17 @@ sudo rm -f /usr/bin/microCI
       }
 
       std::vector<std::string> msgs;
-      msgs.push_back(fmt::format("Invalid external: {}", external));
+      msgs.push_back(std::format("Invalid external: {}", external));
       msgs.push_back("");
       for (auto it = templates.begin(), end = templates.end(); it != end; it = templates.upper_bound(it->first)) {
-        msgs.push_back(fmt::format("microCI --external {}", it->first));
+        msgs.push_back(std::format("microCI --external {}", it->first));
       }
       criticalErrorConsoleBox(msgs);
       return 1;
     }
 
     if (!std::filesystem::exists(yamlFileName)) {
-      auto msg = fmt::format("The input file '{}' was not found", yamlFileName);
+      auto msg = std::format("The input file '{}' was not found", yamlFileName);
       criticalErrorConsoleBox({msg});
       return 1;
     }
@@ -931,7 +931,7 @@ sudo rm -f /usr/bin/microCI
 
     if (!uCI.ReadConfig(yamlFileName)) {
       std::cout << microci::banner() << std::endl;
-      auto msg = fmt::format("Failure reading the file '{}'", yamlFileName);
+      auto msg = std::format("Failure reading the file '{}'", yamlFileName);
       criticalErrorConsoleBox({msg});
       return 1;
     }
@@ -973,9 +973,9 @@ sudo rm -f /usr/bin/microCI
           gitRemoteOrigin = gitConfigIni["remote \"origin\""]["url"].as<std::string>();
         }
 
-        debugConsoleBox({fmt::format("PWD: {}", pwd)});
-        debugConsoleBox({fmt::format("Git config: {}", gitConfigFilename)});
-        debugConsoleBox({fmt::format("Git origin: {}", gitRemoteOrigin)});
+        debugConsoleBox({std::format("PWD: {}", pwd)});
+        debugConsoleBox({std::format("Git config: {}", gitConfigFilename)});
+        debugConsoleBox({std::format("Git origin: {}", gitRemoteOrigin)});
 
         auto pwdRepoId = std::string{"_"};  // avoid keys starting with a number
 
@@ -1005,7 +1005,7 @@ sudo rm -f /usr/bin/microCI
 
         size_t stepNo = 0;
         for (auto step : CI["steps"]) {
-          debugConsoleBox({fmt::format("{} {}", stepNo, step["name"].as<std::string>())});
+          debugConsoleBox({std::format("{} {}", stepNo, step["name"].as<std::string>())});
           dbJson["repos"][pwdRepoId]["steps"][stepNo]["name"]   = step["name"].as<std::string>();
           dbJson["repos"][pwdRepoId]["steps"][stepNo]["plugin"] = step["plugin"]["name"].as<std::string>();
           dbJson["repos"][pwdRepoId]["steps"][stepNo]["only"]   = bool(step["only"]);

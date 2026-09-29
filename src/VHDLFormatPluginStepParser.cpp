@@ -114,7 +114,7 @@ EOF
                                      data);
 
   for (const auto &src : sourceList) {
-    mMicroCI->Script() << fmt::format(R"( \
+    mMicroCI->Script() << std::format(R"( \
         && cat <(compgen -G '{}') \
           | )",
                                       src);

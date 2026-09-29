@@ -63,7 +63,7 @@ void ClangFormatPluginStepParser::Parse(const YAML::Node &step) {
         /bin/bash -c "cd {{ WORKSPACE }})",
                                      data);
   for (const auto &src : sourceList) {
-    mMicroCI->Script() << fmt::format(R"( \
+    mMicroCI->Script() << std::format(R"( \
         && echo 'clang-format {}' \
         && cat <(compgen -G '{}') \
           | )",

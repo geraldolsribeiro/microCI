@@ -30,7 +30,7 @@
 #ifndef PLUGIN_STEP_PARSER_HPP
 #define PLUGIN_STEP_PARSER_HPP
 
-#include <fmt/core.h>
+#include <format>
 #include <string>
 #include <yaml-cpp/yaml.h>
 

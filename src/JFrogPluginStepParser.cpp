@@ -62,7 +62,7 @@ void JFrogPluginStepParser::Parse(const YAML::Node &step) {
   for (const auto &envName : {"JFROG_ACCESS_TOKEN", "JFROG_URL"}) {
     auto it = envs.find(EnvironmentVariable{.name = envName, .value = ""});
     if (it == envs.end()) {
-      errorConsoleBox({fmt::format("The environment variable called '{}' was not found", envName)});
+      errorConsoleBox({std::format("The environment variable called '{}' was not found", envName)});
       invalidConfigurationDetected();
       return;
     } else {
@@ -84,7 +84,7 @@ void JFrogPluginStepParser::Parse(const YAML::Node &step) {
         /bin/bash -c "cd {{ WORKSPACE }})",
                                      data);
   for (auto cmd : cmds) {
-    mMicroCI->Script() << fmt::format(" \\\n           && {} --url=$JFROG_URL --access-token=$JFROG_ACCESS_TOKEN 2>&1",
+    mMicroCI->Script() << std::format(" \\\n           && {} --url=$JFROG_URL --access-token=$JFROG_ACCESS_TOKEN 2>&1",
                                       cmd);
   }
   mMicroCI->Script() << R"("

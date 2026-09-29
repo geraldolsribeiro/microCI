@@ -144,7 +144,7 @@ void FetchPluginStepParser::parseGithub(const YAML::Node &item, json &data) {
 
   for (const auto &f : item["files"]) {
     // Single quotes to avoid expansion
-    files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
+    files += std::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
   }
 
   data["GIT_REMOTE"] = gitRemote;
@@ -193,12 +193,12 @@ void FetchPluginStepParser::parseGitArchive(const YAML::Node &item, json &data) 
 
     for (const auto &f : item["files"]) {
       // Single quotes to avoid expansion
-      files += fmt::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
+      files += std::format("'{}-{}/{}' ", repoName, gitTag, f.as<std::string>());
     }
   } else {
     for (const auto &f : item["files"]) {
       // Single quotes to avoid expansion
-      files += fmt::format("'{}' ", f.as<std::string>());
+      files += std::format("'{}' ", f.as<std::string>());
     }
   }
 

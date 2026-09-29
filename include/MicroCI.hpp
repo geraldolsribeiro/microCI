@@ -30,6 +30,7 @@
 #ifndef MICRO_CI_HPP
 #define MICRO_CI_HPP
 
+#include <format>
 #include <memory>
 #include <optional>
 #include <set>

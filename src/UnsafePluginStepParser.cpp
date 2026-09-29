@@ -51,7 +51,7 @@ void UnsafePluginStepParser::Parse(const YAML::Node &step) {
   } else if (step["plugin"]["sh"]) {
     cmdsStr = step["plugin"]["sh"].as<std::string>();
   } else {
-    errorConsoleBox({fmt::format("No 'bash' or 'sh' script defined in plugin configuration")});
+    errorConsoleBox({std::format("No 'bash' or 'sh' script defined in plugin configuration")});
     invalidConfigurationDetected();
     throw std::invalid_argument("Script not found");
   }
@@ -65,7 +65,7 @@ void UnsafePluginStepParser::Parse(const YAML::Node &step) {
 
   for (const auto name : {"docker", "network", "volumes", "run_as", "devices", "ssh"}) {
     if (step[name]) {
-      throw std::invalid_argument(fmt::format("unsafe plugin does not support the '{}' field", name));
+      throw std::invalid_argument(std::format("unsafe plugin does not support the '{}' field", name));
     }
   }
 
@@ -81,7 +81,7 @@ void UnsafePluginStepParser::Parse(const YAML::Node &step) {
     if (step["plugin"]["required"]["commands"] && step["plugin"]["required"]["commands"].IsSequence()) {
       for (auto comm : step["plugin"]["required"]["commands"]) {
         data["COMMAND"]          = comm.as<std::string>();
-        data["COMMAND_CENTERED"] = fmt::format("{:^52}", comm.as<std::string>());
+        data["COMMAND_CENTERED"] = std::format("{:^52}", comm.as<std::string>());
         mMicroCI->Script() << inja::render(R"(
 command -v {{ COMMAND }} &>/dev/null || {
 echo "┌──────────────────────────────────────────────────────┐"
@@ -100,7 +100,7 @@ exit 1; }
     if (step["plugin"]["required"]["files"] && step["plugin"]["required"]["files"].IsSequence()) {
       for (auto comm : step["plugin"]["required"]["files"]) {
         data["FILENAME"]          = comm.as<std::string>();
-        data["FILENAME_CENTERED"] = fmt::format("{:^52}", comm.as<std::string>());
+        data["FILENAME_CENTERED"] = std::format("{:^52}", comm.as<std::string>());
         mMicroCI->Script() << inja::render(R"(
 if [ ! -f {{ FILENAME }} ]; then
   echo "┌──────────────────────────────────────────────────────┐"
@@ -120,7 +120,7 @@ fi
 
   mMicroCI->Script() << "           :";
   for (auto cmd : cmds) {
-    mMicroCI->Script() << fmt::format(" \\\n           && {} 2>&1", cmd);
+    mMicroCI->Script() << std::format(" \\\n           && {} 2>&1", cmd);
   }
   endFunction(data);
   mMicroCI->Script() << "# 🔴🔴🔴 UNSAFE STEP END 🔴🔴🔴\n";
