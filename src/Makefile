@@ -66,6 +66,20 @@ ifeq ($(UNAME_S),Darwin)
     endif
 endif
 
+# Check if MinGW/Windows (MSYS2). On MinGW we link dynamically against the
+# DLL import libraries, because the static system libraries (e.g. libcrypto.a)
+# reference Windows system DLLs that -static would prevent from being linked.
+ifneq (,$(findstring MINGW,$(UNAME_S)))
+    IS_MINGW = 1
+endif
+
+# Executable file extension (the MinGW linker appends .exe to the output name)
+ifneq ($(IS_MINGW),1)
+    EXE_EXT =
+else
+    EXE_EXT = .exe
+endif
+
 # ==============================================================================
 # Section 2: Compiler Flags (CXXFLAGS)
 # ==============================================================================
@@ -87,7 +101,11 @@ ifndef IS_MAC_ARM
 # Link against static libraries.
 # Required for dead-code elimination to work properly.
 # Required for dead-code elimination.
+# (Skipped on MinGW: the static system libs reference Windows DLLs that -static
+#  would prevent from being linked, so we link dynamically there instead.)
+ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -static
+endif
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
 # CXXFLAGS+= -fvtable-gc
@@ -113,7 +131,15 @@ endif
 # ==============================================================================
 
 # Optimize for minimal binary size
+# (On MinGW, -Os/-Oz mis-generate references to std::string's move constructor
+#  and fail to link, so we use -O2 there. The -fdata-sections /
+#  -ffunction-sections / --gc-sections / -s flags above still apply, keeping
+#  the binary small.)
+ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -Os # Optimize for Size
+else
+CXXFLAGS+= -O2 # MinGW: -Os/-Oz break std::string move-ctor linking
+endif
 # CXXFLAGS+= -Oz # Aggressive Size Reduction
 # For MacOS the binary size was 1.6MB with Os and 1.7MB with Oz
 
@@ -142,11 +168,11 @@ endif
 # The 'all' target is the default build target that produces ../bin/microCI.
 
 .PHONY: all
-all: ../bin/microCI  # Default target - builds the microCI executable 
+all: ../bin/microCI$(EXE_EXT)  # Default target - builds the microCI executable 
 
 .PHONY: diagram
 diagram:
-	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
+	../bin/microCI$(EXE_EXT) --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
 
 .PHONY: tidy
 tidy:
@@ -307,11 +333,11 @@ single_compilation_unit.cpp: \
 # - macOS ARM builds link without compression (no UPX support on macOS)
 
 ifdef IS_MAC_ARM
-../bin/microCI: single_compilation_unit.cpp
+../bin/microCI$(EXE_EXT): single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 else
-../bin/microCI: single_compilation_unit.cpp
+../bin/microCI$(EXE_EXT): single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	$(Q)strip --strip-all $@  # Remove all debug symbols
@@ -325,7 +351,7 @@ endif
 
 .PHONY: clean
 clean:
-	$(Q)$(RM) ../bin/microCI  # Remove built binary
+	$(Q)$(RM) ../bin/microCI$(EXE_EXT)  # Remove built binary
 	# Clear timestamps to force regeneration
 	$(Q)touch ../new/*.yml
 	$(Q)touch ../docs/*.md

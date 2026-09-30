@@ -960,7 +960,7 @@ sudo rm -f /usr/bin/microCI
         }
         auto CI = YAML::LoadFile(yamlFileName);
 
-        std::string pwd = std::filesystem::absolute(yamlFileName).parent_path().lexically_normal();
+        std::string pwd = std::filesystem::absolute(yamlFileName).parent_path().lexically_normal().string();
         if (pwd.at(pwd.size() - 1) == '/') {
           pwd.erase(pwd.size() - 1);  // remove a barra no final
         }
