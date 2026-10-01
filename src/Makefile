@@ -66,10 +66,17 @@ ifeq ($(UNAME_S),Darwin)
     endif
 endif
 
-# Check if MinGW/Windows (MSYS2). On MinGW we link dynamically against the
-# DLL import libraries, because the static system libraries (e.g. libcrypto.a)
-# reference Windows system DLLs that -static would prevent from being linked.
+# Check if MinGW/Windows (MSYS2). On MinGW we link against DLL import
+# libraries, because the MinGW linker defaults to picking static .a files
+# over .dll.a import libraries, but the compiler generates __imp_ prefixed
+# references that only exist in the import libraries.
+# Detection: uname -s may return "WindowsNT" (not "MINGW64") depending on
+# how the shell was invoked, so we also check the compiler target triplet.
+COMPILER_TARGET := $(shell g++ -dumpmachine 2>/dev/null)
 ifneq (,$(findstring MINGW,$(UNAME_S)))
+    IS_MINGW = 1
+endif
+ifneq (,$(findstring mingw32,$(COMPILER_TARGET)))
     IS_MINGW = 1
 endif
 
@@ -100,11 +107,14 @@ ifndef IS_MAC_ARM
 
 # Link against static libraries.
 # Required for dead-code elimination to work properly.
-# Required for dead-code elimination.
-# (Skipped on MinGW: the static system libs reference Windows DLLs that -static
-#  would prevent from being linked, so we link dynamically there instead.)
+# On MinGW, we use -static-libgcc and -static-libstdc++ to eliminate the
+# libgcc and libstdc++ DLL dependencies. Third-party libs (yaml-cpp, openssl,
+# zstd, zlib) are linked via their DLL import libraries because the MinGW
+# compiler generates __imp_ prefixed references that only exist there.
 ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -static
+else
+CXXFLAGS+= -static-libgcc -static-libstdc++
 endif
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
@@ -146,10 +156,26 @@ endif
 # CXXFLAGS+= -flto # Link Time Optimizations
 CXXFLAGS+= -std=c++20
 # Link libraries required by the project
+ifneq ($(IS_MINGW),1)
 LDLIBS+= -lyaml-cpp    # YAML parsing library
 LDLIBS+= -lcrypto      # OpenSSL crypto library
 LDLIBS+= -lzstd        # Zstandard compression library
 LDLIBS+= -lz           # Standard zlib
+else
+# MinGW: explicitly use DLL import libraries (.dll.a) via -l: syntax.
+# The MinGW linker defaults to picking static .a files over .dll.a import
+# libraries, but the compiler generates __imp_ prefixed references that only
+# exist in the import libraries. Using -l:lib<name>.dll.a forces the correct
+# library and produces a binary that depends only on Windows system DLLs.
+LDLIBS+= -l:libyaml-cpp.dll.a   # YAML parsing library
+LDLIBS+= -l:libcrypto.dll.a     # OpenSSL crypto library
+LDLIBS+= -l:libzstd.dll.a       # Zstandard compression library
+LDLIBS+= -l:libz.dll.a          # Standard zlib
+# Windows system DLLs referenced by OpenSSL (always present on Windows)
+LDLIBS+= -lcrypt32 -lws2_32 -ladvapi32 -lgdi32 -luser32
+# Statically link winpthread to eliminate libwinpthread-1.dll dependency
+LDLIBS+= -l:libwinpthread.a
+endif
 
 # Mac ARM-specific settings
 # ==============================================================================
@@ -341,8 +367,14 @@ else
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	$(Q)strip --strip-all $@  # Remove all debug symbols
-	$(Q)echo "Compressing executable with UPX"
-	$(Q)$(UPX) $@  # Compress binary with UPX
+	$(Q)if command -v upx > /dev/null 2>&1; then echo "Compressing executable with UPX"; $(UPX) $@; else echo "UPX not found, skipping compression"; fi
+ifdef IS_MINGW
+	$(Q)echo "Bundling required DLLs for portability..."
+	$(Q)for dll in libcrypto-3-x64.dll libgcc_s_seh-1.dll libstdc++-6.dll libwinpthread-1.dll libyaml-cpp.dll; do \
+		if [ -f "/mingw64/bin/$$dll" ]; then cp "/mingw64/bin/$$dll" ../bin/; fi; \
+	done
+	$(Q)echo "Portable bundle ready in ../bin/"
+endif
 endif
 
 # ==============================================================================
