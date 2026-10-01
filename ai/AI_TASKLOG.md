@@ -4,9 +4,40 @@
 
 | Task | Status | Branch |
 |------|--------|--------|
+| Fix Windows banner rendering (UTF-8 code page) | done | fix/ai-static-linking-mingw |
 | Fully static MinGW Windows build (zero DLLs) | done | fix/ai-static-linking-mingw |
 
 ## Tasks
+
+### Fix Windows banner rendering (UTF-8 code page)
+
+- **Status:** done
+- **Branch:** fix/ai-static-linking-mingw
+- **Started:** 2026-10-01 22:00:00
+- **Completed:** 2026-10-01 22:10:00
+- **Time Spent:** ~10 min
+
+#### Root Cause
+
+The banner uses UTF-8 box-drawing characters (░ U+2591, █ U+2588, ▀ U+2580).
+On Windows, the console default code page is CP437/CP850, not UTF-8. The 3-byte
+UTF-8 sequences were being interpreted as individual CP437 characters, producing
+garbled output.
+
+#### Fix
+
+Added `SetConsoleOutputCP(CP_UTF8)` at the start of `main()` in `src/main.cpp`.
+Used a minimal `extern "C"` declaration instead of including `windows.h` to avoid
+macro conflicts with `MicroCI::SetEnvironmentVariable`.
+
+#### Subtasks
+
+- [x] Identify root cause (Windows console code page vs UTF-8)
+- [x] Add `SetConsoleOutputCP(CP_UTF8)` call in `main()`
+- [x] Verify build succeeds
+- [x] Verify banner renders correctly
+- [x] Verify no new DLL dependencies
+- [x] Commit
 
 ### Fully static MinGW Windows build (zero DLLs)
 
