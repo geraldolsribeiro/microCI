@@ -38,6 +38,11 @@
 #include <set>
 #include <sstream>
 
+#ifdef _WIN32
+extern "C" int SetConsoleOutputCP(unsigned int);
+#define CP_UTF8 65001
+#endif
+
 #include "3rd/argh.h"
 #include "3rd/inicpp.h"
 #include "ConsoleBox.hpp"
@@ -578,6 +583,10 @@ void customTerminateHandler() {
 // ----------------------------------------------------------------------
 auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
   //{{{
+
+#ifdef _WIN32
+  SetConsoleOutputCP(CP_UTF8);
+#endif
 
   std::set_terminate(customTerminateHandler);
 
