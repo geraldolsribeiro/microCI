@@ -4,89 +4,89 @@
 
 | Task | Status | Branch |
 |------|--------|--------|
-| Portable MinGW Windows build (zero missing DLLs) | done | fix/ai-static-linking-mingw |
+| Fully static MinGW Windows build (zero DLLs) | done | fix/ai-static-linking-mingw |
 
 ## Tasks
 
-### Portable MinGW Windows build (zero missing DLLs)
+### Fully static MinGW Windows build (zero DLLs)
 
 - **Status:** done
 - **Branch:** fix/ai-static-linking-mingw
 - **Started:** 2026-10-01 20:54:46
-- **Completed:** 2026-10-01 21:20:00
-- **Time Spent:** ~25 min
+- **Completed:** 2026-10-01 21:45:00
+- **Time Spent:** ~50 min
 
-#### Findings & Notes
+#### Final Result
 
-- **Root cause of build failure:** The Makefile's MinGW detection used `uname -s` which returns
-  `WindowsNT` (not `MINGW64`) when invoked from PowerShell. This caused the build to use
-  `-static` + `-Os` (Linux flags) instead of the MinGW-specific flags, leading to link errors.
-- **Root cause of `__imp_` link errors:** MinGW GCC generates `__imp_` prefixed references for
-  ALL external functions (DLL import style). The static `.a` libraries don't have these symbols —
-  only the `.dll.a` import libraries do. The MinGW linker defaults to picking `.a` over `.dll.a`,
-  so `-Wl,-Bstatic` or `-static` both fail.
-- **Solution:** Use `-l:lib<name>.dll.a` syntax to explicitly force the import library. This
-  resolves the `__imp_` symbols while the actual code is embedded via the static library.
-- **`-static-libgcc -static-libstdc++`** eliminates `libgcc_s_seh-1.dll` and `libstdc++-6.dll`
-  from the main binary's dependencies. However, `libyaml-cpp.dll` still needs them (transitive dep).
-- **Final result:** Binary + 5 bundled DLLs in `bin/` = portable folder that runs on any Windows
-  machine with zero external dependencies beyond Windows system DLLs.
+**Single `microCI.exe` (7.8 MB) with ZERO third-party DLL dependencies.**
+Only depends on Windows system DLLs (KERNEL32, msvcrt, CRYPT32, ADVAPI32, USER32, WS2_32)
+which are always present on any Windows x64 machine.
 
-#### What was changed in `src/Makefile`
+```
+bin/
+└── microCI.exe   (7.8 MB — fully self-contained)
+```
 
-1. **MinGW detection fix** (line ~75): Added `g++ -dumpmachine` check for `mingw32` as a
-   fallback when `uname -s` doesn't return `MINGW64`.
-2. **Static runtime linking** (line ~110): Added `-static-libgcc -static-libstdc++` for MinGW
-   to eliminate libgcc/libstdc++ DLL deps from the main binary.
-3. **Import library linking** (line ~155): Use `-l:lib<name>.dll.a` syntax for MinGW to force
-   the linker to use import libraries (resolves `__imp_` symbols).
-4. **Windows system DLLs** (line ~167): Added `-lcrypt32 -lws2_32 -ladvapi32 -lgdi32 -luser32`
-   for OpenSSL's Windows API references.
-5. **UPX optional** (line ~370): Made UPX compression optional (skip if not in PATH).
-6. **DLL bundling** (line ~371): Auto-copy required DLLs to `bin/` after build.
+#### Root Cause Analysis
 
-#### Bundled DLLs (in `bin/`)
+The `__imp_` prefix issue was NOT a fundamental MinGW limitation (as initially thought).
+It was caused by **header-level `__declspec(dllimport)` annotations** that tell the compiler
+to generate DLL-import-style references:
 
-| DLL | Size | Purpose |
-|-----|------|---------|
-| `libcrypto-3-x64.dll` | 5.5 MB | OpenSSL crypto |
-| `libgcc_s_seh-1.dll` | 149 KB | GCC runtime (needed by libyaml-cpp.dll) |
-| `libstdc++-6.dll` | 2.6 MB | C++ stdlib (needed by libyaml-cpp.dll) |
-| `libwinpthread-1.dll` | 66 KB | POSIX threads |
-| `libyaml-cpp.dll` | 535 KB | YAML parsing |
+| Library | Header | Macro | Fix |
+|---------|--------|-------|-----|
+| yaml-cpp | `dll.h` | `YAML_CPP_API` → `__declspec(dllimport)` | `-DYAML_CPP_STATIC_DEFINE` |
+| winpthread | `pthread_compat.h` | `WINPTHREAD_API` → `__declspec(dllimport)` | `-DWINPTHREAD_STATIC` |
 
-Total bundle: ~9.3 MB (exe is 3 MB, DLLs are 6.3 MB)
+With these defines, the compiler generates **normal function references** (no `__imp_` prefix),
+which the static `.a` libraries satisfy directly.
+
+The remaining issue was **link order**: `libstdc++.a` (added by GCC driver) references
+`pthread_cond_broadcast` from `libwinpthread.a`, but appears AFTER it in the link command.
+Fixed with `-Wl,--start-group` / `--end-group` + explicitly including `libstdc++.a` and
+`libgcc.a` in the group.
+
+#### Changes to `src/Makefile`
+
+1. **MinGW detection fix**: Added `g++ -dumpmachine` check for `mingw32` (fallback when
+   `uname -s` returns `WindowsNT` instead of `MINGW64`).
+2. **`-DYAML_CPP_STATIC_DEFINE`**: Prevents `__declspec(dllimport)` in yaml-cpp headers.
+3. **`-DWINPTHREAD_STATIC`**: Prevents `__declspec(dllimport)` in pthread headers.
+4. **Static library linking**: `-l:libyaml-cpp.a -l:libcrypto.a -l:libzstd.a -l:libz.a
+   -l:libwinpthread.a -l:libstdc++.a -l:libgcc.a`
+5. **`-Wl,--start-group` / `--end-group`**: Resolves circular references between static libs.
+6. **UPX optional**: Skip compression if UPX not in PATH.
+7. **Removed DLL bundling**: No longer needed (zero third-party DLLs).
 
 #### Subtasks
 
-- [x] Create AI_TASKLOG.md
-- [x] Create branch `fix/ai-static-linking-mingw`
-- [x] Diagnose build failure (MinGW detection + `__imp_` prefix issue)
-- [x] Fix MinGW detection in Makefile (`g++ -dumpmachine` fallback)
-- [x] Fix library linking (`-l:lib<name>.dll.a` syntax)
-- [x] Add `-static-libgcc -static-libstdc++` for MinGW
+- [x] Diagnose `__imp_` link errors (root cause: `__declspec(dllimport)` in headers)
+- [x] Fix MinGW detection in Makefile
+- [x] Add `-DYAML_CPP_STATIC_DEFINE` (yaml-cpp static linking)
+- [x] Add `-DWINPTHREAD_STATIC` (winpthread static linking)
+- [x] Add `--start-group`/`--end-group` + explicit libstdc++/libgcc in group
 - [x] Make UPX optional
-- [x] Add DLL bundling step
-- [x] Rebuild successfully
-- [x] Verify DLL dependencies (only Windows system DLLs + bundled DLLs)
-- [x] Test under MSYS2 bash (version, help, list)
-- [x] Test under native Windows PowerShell (clean PATH)
-- [x] Commit changes
+- [x] Remove DLL bundling step
+- [x] Rebuild successfully (EXIT_CODE=0)
+- [x] Verify: only Windows system DLLs in import table
+- [x] Test under native PowerShell (clean PATH): --version, --list, --help all pass
+- [x] Commit and push
 
-#### Full Context Notes for AI Agents
+#### Build Command
 
-- **Repo:** `D:\Repos\microCI`
-- **MSYS2 path:** `D:\SDK_ARM\msys64` (MINGW64: `D:\SDK_ARM\msys64\mingw64`)
-- **Build command:** `& "D:\SDK_ARM\msys64\usr\bin\bash.exe" -c "export PATH=/mingw64/bin:/usr/bin:/bin; cd /d/Repos/microCI && make -C src clean all 2>&1"`
-- **Binary output:** `bin/microCI.exe` + 5 DLLs in `bin/`
-- **To verify DLLs:** `objdump -p bin/microCI.exe | grep "DLL Name"`
-- **To test from PowerShell (clean PATH):**
-  ```powershell
-  $oldPath = $env:PATH; $env:PATH = "C:\Windows\System32;C:\Windows"
-  D:\Repos\microCI\bin\microCI.exe --version
-  $env:PATH = $oldPath
-  ```
-- **Git identity:** `GIT_AUTHOR_NAME="AI_bot"`, `GIT_AUTHOR_EMAIL="ai_bot@intmain.io"`, same for committer.
-- **Why not fully static?** MinGW GCC generates `__imp_` prefixed references for all external
-  functions. Static `.a` libs don't have these symbols. Only `.dll.a` import libs do. This is a
-  fundamental limitation of the MinGW toolchain. True single-file static builds require MSVC.
+```powershell
+& "D:\SDK_ARM\msys64\usr\bin\bash.exe" -c "export PATH=/mingw64/bin:/usr/bin:/bin; cd /d/Repos/microCI && make -C src clean all 2>&1"
+```
+
+#### Verification
+
+```powershell
+# DLL deps (should be ONLY Windows system DLLs):
+objdump -p bin/microCI.exe | grep "DLL Name"
+# → ADVAPI32.dll, CRYPT32.dll, KERNEL32.dll, msvcrt.dll, USER32.dll, WS2_32.dll
+
+# Native test (clean PATH, no MSYS2):
+$env:PATH = "C:\Windows\System32;C:\Windows"
+D:\Repos\microCI\bin\microCI.exe --version   # → v0.50.0
+D:\Repos\microCI\bin\microCI.exe --list      # → 15 steps
+```

@@ -149,6 +149,13 @@ ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -Os # Optimize for Size
 else
 CXXFLAGS+= -O2 # MinGW: -Os/-Oz break std::string move-ctor linking
+# CRITICAL: Define YAML_CPP_STATIC_DEFINE so yaml-cpp headers don't emit
+# __declspec(dllimport) (which generates __imp_ prefixed references that
+# only exist in .dll.a import libraries, not in the static .a library).
+CXXFLAGS+= -DYAML_CPP_STATIC_DEFINE
+# CRITICAL: Define WINPTHREAD_STATIC so pthread.h doesn't emit
+# __declspec(dllimport) for pthread functions (same __imp_ issue).
+CXXFLAGS+= -DWINPTHREAD_STATIC
 endif
 # CXXFLAGS+= -Oz # Aggressive Size Reduction
 # For MacOS the binary size was 1.6MB with Os and 1.7MB with Oz
@@ -162,19 +169,23 @@ LDLIBS+= -lcrypto      # OpenSSL crypto library
 LDLIBS+= -lzstd        # Zstandard compression library
 LDLIBS+= -lz           # Standard zlib
 else
-# MinGW: explicitly use DLL import libraries (.dll.a) via -l: syntax.
-# The MinGW linker defaults to picking static .a files over .dll.a import
-# libraries, but the compiler generates __imp_ prefixed references that only
-# exist in the import libraries. Using -l:lib<name>.dll.a forces the correct
-# library and produces a binary that depends only on Windows system DLLs.
-LDLIBS+= -l:libyaml-cpp.dll.a   # YAML parsing library
-LDLIBS+= -l:libcrypto.dll.a     # OpenSSL crypto library
-LDLIBS+= -l:libzstd.dll.a       # Zstandard compression library
-LDLIBS+= -l:libz.dll.a          # Standard zlib
+# MinGW: link against TRUE static libraries (.a with real .obj code).
+# All __imp_ references in these static libs resolve to Windows system DLLs
+# (KERNEL32.dll, msvcrt.dll, crypt32.dll) which are always present on Windows.
+# This produces a binary with ZERO third-party DLL dependencies.
+#
+# IMPORTANT: libstdc++.a and libgcc.a are explicitly included in the link group
+# to resolve circular references (libstdc++ ↔ winpthread). Without this, the
+# GCC driver adds them AFTER our libs, and the linker can't resolve back-references.
+LDLIBS+= -l:libyaml-cpp.a    # YAML parsing (static, 1.0 MB of code)
+LDLIBS+= -l:libcrypto.a      # OpenSSL crypto (static, 9.7 MB of code)
+LDLIBS+= -l:libzstd.a        # Zstandard compression (static, 1.3 MB of code)
+LDLIBS+= -l:libz.a           # Standard zlib (static, 115 KB of code)
+LDLIBS+= -l:libwinpthread.a  # POSIX threads (static, 97 KB of code)
+LDLIBS+= -l:libstdc++.a      # C++ stdlib (static, resolves pthread refs)
+LDLIBS+= -l:libgcc.a         # GCC runtime (static)
 # Windows system DLLs referenced by OpenSSL (always present on Windows)
 LDLIBS+= -lcrypt32 -lws2_32 -ladvapi32 -lgdi32 -luser32
-# Statically link winpthread to eliminate libwinpthread-1.dll dependency
-LDLIBS+= -l:libwinpthread.a
 endif
 
 # Mac ARM-specific settings
@@ -365,16 +376,15 @@ ifdef IS_MAC_ARM
 else
 ../bin/microCI$(EXE_EXT): single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
+ifdef IS_MINGW
+	# Use --start-group/--end-group to resolve circular references between
+	# static libs (libstdc++.a references winpthread, winpthread references libstdc++)
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ -Wl,--start-group $(LDLIBS) -Wl,--end-group
+else
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+endif
 	$(Q)strip --strip-all $@  # Remove all debug symbols
 	$(Q)if command -v upx > /dev/null 2>&1; then echo "Compressing executable with UPX"; $(UPX) $@; else echo "UPX not found, skipping compression"; fi
-ifdef IS_MINGW
-	$(Q)echo "Bundling required DLLs for portability..."
-	$(Q)for dll in libcrypto-3-x64.dll libgcc_s_seh-1.dll libstdc++-6.dll libwinpthread-1.dll libyaml-cpp.dll; do \
-		if [ -f "/mingw64/bin/$$dll" ]; then cp "/mingw64/bin/$$dll" ../bin/; fi; \
-	done
-	$(Q)echo "Portable bundle ready in ../bin/"
-endif
 endif
 
 # ==============================================================================
