@@ -66,6 +66,27 @@ ifeq ($(UNAME_S),Darwin)
     endif
 endif
 
+# Check if MinGW/Windows (MSYS2). On MinGW we link against DLL import
+# libraries, because the MinGW linker defaults to picking static .a files
+# over .dll.a import libraries, but the compiler generates __imp_ prefixed
+# references that only exist in the import libraries.
+# Detection: uname -s may return "WindowsNT" (not "MINGW64") depending on
+# how the shell was invoked, so we also check the compiler target triplet.
+COMPILER_TARGET := $(shell g++ -dumpmachine 2>/dev/null)
+ifneq (,$(findstring MINGW,$(UNAME_S)))
+    IS_MINGW = 1
+endif
+ifneq (,$(findstring mingw32,$(COMPILER_TARGET)))
+    IS_MINGW = 1
+endif
+
+# Executable file extension (the MinGW linker appends .exe to the output name)
+ifneq ($(IS_MINGW),1)
+    EXE_EXT =
+else
+    EXE_EXT = .exe
+endif
+
 # ==============================================================================
 # Section 2: Compiler Flags (CXXFLAGS)
 # ==============================================================================
@@ -86,8 +107,15 @@ ifndef IS_MAC_ARM
 
 # Link against static libraries.
 # Required for dead-code elimination to work properly.
-# Required for dead-code elimination.
+# On MinGW, we use -static-libgcc and -static-libstdc++ to eliminate the
+# libgcc and libstdc++ DLL dependencies. Third-party libs (yaml-cpp, openssl,
+# zstd, zlib) are linked via their DLL import libraries because the MinGW
+# compiler generates __imp_ prefixed references that only exist there.
+ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -static
+else
+CXXFLAGS+= -static-libgcc -static-libstdc++
+endif
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
 # CXXFLAGS+= -fvtable-gc
@@ -113,17 +141,52 @@ endif
 # ==============================================================================
 
 # Optimize for minimal binary size
+# (On MinGW, -Os/-Oz mis-generate references to std::string's move constructor
+#  and fail to link, so we use -O2 there. The -fdata-sections /
+#  -ffunction-sections / --gc-sections / -s flags above still apply, keeping
+#  the binary small.)
+ifneq ($(IS_MINGW),1)
 CXXFLAGS+= -Os # Optimize for Size
+else
+CXXFLAGS+= -O2 # MinGW: -Os/-Oz break std::string move-ctor linking
+# CRITICAL: Define YAML_CPP_STATIC_DEFINE so yaml-cpp headers don't emit
+# __declspec(dllimport) (which generates __imp_ prefixed references that
+# only exist in .dll.a import libraries, not in the static .a library).
+CXXFLAGS+= -DYAML_CPP_STATIC_DEFINE
+# CRITICAL: Define WINPTHREAD_STATIC so pthread.h doesn't emit
+# __declspec(dllimport) for pthread functions (same __imp_ issue).
+CXXFLAGS+= -DWINPTHREAD_STATIC
+endif
 # CXXFLAGS+= -Oz # Aggressive Size Reduction
 # For MacOS the binary size was 1.6MB with Os and 1.7MB with Oz
 
 # CXXFLAGS+= -flto # Link Time Optimizations
 CXXFLAGS+= -std=c++20
 # Link libraries required by the project
+ifneq ($(IS_MINGW),1)
 LDLIBS+= -lyaml-cpp    # YAML parsing library
 LDLIBS+= -lcrypto      # OpenSSL crypto library
 LDLIBS+= -lzstd        # Zstandard compression library
 LDLIBS+= -lz           # Standard zlib
+else
+# MinGW: link against TRUE static libraries (.a with real .obj code).
+# All __imp_ references in these static libs resolve to Windows system DLLs
+# (KERNEL32.dll, msvcrt.dll, crypt32.dll) which are always present on Windows.
+# This produces a binary with ZERO third-party DLL dependencies.
+#
+# IMPORTANT: libstdc++.a and libgcc.a are explicitly included in the link group
+# to resolve circular references (libstdc++ ↔ winpthread). Without this, the
+# GCC driver adds them AFTER our libs, and the linker can't resolve back-references.
+LDLIBS+= -l:libyaml-cpp.a    # YAML parsing (static, 1.0 MB of code)
+LDLIBS+= -l:libcrypto.a      # OpenSSL crypto (static, 9.7 MB of code)
+LDLIBS+= -l:libzstd.a        # Zstandard compression (static, 1.3 MB of code)
+LDLIBS+= -l:libz.a           # Standard zlib (static, 115 KB of code)
+LDLIBS+= -l:libwinpthread.a  # POSIX threads (static, 97 KB of code)
+LDLIBS+= -l:libstdc++.a      # C++ stdlib (static, resolves pthread refs)
+LDLIBS+= -l:libgcc.a         # GCC runtime (static)
+# Windows system DLLs referenced by OpenSSL (always present on Windows)
+LDLIBS+= -lcrypt32 -lws2_32 -ladvapi32 -lgdi32 -luser32
+endif
 
 # Mac ARM-specific settings
 # ==============================================================================
@@ -142,11 +205,11 @@ endif
 # The 'all' target is the default build target that produces ../bin/microCI.
 
 .PHONY: all
-all: ../bin/microCI  # Default target - builds the microCI executable 
+all: ../bin/microCI$(EXE_EXT)  # Default target - builds the microCI executable 
 
 .PHONY: diagram
 diagram:
-	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
+	../bin/microCI$(EXE_EXT) --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
 
 .PHONY: tidy
 tidy:
@@ -307,16 +370,21 @@ single_compilation_unit.cpp: \
 # - macOS ARM builds link without compression (no UPX support on macOS)
 
 ifdef IS_MAC_ARM
-../bin/microCI: single_compilation_unit.cpp
+../bin/microCI$(EXE_EXT): single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 else
-../bin/microCI: single_compilation_unit.cpp
+../bin/microCI$(EXE_EXT): single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
+ifdef IS_MINGW
+	# Use --start-group/--end-group to resolve circular references between
+	# static libs (libstdc++.a references winpthread, winpthread references libstdc++)
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ -Wl,--start-group $(LDLIBS) -Wl,--end-group
+else
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+endif
 	$(Q)strip --strip-all $@  # Remove all debug symbols
-	$(Q)echo "Compressing executable with UPX"
-	$(Q)$(UPX) $@  # Compress binary with UPX
+	$(Q)if command -v upx > /dev/null 2>&1; then echo "Compressing executable with UPX"; $(UPX) $@; else echo "UPX not found, skipping compression"; fi
 endif
 
 # ==============================================================================
@@ -325,7 +393,7 @@ endif
 
 .PHONY: clean
 clean:
-	$(Q)$(RM) ../bin/microCI  # Remove built binary
+	$(Q)$(RM) ../bin/microCI$(EXE_EXT)  # Remove built binary
 	# Clear timestamps to force regeneration
 	$(Q)touch ../new/*.yml
 	$(Q)touch ../docs/*.md

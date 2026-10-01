@@ -30,9 +30,13 @@
 #include <algorithm>
 #include <format>
 #include <iostream>
+#ifdef _WIN32
+#include <cstdlib>
+#else
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
+#endif
 
 #include "3rd/inja.hpp"
 
@@ -338,11 +342,18 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
 
     // Global environment configuration
     if (mAltHome.empty()) {
+#ifdef _WIN32
+      if (const char *userProfile = std::getenv("USERPROFILE")) {
+        auto globalEnvironmentFilename = std::format("{}/.microCI.env", userProfile);
+        LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+      }
+#else
       struct passwd *pw = getpwuid(getuid());
       if (pw) {
         auto globalEnvironmentFilename = std::format("{}/.microCI.env", pw->pw_dir);
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
       }
+#endif
     } else {
       auto globalEnvironmentFilename = std::format("{}/.microCI.env", mAltHome);
       LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
@@ -541,6 +552,11 @@ auto MicroCI::DefaultDataTemplate() const -> json {
 
 #ifdef __linux__
   data["RANDOM_8"] = "$(head -c 8 /proc/sys/kernel/random/uuid)";
+#endif
+
+#ifdef _WIN32
+  // Windows (Git Bash / MSYS2): /dev/urandom is available; 4 random bytes -> 8 hex chars
+  data["RANDOM_8"] = R"MC($(head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n'))MC";
 #endif
 
   return data;

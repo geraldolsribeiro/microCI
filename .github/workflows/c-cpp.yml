@@ -69,3 +69,52 @@ jobs:
           microci_*.deb
           microci-*.x86_64.rpm
           LICENSE
+
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    # Prevent git from converting LF -> CRLF on checkout (make requires LF line endings)
+    - name: 'Disable CRLF conversion'
+      shell: powershell
+      run: git config --global core.autocrlf input
+
+    - uses: actions/checkout@v5
+
+    - name: 'Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        install: >-
+          make
+          vim
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-yaml-cpp
+          mingw-w64-x86_64-openssl
+          mingw-w64-x86_64-zstd
+          mingw-w64-x86_64-zlib
+          mingw-w64-x86_64-upx
+
+    - name: 'Download headers'
+      run: |
+        mkdir -p include/3rd/nlohmann
+        wget -P include/3rd https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+        wget -P include/3rd https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        wget -P include/3rd https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
+        wget -P include/3rd/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+
+    - name: 'Build'
+      run: make -C src clean all
+
+    - name: 'Verify'
+      run: bin/microCI.exe --version
+
+    - name: 'Upload Artifact Binary'
+      uses: actions/upload-artifact@v5
+      with:
+        name: 'microCI-windows'
+        path: bin/microCI.exe
+        retention-days: 30
