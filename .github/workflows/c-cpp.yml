@@ -3,9 +3,9 @@ name: C/C++ CI
 
 on:
   push:
-    branches: ["master"]
+    branches: [ "master" ]
   pull_request:
-    branches: ["master"]
+    branches: [ "master" ]
 
 jobs:
   linux:
@@ -15,34 +15,34 @@ jobs:
       image: debian:trixie-slim
 
     steps:
-      - uses: actions/checkout@v5
-      - name: Install dependencies
-        run: |
-          apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev upx equivs alien devscripts git-buildpackage glow make g++ wget git
-      - name: Download headers
-        run: |
-          mkdir -p include/3rd/nlohmann
-          wget -P include/3rd https://raw.githubusercontent.com/adishavit/argh/master/argh.h
-          wget -P include/3rd https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
-          wget -P include/3rd https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
-          wget -P include/3rd/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-      - name: Build
-        run: make -C src clean all
-      - name: Debian/RHEL
-        run: make deb rpm
-      - uses: actions/upload-artifact@v5
-        with:
-          name: microCI-linux
-          path: bin/microCI
-      - uses: actions/upload-artifact@v5
-        with:
-          name: package-deb
-          path: ./microci_*.deb
-      - uses: actions/upload-artifact@v5
-        with:
-          name: package-rpm
-          path: ./microci-*.x86_64.rpm
+    - uses: actions/checkout@v5
+    - name: Install dependencies
+      run: |
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -y xxd libspdlog-dev libyaml-cpp-dev libcrypto++-dev libssl-dev libzstd-dev zlib1g-dev upx equivs alien devscripts git-buildpackage glow make g++ wget git
+    - name: Download headers
+      run: |
+        mkdir -p include/3rd/nlohmann
+        wget -P include/3rd https://raw.githubusercontent.com/adishavit/argh/master/argh.h
+        wget -P include/3rd https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp
+        wget -P include/3rd https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h
+        wget -P include/3rd/nlohmann https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+    - name: Build
+      run: make -C src clean all
+    - name: Debian/RHEL
+      run: make deb rpm
+    - uses: actions/upload-artifact@v5
+      with:
+        name: microCI-linux
+        path: bin/microCI
+    - uses: actions/upload-artifact@v5
+      with:
+        name: package-deb
+        path: ./microci_*.deb
+    - uses: actions/upload-artifact@v5
+      with:
+        name: package-rpm
+        path: ./microci-*.x86_64.rpm
 
   windows:
     runs-on: windows-latest
@@ -50,64 +50,67 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v5
-      - name: Build Windows x64 binary
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: UCRT64
-          update: true
-          # MSYS2 does not provide an xxd package directly; xxd is included with vim.
-          install: >-
-            make vim mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-yaml-cpp mingw-w64-ucrt-x86_64-openssl
-            mingw-w64-ucrt-x86_64-zstd mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-spdlog
-            mingw-w64-ucrt-x86_64-7zip mingw-w64-ucrt-x86_64-upx
-      - name: Download headers
-        run: |
-          mkdir -p include/3rd/nlohmann
-          curl -L https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o include/3rd/argh.h
-          curl -L https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp -o include/3rd/inja.hpp
-          curl -L https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -o include/3rd/inicpp.h
-          curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o include/3rd/nlohmann/json.hpp
-      - name: Compile
-        run: make -C src
-      - uses: actions/upload-artifact@v5
-        with:
-          name: microCI-windows
-          path: bin/microCI.zip
+    - uses: actions/checkout@v5
+    - name: Build Windows x64 binary
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        # MSYS2 does not provide an xxd package directly; xxd is included with vim.
+        install: >-
+          make
+          vim
+          mingw-w64-ucrt-x86_64-gcc
+          mingw-w64-ucrt-x86_64-yaml-cpp
+          mingw-w64-ucrt-x86_64-openssl
+          mingw-w64-ucrt-x86_64-zstd
+          mingw-w64-ucrt-x86_64-zlib
+          mingw-w64-ucrt-x86_64-spdlog
+          mingw-w64-ucrt-x86_64-7zip
+          mingw-w64-ucrt-x86_64-upx
+    - name: Download headers
+      run: |
+        mkdir -p include/3rd/nlohmann
+        curl -L https://raw.githubusercontent.com/adishavit/argh/master/argh.h -o include/3rd/argh.h
+        curl -L https://raw.githubusercontent.com/pantor/inja/master/single_include/inja/inja.hpp -o include/3rd/inja.hpp
+        curl -L https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -o include/3rd/inicpp.h
+        curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o include/3rd/nlohmann/json.hpp
+    - name: Compile
+      run: make -C src
+    - uses: actions/upload-artifact@v5
+      with:
+        name: microCI-windows
+        path: bin/microCI.zip
+
+#    - name: Pre-Release
+#      uses: "marvinpinto/action-automatic-releases@latest"
+#      with:
+#        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#        automatic_release_tag: "latest"
+#        prerelease: true
+#        title: "Development Build"
+#        files: |
+#          bin/microCI
+#          microci_*.deb
+#          microci-*.x86_64.rpm
+#          LICENSE
 
   release:
+    # if: github.event_name == 'push'
     needs: [linux, windows]
     runs-on: ubuntu-latest
-    - name: Pre-Release
-      uses: "marvinpinto/action-automatic-releases@latest"
+    steps:
+    - uses: actions/download-artifact@v5
+    - uses: marvinpinto/action-automatic-releases@latest
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: latest
         prerelease: true
-        title: "Development Build"
+        title: Development Build
         files: |
-          bin/microCI
-          bin/microCI.zip
-          microci_*.deb
-          microci-*.x86_64.rpm
+          microCI-linux/microCI
+          microCI-windows/microCI.exe
+          microCI-windows/microCI.zip
+          package-deb/microci_*.deb
+          package-rpm/microci-*.x86_64.rpm
           LICENSE
-
-#  release:
-#    # if: github.event_name == 'push'
-#    needs: [linux, windows]
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/download-artifact@v5
-#    - uses: marvinpinto/action-automatic-releases@latest
-#      with:
-#        repo_token: ${{ secrets.GITHUB_TOKEN }}
-#        automatic_release_tag: latest
-#        prerelease: true
-#        title: Development Build
-#        files: |
-#          microCI-linux/microCI
-#          microCI-windows/microCI.exe
-#          microCI-windows/microCI.zip
-#          package-deb/microci_*.deb
-#          package-rpm/microci-*.x86_64.rpm
-#          LICENSE
