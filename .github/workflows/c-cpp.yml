@@ -82,35 +82,20 @@ jobs:
         name: microCI-windows
         path: bin/microCI.zip
 
-#    - name: Pre-Release
-#      uses: "marvinpinto/action-automatic-releases@latest"
-#      with:
-#        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#        automatic_release_tag: "latest"
-#        prerelease: true
-#        title: "Development Build"
-#        files: |
-#          bin/microCI
-#          microci_*.deb
-#          microci-*.x86_64.rpm
-#          LICENSE
-
   release:
     # if: github.event_name == 'push'
     needs: [linux, windows]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v5
-    - uses: marvinpinto/action-automatic-releases@latest
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        automatic_release_tag: latest
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
         prerelease: true
-        title: Development Build
+        title: "Development Build"
         files: |
-          microCI-linux/microCI
-          microCI-windows/microCI.exe
-          microCI-windows/microCI.zip
-          package-deb/microci_*.deb
-          package-rpm/microci-*.x86_64.rpm
+          bin/microCI
+          bin/microCI.zip
+          microci_*.deb
+          microci-*.x86_64.rpm
           LICENSE
