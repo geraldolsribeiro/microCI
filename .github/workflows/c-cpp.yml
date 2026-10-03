@@ -3,7 +3,7 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "windows" ]
   pull_request:
     branches: [ "master" ]
 
@@ -76,17 +76,20 @@ jobs:
         curl -L https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -o include/3rd/inicpp.h
         curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o include/3rd/nlohmann/json.hpp
     - name: Compile
-      run: make -C src
+      run: make -C src windows WINDOWS_CXX=g++ WINDOWS_STRIP=strip
     - uses: actions/upload-artifact@v5
       with:
         name: microCI-windows
-        path: bin/microCI.zip
+        path: bin/microCI.exe
 
   release:
-    # if: github.event_name == 'push'
+    if: github.event_name == 'push'
     needs: [linux, windows]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
+      - uses: actions/download-artifact@v5
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -94,8 +97,8 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            bin/microCI
-            bin/microCI.zip
-            microci_*.deb
-            microci-*.x86_64.rpm
+            microCI-linux/microCI
+            microCI-windows/microCI.exe
+            package-deb/microci_*.deb
+            package-rpm/microci-*.x86_64.rpm
             LICENSE
