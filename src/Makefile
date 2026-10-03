@@ -385,7 +385,7 @@ header_only:
 	mkdir -p ../include/3rd/inja
 	wget https://raw.githubusercontent.com/adishavit/argh/master/argh.h -O ../include/3rd/argh.h
 	wget https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -O ../include/3rd/inicpp.h
-	wget https://raw.githubusercontent.com/pantor/inja/refs/heads/main/single_include/inja/inja.hpp  -O ../include/3rd/inja/inja.hpp
+	wget https://raw.githubusercontent.com/pantor/inja/refs/heads/main/single_include/inja/inja.hpp  -O ../include/3rd/inja.hpp
 	wget https://raw.githubusercontent.com/nlohmann/json/refs/heads/develop/single_include/nlohmann/json.hpp -O ../include/3rd/nlohmann/json.hpp
 	wget https://raw.githubusercontent.com/nlohmann/json/refs/heads/develop/single_include/nlohmann/json_fwd.hpp -O ../include/3rd/nlohmann/json_fwd.hpp
 
