@@ -28,9 +28,12 @@
 // IN THE SOFTWARE.
 
 #include <algorithm>
+#include <cstdlib>
 #include <format>
 #include <iostream>
+#ifndef _WIN32
 #include <pwd.h>
+#endif
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -338,11 +341,19 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
 
     // Global environment configuration
     if (mAltHome.empty()) {
+#ifdef _WIN32
+      const char *home = std::getenv("USERPROFILE");
+      if (home) {
+        auto globalEnvironmentFilename = std::format("{}\\.microCI.env", home);
+        LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+      }
+#else
       struct passwd *pw = getpwuid(getuid());
       if (pw) {
         auto globalEnvironmentFilename = std::format("{}/.microCI.env", pw->pw_dir);
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
       }
+#endif
     } else {
       auto globalEnvironmentFilename = std::format("{}/.microCI.env", mAltHome);
       LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
