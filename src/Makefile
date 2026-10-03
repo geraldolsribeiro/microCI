@@ -35,10 +35,6 @@
 # - Cross-platform compilation (Linux/macOS/Windows)
 # - ARM64 and x86_64 support
 #
-# Windows cross compilation:
-#   make windows
-#   make windows WINDOWS_CXX=x86_64-w64-mingw32-g++ \
-#        WINDOWS_LIBDIR=/path/to/mingw-libraries
 # - Dead code elimination for minimal binaries
 # - Single compilation unit generation from multiple source files
 # - Embedded asset compilation (YAML, markdown, shell scripts as binary)
@@ -60,38 +56,49 @@ Q?=@
 # Compiler flags for dead code elimination
 # Reference: https://gcc.gnu.org/legacy-ml/gcc-help/2003-08/msg00128.html
 
-# Detect system
+# Detect operating system
 UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -m)
 
+ifeq ($(UNAME_S),Linux)
+    IS_LINUX = 1
+    ifeq ($(UNAME_P),arm64)
+        IS_LINUX_ARM = 1
+    endif
+endif
+
 # Check if macOS (Darwin) and ARM (aarch64/arm64)
 ifeq ($(UNAME_S),Darwin)
+    IS_MAC
     ifeq ($(UNAME_P),arm64)
         IS_MAC_ARM = 1
     endif
+endif
+
+# Detect Windows environments supported by MSYS2/MinGW or Cygwin
+ifneq (,$(filter MINGW% MSYS_NT% CYGWIN_NT%,$(UNAME_S)))
+    IS_WINDOWS = 1
 endif
 
 # ==============================================================================
 # Section 2: Compiler Flags (CXXFLAGS)
 # ==============================================================================
 
+BIN_MICROCI=../bin/microCI
 
-# Include directories for headers
-CXXFLAGS+= -I../include/                # Project header directory
-CXXFLAGS+= -I../include/3rd/            # Third-party library headers
-
-# Strict compiler warnings (treat all warnings as errors)
-CXXFLAGS+= -Wall -Wextra -Wpedantic -Werror
+CXXFLAGS+= -I../include/                    # Project header directory
+CXXFLAGS+= -I../include/3rd/                # Third-party library headers
+CXXFLAGS+= -Wall -Wextra -Wpedantic -Werror # Strict compiler warnings (treat all warnings as errors)
+CXXFLAGS+= -D_REENTRANT
+CXXFLAGS+= -DYAML_CPP_STATIC_DEFINE
+CXXFLAGS+= -std=c++20
 
 # ==============================================================================
 # Section 3: Static Library Linking (Non-macOS ARM only)
 # ==============================================================================
 
-ifndef IS_MAC_ARM
 
-# Link against static libraries.
-# Required for dead-code elimination to work properly.
-# Required for dead-code elimination.
+ifdef IS_LINUX
 CXXFLAGS+= -static
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
@@ -118,26 +125,32 @@ endif
 # ==============================================================================
 
 # Optimize for minimal binary size
-CXXFLAGS+= -Os # Optimize for Size
+# CXXFLAGS+= -Os # Optimize for Size
 # CXXFLAGS+= -Oz # Aggressive Size Reduction
 # For MacOS the binary size was 1.6MB with Os and 1.7MB with Oz
 
 # CXXFLAGS+= -flto # Link Time Optimizations
-CXXFLAGS+= -std=c++20
-# Link libraries required by the project
 LDLIBS+= -lyaml-cpp    # YAML parsing library
 LDLIBS+= -lcrypto      # OpenSSL crypto library
 LDLIBS+= -lzstd        # Zstandard compression library
 LDLIBS+= -lz           # Standard zlib
 
-# Mac ARM-specific settings
 # ==============================================================================
-# Section 5: macOS ARM64 Specific Settings
+# Section 5.1: macOS ARM64 Specific Settings
 # ==============================================================================
 
 ifdef IS_MAC_ARM
 CXXFLAGS += -I/opt/homebrew/include   # Homebrew include paths
 LDLIBS += -L/opt/homebrew/lib         # Homebrew library paths
+endif
+
+# ==============================================================================
+# Section 5.2: Windows Specific Settings
+# ==============================================================================
+ifdef IS_WINDOWS
+BIN_MICROCI=../bin/microCI.exe
+CXXFLAGS+= -static
+LDLIBS+=  -lcrypt32 -lws2_32
 endif
 
 # ==============================================================================
@@ -147,33 +160,11 @@ endif
 # The 'all' target is the default build target that produces ../bin/microCI.
 
 .PHONY: all
-all: ../bin/microCI  # Default target - builds the microCI executable
-
-# Build a native Windows x86_64 (PE/COFF) executable from Linux or macOS.
-# The third-party libraries must be available for the MinGW target.  Set
-# WINDOWS_LIBDIR when they are installed outside the compiler's default search
-# path (for example, when using a vcpkg MinGW triplet).
-WINDOWS_CXX ?= x86_64-w64-mingw32-g++
-WINDOWS_STRIP ?= x86_64-w64-mingw32-strip
-WINDOWS_LIBDIR ?=
-# Do not reuse the Linux -static linker options: MSYS2 libraries are built
-# against the UCRT and must be linked through their import libraries.
-WINDOWS_CXXFLAGS = -I../include/ -I../include/3rd/ -Wall -Wextra -Wpedantic -Werror -Os -std=c++20 -D_WIN32
-WINDOWS_LDFLAGS = $(LDFLAGS) $(if $(WINDOWS_LIBDIR),-L$(WINDOWS_LIBDIR),)
-WINDOWS_LDLIBS = $(LDLIBS) -lws2_32 -lcrypt32 -lstdc++
-
-.PHONY: windows
-windows: ../bin/microCI.exe
-
-../bin/microCI.exe: single_compilation_unit.cpp
-	$(Q)mkdir -p ../bin/
-	$(Q)$(WINDOWS_CXX) $(WINDOWS_CXXFLAGS) $(WINDOWS_LDFLAGS) $^ -o $@ $(WINDOWS_LDLIBS)
-	$(Q)$(WINDOWS_STRIP) --strip-all $@
-
+all: $(BIN_MICROCI)  # Default target - builds the microCI executable
 
 .PHONY: diagram
 diagram:
-	../bin/microCI --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
+	$(BIN_MICROCI) --input ../.microCI.yml --activity-diagram > ../docs/diagrams/microCI_activity_diagram.puml  # Generate PlantUML activity diagram
 
 .PHONY: tidy
 tidy:
@@ -334,16 +325,21 @@ single_compilation_unit.cpp: \
 # - macOS ARM builds link without compression (no UPX support on macOS)
 
 ifdef IS_MAC_ARM
-../bin/microCI: single_compilation_unit.cpp
+$(BIN_MICROCI):: single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 else
-../bin/microCI: single_compilation_unit.cpp
+$(BIN_MICROCI):: single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	$(Q)strip --strip-all $@  # Remove all debug symbols
 	$(Q)echo "Compressing executable with UPX"
 	$(Q)$(UPX) $@  # Compress binary with UPX
+endif
+
+ifdef IS_WINDOWS
+$(BIN_MICROCI):: single_compilation_unit.cpp
+	7z a -tzip ../bin/microCI.zip $(BIN_MICROCI)
 endif
 
 # ==============================================================================
@@ -352,7 +348,7 @@ endif
 
 .PHONY: clean
 clean:
-	$(Q)$(RM) ../bin/microCI ../bin/microCI.exe  # Remove built binaries
+	$(Q)$(RM) $(BIN_MICROCI) # Remove built binaries
 	# Clear timestamps to force regeneration
 	$(Q)touch ../new/*.yml
 	$(Q)touch ../docs/*.md

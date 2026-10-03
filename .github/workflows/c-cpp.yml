@@ -60,6 +60,7 @@ jobs:
         install: >-
           make
           vim
+          7zip
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-yaml-cpp
           mingw-w64-ucrt-x86_64-openssl
@@ -74,11 +75,11 @@ jobs:
         curl -L https://raw.githubusercontent.com/Rookfighter/inifile-cpp/master/include/inicpp.h -o include/3rd/inicpp.h
         curl -L https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp -o include/3rd/nlohmann/json.hpp
     - name: Compile
-      run: make -C src windows WINDOWS_CXX=g++ WINDOWS_STRIP=strip
+      run: make -C src
     - uses: actions/upload-artifact@v5
       with:
         name: microCI-windows
-        path: bin/microCI.exe
+        path: bin/microCI.zip
 
   release:
     if: github.event_name == 'push'
@@ -95,6 +96,7 @@ jobs:
         files: |
           microCI-linux/microCI
           microCI-windows/microCI.exe
+          microCI-windows/microCI.zip
           package-deb/microci_*.deb
           package-rpm/microci-*.x86_64.rpm
           LICENSE
