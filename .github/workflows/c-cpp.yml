@@ -60,13 +60,13 @@ jobs:
         install: >-
           make
           vim
-          7zip
           mingw-w64-ucrt-x86_64-gcc
           mingw-w64-ucrt-x86_64-yaml-cpp
           mingw-w64-ucrt-x86_64-openssl
           mingw-w64-ucrt-x86_64-zstd
           mingw-w64-ucrt-x86_64-zlib
           mingw-w64-ucrt-x86_64-spdlog
+          mingw-w64-ucrt-x86_64-7zip
     - name: Download headers
       run: |
         mkdir -p include/3rd/nlohmann
