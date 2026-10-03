@@ -67,6 +67,7 @@ jobs:
           mingw-w64-ucrt-x86_64-zlib
           mingw-w64-ucrt-x86_64-spdlog
           mingw-w64-ucrt-x86_64-7zip
+          mingw-w64-ucrt-x86_64-upx
     - name: Download headers
       run: |
         mkdir -p include/3rd/nlohmann
