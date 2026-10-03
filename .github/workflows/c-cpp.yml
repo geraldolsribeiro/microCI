@@ -8,7 +8,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  linux:
     # if: false # Uncomment to disable
     runs-on: ubuntu-latest
     container:
@@ -82,9 +82,22 @@ jobs:
         name: microCI-windows
         path: bin/microCI.zip
 
+#    - name: Pre-Release
+#      uses: "marvinpinto/action-automatic-releases@latest"
+#      with:
+#        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#        automatic_release_tag: "latest"
+#        prerelease: true
+#        title: "Development Build"
+#        files: |
+#          bin/microCI
+#          microci_*.deb
+#          microci-*.x86_64.rpm
+#          LICENSE
+
   release:
-    if: github.event_name == 'push'
-    needs: [build, windows]
+    # if: github.event_name == 'push'
+    needs: [linux, windows]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v5
