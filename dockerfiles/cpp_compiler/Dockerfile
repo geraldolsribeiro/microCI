@@ -31,7 +31,12 @@ FROM debian:trixie-slim
 LABEL org.opencontainers.image.authors="Geraldo Luis da Silva Ribeiro <geraldolsribeiro@gmail.com>"
 
 RUN set -eux; \
-  echo "2026-06-15" > /dev/null \
+  echo "2026-10-04" > /dev/null \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
+  && curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" > /etc/apt/sources.list.d/llvm.list \
+  && echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" >> /etc/apt/sources.list.d/llvm.list \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -48,8 +53,8 @@ RUN set -eux; \
     python3-pip \
   && apt-get clean autoclean \
   && rm -rf /var/lib/apt/lists/* \
-  && echo "deb http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" > /etc/apt/sources.list.d/llvm.list \
-  && echo "deb-src http://apt.llvm.org/trixie/ llvm-toolchain-trixie-22 main" >> /etc/apt/sources.list.d/llvm.list \
+  && echo "deb http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" > /etc/apt/sources.list.d/llvm.list \
+  && echo "deb-src http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" >> /etc/apt/sources.list.d/llvm.list \
   && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
   && apt-get update \
   && apt-get clean autoclean \
@@ -57,12 +62,12 @@ RUN set -eux; \
   && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN set -eux; \
-  echo "2026-03-14" > /dev/null \
+  echo "2026-10-04" > /dev/null \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
-    clang-22 \
-    clang-format-22 \
-    clang-tidy-22 \
+    clang-23 \
+    clang-format-23 \
+    clang-tidy-23 \
     cppcheck \
     doxygen \
     lcov \
@@ -91,10 +96,10 @@ RUN mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MAN
 RUN sed -i "44i\        bold = False" /usr/local/lib/python3.13/dist-packages/clang_html/clang_visualizer.py
 
 RUN set -eux; \
-  echo "2025-07-22" > /dev/null \
-  && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
-  && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
-  && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100
+  echo "2026-10-04" > /dev/null \
+  && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-23 100 \
+  && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-23 100 \
+  && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-23 100
 
 RUN set -eux; \
   echo "2026-06-15" > /dev/null \
