@@ -154,6 +154,9 @@ endif
 # ==============================================================================
 ifeq ($(IS_WINDOWS),1)
 BIN_MICROCI=../bin/microCI.exe
+MICROCI_VERSION=$(shell sed -n 's/#define microCI_version "\([0-9.]*\)"/\1/p' ../include/MicroCI.hpp)
+WINDOWS_ARCH=$(shell uname -m)
+WINDOWS_ARCHIVE=../bin/microCI_$(MICROCI_VERSION)_$(WINDOWS_ARCH).zip
 CXXFLAGS+= -static
 LDLIBS+=  -lcrypt32 -lws2_32
 endif
@@ -348,7 +351,7 @@ ifeq ($(IS_WINDOWS),1)
 $(BIN_MICROCI):: single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
-	7z a -tzip ../bin/microCI.zip $(BIN_MICROCI)
+	7z a -tzip $(WINDOWS_ARCHIVE) $(BIN_MICROCI)
 endif
 
 # ==============================================================================

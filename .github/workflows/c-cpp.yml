@@ -80,7 +80,7 @@ jobs:
     - uses: actions/upload-artifact@v5
       with:
         name: microCI-windows
-        path: bin/microCI.zip
+        path: bin/microCI_*.zip
 
   release:
     if: github.event_name == 'push'
@@ -98,7 +98,7 @@ jobs:
           title: "Development Build"
           files: |
             microCI-linux/microCI
-            microCI-windows/microCI.zip
+            microCI-windows/microCI_*.zip
             package-deb/microci_*.deb
             package-rpm/microci-*.x86_64.rpm
-            LICENSE
+            # LICENSE
