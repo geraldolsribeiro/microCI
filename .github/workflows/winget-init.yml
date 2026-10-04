@@ -12,8 +12,17 @@ jobs:
   initialize-winget:
     runs-on: windows-latest
     steps:
+      - name: Remove conflicting Microsoft.UI.Xaml package
+        shell: pwsh
+        run: |
+          $packages = Get-AppxPackage -AllUsers -Name "Microsoft.UI.Xaml" -ErrorAction SilentlyContinue
+          foreach ($package in $packages) {
+            Remove-AppxPackage -Package $package.PackageFullName -AllUsers -ErrorAction SilentlyContinue
+          }
+
       - name: Set up WinGet
         uses: Cyberboss/install-winget@v1 # Installs the winget subsystem on the cloud runner
+        continue-on-error: true # Keep working if the runner already provides a compatible WinGet installation
 
       - name: Install WingetCreate
         run: |
