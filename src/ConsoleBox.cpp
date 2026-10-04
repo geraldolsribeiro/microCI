@@ -31,6 +31,18 @@
 
 namespace {
 
+// Windows shells commonly use a legacy code page for console output.
+// Use an ASCII fallback there; it works with every Windows code page and still produces a readable box.
+#ifdef _WIN32
+constexpr char kHorizontal[]  = "-";
+constexpr char kTopLeft[]     = "+";
+constexpr char kTopRight[]    = "+";
+constexpr char kBottomLeft[]  = "+";
+constexpr char kBottomRight[] = "+";
+constexpr char kMiddleLeft[]  = "+";
+constexpr char kMiddleRight[] = "+";
+constexpr char kVertical[]    = "|";
+#else  // Use UTF-8 for Linux and MacOS
 constexpr char kHorizontal[]  = "─";
 constexpr char kTopLeft[]     = "┌";
 constexpr char kTopRight[]    = "┐";
@@ -39,6 +51,7 @@ constexpr char kBottomRight[] = "┘";
 constexpr char kMiddleLeft[]  = "├";
 constexpr char kMiddleRight[] = "┤";
 constexpr char kVertical[]    = "│";
+#endif
 
 // ----------------------------------------------------------------------
 //

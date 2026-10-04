@@ -35,8 +35,8 @@ RUN set -eux; \
   && apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
   && curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg \
-  && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" > /etc/apt/sources.list.d/llvm.list \
-  && echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" >> /etc/apt/sources.list.d/llvm.list \
+  && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie llvm-toolchain-trixie-23 main" > /etc/apt/sources.list.d/llvm.list \
+  && echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie llvm-toolchain-trixie-23 main" >> /etc/apt/sources.list.d/llvm.list \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -51,20 +51,6 @@ RUN set -eux; \
     cmake \
     python3 \
     python3-pip \
-  && apt-get clean autoclean \
-  && rm -rf /var/lib/apt/lists/* \
-  && echo "deb http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" > /etc/apt/sources.list.d/llvm.list \
-  && echo "deb-src http://apt.llvm.org/trixie/ llvm-toolchain-trixie-23 main" >> /etc/apt/sources.list.d/llvm.list \
-  && curl https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/llvm.asc \
-  && apt-get update \
-  && apt-get clean autoclean \
-  && apt-get autoremove --yes \
-  && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-RUN set -eux; \
-  echo "2026-10-04" > /dev/null \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
     clang-23 \
     clang-format-23 \
     clang-tidy-23 \
@@ -73,6 +59,7 @@ RUN set -eux; \
     lcov \
     ninja-build \
   && apt-get clean autoclean \
+  && apt-get autoremove --yes \
   && rm -rf /var/lib/apt/lists/*
 
 # The package libpcre3 will not exist on trixie and the code should be ported to libpcre2.
