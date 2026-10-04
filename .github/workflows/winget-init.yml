@@ -2,6 +2,11 @@ name: Initial Winget Manifest Submission
 
 on:
   workflow_dispatch: # Allows you to trigger this manually from the GitHub website
+  # After the first successful submission, comment/uncomment the temporary
+  # push trigger below and keep only workflow_dispatch for future reviews.
+  push:
+    branches:
+      - winget
 
 jobs:
   initialize-winget:
@@ -16,7 +21,7 @@ jobs:
 
       - name: Submit Initial Manifest
         env:
-          GITHUB_TOKEN: \${{ secrets.WINGET_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WINGET_TOKEN }}
         run: |
           # The cloud runner generates your first metadata file and submits the PR to Microsoft
           wingetcreate new https://github.com `
@@ -27,4 +32,4 @@ jobs:
             --desc "Write your pipeline once. Run it anywhere." `
             --license MIT `
             --installer-type portable `
-            --token "\$env:GITHUB_TOKEN"
+            --token "$env:GITHUB_TOKEN"
