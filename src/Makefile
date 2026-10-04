@@ -60,7 +60,7 @@ Q?=@
 UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -m)
 
-IS_LINUX=1
+IS_LINUX=0
 IS_LINUX_ARM=0
 IS_MAC=0
 IS_MAC_ARM=0
@@ -75,7 +75,7 @@ endif
 
 # Check if macOS (Darwin) and ARM (aarch64/arm64)
 ifeq ($(UNAME_S),Darwin)
-    IS_MAC
+    IS_MAC = 1
     ifeq ($(UNAME_P),arm64)
         IS_MAC_ARM = 1
     endif
