@@ -81,6 +81,12 @@ jobs:
       with:
         name: microCI-windows
         path: bin/microCI.zip
+    - name: Publish to Winget
+      uses: vedantmgoyal2009/winget-releaser@v2
+      with:
+        identifier: geraldolsribeiro.microCI
+        max-versions-to-keep: 5
+        token: ${{ secrets.WINGET_TOKEN }}
 
   release:
     if: github.event_name == 'push'
