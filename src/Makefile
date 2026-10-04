@@ -60,6 +60,12 @@ Q?=@
 UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -m)
 
+IS_LINUX=1
+IS_LINUX_ARM=0
+IS_MAC=0
+IS_MAC_ARM=0
+IS_WINDOWS=0
+
 ifeq ($(UNAME_S),Linux)
     IS_LINUX = 1
     ifeq ($(UNAME_P),arm64)
@@ -97,8 +103,7 @@ CXXFLAGS+= -std=c++20
 # Section 3: Static Library Linking (Non-macOS ARM only)
 # ==============================================================================
 
-
-ifdef IS_LINUX
+ifeq ($(IS_LINUX),1)
 CXXFLAGS+= -static
 
 # C++ virtual method table instrumented with garbage collection information for the linker.
@@ -139,7 +144,7 @@ LDLIBS+= -lz           # Standard zlib
 # Section 5.1: macOS ARM64 Specific Settings
 # ==============================================================================
 
-ifdef IS_MAC_ARM
+ifeq ($(IS_MAC_ARM),1)
 CXXFLAGS += -I/opt/homebrew/include   # Homebrew include paths
 LDLIBS += -L/opt/homebrew/lib         # Homebrew library paths
 endif
@@ -147,7 +152,7 @@ endif
 # ==============================================================================
 # Section 5.2: Windows Specific Settings
 # ==============================================================================
-ifdef IS_WINDOWS
+ifeq ($(IS_WINDOWS),1)
 BIN_MICROCI=../bin/microCI.exe
 CXXFLAGS+= -static
 LDLIBS+=  -lcrypt32 -lws2_32
@@ -324,11 +329,7 @@ single_compilation_unit.cpp: \
 # - Non-ARM builds are stripped and UPX compressed for minimal size
 # - macOS ARM builds link without compression (no UPX support on macOS)
 
-ifdef IS_MAC_ARM
-$(BIN_MICROCI):: single_compilation_unit.cpp
-	$(Q)mkdir -p ../bin/
-	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
-else
+ifeq ($(IS_LINUX),1)
 $(BIN_MICROCI):: single_compilation_unit.cpp
 	$(Q)mkdir -p ../bin/
 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
@@ -337,8 +338,16 @@ $(BIN_MICROCI):: single_compilation_unit.cpp
 	$(Q)$(UPX) $@  # Compress binary with UPX
 endif
 
-ifdef IS_WINDOWS
+ifeq ($(IS_MAC_ARM),1)
 $(BIN_MICROCI):: single_compilation_unit.cpp
+	$(Q)mkdir -p ../bin/
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+endif
+
+ifeq ($(IS_WINDOWS),1)
+$(BIN_MICROCI):: single_compilation_unit.cpp
+	$(Q)mkdir -p ../bin/
+	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 	7z a -tzip ../bin/microCI.zip $(BIN_MICROCI)
 endif
 
