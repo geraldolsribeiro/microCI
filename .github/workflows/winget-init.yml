@@ -1,0 +1,30 @@
+name: Initial Winget Manifest Submission
+
+on:
+  workflow_dispatch: # Allows you to trigger this manually from the GitHub website
+
+jobs:
+  initialize-winget:
+    runs-on: windows-latest
+    steps:
+      - name: Set up WinGet
+        uses: Cyberboss/install-winget@v1 # Installs the winget subsystem on the cloud runner
+
+      - name: Install WingetCreate
+        run: |
+          winget install Microsoft.WingetCreate --accept-source-agreements --accept-package-agreements
+
+      - name: Submit Initial Manifest
+        env:
+          GITHUB_TOKEN: \${{ secrets.WINGET_TOKEN }}
+        run: |
+          # The cloud runner generates your first metadata file and submits the PR to Microsoft
+          wingetcreate new https://github.com `
+            --id geraldolsribeiro.microCI `
+            --version 0.51.0 `
+            --name microCI `
+            --publisher geraldolsribeiro `
+            --desc "Write your pipeline once. Run it anywhere." `
+            --license MIT `
+            --installer-type portable `
+            --token "\$env:GITHUB_TOKEN"
