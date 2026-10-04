@@ -9,7 +9,7 @@ on:
 
 jobs:
   linux:
-    # if: false # Uncomment to disable
+    if: false # Uncomment to disable
     runs-on: ubuntu-latest
     container:
       image: debian:trixie-slim
@@ -45,6 +45,7 @@ jobs:
         path: ./microci-*.x86_64.rpm
 
   windows:
+    if: false # Uncomment to disable
     runs-on: windows-latest
     defaults:
       run:
@@ -89,6 +90,7 @@ jobs:
 #        token: ${{ secrets.WINGET_TOKEN }}
 
   release:
+    if: false # Uncomment to disable
     if: github.event_name == 'push'
     needs: [linux, windows]
     runs-on: ubuntu-latest
