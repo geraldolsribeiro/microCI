@@ -51,7 +51,7 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
       footer = step["plugin"]["html"]["footer"].as<std::string>();
     }
     if (step["plugin"]["html"]["stylesheet"]) {
-      stylesheet = step["html"]["stylesheet"].as<std::string>();
+      stylesheet = step["plugin"]["html"]["stylesheet"].as<std::string>();
     }
   }
 
@@ -93,8 +93,8 @@ void DoxygenPluginStepParser::Parse(const YAML::Node &step) {
           && sed -i 's#^CALLER_GRAPH.*#CALLER_GRAPH = YES#' {{ DOXYFILE }} \
           && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = {{ OUTPUT_DIRECTORY }}/doxygen.log#' {{ DOXYFILE }} \
           && mkdir -p auditing \
-          && doxygen {{ DOXYFILE }}; \
-          touch {{ OUTPUT_DIRECTORY }}/doxygen.log \
+          && doxygen {{ DOXYFILE }} \
+          && touch {{ OUTPUT_DIRECTORY }}/doxygen.log \
           && sed -i 's#/microci_workspace/##g' {{ OUTPUT_DIRECTORY }}/doxygen.log"
 )",
                                      data);
