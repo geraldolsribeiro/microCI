@@ -88,7 +88,7 @@ auto PluginStepParser::stepDockerImage(const YAML::Node &step, const std::string
   // 2 - Plugin default
   if (!overrideDefaultImage.empty()) {
     dockerImage = overrideDefaultImage;
-    if (not isSkipPlugin) {     
+    if (not isSkipPlugin) {
       mMicroCI->AddDockerImage(overrideDefaultImage);
     }
   }
