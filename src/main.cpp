@@ -606,22 +606,38 @@ auto main([[maybe_unused]] int argc, char **argv, char **envp) -> int {
     if (cmdl[{"-u", "--update"}]) {
       std::cout << R"(
 echo "🚀 Updating to the latest stable release..."
-sudo curl -fsSL \
+set -euo pipefail
+tmp=$(sudo mktemp /usr/bin/microCI.XXXXXX)
+trap 'sudo rm -f "$tmp"' EXIT
+if sudo curl -fsSL \
   https://github.com/geraldolsribeiro/microci/releases/latest/download/microCI \
-  -o /usr/bin/microCI
-sudo chmod 755 /usr/bin/microCI
-microCI --version
+  --retry 3 --connect-timeout 15 --max-time 300 \
+  -o "$tmp" && sudo test -s "$tmp" && sudo chmod 755 "$tmp" && sudo mv -f "$tmp" /usr/bin/microCI; then
+  trap - EXIT
+  microCI --version
+else
+  echo "❌ Update failed; the existing microCI binary was preserved." >&2
+  exit 1
+fi
 )";
       return 0;
     }
     if (cmdl[{"-D", "--update-dev"}]) {
       std::cout << R"(
 echo "🚧 Updating to the development stream..."
-sudo curl -fsSL \
+set -euo pipefail
+tmp=$(sudo mktemp /usr/bin/microCI.XXXXXX)
+trap 'sudo rm -f "$tmp"' EXIT
+if sudo curl -fsSL \
   https://github.com/geraldolsribeiro/microci/releases/download/latest/microCI \
-  -o /usr/bin/microCI
-sudo chmod 755 /usr/bin/microCI
-microCI --version
+  --retry 3 --connect-timeout 15 --max-time 300 \
+  -o "$tmp" && sudo test -s "$tmp" && sudo chmod 755 "$tmp" && sudo mv -f "$tmp" /usr/bin/microCI; then
+  trap - EXIT
+  microCI --version
+else
+  echo "❌ Update failed; the existing microCI binary was preserved." >&2
+  exit 1
+fi
 )";
       return 0;
     }
