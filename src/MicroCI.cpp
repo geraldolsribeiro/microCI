@@ -348,10 +348,16 @@ auto MicroCI::ReadConfig(const std::string &fileName) -> bool {
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
       }
 #else
-      struct passwd *pw = getpwuid(getuid());
-      if (pw) {
-        auto globalEnvironmentFilename = std::format("{}/.microCI.env", pw->pw_dir);
+      const char *home = std::getenv("HOME");
+      if (home) {
+        auto globalEnvironmentFilename = std::format("{}\\.microCI.env", home);
         LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+      } else {
+        struct passwd *pw = getpwuid(getuid());
+        if (pw) {
+          auto globalEnvironmentFilename = std::format("{}/.microCI.env", pw->pw_dir);
+          LoadEnvironmentFromEnvFile(globalEnvironmentFilename);
+        }
       }
 #endif
     } else {
