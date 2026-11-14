@@ -11,7 +11,7 @@ GLOW_STYLE=tokyo-night
 GLOW_STYLE=dracula
 
 ../help/%.txt: ???_plugin_%.md
-	CLICOLOR_FORCE=1 glow --width 100 --style $(GLOW_STYLE) $< > $@
+	CLICOLOR_FORCE=1 glow --width 100 --style $(GLOW_STYLE) $< | sed 's/[[:space:]]*$$//' > $@
 
 ../bin/microCI:
 	$(MAKE) -C ../src/
