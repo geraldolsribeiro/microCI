@@ -56,7 +56,9 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
-  data["DEFAULT_TARGET"] = step["plugin"]["target"].as<std::string>("./");
+  auto defaultTarget     = step["plugin"]["target"].as<std::string>("./");
+  data["DEFAULT_TARGET"] = defaultTarget;
+
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     beginFunction(data, envs);
     prepareRunDocker(data, envs, volumes);
@@ -68,7 +70,8 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     for (const auto &item : step["plugin"]["items"]) {
       auto gitTag     = item["tag"].as<std::string>("master");
       data["GIT_TAG"] = gitTag;
-      data["TARGET"]  = item["target"].as<std::string>(data["DEFAULT_TARGET"].get<std::string>());
+      auto stepTarget = item["target"].as<std::string>(data["DEFAULT_TARGET"].get<std::string>());
+      data["TARGET"]  = stepTarget;
 
       mMicroCI->Script() << inja::render(
           R"( \
@@ -83,19 +86,23 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         parseUrl(item, data);
       }
 
-      mMicroCI->Script() << inja::render(
-          R"( \
+      if (stepTarget != "." and stepTarget != "./") {
+        mMicroCI->Script() << inja::render(
+            R"( \
            ; echo 'chown item target' \
            ; chown $(id -u):$(id -g) -Rv {{ TARGET }})",
-          data);
+            data);
+      }
 
     }  // end for item
 
-    mMicroCI->Script() << inja::render(
-        R"( \
+    if (defaultTarget != "." and defaultTarget != "./") {
+      mMicroCI->Script() << inja::render(
+          R"( \
            ; echo 'chown default target' \
            ; chown $(id -u):$(id -g) -Rv {{ DEFAULT_TARGET }})",
-        data);
+          data);
+    }
     mMicroCI->Script() << "\"\n";
     endFunction(data);
   }
