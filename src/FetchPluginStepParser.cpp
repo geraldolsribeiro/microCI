@@ -86,23 +86,23 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         parseUrl(item, data);
       }
 
-      if (stepTarget != "." and stepTarget != "./") {
+      // if (stepTarget != "." and stepTarget != "./") {
         mMicroCI->Script() << inja::render(
             R"( \
            ; echo 'chown item target' \
            ; chown $(id -u):$(id -g) -Rv {{ TARGET }})",
             data);
-      }
+      // }
 
     }  // end for item
 
-    if (defaultTarget != "." and defaultTarget != "./") {
+    // if (defaultTarget != "." and defaultTarget != "./") {
       mMicroCI->Script() << inja::render(
           R"( \
            ; echo 'chown default target' \
            ; chown $(id -u):$(id -g) -Rv {{ DEFAULT_TARGET }})",
           data);
-    }
+    // }
     mMicroCI->Script() << "\"\n";
     endFunction(data);
   }
