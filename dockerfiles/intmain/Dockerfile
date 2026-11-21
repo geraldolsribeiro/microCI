@@ -90,6 +90,7 @@ RUN \
   libidn11-dev \
   libidn2-0-dev \
   libjsoncpp-dev \
+  libleveldb-dev \
   libmarkdown2-dev \
   libmemcached-dev \
   libncurses5-dev \
