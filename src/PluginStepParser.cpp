@@ -52,9 +52,21 @@ auto PluginStepParser::parseRunAs(const YAML::Node &step, const json &data, cons
     -> json {
   auto data_      = data;
   data_["RUN_AS"] = defaultValue;
+  data_["UID"]    = "$(id -u)";
+  data_["GID"]    = "$(id -g)";
+
   if (step["run_as"]) {
     data_["RUN_AS"] = step["run_as"].as<std::string>();
   }
+
+  if (step["uid"]) {
+    data_["UID"] = step["uid"].as<std::string>();
+  }
+
+  if (step["gid"]) {
+    data_["GID"] = step["gid"].as<std::string>();
+  }
+
   return data_;
 }
 
@@ -264,9 +276,11 @@ void PluginStepParser::prepareRunDocker(const json &data, const std::set<Environ
       docker run)",
                                      data);
 
-  if (std::string{data["RUN_AS"]} != "root") {
+  if (std::string{data["RUN_AS"]} == "root") {
+    // Nothing to add
+  } else if (std::string{data["RUN_AS"]} == "user") {
     mMicroCI->Script() << inja::render(R"( \
-        --user $(id -u):$(id -g))",
+        --user {{UID}}:{{GID}})",  // --user $(id -u):$(id -g))",
                                        data);
   }
 

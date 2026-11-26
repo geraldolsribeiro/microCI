@@ -394,12 +394,15 @@ function step_format_c___code_with_clang_format() {
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "intmain/microci_cpp_compiler:latest" \
         /bin/bash -c "cd /microci_workspace \
+        && echo 'clang-format src/*.cpp' \
         && cat <(compgen -G 'src/*.cpp') \
-          | xargs -I {} clang-format -i {} 2>&1  \
+          | xargs -I {} clang-format -i {} 2>&1 || echo 'clang-format error'  \
+        && echo 'clang-format test/*.cpp' \
         && cat <(compgen -G 'test/*.cpp') \
-          | xargs -I {} clang-format -i {} 2>&1  \
+          | xargs -I {} clang-format -i {} 2>&1 || echo 'clang-format error'  \
+        && echo 'clang-format include/*.hpp' \
         && cat <(compgen -G 'include/*.hpp') \
-          | xargs -I {} clang-format -i {} 2>&1 "
+          | xargs -I {} clang-format -i {} 2>&1 || echo 'clang-format error' "
 
     )
 

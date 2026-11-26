@@ -56,8 +56,22 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
-  auto defaultTarget     = step["plugin"]["target"].as<std::string>("./");
-  data["DEFAULT_TARGET"] = defaultTarget;
+  auto defaultTarget                      = step["plugin"]["target"].as<std::string>("external/include");
+  data["DEFAULT_TARGET"]                  = defaultTarget;
+  std::filesystem::path defaultTargetPath = defaultTarget;
+  defaultTargetPath                       = defaultTargetPath.lexically_normal();  // resolve redundant . or ..
+
+  if (defaultTargetPath.empty() or not defaultTargetPath.is_relative()) {
+    data["DEFAULT_TARGET_FIRST"] = defaultTarget;
+  } else {
+    std::filesystem::path first = *defaultTargetPath.begin();
+    // Handle edge cases: current dir ("."), parent dir (".."), or a standalone file ("file.txt")
+    if (first == "." or first == ".." or not defaultTargetPath.has_parent_path()) {
+      data["DEFAULT_TARGET_FIRST"] = defaultTarget;
+    } else {
+      data["DEFAULT_TARGET_FIRST"] = first.string();
+    }
+  }
 
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     beginFunction(data, envs);
@@ -70,8 +84,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     for (const auto &item : step["plugin"]["items"]) {
       auto gitTag     = item["tag"].as<std::string>("master");
       data["GIT_TAG"] = gitTag;
-      auto stepTarget = item["target"].as<std::string>(data["DEFAULT_TARGET"].get<std::string>());
-      data["TARGET"]  = stepTarget;
+      data["TARGET"]  = item["target"].as<std::string>(data["DEFAULT_TARGET"].get<std::string>());
 
       mMicroCI->Script() << inja::render(
           R"( \
@@ -86,23 +99,19 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
         parseUrl(item, data);
       }
 
-      // if (stepTarget != "." and stepTarget != "./") {
-        mMicroCI->Script() << inja::render(
-            R"( \
+      mMicroCI->Script() << inja::render(
+          R"( \
            ; echo 'chown item target' \
-           ; chown $(id -u):$(id -g) -Rv {{ TARGET }})",
-            data);
-      // }
+           ; chown {{UID}}:{{GID}} -Rv {{ TARGET }})",
+          data);
 
     }  // end for item
 
-    // if (defaultTarget != "." and defaultTarget != "./") {
-      mMicroCI->Script() << inja::render(
-          R"( \
+    mMicroCI->Script() << inja::render(
+        R"( \
            ; echo 'chown default target' \
-           ; chown $(id -u):$(id -g) -Rv {{ DEFAULT_TARGET }})",
-          data);
-    // }
+           ; chown {{UID}}:{{GID}} -Rv {{ DEFAULT_TARGET_FIRST }})",
+        data);
     mMicroCI->Script() << "\"\n";
     endFunction(data);
   }

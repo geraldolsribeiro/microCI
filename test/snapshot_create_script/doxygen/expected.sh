@@ -402,8 +402,8 @@ function step_build_documentation_with_doxygen() {
           && sed -i 's#^CALLER_GRAPH.*#CALLER_GRAPH = YES#' ./Doxyfile \
           && sed -i 's#^WARN_LOGFILE.*#WARN_LOGFILE = doxygen/doxygen.log#' ./Doxyfile \
           && mkdir -p auditing \
-          && doxygen ./Doxyfile; \
-          touch doxygen/doxygen.log \
+          && doxygen ./Doxyfile \
+          && touch doxygen/doxygen.log \
           && sed -i 's#/microci_workspace/##g' doxygen/doxygen.log"
 
     )

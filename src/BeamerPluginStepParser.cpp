@@ -121,7 +121,7 @@ void BeamerPluginStepParser::Parse(const YAML::Node &step) {
         --name microci_{{ FUNCTION_NAME }}_{{ RANDOM_8 }} \
         --workdir {{ WORKSPACE }} \
         --volume "${MICROCI_PWD}":{{ WORKSPACE }} \
-        --user $(id -u):$(id -g) \
+        --user {{UID}}:{{GID}} \
         {{ DOCKER_IMAGE }} \
         --variable lang='{{ LANG }}' \
         --variable date='{{ DATE }}' \
