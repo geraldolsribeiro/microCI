@@ -20,7 +20,7 @@ for dir in */; do
   esac
 
   pushd "$dir" >/dev/null
-  ../../../bin/microCI -i "input.yml" | shfmt -i 2 -ci -sr >"expected.sh"
+  ../../../bin/microCI -i "input.yml" | sed -E "s/microCI v0.[0-9][0-9].[0-9]/microCI v9.99.9/" | shfmt -i 2 -ci -sr >"expected.sh"
   popd >/dev/null
 
   echo "[create script] UPDATED  $test_name"

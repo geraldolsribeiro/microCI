@@ -373,7 +373,7 @@ function step_publish_to_another_git_repository() {
 
   echo -ne "[0;36m${title}[0m: "
   local DISABLE_WELCOME_MESSAGE="true"
-  local GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_ed25519 -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts"
+  local GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_ed25519 -F /.microCI_ssh/config -o UserKnownHostsFile=/.microCI_ssh/known_hosts"
 
   {
     (
@@ -393,7 +393,7 @@ function step_publish_to_another_git_repository() {
         --network host \
         --workdir /microci_workspace \
         --env DISABLE_WELCOME_MESSAGE="true" \
-        --env GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_ed25519 -F /dev/null -o UserKnownHostsFile=/.microCI_ssh/known_hosts" \
+        --env GIT_SSH_COMMAND="ssh -i /.microCI_ssh/id_ed25519 -F /.microCI_ssh/config -o UserKnownHostsFile=/.microCI_ssh/known_hosts" \
         --volume "${HOME}/.ssh":"/.microCI_ssh":ro \
         --volume "${MICROCI_PWD}":"/microci_workspace":rw \
         "bitnamilegacy/git:latest" \
