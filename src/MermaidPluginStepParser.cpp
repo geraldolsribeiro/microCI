@@ -63,6 +63,7 @@ void MermaidPluginStepParser::Parse(const YAML::Node &step) {
 
   auto data = mMicroCI->DefaultDataTemplate();
   data      = parseNetwork(step, data, "host");
+  data      = parseRunAs(step, data, "user");
 
   data["STEP_NAME"]        = stepName(step);
   data["FUNCTION_NAME"]    = sanitizeName(stepName(step));
@@ -76,7 +77,7 @@ void MermaidPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << inja::render(R"(
       # shellcheck disable=SC2140
       docker run \
-        --user $(id -u):$(id -g) \
+        --user {{UID}}:{{GID}} \
         --interactive \
         --attach stdout \
         --attach stderr \
