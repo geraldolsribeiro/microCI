@@ -158,7 +158,7 @@ MICROCI_VERSION=$(shell sed -n 's/#define microCI_version "\([0-9.]*\)"/\1/p' ..
 WINDOWS_ARCH=$(shell uname -m)
 WINDOWS_ARCHIVE=../bin/microCI_$(MICROCI_VERSION)_$(WINDOWS_ARCH).zip
 CXXFLAGS+= -static
-LDLIBS+=  -lcrypt32 -lws2_32
+LDLIBS+= -lcrypto -lssl -lcrypt32 -lws2_32 -lbcrypt
 endif
 
 # ==============================================================================
