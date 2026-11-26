@@ -3307,6 +3307,17 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     #define JSON_DISABLE_TUPLE_REFERENCE_CONVERSION 0
 #endif
 
+// JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE: how many elements of optimized
+// UBJSON containers of type Z, T or F (which have no payload) a reader accepts
+// per byte of input, on top of a fixed base. The value is checked and converted
+// in binary_reader.hpp; the macro is documented in
+// docs/mkdocs/docs/api/macros/json_ubjson_valueless_elements_per_byte.md.
+// It is not part of the ABI tag: it must have the same value in every
+// translation unit of a program.
+#ifndef JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE
+    #define JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE 4
+#endif
+
 #if JSON_HAS_THREE_WAY_COMPARISON
     #include <compare> // partial_ordering
 #endif
@@ -7799,30 +7810,47 @@ namespace detail
  * leave j with the type of the new value, but the pointer to the destroyed old one.
  */
 
-// a move iterator over the elements of an rvalue container, unless they are
-// const (e.g., std::set): libstdc++ before GCC 5 defines the reference of a
-// std::move_iterator as value_type&&, which cannot bind to a const element
-template<typename Iterator>
-std::move_iterator<Iterator> make_move_iterator_if_mutable_impl(const Iterator& it, std::true_type /*mutable*/)
-{
-    return std::make_move_iterator(it);
-}
+// reference type of the elements of a const T
+template<typename T>
+using const_range_reference_t = decltype(*std::declval<iterator_t<const T>&>());
 
-template<typename Iterator>
-Iterator make_move_iterator_if_mutable_impl(const Iterator& it, std::false_type /*mutable*/)
-{
-    return it;
-}
+// a container that owns its elements propagates constness to them (deep
+// constness): the elements of a const std::vector<std::string> are const. A
+// non-owning range (a span, an iterator range) has shallow constness: a const
+// span still gives mutable access to the elements it refers to. Moving from an
+// rvalue of such a range would empty the storage it refers to, so the elements
+// of an rvalue range are only moved if it has deep constness.
+template<typename T>
+using owns_its_elements = std::is_const<typename std::remove_reference<detected_t<const_range_reference_t, T>>::type>;
 
 template<typename Iterator>
 using is_mutable_iterator = std::integral_constant < bool,
       !std::is_const<typename std::remove_reference<decltype(*std::declval<Iterator&>())>::type>::value >;
 
+// a move iterator over the elements of an rvalue container that owns them,
+// unless they are const (e.g., std::set): libstdc++ before GCC 5 defines the
+// reference of a std::move_iterator as value_type&&, which cannot bind to a
+// const element
 template<typename Iterator>
-auto make_move_iterator_if_mutable(const Iterator& it)
--> decltype(make_move_iterator_if_mutable_impl(it, is_mutable_iterator<Iterator> {}))
+std::move_iterator<Iterator> make_move_iterator_if_impl(const Iterator& it, std::true_type /*move*/)
 {
-    return make_move_iterator_if_mutable_impl(it, is_mutable_iterator<Iterator> {});
+    return std::make_move_iterator(it);
+}
+
+template<typename Iterator>
+Iterator make_move_iterator_if_impl(const Iterator& it, std::false_type /*move*/)
+{
+    return it;
+}
+
+template<typename Container, typename Iterator>
+using moves_elements = conjunction<owns_its_elements<Container>, is_mutable_iterator<Iterator>>;
+
+template<typename Container, typename Iterator>
+auto make_move_iterator_if_owned(const Iterator& it)
+-> decltype(make_move_iterator_if_impl(it, moves_elements<Container, Iterator> {}))
+{
+    return make_move_iterator_if_impl(it, moves_elements<Container, Iterator> {});
 }
 
 template<value_t> struct external_constructor;
@@ -7944,14 +7972,14 @@ struct external_constructor<value_t::array>
         j.replace_value(value_t::array, value);
     }
 
-    /// an rvalue container: move its elements
+    /// an rvalue container: move its elements if it owns them
     template<typename BasicJsonType, typename CompatibleArrayType>
     static void construct_moving(BasicJsonType& j, CompatibleArrayType& arr)
     {
         using std::begin;
         using std::end;
 
-        const typename BasicJsonType::json_value value(j.template create<typename BasicJsonType::array_t>(make_move_iterator_if_mutable(begin(arr)), make_move_iterator_if_mutable(end(arr))));
+        const typename BasicJsonType::json_value value(j.template create<typename BasicJsonType::array_t>(make_move_iterator_if_owned<CompatibleArrayType>(begin(arr)), make_move_iterator_if_owned<CompatibleArrayType>(end(arr))));
         j.replace_value(value_t::array, value);
     }
 
@@ -8005,14 +8033,14 @@ struct external_constructor<value_t::object>
         j.replace_value(value_t::object, value);
     }
 
-    /// an rvalue container: move its values
+    /// an rvalue container: move its values if it owns them
     template<typename BasicJsonType, typename CompatibleObjectType>
     static void construct_moving(BasicJsonType& j, CompatibleObjectType& obj)
     {
         using std::begin;
         using std::end;
 
-        const typename BasicJsonType::json_value value(j.template create<typename BasicJsonType::object_t>(make_move_iterator_if_mutable(begin(obj)), make_move_iterator_if_mutable(end(obj))));
+        const typename BasicJsonType::json_value value(j.template create<typename BasicJsonType::object_t>(make_move_iterator_if_owned<CompatibleObjectType>(begin(obj)), make_move_iterator_if_owned<CompatibleObjectType>(end(obj))));
         j.replace_value(value_t::object, value);
     }
 
@@ -8207,7 +8235,8 @@ using is_rvalue_array_to_json = conjunction<is_movable_container_rvalue<T>,
       is_compatible_string_type<BasicJsonType, T>,
       is_compatible_binary_type<BasicJsonType, T>>>>;
 
-// rvalue containers: their elements are moved instead of copied
+// rvalue containers: their elements are moved instead of copied if the
+// container owns them (see owns_its_elements)
 template<typename BasicJsonType, typename CompatibleArrayType,
          enable_if_t<is_rvalue_array_to_json<BasicJsonType, CompatibleArrayType>::value, int> = 0>
 inline void to_json(BasicJsonType& j, CompatibleArrayType && arr) // NOLINT(cppcoreguidelines-missing-std-forward)
@@ -8980,6 +9009,7 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <iterator> // back_inserter
 #include <limits> // numeric_limits
 #include <string> // char_traits, string
+#include <type_traits> // false_type, integral_constant, is_convertible, is_integral, is_same, remove_cv, remove_reference, true_type
 #include <utility> // make_pair, move
 #include <vector> // vector
 #ifdef __cpp_lib_byteswap
@@ -9333,87 +9363,164 @@ inline const char* empty_input_message() noexcept
     return "attempting to parse an empty input; check that your input string or stream contains the expected JSON";
 }
 
-////////////////////
-// input adapters //
-////////////////////
-
-#ifndef JSON_NO_IO
 /*!
+@brief the characters of the last read token, kept for error messages
+
 A growable array of characters for the part of a token that an input adapter
-copied out of its window: unlike std::vector<char>::push_back(), appending a
-character takes no reference to a local, and is a few instructions when there
-is room.
+copied out of its window, or that the lexer copies while it scans input it
+cannot read again: unlike std::vector::push_back(), appending a character
+takes no reference to a local, and is a few instructions when there is room.
+
+The token is only needed for error messages, which show its first head()
+characters and its last head() characters (see lexer::get_token_string). The
+buffer therefore keeps the first head() and at least the last tail()
+characters: when it is full and holds more than limit() characters, it drops
+the characters in between instead of growing. That happens where it would
+otherwise reallocate, so appending stays as cheap as before, and a long string
+or a long run of whitespace read from a stream is not kept a second time.
 */
-class token_carry_buffer
+template<typename CharType>
+class token_text_buffer
 {
   public:
-    token_carry_buffer() = default;
-    token_carry_buffer(const token_carry_buffer&) = delete;
-    token_carry_buffer& operator=(const token_carry_buffer&) = delete;
-    token_carry_buffer(token_carry_buffer&& rhs) noexcept
+    static constexpr std::size_t head() noexcept
+    {
+        return 4096;
+    }
+    /// a little more than head(), as the last character may be handed back
+    static constexpr std::size_t tail() noexcept
+    {
+        return head() + 16;
+    }
+    static constexpr std::size_t limit() noexcept
+    {
+        return head() + (2 * tail());
+    }
+
+    token_text_buffer() = default;
+    token_text_buffer(const token_text_buffer&) = delete;
+    token_text_buffer& operator=(const token_text_buffer&) = delete;
+    token_text_buffer(token_text_buffer&& rhs) noexcept
         : m_data(std::move(rhs.m_data)), m_end(rhs.m_end), m_capacity_end(rhs.m_capacity_end)
     {
         rhs.m_end = rhs.m_capacity_end = nullptr;
     }
-    token_carry_buffer& operator=(token_carry_buffer&&) = delete;
-    ~token_carry_buffer() = default;
+    token_text_buffer& operator=(token_text_buffer&& rhs) noexcept
+    {
+        m_data = std::move(rhs.m_data);
+        m_end = rhs.m_end;
+        m_capacity_end = rhs.m_capacity_end;
+        rhs.m_end = rhs.m_capacity_end = nullptr;
+        return *this;
+    }
+    ~token_text_buffer() = default;
 
     void clear() noexcept
     {
         m_end = m_data.get();
     }
 
-    void push_back(char c)
+    bool empty() const noexcept
+    {
+        return m_end == m_data.get();
+    }
+
+    void push_back(CharType c)
     {
         if (JSON_HEDLEY_UNLIKELY(m_end == m_capacity_end))
         {
-            grow(1);
+            make_room(1);
         }
         *m_end++ = c;
     }
 
-    void append(const char* first, const char* last)
+    /// drop the last character
+    void pop_back() noexcept
+    {
+        JSON_ASSERT(!empty());
+        --m_end;
+    }
+
+    void append(const CharType* first, const CharType* last)
     {
         const auto n = static_cast<std::size_t>(last - first);
         const auto room = static_cast<std::size_t>(m_capacity_end - m_end);
-        if (n > room)
+        if (JSON_HEDLEY_UNLIKELY(n > room))
         {
-            grow(n);
+            append_long(first, n);
+            return;
         }
         if (n != 0)
         {
-            std::memcpy(m_end, first, n);
+            std::memcpy(m_end, first, n * sizeof(CharType));
         }
         m_end += n;
     }
 
     /// replace the contents of @a out
-    void copy_to(std::vector<char>& out) const
+    void copy_to(std::vector<CharType>& out) const
     {
         out.assign(m_data.get(), m_end);
     }
 
   private:
-    /// make room for @a extra more characters
-    JSON_HEDLEY_NEVER_INLINE void grow(std::size_t extra)
+    /// append @a n characters that do not fit, in pieces of at most tail()
+    /// characters, so that dropping the middle keeps the last tail() of them
+    JSON_HEDLEY_NEVER_INLINE void append_long(const CharType* first, std::size_t n)
     {
-        const auto size = static_cast<std::size_t>(m_end - m_data.get());
-        const auto capacity = static_cast<std::size_t>(m_capacity_end - m_data.get());
-        const std::size_t new_capacity = (std::max)(capacity < 32 ? static_cast<std::size_t>(32) : 2 * capacity, size + extra);
-        std::unique_ptr<char[]> data(new char[new_capacity]); // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
-        if (size != 0)
+        while (n != 0)
         {
-            std::memcpy(data.get(), m_data.get(), size);
+            const std::size_t piece = n < tail() ? n : tail();
+            make_room(piece);
+            std::memcpy(m_end, first, piece * sizeof(CharType));
+            m_end += piece;
+            first += piece;
+            n -= piece;
         }
-        m_data = std::move(data);
-        m_end = m_data.get() + size;
-        m_capacity_end = m_data.get() + new_capacity;
     }
 
-    std::unique_ptr<char[]> m_data{}; // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays,readability-redundant-member-init)
-    char* m_end = nullptr;
-    char* m_capacity_end = nullptr;
+    /// make room for @a extra (at most tail()) more characters: drop the
+    /// middle of a long token instead of growing beyond limit()
+    JSON_HEDLEY_NEVER_INLINE void make_room(std::size_t extra)
+    {
+        // nothing is allocated before the first character
+        std::size_t size = m_data ? static_cast<std::size_t>(m_end - m_data.get()) : 0;
+        if (size + extra > limit() && size > head() + tail())
+        {
+            std::memmove(m_data.get() + head(), m_end - tail(), tail() * sizeof(CharType));
+            m_end = m_data.get() + head() + tail();
+            size = head() + tail();
+        }
+        const std::size_t capacity = m_data ? static_cast<std::size_t>(m_capacity_end - m_data.get()) : 0;
+        if (size + extra > capacity)
+        {
+            // never more than limit(): from there on, the middle is dropped
+            const std::size_t doubled = capacity < 32 ? static_cast<std::size_t>(32) : 2 * capacity;
+            const std::size_t new_capacity = (std::max)(doubled < limit() ? doubled : limit(), size + extra);
+            std::unique_ptr<CharType[]> data(new CharType[new_capacity]); // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays)
+            if (size != 0)
+            {
+                std::memcpy(data.get(), m_data.get(), size * sizeof(CharType));
+            }
+            m_data = std::move(data);
+            m_end = m_data.get() + size;
+            m_capacity_end = m_data.get() + new_capacity;
+        }
+    }
+
+    std::unique_ptr<CharType[]> m_data{}; // NOLINT(cppcoreguidelines-avoid-c-arrays,hicpp-avoid-c-arrays,modernize-avoid-c-arrays,readability-redundant-member-init)
+    CharType* m_end = nullptr;
+    CharType* m_capacity_end = nullptr;
 };
+
+/// the part of a token that an input adapter copied out of its window
+using token_carry_buffer = token_text_buffer<char>;
+
+////////////////////
+// input adapters //
+////////////////////
+
+#ifndef JSON_NO_IO
 /*!
 Input adapter for stdio file access. The file is locked for the lifetime of the
 adapter and read with the unlocked stdio functions (see
@@ -11553,7 +11660,7 @@ struct ieee_binary_format<53> // binary64
 
 These formats (float, double, and long double where it is binary64, e.g.
 with MSVC or on Apple arm64) are converted by parse_float_native(). The
-predicate is the one the serializer uses to choose Grisu2.
+predicate is the one the serializer uses to choose to_chars() over snprintf.
 */
 template<typename FloatType>
 struct has_native_float_format
@@ -13908,7 +14015,10 @@ class lexer : public lexer_base<BasicJsonType>
     /// streaming adapter: capture the characters
     void bulk_track_token(const char* data, std::size_t n, std::false_type /*lazy*/)
     {
-        token_string.insert(token_string.end(), data, data + n);
+        for (std::size_t i = 0; i < n; ++i)
+        {
+            token_string.push_back(static_cast<char_type>(data[i]));
+        }
     }
 
     /// streaming input: no bulk fast path
@@ -15651,15 +15761,28 @@ scan_number_done:
         const std::size_t stop = ia.get_consumed_count() - (pending_real_unget ? 1u : 0u);
         if (JSON_HEDLEY_LIKELY(stop >= token_string_start))
         {
-            ia.copy_consumed_range(token_string_start, stop, out);
+            // only the beginning and the end of a long token are shown (see
+            // get_token_string), so copy only these
+            constexpr std::size_t head = token_text_buffer<char_type>::head();
+            constexpr std::size_t tail = token_text_buffer<char_type>::tail();
+            if (stop - token_string_start > head + tail)
+            {
+                ia.copy_consumed_range(token_string_start, token_string_start + head, out);
+                ia.copy_consumed_range(stop - tail, stop, out);
+            }
+            else
+            {
+                ia.copy_consumed_range(token_string_start, stop, out);
+            }
         }
         return out;
     }
 
     /// streaming adapter: the token was copied eagerly while scanning
-    const std::vector<char_type>& collect_token_chars(std::vector<char_type>& /*out*/, std::false_type /*lazy*/) const
+    const std::vector<char_type>& collect_token_chars(std::vector<char_type>& out, std::false_type /*lazy*/) const
     {
-        return token_string;
+        token_string.copy_to(out);
+        return out;
     }
 
     /// return the last read token (for errors only).  Will never contain EOF
@@ -15670,10 +15793,86 @@ scan_number_done:
         std::vector<char_type> reconstructed;
         const std::vector<char_type>& chars = collect_token_chars(reconstructed, std::integral_constant<bool, lazy_token_string> {});
 
-        // escape control characters
+        // a long token is shown by its first and its last head() characters;
+        // the buffers that keep it while it is read keep no more than these
+        // and a few more (see token_text_buffer)
+        constexpr std::size_t shown = token_text_buffer<char_type>::head();
         std::string result;
-        for (const auto c : chars)
+        if (chars.size() > 2 * shown)
         {
+            // the lexer reads bytes (wide characters arrive as UTF-8), so
+            // move both cuts to character boundaries to keep the message
+            // valid UTF-8; this only shortens the two parts
+            const auto head_end = chars.begin() + static_cast<std::ptrdiff_t>(length_without_partial_utf8_at_end(chars.data(), shown));
+            const auto tail_begin = chars.end() - static_cast<std::ptrdiff_t>(shown);
+            append_escaped(result, chars.begin(), head_end);
+            result += "...";
+            append_escaped(result, tail_begin + static_cast<std::ptrdiff_t>(partial_utf8_length_at_start(&*tail_begin)), chars.end());
+        }
+        else
+        {
+            append_escaped(result, chars.begin(), chars.end());
+        }
+        return result;
+    }
+
+  private:
+    /// whether @a c is a UTF-8 continuation byte
+    static bool is_utf8_continuation(const char_type c) noexcept
+    {
+        return (static_cast<unsigned char>(c) & 0xC0u) == 0x80u;
+    }
+
+    /*!
+    @brief the length of the first @a n characters at @a data without a UTF-8
+           character that begins there but does not end there
+
+    Looks only at the last 4 of these characters: in valid UTF-8, at most 3
+    bytes of a character can be before the cut.
+    */
+    static std::size_t length_without_partial_utf8_at_end(const char_type* data, const std::size_t n) noexcept
+    {
+        std::size_t lead = n - 1;
+        while (lead > n - 4 && is_utf8_continuation(data[lead]))
+        {
+            --lead;
+        }
+        const auto c = static_cast<unsigned char>(data[lead]);
+        std::size_t length = 1;
+        if (c >= 0xF0u)
+        {
+            length = 4;
+        }
+        else if (c >= 0xE0u)
+        {
+            length = 3;
+        }
+        else if (c >= 0xC0u)
+        {
+            length = 2;
+        }
+        return lead + length > n ? lead : n;
+    }
+
+    /// the number of UTF-8 continuation bytes (at most 3) at the start of @a data, which
+    /// belong to a character that begins before it
+    static std::size_t partial_utf8_length_at_start(const char_type* data) noexcept
+    {
+        std::size_t skip = 0;
+        while (skip < 3 && is_utf8_continuation(data[skip]))
+        {
+            ++skip;
+        }
+        return skip;
+    }
+
+    /// append the characters [first, last) to @a result, escaping control characters
+    template<typename Iterator>
+    static void append_escaped(std::string& result, Iterator first, Iterator last)
+    {
+        for (; first != last; ++first)
+        {
+            const auto c = *first;
             if (static_cast<unsigned char>(c) <= '\x1F')
             {
                 // escape control characters
@@ -15687,9 +15886,9 @@ scan_number_done:
                 result.push_back(static_cast<std::string::value_type>(c));
             }
         }
-
-        return result;
     }
+
+  public:
 
     /// return syntax error message
     JSON_HEDLEY_RETURNS_NON_NULL
@@ -15939,7 +16138,7 @@ scan_number_done:
 
     /// raw input token string for error messages; only populated for streaming
     /// adapters (seekable adapters reconstruct it lazily via token_string_start)
-    std::vector<char_type> token_string {};
+    token_text_buffer<char_type> token_string {};
 
     /// start offset of the current token within the input, used to reconstruct
     /// the last read token on error for seekable adapters (see collect_token_chars)
@@ -16178,6 +16377,40 @@ constexpr std::size_t unknown_size()
     return (std::numeric_limits<std::size_t>::max)();
 }
 
+/// the largest number of elements the DOM parsers reserve for one array upfront
+constexpr std::size_t reserve_cap()
+{
+    return 16384;
+}
+
+/*!
+@brief number of array elements a DOM parser may reserve upfront on top of
+       @ref reserved_elements_per_byte
+
+An array that announces its size is given storage for that many elements when
+it opens (at most @ref reserve_cap of them), before any input backs the
+announcement, and the arrays that are open at the same time keep their storage
+until the input is complete: 100000 nested headers of three bytes each that
+announce 16384 elements would otherwise need 1.7 GB. The elements reserved for
+all arrays of an input are therefore added up, and the sum must stay below
+this base plus @ref reserved_elements_per_byte for every byte read so far; an
+array that would go beyond reserves what is left, and grows as its elements
+arrive. The base is four arrays of the maximum size, so the first nested
+arrays of an input are not affected.
+*/
+JSON_INLINE_VARIABLE constexpr std::size_t reserved_elements_base = 4 * reserve_cap();
+
+/*!
+@brief number of array elements a DOM parser may reserve upfront per byte of
+       input, in addition to @ref reserved_elements_base
+
+An element of an array takes at least one byte of input, so an array that
+completes has used what was reserved for it. At a rate of 2 elements per
+byte, an array that announces more than the input provides keeps at most
+32 bytes of memory per byte of input, plus the base, until the parse fails.
+*/
+JSON_INLINE_VARIABLE constexpr std::size_t reserved_elements_per_byte = 2;
+
 /*!
 @brief reserve capacity for @a len elements in array @a arr
 
@@ -16193,12 +16426,24 @@ template<typename ArrayType>
 auto reserve_array(ArrayType& arr, std::size_t len, priority_tag<1> /*unused*/)
 -> decltype(arr.reserve(len), void())
 {
-    constexpr std::size_t reserve_cap = 16384;
-    arr.reserve((std::min)(len, reserve_cap));
+    arr.reserve((std::min)(len, reserve_cap()));
 }
 
 template<typename ArrayType>
 inline void reserve_array(ArrayType& /*arr*/, std::size_t /*len*/, priority_tag<0> /*unused*/)
+{}
+
+/// reserve capacity for @a count elements in array @a arr, where @a count is
+/// at most reserve_cap() already (see json_sax_dom_error_state::reserve_count)
+template<typename ArrayType>
+auto reserve_array_capped(ArrayType& arr, std::size_t count, priority_tag<1> /*unused*/)
+-> decltype(arr.reserve(count), void())
+{
+    arr.reserve(count);
+}
+
+template<typename ArrayType>
+inline void reserve_array_capped(ArrayType& /*arr*/, std::size_t /*count*/, priority_tag<0> /*unused*/)
 {}
 
 /*!
@@ -16361,6 +16606,13 @@ struct diagnostic_positions
 Holds whether a parse error occurred and whether errors are thrown, and
 implements the parse_error() and is_errored() members of the SAX interface for
 json_sax_dom_parser and json_sax_dom_callback_parser.
+
+It also bounds what the parsers reserve for arrays that announce their size
+(reserve_count()): the announced size is not backed by input yet when the
+array opens, and the arrays that are open at the same time each keep what was
+reserved for them, so the binary_reader tells the parser where to find the
+number of characters it has read (set_input_position()), which the bound
+is derived from.
 */
 class json_sax_dom_error_state
 {
@@ -16394,7 +16646,105 @@ class json_sax_dom_error_state
         return errored;
     }
 
+    /// bind the number of characters the input has provided so far; see
+    /// @ref reserve_count
+    /// (nullptr: not known, which bounds only the size of each array)
+    void set_input_position(const std::size_t* position) noexcept
+    {
+        input_position = position;
+        credit_position = 0;
+        reserve_credit = position != nullptr ? reserved_elements_base : (std::numeric_limits<std::size_t>::max)();
+    }
+
+    /// what set_input_position() changes, so that a binding can be undone
+    struct reserve_state
+    {
+        const std::size_t* position;
+        std::size_t position_at_refill;
+        std::size_t credit;
+    };
+
+    reserve_state get_reserve_state() const noexcept
+    {
+        return {input_position, credit_position, reserve_credit};
+    }
+
+    void set_reserve_state(const reserve_state& state) noexcept
+    {
+        input_position = state.position;
+        credit_position = state.position_at_refill;
+        reserve_credit = state.credit;
+    }
+
+  protected:
+    /*!
+    @brief the number of elements to reserve for an array that announces @a len
+
+    The announced number is not backed by input when the array opens, and the
+    arrays that are open at the same time each keep what was reserved for
+    them, so what is reserved for all arrays together is bounded by the
+    input read so far: @ref reserved_elements_base plus
+    @ref reserved_elements_per_byte for every character. An array that
+    announces more than what is left of that is given what is left, and
+    grows as its elements arrive. Without the position of the input (the
+    parser is not driven by a binary_reader that is running) nothing is
+    bounded but reserve_cap() for each array.
+
+    The common case, an array whose reservation is no more than the credit
+    left, costs a comparison and a subtraction. An array is charged what is
+    reserved for it, at most reserve_cap() elements, not what it announces, so
+    an array of more elements does not take credit from the arrays nested in
+    it.
+    */
+    std::size_t reserve_count(const std::size_t len) noexcept
+    {
+        const std::size_t count = (std::min)(len, reserve_cap());
+        if (JSON_HEDLEY_LIKELY(count <= reserve_credit))
+        {
+            reserve_credit -= count;
+            return count;
+        }
+        return reserve_count_slowly(count);
+    }
+
   private:
+    /// @a count is at most reserve_cap()
+    JSON_HEDLEY_NEVER_INLINE
+    std::size_t reserve_count_slowly(std::size_t count) noexcept
+    {
+        constexpr std::size_t max_size = (std::numeric_limits<std::size_t>::max)();
+        if (input_position == nullptr)
+        {
+            reserve_credit = max_size;
+            return count;
+        }
+
+        // refill the credit with 'reserved_elements_per_byte' for every
+        // character read since the last refill; it saturates instead of
+        // overflowing when size_t is 32 bits wide and a very large input has
+        // been read (the position goes back by up to two in BON8, which has
+        // no sizes)
+        const std::size_t position = *input_position;
+        if (position > credit_position)
+        {
+            const std::size_t bytes = position - credit_position;
+            reserve_credit = bytes <= (max_size - reserve_credit) / reserved_elements_per_byte
+                             ? reserve_credit + (reserved_elements_per_byte * bytes)
+                             : max_size;
+            credit_position = position;
+        }
+
+        count = (std::min)(count, reserve_credit);
+        reserve_credit -= count;
+        return count;
+    }
+
+    /// the number of characters the input has provided so far, if known
+    const std::size_t* input_position = nullptr;
+    /// the number of characters the input had provided when the credit was refilled
+    std::size_t credit_position = 0;
+    /// the number of elements that may still be reserved
+    std::size_t reserve_credit = reserved_elements_base;
     /// whether a syntax error occurred
     bool errored = false;
     /// whether to throw exceptions in case of errors
@@ -17229,7 +17579,7 @@ class json_sax_dom_parser : public json_sax_dom_error_state
 
         if (len != detail::unknown_size())
         {
-            reserve_array(*ref->m_data.m_value.array, len, priority_tag<1> {});
+            reserve_array_capped(*ref->m_data.m_value.array, reserve_count(len), priority_tag<1> {});
         }
     }
 
@@ -17577,7 +17927,7 @@ class json_sax_dom_binary_parser : public json_sax_dom_error_state
 
         if (len != detail::unknown_size())
         {
-            reserve_array(*ref_stack.back()->m_data.m_value.array, len, priority_tag<1> {});
+            reserve_array_capped(*ref_stack.back()->m_data.m_value.array, reserve_count(len), priority_tag<1> {});
         }
 
         return true;
@@ -17869,7 +18219,7 @@ class json_sax_dom_callback_parser : public json_sax_dom_error_state
 
             if (len != detail::unknown_size())
             {
-                reserve_array(*ref_stack.back()->m_data.m_value.array, len, priority_tag<1> {});
+                reserve_array_capped(*ref_stack.back()->m_data.m_value.array, reserve_count(len), priority_tag<1> {});
             }
         }
 
@@ -18474,13 +18824,133 @@ the input.
 
 This is a sanity bound rather than a security boundary, and it is far above
 any container met in practice. @ref binary_writer falls back to the
-unoptimized encoding for longer containers, so that a value serialized by
-this library can always be read back.
+unoptimized encoding for longer containers, and for containers that together
+with the ones before them would exceed @ref valueless_elements_base, so that a
+value serialized by this library can always be read back.
 
 @sa https://github.com/nlohmann/json/issues/2793
 */
 JSON_INLINE_VARIABLE constexpr std::size_t max_valueless_container_size = 1 << 20;
 
+/*!
+@brief number of elements of valueless UBJSON containers accepted on top of
+       @ref valueless_elements_per_byte
+
+The limit @ref max_valueless_container_size applies to each container on its
+own, so on its own it lets 9 bytes announce 1048576 values, and every further
+8 bytes (a row of an optimized array of arrays) another 1048576. The elements
+of all containers of a valueless type in one input are therefore added up, and
+the sum must stay below this base
+plus @ref valueless_elements_per_byte for every byte read so far. The base is
+the per-container limit, so a container that was accepted on its own before
+the sum was introduced is still accepted at the start of an input.
+*/
+JSON_INLINE_VARIABLE constexpr std::size_t valueless_elements_base = max_valueless_container_size;
+
+/// the value of JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE as a std::size_t:
+/// saturated at the largest one, not truncated, for a value that is wider
+template<typename T>
+constexpr std::size_t valueless_elements_rate(const T value) noexcept
+{
+    return static_cast<std::uintmax_t>(value) > (std::numeric_limits<std::size_t>::max)()
+           ? (std::numeric_limits<std::size_t>::max)()
+           : static_cast<std::size_t>(value);
+}
+
+/*!
+@brief number of elements of valueless UBJSON containers accepted per byte of
+       input, in addition to @ref valueless_elements_base
+
+This is the value of the macro JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE (4 by
+default), see docs/mkdocs/docs/api/macros/json_ubjson_valueless_elements_per_byte.md.
+
+An element of a value that has a payload costs at least one byte of input, but
+an element of a valueless type costs none, so these are the only elements whose
+number the input does not bound. They are accepted at this rate per byte read,
+which bounds the memory they take in a DOM: a value takes 16 bytes there, so
+the arrays at the limit take about 20 times this rate bytes of memory per byte
+of input (16 for the value, the rest is allocator rounding and the arrays
+themselves; measured on macOS, DOM, with containers of 9 times the rate
+elements: 25 bytes per byte at a rate of 1, 81 at 4, 312 at 16, 1226 at 64 and
+5493 at 256), plus about 33 MB for the first elements of the base (16 bytes for
+each of the 1048576 elements, and a vector that grows by reallocation, as only
+16384 elements are reserved upfront, needs the old and the new storage at once).
+
+The bound is meant for input written by other encoders and by versions before
+3.13.0, which wrote long arrays of this type optimized without a limit: input
+written by @ref binary_writer never needs more than the base, because the
+writer falls back to the unoptimized form once the arrays written so far and
+the next one add up to more than that, whatever the rate is.
+
+Range: a positive integer. A value that is not one is a compile-time error (a
+reader with a rate of 0 would accept nothing beyond the base, and a negative or
+fractional rate has no meaning). A value that does not fit into std::size_t is
+used as the largest std::size_t: the rate is so high then that the bound is
+out of reach anyway, and a project can use one spelling (for example
+`0xFFFFFFFFFFFFFFFFu`) for 32 and 64 bit targets. The type of the value must
+be an integer type that is not wider than std::uintmax_t and not bool or a
+character type. A rate of at least 2^20 / 8 = 131072 effectively switches the
+whole-input bound off: an array of more than 32767 elements needs a count of
+type `l`, so its shortest header is `$Z#l` and four bytes (8 bytes) inside an
+optimized array of arrays (9 bytes, `[$Z#l`, at the top level), and a shorter
+header (`$Z#I` and two bytes) announces at most 32767. Every container thus has
+at most (rate * header bytes) elements, which never exceeds the limit. With a
+rate of 131071 an input that is refused exists (rows of 1048576 elements gain
+8 elements each); the per-container limit still applies.
+
+The value must be the same in every translation unit of a program (it is
+compiled into member functions of binary_reader, which are inline), and it is
+not part of the ABI tag of the namespace.
+*/
+JSON_INLINE_VARIABLE constexpr std::size_t valueless_elements_per_byte =
+    // a value that does not fit into std::size_t is the largest one (see above);
+    // the comparison is made in the widest unsigned type, so that nothing is
+    // truncated before it is made. A function template, so that the casts are
+    // not "useless" (-Wuseless-cast) where the macro already has the type
+    valueless_elements_rate((JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE));
+
+/// the type of the macro's value is char8_t (C++20)
+template<typename T>
+#if defined(__cpp_char8_t)
+struct valueless_elements_rate_is_char8 : std::is_same<T, char8_t> {};
+#else
+struct valueless_elements_rate_is_char8 : std::false_type {};
+#endif
+
+/// the type of the macro's value is a character or boolean type
+template<typename T>
+struct valueless_elements_rate_is_char_or_bool
+    : disjunction<std::is_same<T, bool>, std::is_same<T, char>, std::is_same<T, signed char>,
+      std::is_same<T, unsigned char>, std::is_same<T, wchar_t>, std::is_same<T, char16_t>,
+      std::is_same<T, char32_t>, valueless_elements_rate_is_char8<T>>
+{};
+
+// these messages are what a user sees for a wrong value of the macro. The
+// integer test comes first because a fractional value would also fail the
+// positivity test; a value wider than std::uintmax_t would be truncated by
+// the conversion above, so it is rejected
+static_assert(std::is_integral<typename std::remove_reference<decltype((JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE))>::type>::value
+              && !valueless_elements_rate_is_char_or_bool<typename std::remove_cv<typename std::remove_reference<decltype((JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE))>::type>::type>::value,
+              "JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE must be an integer (not bool or a character type)");
+static_assert(sizeof(decltype((JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE))) <= sizeof(std::uintmax_t),
+              "JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE must not be wider than std::uintmax_t");
+static_assert((JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE) > 0,
+              "JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE must be a positive integer");
+
+/*!
+@brief the number of bytes read up to which
+       @ref valueless_elements_base plus @ref valueless_elements_per_byte times
+       that number can be computed in std::size_t
+
+For more bytes than this the limit of the valueless elements is the largest
+std::size_t, which is saturation: the sum is not computed, because it would wrap
+around, which happens for a rate that is large (the largest std::size_t as the
+rate wraps already at the first byte) or an input that is large (more than
+about a billion bytes for the default rate with a 32-bit std::size_t). It is a
+constant of the build, so no division is made while reading.
+*/
+JSON_INLINE_VARIABLE constexpr std::size_t valueless_elements_saturation_chars =
+    ((std::numeric_limits<std::size_t>::max)() - valueless_elements_base) / (valueless_elements_per_byte == 0 ? 1 : valueless_elements_per_byte);
 ///////////////////
 // binary reader //
 ///////////////////
@@ -18548,6 +19018,8 @@ class binary_reader
         sax = sax_;
         container_stack.clear();
         bon8_pushback_size = 0;
+        // the position is only known to the DOM parser while this reader lives
+        const position_binding binding(bound_parser(sax, std::is_convertible<SAX*, json_sax_dom_error_state*> {}), &chars_read);
         bool result = false;
 
         switch (input_format)
@@ -18616,6 +19088,61 @@ class binary_reader
     }
 
   private:
+    /// the DOM parser of @a s whose reserved storage is bounded by the input
+    /// read so far; nullptr for any other SAX parser, which does not reserve,
+    /// and for one that derives from a DOM parser privately or protectedly
+    /// (or ambiguously), which the reader cannot reach
+    static json_sax_dom_error_state* bound_parser(SAX* s, std::true_type /*is a DOM parser*/) noexcept
+    {
+        return s;
+    }
+
+    static json_sax_dom_error_state* bound_parser(SAX* /*s*/, std::false_type /*is a DOM parser*/) noexcept
+    {
+        return nullptr;
+    }
+
+    /*!
+    @brief tells a DOM parser where to find the number of characters read
+           while sax_parse() runs, and puts back what it knew before when
+           sax_parse() returns or throws
+
+    The reader is a local of the caller and is gone then, so the parser must
+    not keep its position. A parser that was bound by a reader that is still
+    running (a parse inside a parse) gets that binding back; that reader is
+    still alive, as it encloses this one.
+    */
+    class position_binding
+    {
+      public:
+        position_binding(json_sax_dom_error_state* parser_, const std::size_t* position) noexcept
+            : parser(parser_), saved()
+        {
+            if (parser != nullptr)
+            {
+                saved = parser->get_reserve_state();
+                parser->set_input_position(position);
+            }
+        }
+
+        position_binding(const position_binding&) = delete;
+        position_binding(position_binding&&) = delete;
+        position_binding& operator=(const position_binding&) = delete;
+        position_binding& operator=(position_binding&&) = delete;
+
+        ~position_binding()
+        {
+            if (parser != nullptr)
+            {
+                parser->set_reserve_state(saved);
+            }
+        }
+
+      private:
+        json_sax_dom_error_state* parser;
+        json_sax_dom_error_state::reserve_state saved;
+    };
+
     ////////////////////////
     // nested containers  //
     ////////////////////////
@@ -20151,6 +20678,21 @@ class binary_reader
     }
 
     /*!
+    @brief move past a value of @a size bytes, starting with @a head, that a
+           bulk run reads, as get() and get_number() would
+
+    Called before the value is passed on, so that an error reported while
+    passing it on (see @ref emit_float) has the position and the last byte
+    that reading the value byte by byte gives.
+    */
+    void bulk_advance(const std::size_t size, const unsigned char head)
+    {
+        ia.bulk_skip(size);
+        chars_read += size;
+        current = head;
+    }
+
+    /*!
     @brief read the integers, floats, booleans, and nulls that follow in a
            definite-length array, without the per-element bookkeeping of
            @ref parse_cbor_internal
@@ -20175,71 +20717,70 @@ class binary_reader
         {
             const auto* const data = reinterpret_cast<const unsigned char*>(ia.bulk_data());
             const unsigned char head = data[0];
-            std::size_t size = 0;
             bool accepted = false;
             switch (head)
             {
                 case 0x18:
-                    size = 2;
+                    bulk_advance(2, head);
                     accepted = emit_unsigned(data[1]);
                     break;
                 case 0x19:
-                    size = 3;
+                    bulk_advance(3, head);
                     accepted = emit_unsigned(load_big_endian<std::uint16_t>(data + 1));
                     break;
                 case 0x1A:
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_unsigned(load_big_endian<std::uint32_t>(data + 1));
                     break;
                 case 0x1B:
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_unsigned(load_big_endian<std::uint64_t>(data + 1));
                     break;
                 case 0x38:
-                    size = 2;
+                    bulk_advance(2, head);
                     accepted = emit_cbor_negative_integer(data[1]);
                     break;
                 case 0x39:
-                    size = 3;
+                    bulk_advance(3, head);
                     accepted = emit_cbor_negative_integer(load_big_endian<std::uint16_t>(data + 1));
                     break;
                 case 0x3A:
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_cbor_negative_integer(load_big_endian<std::uint32_t>(data + 1));
                     break;
                 case 0x3B:
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_cbor_negative_integer(load_big_endian<std::uint64_t>(data + 1));
                     break;
                 case 0xF4:
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->boolean(false);
                     break;
                 case 0xF5:
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->boolean(true);
                     break;
                 case 0xF6:
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->null();
                     break;
                 case 0xFA:
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_float(load_big_endian<float>(data + 1));
                     break;
                 case 0xFB:
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_float(load_big_endian<double>(data + 1));
                     break;
                 default:
                     if (head <= 0x17)
                     {
-                        size = 1;
+                        bulk_advance(1, head);
                         accepted = sax->number_unsigned(static_cast<number_unsigned_t>(head));
                     }
                     else if (head >= 0x20 && head <= 0x37)
                     {
-                        size = 1;
+                        bulk_advance(1, head);
                         accepted = sax->number_integer(static_cast<std::int8_t>(0x20 - 1 - head));
                     }
                     else
@@ -20249,10 +20790,6 @@ class binary_reader
                     }
                     break;
             }
-            // as if read by get() and get_number(): current is the head byte
-            ia.bulk_skip(size);
-            chars_read += size;
-            current = head;
             --remaining;
             if (JSON_HEDLEY_UNLIKELY(!accepted))
             {
@@ -21090,73 +21627,72 @@ class binary_reader
         {
             const auto* const data = reinterpret_cast<const unsigned char*>(ia.bulk_data());
             const unsigned char head = data[0];
-            std::size_t size = 0;
             bool accepted = false;
             switch (head)
             {
                 case 0xC0: // nil
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->null();
                     break;
                 case 0xC2: // false
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->boolean(false);
                     break;
                 case 0xC3: // true
-                    size = 1;
+                    bulk_advance(1, head);
                     accepted = sax->boolean(true);
                     break;
                 case 0xCA: // float 32
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_float(load_big_endian<float>(data + 1));
                     break;
                 case 0xCB: // float 64
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_float(load_big_endian<double>(data + 1));
                     break;
                 case 0xCC: // uint 8
-                    size = 2;
+                    bulk_advance(2, head);
                     accepted = emit_unsigned(data[1]);
                     break;
                 case 0xCD: // uint 16
-                    size = 3;
+                    bulk_advance(3, head);
                     accepted = emit_unsigned(load_big_endian<std::uint16_t>(data + 1));
                     break;
                 case 0xCE: // uint 32
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_unsigned(load_big_endian<std::uint32_t>(data + 1));
                     break;
                 case 0xCF: // uint 64
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_unsigned(load_big_endian<std::uint64_t>(data + 1));
                     break;
                 case 0xD0: // int 8
-                    size = 2;
+                    bulk_advance(2, head);
                     accepted = emit_signed(static_cast<std::int8_t>(data[1]));
                     break;
                 case 0xD1: // int 16
-                    size = 3;
+                    bulk_advance(3, head);
                     accepted = emit_signed(load_big_endian<std::int16_t>(data + 1));
                     break;
                 case 0xD2: // int 32
-                    size = 5;
+                    bulk_advance(5, head);
                     accepted = emit_signed(load_big_endian<std::int32_t>(data + 1));
                     break;
                 case 0xD3: // int 64
-                    size = 9;
+                    bulk_advance(9, head);
                     accepted = emit_signed(load_big_endian<std::int64_t>(data + 1));
                     break;
                 default:
                     if (head <= 0x7F)
                     {
                         // positive fixint
-                        size = 1;
+                        bulk_advance(1, head);
                         accepted = sax->number_unsigned(static_cast<number_unsigned_t>(head));
                     }
                     else if (head >= 0xE0)
                     {
                         // negative fixint
-                        size = 1;
+                        bulk_advance(1, head);
                         accepted = sax->number_integer(static_cast<std::int8_t>(head));
                     }
                     else
@@ -21166,10 +21702,6 @@ class binary_reader
                     }
                     break;
             }
-            // as if read by get() and get_number(): current is the last byte
-            ia.bulk_skip(size);
-            chars_read += size;
-            current = data[size - 1];
             --remaining;
             if (JSON_HEDLEY_UNLIKELY(!accepted))
             {
@@ -22073,6 +22605,7 @@ class binary_reader
         const auto* const data = reinterpret_cast<const unsigned char*>(ia.bulk_data());
         // UBJSON stores numbers big-endian, BJData little-endian
         const bool swap = is_little_endian != (input_format == input_format_t::bjdata);
+        const std::size_t start = chars_read;
         std::size_t read = 0;
         bool accepted = true;
         while (read < count && accepted)
@@ -22084,15 +22617,38 @@ class binary_reader
                 byte_swap(number);
             }
             ++read;
+            // where passing the value on can report an error (see
+            // emit_float), the position is that after the value, as if it
+            // was read by get_number()
+            set_chars_read(start + (read * size), std::integral_constant<bool, may_overflow_number_float<NumberType>()> {});
             accepted = emit_ubjson_number(number);
         }
-        // as if read by get_number(): current is the last byte read
+        // get_number() does not change current
         ia.bulk_skip(read * size);
-        chars_read += read * size;
-        current = data[(read * size) - 1];
+        chars_read = start + (read * size);
         remaining -= read;
         return accepted;
     }
+
+    /*!
+    @brief whether a value of type @a NumberType can be finite and still
+           overflow number_float_t, which @ref emit_float reports as an error
+
+    False for the default number types, so that the loop in @ref
+    parse_ubjson_typed_run need not track the position per value.
+    */
+    template<typename NumberType>
+    static constexpr bool may_overflow_number_float() noexcept
+    {
+        return static_cast<long double>((std::numeric_limits<number_float_t>::max)()) < static_cast<long double>((std::numeric_limits<NumberType>::max)());
+    }
+
+    void set_chars_read(const std::size_t position, std::true_type /*track*/) noexcept
+    {
+        chars_read = position;
+    }
+
+    void set_chars_read(const std::size_t /*position*/, std::false_type /*track*/) const noexcept {}
 
     template<typename NumberType, enable_if_t<std::is_floating_point<NumberType>::value, int> = 0>
     bool emit_ubjson_number(const NumberType number)
@@ -22110,6 +22666,38 @@ class binary_reader
     bool emit_ubjson_number(const NumberType number)
     {
         return emit_unsigned(number);
+    }
+
+    /*!
+    @brief add the elements of a container of a valueless type to the total of
+           the input and check the total against the input read so far
+
+    A container of type 'Z', 'T' or 'F' has no payload, so its elements are the
+    only ones for which the input does not bound the count. The check is made
+    once per container, not per element.
+
+    @param[in] count  number of elements the container declares; at most
+                      @ref max_valueless_container_size
+    @return false if the total is more than @ref valueless_elements_base plus
+            @ref valueless_elements_per_byte for every byte read so far; the
+            total is not changed then
+    */
+    bool charge_valueless_elements(const std::size_t count) noexcept
+    {
+        // limit = base + rate * chars_read, saturating at the largest size_t
+        // instead of wrapping around, which would make a huge rate or input
+        // reject everything. valueless_elements never exceeds the limit of an
+        // earlier call, and the limit does not decrease, so the difference
+        // below cannot underflow.
+        const std::size_t limit = chars_read <= valueless_elements_saturation_chars
+                                  ? valueless_elements_base + (valueless_elements_per_byte * chars_read)
+                                  : (std::numeric_limits<std::size_t>::max)();
+        if (JSON_HEDLEY_UNLIKELY(count > limit - valueless_elements))
+        {
+            return false;
+        }
+        valueless_elements += count;
+        return true;
     }
 
     /*!
@@ -22197,22 +22785,25 @@ class binary_reader
             // declared count alone decides how much is allocated; the check is
             // made before the start event so that no container is opened that
             // is then abandoned. See @ref max_valueless_container_size.
-            if (JSON_HEDLEY_UNLIKELY((size_and_type.second == 'Z' || size_and_type.second == 'T' || size_and_type.second == 'F')
-                                     && size_and_type.first > max_valueless_container_size))
+            if (JSON_HEDLEY_UNLIKELY(size_and_type.second == 'Z' || size_and_type.second == 'T' || size_and_type.second == 'F'))
             {
-                return out_of_range_error(exception_id::container_too_large, "excessive array size", "size");
+                if (JSON_HEDLEY_UNLIKELY(size_and_type.first > max_valueless_container_size))
+                {
+                    return out_of_range_error(exception_id::container_too_large, "excessive array size", "size");
+                }
+                if (JSON_HEDLEY_UNLIKELY(!charge_valueless_elements(size_and_type.first)))
+                {
+                    return out_of_range_error(exception_id::container_too_large, "excessive number of elements without payload", "size");
+                }
             }
 
-            if (JSON_HEDLEY_UNLIKELY(!enter_array(size_and_type.first, size_and_type.second)))
+            // a no-op is not a value, so an array of them is empty whatever
+            // count it declares: the SAX parser is told so, instead of being
+            // made to reserve storage for a count that no input backs
+            const std::size_t announced = size_and_type.second == 'N' ? 0 : size_and_type.first;
+            if (JSON_HEDLEY_UNLIKELY(!enter_array(announced, size_and_type.second)))
             {
                 return false;
-            }
-
-            if (size_and_type.second == 'N')
-            {
-                // a no-op is not a value, so a container of them holds none;
-                // the declared size has already been passed to the SAX parser
-                container_stack.back().remaining = 0;
             }
 
             return size_and_type.second == 0
@@ -22284,6 +22875,10 @@ class binary_reader
         auto number_lexer = detail::lexer<BasicJsonType, ia_type>(detail::input_adapter(number_vector), false);
         const auto result_number = number_lexer.scan();
         const auto number_string = number_lexer.get_token_string();
+        // the number as the lexer read it, for SAX number_float(): unlike
+        // get_token_string(), which is meant for error messages and shortens
+        // long tokens, it is complete; the next scan() replaces it
+        const string_t number_text = number_lexer.get_string();
         const auto result_remainder = number_lexer.scan();
 
         using token_type = typename detail::lexer_base<BasicJsonType>::token_type;
@@ -22310,10 +22905,7 @@ class binary_reader
                                number_string,
                                out_of_range::create(exception_id::number_overflow, concat("number overflow parsing '", number_string, '\''), nullptr));
                 }
-                // number_string is a std::string, while the SAX interface takes a
-                // string_t; convert explicitly, as the two are only implicitly
-                // convertible for some string types
-                return sax->number_float(parsed_float, string_t(number_string.data(), number_string.size()));
+                return sax->number_float(parsed_float, number_text);
             }
             case token_type::uninitialized:
             case token_type::literal_true:
@@ -23525,6 +24117,10 @@ class binary_reader
 
     /// the number of characters read
     std::size_t chars_read = 0;
+
+    /// UBJSON: the sum of the element counts of the containers of a valueless
+    /// type read so far; see @ref charge_valueless_elements
+    std::size_t valueless_elements = 0;
 
     /// whether we can assume little endianness
     const bool is_little_endian = little_endianness();
@@ -26271,7 +26867,9 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
     /// access to successor
     reference operator[](difference_type n) const
     {
-        return *(this->operator+(n));
+        // the element n positions after *this is the one n + 1 positions before base();
+        // Base::operator[] then reports invalid_iterator.208 for object iterators
+        return this->base()[-n - 1];
     }
 
     /// return the key of an object iterator
@@ -27160,139 +27758,6 @@ class json_pointer
     }
 
   private:
-    /*!
-    @brief the pointer prefixes of a flattened object that denote arrays
-
-    @ref unflatten creates arrays exactly below the prefixes that have a
-    reference token 0 among their children, and objects everywhere else.
-    Deciding this up front keeps the result independent of the order in which
-    the flattened object is iterated, which is unspecified for some object
-    types.
-
-    A prefix is identified by the text of the key it is the beginning of:
-    escaping is unambiguous, so equal prefixes of valid keys are equal texts.
-    The set refers to the keys, which must outlive it.
-    */
-    class array_prefix_set
-    {
-      public:
-        void insert(const char* data, std::size_t size)
-        {
-            // flattened objects are usually sorted, so most keys that have a
-            // 0 yield the prefix of the previous one
-            if (last_data != nullptr && last_size == size && std::memcmp(last_data, data, size) == 0)
-            {
-                return;
-            }
-            last_data = data;
-            last_size = size;
-
-            if (table.empty())
-            {
-                table.resize(16);
-            }
-            const std::size_t hash = hash_of(data, size);
-            const std::size_t mask = table.size() - 1;
-            std::size_t i = hash & mask;
-            while (table[i].data != nullptr)
-            {
-                if (table[i].hash == hash && table[i].size == size && std::memcmp(table[i].data, data, size) == 0)
-                {
-                    return;
-                }
-                i = (i + 1) & mask;
-            }
-            table[i] = slot(hash, data, size);
-
-            // keep the load factor below 1/2
-            if (++used * 2 > table.size())
-            {
-                grow();
-            }
-        }
-
-        bool empty() const noexcept
-        {
-            return used == 0;
-        }
-
-        bool contains(const char* data, std::size_t size) const noexcept
-        {
-            if (used == 0)
-            {
-                return false;
-            }
-            const std::size_t hash = hash_of(data, size);
-            const std::size_t mask = table.size() - 1;
-            for (std::size_t i = hash & mask; table[i].data != nullptr; i = (i + 1) & mask)
-            {
-                if (table[i].hash == hash && table[i].size == size && std::memcmp(table[i].data, data, size) == 0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-      private:
-        struct slot
-        {
-            slot() noexcept = default;
-
-            slot(std::size_t h, const char* d, std::size_t s) noexcept
-                : hash(h), data(d), size(s)
-            {}
-
-            std::size_t hash = 0;
-            const char* data = nullptr; // nullptr: the slot is empty
-            std::size_t size = 0;
-        };
-
-        static std::size_t hash_of(const char* data, std::size_t size) noexcept
-        {
-            std::uint64_t h = 0x9E3779B97F4A7C15ULL ^ size;
-            std::size_t i = 0;
-            for (; i + 8 <= size; i += 8)
-            {
-                std::uint64_t w = 0;
-                std::memcpy(&w, data + i, 8);
-                h = (h ^ w) * 0x100000001B3ULL;
-                h ^= h >> 32u;
-            }
-            std::uint64_t w = 0;
-            if (i < size)
-            {
-                std::memcpy(&w, data + i, size - i);
-            }
-            h = (h ^ w) * 0x9E3779B97F4A7C15ULL;
-            return detail::conditional_static_cast<std::size_t>(h ^ (h >> 29u));
-        }
-
-        void grow()
-        {
-            std::vector<slot> old(table.size() * 2);
-            old.swap(table);
-            const std::size_t mask = table.size() - 1;
-            for (const auto& s : old)
-            {
-                if (s.data != nullptr)
-                {
-                    std::size_t i = s.hash & mask;
-                    while (table[i].data != nullptr)
-                    {
-                        i = (i + 1) & mask;
-                    }
-                    table[i] = s;
-                }
-            }
-        }
-
-        std::vector<slot> table{};
-        std::size_t used = 0;
-        const char* last_data = nullptr;
-        std::size_t last_size = 0;
-    };
-
     /// @brief the length of the longest common prefix of the first @a limit bytes of @a a and @a b
     static std::size_t common_prefix_length(const char* a, const char* b, const std::size_t limit) noexcept
     {
@@ -27314,6 +27779,355 @@ class json_pointer
         }
         return i;
     }
+
+    /*!
+    @brief the prefixes of a flattened object that are marked as arrays, for
+           prefixes that are not short
+
+    A prefix is identified by the tokens it consists of: a node of a tree
+    stands for the prefix of its parent followed by a token, and is looked up
+    by its parent and the text of the token. The node of a prefix is found by
+    walking the tokens of the key from the root, so identifying all prefixes
+    of a key together costs one pass over the key, however long the prefixes
+    are, and no prefix is ever compared byte by byte as a whole. The nodes
+    along the key that was walked last are kept, and the walk of the next key
+    starts below the beginning it has in common with that key. The tree refers
+    to the keys, which must outlive it.
+    */
+    class prefix_tree
+    {
+      public:
+        /// @brief set the seed of the hash function, before anything is added
+        void reseed(const std::uint64_t seed_value) noexcept
+        {
+            seed = seed_value;
+        }
+
+        /// @brief mark the first @a prefix_size bytes of the key of @a key_size bytes at @a data
+        void mark(const char* data, std::size_t key_size, std::size_t prefix_size)
+        {
+            nodes[walk(data, key_size, prefix_size)].marked = true;
+            any_marked = true;
+        }
+
+        bool is_marked(const char* data, std::size_t key_size, std::size_t prefix_size)
+        {
+            return any_marked && nodes[walk(data, key_size, prefix_size)].marked;
+        }
+
+        bool empty() const noexcept
+        {
+            return !any_marked;
+        }
+
+        /// @brief the hash of the first @a size bytes at @a data, for the seed @a seed_value
+        static std::size_t hash_bytes(const char* data, std::size_t size, const std::uint64_t seed_value) noexcept
+        {
+            std::uint64_t h = seed_value ^ size;
+            std::size_t i = 0;
+            for (; i + 8 <= size; i += 8)
+            {
+                std::uint64_t w = 0;
+                std::memcpy(&w, data + i, 8);
+                h = (h ^ w) * 0x100000001B3ULL;
+                h ^= h >> 32u;
+            }
+            std::uint64_t w = 0;
+            if (i < size)
+            {
+                std::memcpy(&w, data + i, size - i);
+            }
+            h = (h ^ w) * 0x9E3779B97F4A7C15ULL;
+            return detail::conditional_static_cast<std::size_t>(h ^ (h >> 29u));
+        }
+
+      private:
+        struct node
+        {
+            std::size_t parent = 0;
+            std::size_t hash = 0;
+            const char* token = nullptr;
+            std::size_t token_size = 0;
+            bool marked = false;
+        };
+
+        /// @brief a slot of the hash table; the index of a node, 0 if the slot is empty
+        struct bucket
+        {
+            std::size_t index = 0;
+        };
+
+        /// @brief the node after a token of the key that was walked last, and where the token ends
+        struct step
+        {
+            std::size_t node = 0;
+            std::size_t end = 0;
+        };
+
+        /// @brief the index of the node of the prefix that ends at the slash (or the end) at @a prefix_size
+        std::size_t walk(const char* data, std::size_t key_size, std::size_t prefix_size)
+        {
+            if (nodes.empty())
+            {
+                nodes.emplace_back();
+                table.resize(16);
+                chain.emplace_back();
+            }
+
+            if (data != last_key)
+            {
+                // keep the nodes within the beginning that this key has in common
+                // with the key they were found for; a prefix that ends inside a
+                // token of this key is not one of its prefixes
+                const std::size_t same = common_prefix_length(data, last_key, (std::min)(key_size, last_key_size));
+                std::size_t keep = chain.size();
+                while (keep > 1 && (chain[keep - 1].end > same || (chain[keep - 1].end == same && same < key_size && data[same] != '/')))
+                {
+                    --keep;
+                }
+                chain.resize(keep);
+                last_key = data;
+                last_key_size = key_size;
+            }
+
+            // walk the tokens that are not walked yet
+            while (chain.back().end < prefix_size && chain.back().end < key_size)
+            {
+                const std::size_t start = chain.back().end + 1;
+                const void* const slash = std::memchr(data + start, '/', key_size - start);
+                const std::size_t end = slash == nullptr ? key_size : static_cast<std::size_t>(static_cast<const char*>(slash) - data);
+                step next;
+                next.node = child(chain.back().node, data + start, end - start);
+                next.end = end;
+                chain.push_back(next);
+            }
+
+            if (chain.back().end == prefix_size)
+            {
+                return chain.back().node;
+            }
+            // an earlier call walked further
+            const auto it = std::lower_bound(chain.begin(), chain.end(), prefix_size, [](const step & s, std::size_t size)
+            {
+                return s.end < size;
+            });
+            return it->node;
+        }
+
+        std::size_t slot_of(std::size_t parent, std::size_t hash) const noexcept
+        {
+            std::uint64_t x = static_cast<std::uint64_t>(hash) ^ (static_cast<std::uint64_t>(parent) * 0x9E3779B97F4A7C15ULL);
+            x ^= x >> 32u;
+            x *= 0xD6E8FEB86659FD93ULL;
+            x ^= x >> 32u;
+            return static_cast<std::size_t>(x) & (table.size() - 1);
+        }
+
+        /// @brief the node of the prefix of the node @a parent followed by the token, which is added if it is not there
+        std::size_t child(std::size_t parent, const char* token, std::size_t token_size)
+        {
+            const std::size_t hash = hash_bytes(token, token_size, seed);
+            std::size_t i = slot_of(parent, hash);
+            while (table[i].index != 0)
+            {
+                const node& n = nodes[table[i].index];
+                if (n.parent == parent && n.hash == hash && n.token_size == token_size && std::memcmp(n.token, token, token_size) == 0)
+                {
+                    return table[i].index;
+                }
+                i = (i + 1) & (table.size() - 1);
+            }
+
+            node created;
+            created.parent = parent;
+            created.hash = hash;
+            created.token = token;
+            created.token_size = token_size;
+            nodes.push_back(created);
+            table[i].index = nodes.size() - 1;
+
+            // keep the load factor below 1/2
+            if (nodes.size() * 2 > table.size())
+            {
+                std::vector<bucket> old(table.size() * 2);
+                old.swap(table);
+                for (std::size_t k = 1; k < nodes.size(); ++k)
+                {
+                    std::size_t j = slot_of(nodes[k].parent, nodes[k].hash);
+                    while (table[j].index != 0)
+                    {
+                        j = (j + 1) & (table.size() - 1);
+                    }
+                    table[j].index = k;
+                }
+            }
+            return nodes.size() - 1;
+        }
+
+        std::uint64_t seed = 0;
+        /// @brief the nodes; the first is the root, the empty prefix
+        std::vector<node> nodes{};
+        /// @brief the nodes (not the root) in a hash table
+        std::vector<bucket> table{};
+        /// @brief the root, and the node after each token of the key that was walked last
+        std::vector<step> chain{};
+        const char* last_key = nullptr;
+        std::size_t last_key_size = 0;
+        bool any_marked = false;
+    };
+
+    /*!
+    @brief the pointer prefixes of a flattened object that denote arrays
+
+    @ref unflatten creates arrays exactly below the prefixes that have a
+    reference token 0 among their children, and objects everywhere else.
+    Deciding this up front keeps the result independent of the order in which
+    the flattened object is iterated, which is unspecified for some object
+    types.
+
+    A prefix is identified by the text of the key it is the beginning of:
+    escaping is unambiguous, so equal prefixes of valid keys are equal texts.
+    The set refers to the keys, which must outlive it. Short prefixes are
+    kept in a hash table and compared as texts, which costs at most the length
+    of the bound. Longer prefixes are kept in a @ref prefix_tree, because
+    hashing and comparing every one of the prefixes of a key with many tokens
+    from its beginning would take quadratic time.
+
+    The hash function depends on a seed that is derived from the address of a
+    local variable, which address space layout randomization changes between
+    processes, so keys cannot be crafted to collide in advance; the result
+    does not depend on the seed. Where the addresses are not randomized, or
+    when the seed is known, keys can collide: k short prefixes then cost
+    k^2 / 2 comparisons of fewer than 64 bytes each. The long prefixes are not
+    hashed as a whole.
+    */
+    class array_prefix_set
+    {
+      public:
+        /// @brief choose the seed of the hash function, before anything is added: it is derived from the address that is passed
+        void reseed(const void* address) noexcept
+        {
+            // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast,hicpp-use-auto,modernize-use-auto): the address is only a source of entropy
+            std::uint64_t x = reinterpret_cast<std::uintptr_t>(address);
+            x ^= 0x9E3779B97F4A7C15ULL;
+            x *= 0xBF58476D1CE4E5B9ULL;
+            seed = x ^ (x >> 31u);
+            tree.reseed(seed);
+        }
+
+        /// @brief add the first @a prefix_size bytes of the key of @a key_size bytes at @a data
+        void insert(const char* data, std::size_t key_size, std::size_t prefix_size)
+        {
+            if (prefix_size >= short_limit)
+            {
+                tree.mark(data, key_size, prefix_size);
+                return;
+            }
+
+            // flattened objects are usually sorted, so most keys that have a
+            // 0 yield the prefix of the previous one
+            if (last_data != nullptr && last_size == prefix_size && std::memcmp(last_data, data, prefix_size) == 0)
+            {
+                return;
+            }
+            last_data = data;
+            last_size = prefix_size;
+
+            const std::size_t hash = prefix_tree::hash_bytes(data, prefix_size, seed);
+            if (table.empty())
+            {
+                table.resize(16);
+            }
+            const std::size_t mask = table.size() - 1;
+            std::size_t i = hash & mask;
+            while (table[i].data != nullptr)
+            {
+                if (table[i].hash == hash && table[i].size == prefix_size && std::memcmp(table[i].data, data, prefix_size) == 0)
+                {
+                    return;
+                }
+                i = (i + 1) & mask;
+            }
+            table[i] = slot(hash, data, prefix_size);
+
+            // keep the load factor below 1/2
+            if (++used * 2 > table.size())
+            {
+                grow();
+            }
+        }
+
+        bool empty() const noexcept
+        {
+            return used == 0 && tree.empty();
+        }
+
+        /// @brief whether the first @a prefix_size bytes of the key of @a key_size bytes at @a data were added
+        bool contains(const char* data, std::size_t key_size, std::size_t prefix_size)
+        {
+            if (prefix_size >= short_limit)
+            {
+                return tree.is_marked(data, key_size, prefix_size);
+            }
+            if (used == 0)
+            {
+                return false;
+            }
+            const std::size_t hash = prefix_tree::hash_bytes(data, prefix_size, seed);
+            const std::size_t mask = table.size() - 1;
+            for (std::size_t i = hash & mask; table[i].data != nullptr; i = (i + 1) & mask)
+            {
+                if (table[i].hash == hash && table[i].size == prefix_size && std::memcmp(table[i].data, data, prefix_size) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+      private:
+        /// @brief prefixes of fewer bytes are kept in the hash table
+        static constexpr std::size_t short_limit = 64;
+
+        struct slot
+        {
+            slot() noexcept = default;
+
+            slot(std::size_t h, const char* d, std::size_t s) noexcept
+                : hash(h), data(d), size(s)
+            {}
+
+            std::size_t hash = 0;
+            const char* data = nullptr; // nullptr: the slot is empty
+            std::size_t size = 0;
+        };
+
+        void grow()
+        {
+            std::vector<slot> old(table.size() * 2);
+            old.swap(table);
+            const std::size_t mask = table.size() - 1;
+            for (const auto& s : old)
+            {
+                if (s.data != nullptr)
+                {
+                    std::size_t i = s.hash & mask;
+                    while (table[i].data != nullptr)
+                    {
+                        i = (i + 1) & mask;
+                    }
+                    table[i] = s;
+                }
+            }
+        }
+
+        std::uint64_t seed = 0;
+        prefix_tree tree{};
+        std::vector<slot> table{};
+        std::size_t used = 0;
+        const char* last_data = nullptr;
+        std::size_t last_size = 0;
+    };
 
     /*!
     @brief check that @a key is a valid JSON pointer, and add the prefixes of
@@ -27360,7 +28174,7 @@ class json_pointer
                 // a token 0 makes the pointer before it an array
                 if (i - begin == 1 && data[begin] == '0')
                 {
-                    arrays.insert(data, begin - 1);
+                    arrays.insert(data, size, begin - 1);
                 }
                 begin = i + 1;
             }
@@ -28403,6 +29217,7 @@ class json_pointer
         // token 0 among their children; the values below them are arrays,
         // all others are objects (see array_prefix_set)
         array_prefix_set arrays;
+        arrays.reseed(&arrays);
         const string_t* previous_key = nullptr;
         for (const auto& element : *value.m_data.m_value.object)
         {
@@ -28494,7 +29309,7 @@ class json_pointer
                     case detail::value_t::null:
                     {
                         // a first child 0 makes the value an array without a look-up
-                        if ((token_size == 1 && data[pos + 1] == '0') || arrays.contains(data, pos))
+                        if ((token_size == 1 && data[pos + 1] == '0') || arrays.contains(data, key.size(), pos))
                         {
                             // some reference token below this position is 0, so the
                             // value is an array
@@ -28546,6 +29361,19 @@ class json_pointer
                 pos = end;
             }
 
+            if (JSON_HEDLEY_UNLIKELY(!current->is_null()))
+            {
+                // the key is a prefix of an earlier key (only possible if the
+                // object type does not sort its keys), so the value is the
+                // array or object built for that key: a null leaves it as it
+                // is (as when the shorter key comes first), any other value
+                // conflicts with it
+                if (element.second.is_null())
+                {
+                    continue;
+                }
+                JSON_THROW(detail::type_error::create(detail::exception_id::unflatten_invalid_value, "invalid value to unflatten", &result));
+            }
             *current = element.second;
         }
 
@@ -30423,7 +31251,7 @@ class binary_writer
         JSON_THROW(out_of_range::create(exception_id::subtype_out_of_range, concat("subtype ", std::to_string(subtype), " is too large for ", what, " (max 255)"), &j));
     }
 
-    /// @throw other_error.407 always
+    /// @throw other_error.502 always
     JSON_HEDLEY_NO_RETURN JSON_HEDLEY_NEVER_INLINE
     static void throw_size_marker_required(const BasicJsonType& j)
     {
@@ -30677,6 +31505,14 @@ class binary_writer
         write_container_iterative<msgpack_walk>(root);
     }
 
+    // a function, not an inline condition: for an object the type is never
+    // valueless and MSVC would warn about a constant expression (C4127)
+    static constexpr bool valueless_array_fits(const bool valueless_type, const std::size_t size,
+            const std::size_t written) noexcept
+    {
+        return !valueless_type || size <= detail::valueless_elements_base - written;
+    }
+
     /*!
     @brief write the start of an array (@a IsArray) or object: its opening
            marker, the optimized type, and the count
@@ -30712,20 +31548,29 @@ class binary_writer
 
             // an optimized array of a valueless type carries no payload, so a
             // reader has nothing but the declared count to bound the allocation
-            // by and refuses an excessive one. Write the unoptimized form for
-            // those, at one byte per element, so the result can be read back.
+            // by. It refuses one array of more than max_valueless_container_size
+            // elements, and all such arrays of one input together when they add
+            // up to more than valueless_elements_base plus
+            // JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE per byte read. Write the
+            // unoptimized form, at one byte per element, for an array that
+            // would exceed the base with the arrays written so far, so that the
+            // result can be read back: the limit of a reader is never below the
+            // base, whatever the macro is set to, so the writer does not use
+            // it (and a reader with a larger rate reads this output as well).
             // Objects are not affected: every element is preceded by its key.
-            const bool valueless_type = (first_prefix == 'Z' || first_prefix == 'T' || first_prefix == 'F');
-            const bool excessive_valueless = IsArray
-                                             && valueless_type
-                                             && size > detail::max_valueless_container_size;
-
-            if (same_prefix && !excessive_valueless
-                    && !(use_bjdata && is_bjdata_excluded_type_marker(first_prefix)))
+            if (same_prefix && !(use_bjdata && is_bjdata_excluded_type_marker(first_prefix)))
             {
-                prefix_required = false;
-                oa.write_character(to_char_type('$'));
-                oa.write_character(first_prefix);
+                const bool valueless_type = IsArray && (first_prefix == 'Z' || first_prefix == 'T' || first_prefix == 'F');
+                if (valueless_array_fits(valueless_type, size, valueless_elements_written))
+                {
+                    prefix_required = false;
+                    oa.write_character(to_char_type('$'));
+                    oa.write_character(first_prefix);
+                    if (valueless_type)
+                    {
+                        valueless_elements_written += size;
+                    }
+                }
             }
         }
 
@@ -34949,6 +35794,10 @@ class binary_writer
     /// how to treat a string value or object key that is not valid UTF-8
     /// (CBOR, MessagePack, UBJSON, BJData, and BSON; not BON8)
     const error_handler_t error_handler = binary_writer_default_error_handler();
+
+    /// UBJSON: the number of elements written so far in optimized arrays of a
+    /// valueless type, which a reader adds up and bounds
+    std::size_t valueless_elements_written = 0;
 };
 
 }  // namespace detail
@@ -35261,10 +36110,11 @@ namespace detail
 {
 
 /*!
-@brief implements the Grisu2 algorithm for binary to decimal floating-point
-conversion.
+@brief implements binary to decimal floating-point conversion: the shortest
+digits of Zmij (see zmij.hpp) for IEEE 754 binary64 numbers, and the Grisu2
+algorithm for all other formats.
 
-This implementation is a slightly modified version of the reference
+The Grisu2 implementation is a slightly modified version of the reference
 implementation which may be obtained from
 http://florian.loitsch.com/publications (bench.tar.gz).
 
@@ -37377,7 +38227,7 @@ class serializer
             put_literal("\"subtype\": ");
             if (binary.has_subtype())
             {
-                dump_integer(binary.subtype());
+                dump_subtype(binary.subtype());
             }
             else
             {
@@ -37403,7 +38253,7 @@ class serializer
             put_literal("],\"subtype\":");
             if (binary.has_subtype())
             {
-                dump_integer(binary.subtype());
+                dump_subtype(binary.subtype());
                 put_char('}');
             }
             else
@@ -38312,7 +39162,7 @@ class serializer
             {
                 return n_digits + 3;
             }
-            x = x / 10000u;
+            x = static_cast<number_magnitude_t>(x / 10000u);
             n_digits += 4;
         }
     }
@@ -38625,6 +39475,40 @@ class serializer
     }
 
     /*!
+    @brief dump the subtype of a binary value
+
+    The subtype is a std::uint64_t, whatever the number types are. @ref
+    dump_integer converts its argument to the magnitude type of
+    number_unsigned_t, so it writes the subtype only if that type has at least
+    64 bits; otherwise (it would truncate the subtype) the digits are written
+    one by one.
+
+    @param[in] subtype  the subtype to dump
+    */
+    void dump_subtype(std::uint64_t subtype)
+    {
+        dump_subtype(subtype, std::integral_constant<bool, magnitude_has_at_least_64_bits> {});
+    }
+
+    void dump_subtype(std::uint64_t subtype, std::true_type /*magnitude has at least 64 bits*/)
+    {
+        dump_integer(subtype);
+    }
+
+    void dump_subtype(std::uint64_t subtype, std::false_type /*magnitude has less than 64 bits*/)
+    {
+        std::array<char, 20> digits{{}}; // 2^64 - 1 has 20 digits
+        std::size_t start = digits.size();
+        do
+        {
+            digits[--start] = static_cast<char>('0' + (subtype % 10));
+            subtype /= 10;
+        }
+        while (subtype != 0);
+        put_string(digits, start, digits.size());
+    }
+
+    /*!
     @brief dump an integer
 
     Dump a given integer, appending it to @ref write_buffer (directly: copying
@@ -38774,8 +39658,9 @@ class serializer
         }
 
         // If number_float_t is an IEEE-754 single or double precision number,
-        // use the Grisu2 algorithm to produce short numbers which are
-        // guaranteed to round-trip, using strtof and strtod, resp.
+        // use to_chars() to produce short numbers which are guaranteed to
+        // round-trip, using strtof and strtod, resp. (the shortest digits of
+        // Zmij for binary64, the Grisu2 algorithm for binary32).
         //
         // NB: The test below works if <long double> == <double>.
         static constexpr bool is_ieee_single_or_double
@@ -38877,6 +39762,11 @@ class serializer
     static constexpr bool magnitude_has_at_most_64_bits = std::numeric_limits<number_magnitude_t>::is_specialized
         && std::numeric_limits<number_magnitude_t>::digits <= 64;
 
+    /// whether every std::uint64_t fits number_magnitude_t (then dump_integer
+    /// can write a binary subtype)
+    static constexpr bool magnitude_has_at_least_64_bits = std::numeric_limits<number_magnitude_t>::is_specialized
+        && std::numeric_limits<number_magnitude_t>::digits >= 64;
+
     /// whether @a x fits 64 bits: always if number_magnitude_t has at most
     /// 64 bits (selected by type, as the comparison would be reported as
     /// always true), else compared
@@ -38902,7 +39792,7 @@ class serializer
     number_magnitude_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0);
-        return static_cast<number_magnitude_t>(-(x + 1)) + 1;
+        return static_cast<number_magnitude_t>(static_cast<number_magnitude_t>(-(x + 1)) + 1);
     }
 
   private:
@@ -47956,6 +48846,7 @@ struct formatter<nlohmann::NLOHMANN_BASIC_JSON_TPL, char> // NOLINT(cert-dcl58-c
     #undef JSON_USE_OBJECTS_FOR_ENUM_KEYED_MAPS
     #undef JSON_DISABLE_STREAM_BULK_SCAN
     #undef JSON_DISABLE_UNLOCKED_FILE_IO
+    #undef JSON_UBJSON_VALUELESS_ELEMENTS_PER_BYTE
 #endif
 
 // #include <nlohmann/thirdparty/hedley/hedley_undef.hpp>
@@ -48011,6 +48902,7 @@ struct formatter<nlohmann::NLOHMANN_BASIC_JSON_TPL, char> // NOLINT(cert-dcl58-c
 #undef JSON_HEDLEY_EMSCRIPTEN_VERSION
 #undef JSON_HEDLEY_EMSCRIPTEN_VERSION_CHECK
 #undef JSON_HEDLEY_END_C_DECLS
+#undef JSON_HEDLEY_FALL_THROUGH
 #undef JSON_HEDLEY_FLAGS
 #undef JSON_HEDLEY_FLAGS_CAST
 #undef JSON_HEDLEY_GCC_HAS_ATTRIBUTE
@@ -48119,7 +49011,6 @@ struct formatter<nlohmann::NLOHMANN_BASIC_JSON_TPL, char> // NOLINT(cert-dcl58-c
 #undef JSON_HEDLEY_WARNING
 #undef JSON_HEDLEY_WARN_UNUSED_RESULT
 #undef JSON_HEDLEY_WARN_UNUSED_RESULT_MSG
-#undef JSON_HEDLEY_FALL_THROUGH
 
 // IWYU pragma: keep
 
