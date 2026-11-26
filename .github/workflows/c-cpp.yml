@@ -45,7 +45,7 @@ jobs:
         path: ./microci-*.x86_64.rpm
 
   windows:
-    if: false # Uncomment to disable
+    # if: false # Uncomment to disable
     runs-on: windows-latest
     defaults:
       run:
