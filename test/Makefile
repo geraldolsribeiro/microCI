@@ -51,6 +51,10 @@ snapshot_cmd_new_test:
 snapshot_cmd_external_test:
 	./snapshot_cmd_external/test_all.sh
 
+.PHONY: snapshot_cmd_external_update
+snapshot_cmd_external_update:
+	./snapshot_cmd_external/update_expected.sh
+
 .PHONY: runtime_test
 runtime_test:
 	./runtime/test_all.sh
