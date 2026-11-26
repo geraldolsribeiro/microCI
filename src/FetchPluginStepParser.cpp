@@ -56,7 +56,23 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
   bitnamiDisableWelcomeMessage.value = "true";
   envs.insert(bitnamiDisableWelcomeMessage);
 
-  data["DEFAULT_TARGET"] = step["plugin"]["target"].as<std::string>("./");
+  auto defaultTarget                      = step["plugin"]["target"].as<std::string>("external/include");
+  data["DEFAULT_TARGET"]                  = defaultTarget;
+  std::filesystem::path defaultTargetPath = defaultTarget;
+  defaultTargetPath                       = defaultTargetPath.lexically_normal();  // resolve redundant . or ..
+
+  if (defaultTargetPath.empty() or not defaultTargetPath.is_relative()) {
+    data["DEFAULT_TARGET_FIRST"] = defaultTarget;
+  } else {
+    std::filesystem::path first = *defaultTargetPath.begin();
+    // Handle edge cases: current dir ("."), parent dir (".."), or a standalone file ("file.txt")
+    if (first == "." or first == ".." or not defaultTargetPath.has_parent_path()) {
+      data["DEFAULT_TARGET_FIRST"] = defaultTarget;
+    } else {
+      data["DEFAULT_TARGET_FIRST"] = first.string();
+    }
+  }
+
   if (step["plugin"]["items"] && step["plugin"]["items"].IsSequence()) {
     beginFunction(data, envs);
     prepareRunDocker(data, envs, volumes);
@@ -94,7 +110,7 @@ void FetchPluginStepParser::Parse(const YAML::Node &step) {
     mMicroCI->Script() << inja::render(
         R"( \
            ; echo 'chown default target' \
-           ; chown {{UID}}:{{GID}} -Rv {{ DEFAULT_TARGET }})",
+           ; chown {{UID}}:{{GID}} -Rv {{ DEFAULT_TARGET_FIRST }})",
         data);
     mMicroCI->Script() << "\"\n";
     endFunction(data);
