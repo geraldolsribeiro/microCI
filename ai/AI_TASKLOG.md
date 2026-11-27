@@ -4,7 +4,7 @@
 
 | Created | Task | Status | Type | Subtasks | Time Spent | Blockers |
 |---------|------|--------|------|----------|------------|----------|
-| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 7/7 | 50m | none |
+| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#0969da;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">in_progress</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 7/8 | 50m | none |
 
 > ✅ **1 completed task(s)** — [View completed tasks](#completed-tasks)
 
@@ -50,6 +50,7 @@
 - [x] Subtask 5 — Test sync scripts locally (Windows PowerShell OK; WSL bash OK after LF fix)
 - [x] Subtask 6 — Test online doc access via fetch_web_content (API listing + raw docs + raw templates OK)
 - [x] Subtask 7 — Commit and push branch, update task log
+- [ ] Subtask 8 — README.md: add "AI agent skill" section with local install instructions (27-11-2026 follow-up request)
 
 ### Full Context Notes for AI Agents
 
