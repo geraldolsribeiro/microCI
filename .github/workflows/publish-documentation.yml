@@ -10,6 +10,9 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Run standard Docker container
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
         run: |
           curl -fsSL github.com/geraldolsribeiro/microci/releases/download/latest/microCI -o microCI
           chmod 755 ./microCI
