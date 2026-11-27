@@ -1,0 +1,37 @@
+name: Publish documentation to microci.dev
+
+on: [push]
+
+jobs:
+  execute-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Run standard Docker container
+        run: |
+          curl -fsSL github.com/geraldolsribeiro/microci/releases/download/latest/microCI -o microCI
+          chmod 755 ./microCI
+          mkdir -p ~/.ssh/
+          touch ~/.ssh/config
+          ssh-keyscan github.com >> ~/.ssh/known_hosts          
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          ./microCI -N 7,9,10,11 | bash
+
+# microCI -l
+#  1 05b1 C++ check with clang-tidy
+#  2 ec9f C++ check with cppcheck
+#  3 92ad SAST com flawfinder
+#  4 9eba Convert pdf to jpg
+#  5 d154 Build diagrams with plantuml
+#  6 7e4a Build diagrams - pikchr
+#  7 ee7b Build HTML documentation
+#  8 e159 Documentation preview http://localhost:8000
+#  9 cb76 Configure Github pages and README
+# 10 0d3e Build PDF documentation
+# 11 a99b Publish documentation to microci.dev
+# 12 4680 C++ code format with clang-format
+# 13 b7b7 Download project dependencies
+# 14 bf1d Build microCI static version
+# 15 f82a Build docker image for microci_cpp_compiler
