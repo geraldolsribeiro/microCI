@@ -4,19 +4,21 @@
 
 | Created | Task | Status | Type | Subtasks | Time Spent | Blockers |
 |---------|------|--------|------|----------|------------|----------|
-| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#0969da;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">in_progress</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 5/7 | ~40m | none |
+| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 7/7 | 50m | none |
+
+> ✅ **1 completed task(s)** — [View completed tasks](#completed-tasks)
 
 ---
 
 ## Task T1: microci-pipeline skill
 
-- **Status**: <span style="background-color:#0969da;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">in_progress</span>
+- **Status**: <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span>
 - **Type**: <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span>
 - **Created**: 27-11-2026 11:29:15
-- **Last Updated**: 27-11-2026 12:08:00
-- **Time Spent**: 40m
+- **Last Updated**: 27-11-2026 12:35:00
+- **Time Spent**: 50m
 - **Branch**: [`feat/ai-microci-pipeline-skill`](https://github.com/HectorBravo/microCI/tree/feat/ai-microci-pipeline-skill)
-- **Commit(s)**: [f3d3b0f](https://github.com/HectorBravo/microCI/commit/f3d3b0f) (task log), [08a66ba](https://github.com/HectorBravo/microCI/commit/08a66ba) (skill)
+- **Commit(s)**: [08a66ba](https://github.com/HectorBravo/microCI/commit/08a66ba) (skill), merged into master as [8aa7271](https://github.com/HectorBravo/microCI/commit/8aa7271); upstream PR geraldolsribeiro/microCI#121
 - **Blockers**: none
 - **Findings & Notes**:
   - Skill pattern modeled on cline/sdk-skill (SKILL.md router + references/).
@@ -62,12 +64,17 @@
 - Assumptions: upstream geraldolsribeiro/microCI stays public with branch `master` and folders
   `docs/` + `new/`; GitHub contents API and raw.githubusercontent.com reachable (verified 27-11-2026).
 
-### State at push time (commit 08a66ba)
+### State at push time (commit 08a66ba) — RESOLVED
 
-- All subtasks complete; branch pushed with upstream tracking (`git branch -vv` shows `-> origin/...`).
-- Remaining workflow steps after user merges the branch: final log commit on `master` (status done,
-  next commit after merge), then fast-forward this branch onto it
-  (`git fetch origin; git checkout feat/ai-microci-pipeline-skill; git merge --ff-only origin/master;
-  git push --force-with-lease origin feat/ai-microci-pipeline-skill`).
+- All subtasks complete; branch pushed with upstream tracking.
+- DONE: merged into `master` (merge commit `8aa7271`, `--no-ff`) and pushed to origin.
+- DONE: upstream PR created: https://github.com/geraldolsribeiro/microCI/pull/121
+  (head `HectorBravo:master` → base `geraldolsribeiro:master`).
 
 ---
+
+## Completed Tasks
+
+| Created | Task | Type | Subtasks | Time Spent |
+|---------|------|------|----------|------------|
+| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 7/7 | 50m |
