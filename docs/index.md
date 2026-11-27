@@ -109,6 +109,47 @@ microCI | bash
 
 </div>
 
+## AI agent skill: `microci-pipeline`
+
+An optional [skill](../skills/microci-pipeline/SKILL.md) for AI coding assistants (Cline, Claude Code, Codex CLI, Cursor, Copilot, Windsurf, OpenCode, pi, etc.) that lets you edit pipelines in plain language:
+
+> *"add a step that builds the docs with mkdocs and publishes them to github pages"*
+
+The skill teaches the agent how to add/edit `.microCI.yml` steps safely (never guessing YAML keys, always validating with `microCI -T`), and it downloads these plugin documentation pages and the canonical step templates from the repository on demand — so they always match the latest release.
+
+### Install locally
+
+Point your assistant at the `skills/microci-pipeline` folder of a clone of the repository:
+
+**Manual install (any agent):** copy or symlink the skill folder into your agent's skills directory:
+
+```bash
+# Linux / macOS — example for Claude Code (user-level)
+git clone https://github.com/geraldolsribeiro/microCI ~/microCI
+mkdir -p ~/.claude/skills
+ln -s ~/microCI/skills/microci-pipeline ~/.claude/skills/microci-pipeline
+```
+
+```powershell
+# Windows — example for Claude Code (user-level)
+git clone https://github.com/geraldolsribeiro/microCI $HOME\microCI
+New-Item -ItemType Junction -Path "$HOME\.claude\skills\microci-pipeline" `
+  -Target "$HOME\microCI\skills\microci-pipeline"
+```
+
+Other agents use the same idea with a different skills path, e.g. `~/.codex/skills/` (Codex CLI),
+`.cursor/rules/` or `.cline/skills/` in the project (project-level install works too — just copy
+the `skills/microci-pipeline` folder there).
+
+**First use:** the skill fetches the documentation cache automatically. To pre-warm it manually:
+
+```bash
+bash skills/microci-pipeline/scripts/sync.sh          # Linux / macOS
+powershell -ExecutionPolicy Bypass -File skills/microci-pipeline/scripts/sync.ps1   # Windows
+```
+
+Cache location: `~/.cache/microci-skill` (Linux/macOS) or `%LOCALAPPDATA%\microci-skill` (Windows).
+
 ## Why it matters
 
 microCI focuses on:
