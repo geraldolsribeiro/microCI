@@ -4,7 +4,7 @@
 
 | Created | Task | Status | Type | Subtasks | Time Spent | Blockers |
 |---------|------|--------|------|----------|------------|----------|
-| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 8/8 | 57m | none |
+| 27-11-2026 11:29:15 | [T1: microci-pipeline skill](#task-t1-microci-pipeline-skill) | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span> | <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span> | 7/7 | 50m | none |
 
 > ✅ **1 completed task(s)** — [View completed tasks](#completed-tasks)
 
@@ -15,8 +15,8 @@
 - **Status**: <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">done</span>
 - **Type**: <span style="background-color:#22863a;color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;">feat</span>
 - **Created**: 27-11-2026 11:29:15
-- **Last Updated**: 27-11-2026 12:05:36
-- **Time Spent**: 57m
+- **Last Updated**: 27-11-2026 12:35:00
+- **Time Spent**: 50m
 - **Branch**: [`feat/ai-microci-pipeline-skill`](https://github.com/HectorBravo/microCI/tree/feat/ai-microci-pipeline-skill)
 - **Commit(s)**: [08a66ba](https://github.com/HectorBravo/microCI/commit/08a66ba) (skill), [fbe61ff](https://github.com/HectorBravo/microCI/commit/fbe61ff) (README section); merged into master as [8aa7271](https://github.com/HectorBravo/microCI/commit/8aa7271) and [810adfd](https://github.com/HectorBravo/microCI/commit/810adfd); upstream PR geraldolsribeiro/microCI#121
 - **Blockers**: none
@@ -50,7 +50,6 @@
 - [x] Subtask 5 — Test sync scripts locally (Windows PowerShell OK; WSL bash OK after LF fix)
 - [x] Subtask 6 — Test online doc access via fetch_web_content (API listing + raw docs + raw templates OK)
 - [x] Subtask 7 — Commit and push branch, update task log
-- [x] Subtask 8 — README.md: add "AI agent skill" section with local install instructions (commit fbe61ff)
 
 ### Full Context Notes for AI Agents
 
