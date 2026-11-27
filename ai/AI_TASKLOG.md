@@ -18,7 +18,7 @@
 - **Last Updated**: 27-11-2026 12:05:36
 - **Time Spent**: 57m
 - **Branch**: [`feat/ai-microci-pipeline-skill`](https://github.com/HectorBravo/microCI/tree/feat/ai-microci-pipeline-skill)
-- **Commit(s)**: [08a66ba](https://github.com/HectorBravo/microCI/commit/08a66ba) (skill), merged into master as [8aa7271](https://github.com/HectorBravo/microCI/commit/8aa7271); upstream PR geraldolsribeiro/microCI#121
+- **Commit(s)**: [08a66ba](https://github.com/HectorBravo/microCI/commit/08a66ba) (skill), [fbe61ff](https://github.com/HectorBravo/microCI/commit/fbe61ff) (README section); merged into master as [8aa7271](https://github.com/HectorBravo/microCI/commit/8aa7271) and [810adfd](https://github.com/HectorBravo/microCI/commit/810adfd); upstream PR geraldolsribeiro/microCI#121
 - **Blockers**: none
 - **Findings & Notes**:
   - Skill pattern modeled on cline/sdk-skill (SKILL.md router + references/).
