@@ -23,6 +23,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           echo "$SSH_PUBLIC_KEY" >  ~/.ssh/id_ed25519.pub
           ./microCI -N 7,9,10,11 | bash
+          cat .microCI.log
 
 # microCI -l
 #  1 05b1 C++ check with clang-tidy
