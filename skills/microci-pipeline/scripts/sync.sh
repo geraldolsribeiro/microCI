@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # sync.sh - Refresh the microCI skill docs/templates cache from GitHub.
 # Usage: bash sync.sh [cache_dir]   (default: ~/.cache/microci-skill)
+# Downloads the repository archive ONCE and extracts only the needed files (fast, 2 requests total).
 # Exit code != 0 means the cache must not be trusted.
 set -euo pipefail
 
@@ -9,36 +10,48 @@ OWNER="geraldolsribeiro"
 REPO="microCI"
 BRANCH="master"
 API_BASE="https://api.github.com/repos/${OWNER}/${REPO}"
-RAW_BASE="https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}"
+ARCHIVE_URL="https://codeload.github.com/${OWNER}/${REPO}/tar.gz/refs/heads/${BRANCH}"
 UA="microci-skill-sync"
 
 DOCS_DIR="${CACHE_DIR}/docs"
 TMPL_DIR="${CACHE_DIR}/templates"
-mkdir -p "${DOCS_DIR}" "${TMPL_DIR}"
 
 command -v curl >/dev/null || { echo "curl is required" >&2; exit 1; }
+command -v tar  >/dev/null || { echo "tar is required"  >&2; exit 1; }
+
+START_TS=$(date +%s)
 
 # Head commit (best effort)
 COMMIT="$(curl -fsSL -H "User-Agent: ${UA}" "${API_BASE}/commits/${BRANCH}" \
           | grep -o '"sha": *"[0-9a-f]*"' | head -n1 | sed 's/.*"\([0-9a-f]*\)"/\1/' || echo unknown)"
 
+TMP_TAR="$(mktemp /tmp/microci-skill.XXXXXX.tar.gz)"
+TMP_OUT="$(mktemp -d /tmp/microci-skill-extract.XXXXXX)"
+cleanup() { rm -f "${TMP_TAR}"; rm -rf "${TMP_OUT}"; }
+trap cleanup EXIT
+
+# Single archive download + selective extraction
+curl -fsSL -H "User-Agent: ${UA}" -o "${TMP_TAR}" "${ARCHIVE_URL}"
+tar -xzf "${TMP_TAR}" -C "${TMP_OUT}"
+
+PREFIX="${REPO}-${BRANCH}"
+mkdir -p "${DOCS_DIR}" "${TMPL_DIR}"
+
 DOCS_COUNT=0
-TMPL_COUNT=0
-
-while IFS= read -r name; do
-    [ -z "${name}" ] && continue
-    curl -fsSL -H "User-Agent: ${UA}" -o "${DOCS_DIR}/${name}" "${RAW_BASE}/docs/${name}"
+while IFS= read -r f; do
+    [ -z "${f}" ] && continue
+    cp "${f}" "${DOCS_DIR}/$(basename "${f}")"
     DOCS_COUNT=$((DOCS_COUNT + 1))
-done < <(curl -fsSL -H "User-Agent: ${UA}" "${API_BASE}/contents/docs?ref=${BRANCH}" \
-         | grep -o '"name": *"[0-9][0-9][0-9]_[^"]*\.md"' | sed 's/.*"\([^"]*\)"/\1/')
+done < <(find "${TMP_OUT}/${PREFIX}/docs" -maxdepth 1 -type f -name '[0-9][0-9][0-9]_*.md')
 
-while IFS= read -r name; do
-    [ -z "${name}" ] && continue
-    curl -fsSL -H "User-Agent: ${UA}" -o "${TMPL_DIR}/${name}" "${RAW_BASE}/new/${name}"
+TMPL_COUNT=0
+while IFS= read -r f; do
+    [ -z "${f}" ] && continue
+    cp "${f}" "${TMPL_DIR}/$(basename "${f}")"
     TMPL_COUNT=$((TMPL_COUNT + 1))
-done < <(curl -fsSL -H "User-Agent: ${UA}" "${API_BASE}/contents/new?ref=${BRANCH}" \
-         | grep -o '"name": *"[^"]*\.yml"' | sed 's/.*"\([^"]*\)"/\1/')
+done < <(find "${TMP_OUT}/${PREFIX}/new" -maxdepth 1 -type f -name '*.yml')
 
+# Sanity lower bounds (upstream grows over time)
 if [ "${DOCS_COUNT}" -lt 30 ] || [ "${TMPL_COUNT}" -lt 25 ]; then
     echo "microci-skill sync FAILED: sanity check docs=${DOCS_COUNT} templates=${TMPL_COUNT}" >&2
     exit 1
@@ -53,4 +66,7 @@ fi
     echo "templates_count=${TMPL_COUNT}"
 } > "${CACHE_DIR}/.sync_meta"
 
-echo "microci-skill sync OK: ${DOCS_COUNT} docs, ${TMPL_COUNT} templates -> ${CACHE_DIR} (commit ${COMMIT})"
+ELAPSED=$(( $(date +%s) - START_TS ))
+echo "microci-skill sync OK: ${DOCS_COUNT} docs, ${TMPL_COUNT} templates in ${ELAPSED}s -> ${CACHE_DIR} (commit ${COMMIT})"
+
+
